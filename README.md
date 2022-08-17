@@ -10,8 +10,7 @@ For other variants see [https://jitpack.io/](https://jitpack.io/).
 
 ## Features:
 
-* Vectors: 2d, 3d
-
+* Vector2d, Vector3d and views: IVector2d, IVector3d
 Not implemented yet:
 * Matrices: 2x2, 3x3, 4x4
 * Quaternions
