@@ -25,7 +25,7 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   def squareDistance(v: IVec): Double
   def distance(v: IVec): Double = math.sqrt(squareDistance(v))
 
-  def isEqual(v: IVec, eps: Double = 0.000001): Boolean
+  def isEquals(v: IVec, eps: Double = 0.000001): Boolean
 
 
 trait VectorNd[IVec <: IVectorNd[_, _], Vec] extends IVectorNd[IVec, Vec]:

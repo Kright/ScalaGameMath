@@ -46,7 +46,7 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
   def sin(v: IVector3d): Double =
     math.sqrt(cross(v).squareMag / (squareMag * v.squareMag))
 
-  override def isEqual(v: IVector3d, eps: Double = 0.000001): Boolean =
+  override def isEquals(v: IVector3d, eps: Double = 0.000001): Boolean =
     math.abs(x - v.x) < eps && math.abs(y - v.y) < eps && math.abs(z - v.z) < eps
 
 

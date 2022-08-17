@@ -36,7 +36,7 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
     val dy = y - v.y
     dx * dx + dy * dy
 
-  override def isEqual(v: IVector2d, eps: Double = 0.000001): Boolean =
+  override def isEquals(v: IVector2d, eps: Double = 0.000001): Boolean =
     math.abs(x - v.x) < eps && math.abs(y - v.y) < eps
 
 
