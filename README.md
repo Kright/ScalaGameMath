@@ -13,6 +13,7 @@ For other variants see [https://jitpack.io/](https://jitpack.io/).
 * Vector2d, Vector3d
 * Quaternions
 * each of this classes has view (for example, IVector2d), interaction with view cannot change object
+
 Not implemented yet:
 * Matrices: 2x2, 3x3, 4x4
 
