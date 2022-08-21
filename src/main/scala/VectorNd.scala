@@ -31,18 +31,18 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
 trait VectorNd[IVec <: IVectorNd[_, _], Vec] extends IVectorNd[IVec, Vec]:
   self: Vec & IVec =>
 
-  def :=(v: IVec): Unit
+  def :=(v: IVec): Vec
 
-  def +=(v: IVec): Unit
-  def -=(v: IVec): Unit
-  def *=(v: IVec): Unit
-  def *=(m: Double): Unit
-  def madd(v: IVec, multiplier: Double): Unit
-  def /=(v: IVec): Unit
-  def /=(d: Double): Unit = this *= (1.0 / d)
+  def +=(v: IVec): Vec
+  def -=(v: IVec): Vec
+  def *=(v: IVec): Vec
+  def *=(m: Double): Vec
+  def madd(v: IVec, multiplier: Double): Vec
+  def /=(v: IVec): Vec
+  def /=(d: Double): Vec = this *= (1.0 / d)
 
-  def setMin(v: IVec): Unit
-  def setMax(v: IVec): Unit
-  def setClamp(lower: IVec, upper: IVec): Unit
+  def setMin(v: IVec): Vec
+  def setMax(v: IVec): Vec
+  def setClamp(lower: IVec, upper: IVec): Vec
 
-  def normalize(): Unit = this /= this.mag
+  def normalize(): Vec = this /= this.mag

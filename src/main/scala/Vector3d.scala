@@ -54,62 +54,73 @@ final class Vector3d(var x:Double = 0.0,
                      var y:Double = 0.0,
                      var z:Double = 0.0) extends IVector3d with VectorNd[IVector3d, Vector3d]:
 
-  def :=(x: Double,y: Double,z: Double): Unit =
+  def :=(x: Double,y: Double,z: Double): Vector3d =
     this.x = x
     this.y = y
     this.z = z
+    this
 
-  override def :=(v: IVector3d): Unit =
+  override def :=(v: IVector3d): Vector3d =
     x = v.x
     y = v.y
     z = v.z
+    this
 
-  override def +=(v: IVector3d): Unit =
+  override def +=(v: IVector3d): Vector3d =
     x += v.x
     y += v.y
     z += v.z
+    this
 
-  override def -=(v: IVector3d): Unit =
+  override def -=(v: IVector3d): Vector3d =
     x -= v.x
     y -= v.y
     z -= v.z
+    this
 
-  override def *=(v: IVector3d): Unit =
+  override def *=(v: IVector3d): Vector3d =
     x *= v.x
     y *= v.y
     z *= v.z
+    this
 
-  override def *=(m: Double): Unit =
+  override def *=(m: Double): Vector3d =
     x *= m
     y *= m
     z *= m
+    this
 
-  override def madd(v: IVector3d, multiplier: Double): Unit =
+  override def madd(v: IVector3d, multiplier: Double): Vector3d =
     x += v.x * multiplier
     y += v.y * multiplier
     z += v.z * multiplier
+    this
 
-  override def /=(v: IVector3d): Unit =
+  override def /=(v: IVector3d): Vector3d =
     x /= v.x
     y /= v.y
     z /= v.z
+    this
 
-  override def setMin(v: IVector3d): Unit =
+  override def setMin(v: IVector3d): Vector3d =
     x = math.min(x, v.x)
     y = math.min(y, v.y)
     z = math.min(z, v.z)
+    this
 
-  override def setMax(v: IVector3d): Unit =
+  override def setMax(v: IVector3d): Vector3d =
     x = math.max(x, v.x)
     y = math.max(y, v.y)
     z = math.max(z, v.z)
+    this
 
-  override def setClamp(lower: IVector3d, upper: IVector3d): Unit =
+  override def setClamp(lower: IVector3d, upper: IVector3d): Vector3d =
     x = math.min(upper.x, math.max(x, lower.x))
     y = math.min(upper.y, math.max(y, lower.y))
     z = math.min(upper.z, math.max(z, lower.z))
+    this
 
-  def setCross(f: IVector3d, s: IVector3d): Unit =
+  def setCross(f: IVector3d, s: IVector3d): Vector3d =
     this :=(f.y * s.z - f.z * s.y,
             f.z * s.x - f.x * s.z,
             f.x * s.y - f.y * s.x)

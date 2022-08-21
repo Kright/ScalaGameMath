@@ -61,56 +61,61 @@ final class Quaternion(var w: Double,
 
   def this() = this(1.0, 0.0, 0.0, 0.0)
 
-  def :=(w: Double, x: Double, y: Double, z: Double): Unit =
+  def :=(w: Double, x: Double, y: Double, z: Double): Quaternion =
     this.w = w
     this.x = x
     this.y = y
     this.z = z
+    this
 
-  def :=(v: IQuaternion): Unit =
+  def :=(v: IQuaternion): Quaternion =
     w = v.w
     x = v.x
     y = v.y
     z = v.z
+    this
 
-  def :=(angleRadians: Double, axis: IVector3d): Unit =
+  def :=(angleRadians: Double, axis: IVector3d): Quaternion =
     val realAngle = angleRadians * 0.5
     val m = math.sin(realAngle) / axis.mag
     this := (math.cos(realAngle), axis.x * m, axis.y * m, axis.z * m)
 
-  def setIdentity(): Unit =
+  def setIdentity(): Quaternion =
     this := (1.0, 0.0, 0.0, 0.0)
 
   /** exponent length is 0.5*angle of rotation */
-  def setFromExp(exp: IVector3d): Unit =
+  def setFromExp(exp: IVector3d): Quaternion =
     val l = exp.mag
     val m = math.sin(l) / l
     this := (math.cos(l), exp.x * m, exp.y * m, exp.z * m)
 
-  def conjugate(): Unit =
+  def conjugate(): Quaternion =
     x = -x
     y = -y
     z = -z
+    this
 
-  def negate(): Unit =
+  def negate(): Quaternion =
     w = -w
     x = -x
     y = -y
     z = -z
+    this
 
-  def *=(m: Double): Unit =
+  def *=(m: Double): Quaternion =
     w *= m
     x *= m
     y *= m
     z *= m
+    this
 
-  def *=(q: Quaternion): Unit =
+  def *=(q: Quaternion): Quaternion =
     Quaternion.multiply(this, q, result = this)
 
-  def normalize(): Unit =
+  def normalize(): Quaternion =
     this *= 1.0 / mag
 
-  def ^(pow: Double): Unit =
+  def ^(pow: Double): Quaternion =
     val xyz = magXYZ
     val alpha = pow * math.atan2(xyz, w)
     val m = math.sin(alpha) / xyz
