@@ -21,13 +21,13 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
     new Vector3d(x / v.x, y / v.y, z / v.z)
 
   override def min(v: IVector3d): Vector3d =
-    new Vector3d(math.min(x, v.x), math.min(y, v.y), math.min(z, v.z))
+    new Vector3d(Math.min(x, v.x), Math.min(y, v.y), Math.min(z, v.z))
 
   override def max(v: IVector3d): Vector3d =
-    new Vector3d(math.max(x, v.x), math.max(y, v.y), math.max(z, v.z))
+    new Vector3d(Math.max(x, v.x), Math.max(y, v.y), Math.max(z, v.z))
 
   override def clamp(lower: IVector3d, upper: IVector3d): Vector3d =
-    new Vector3d(math.min(upper.x, math.max(x, lower.x)), math.min(upper.y, math.max(y, lower.y)), math.min(upper.z, math.max(z, lower.z)))
+    new Vector3d(Math.min(upper.x, Math.max(x, lower.x)), Math.min(upper.y, Math.max(y, lower.y)), Math.min(upper.z, Math.max(z, lower.z)))
 
   override def dot(v: IVector3d): Double =
     x * v.x + y * v.y + z * v.z
@@ -44,10 +44,10 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
                  x * v.y - y * v.x)
 
   def sin(v: IVector3d): Double =
-    math.sqrt(cross(v).squareMag / (squareMag * v.squareMag))
+    Math.sqrt(cross(v).squareMag / (squareMag * v.squareMag))
 
   override def isEquals(v: IVector3d, eps: Double = 0.000001): Boolean =
-    math.abs(x - v.x) < eps && math.abs(y - v.y) < eps && math.abs(z - v.z) < eps
+    Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps && Math.abs(z - v.z) < eps
 
 
 final class Vector3d(var x:Double = 0.0,
@@ -103,21 +103,21 @@ final class Vector3d(var x:Double = 0.0,
     this
 
   override def setMin(v: IVector3d): Vector3d =
-    x = math.min(x, v.x)
-    y = math.min(y, v.y)
-    z = math.min(z, v.z)
+    x = Math.min(x, v.x)
+    y = Math.min(y, v.y)
+    z = Math.min(z, v.z)
     this
 
   override def setMax(v: IVector3d): Vector3d =
-    x = math.max(x, v.x)
-    y = math.max(y, v.y)
-    z = math.max(z, v.z)
+    x = Math.max(x, v.x)
+    y = Math.max(y, v.y)
+    z = Math.max(z, v.z)
     this
 
   override def setClamp(lower: IVector3d, upper: IVector3d): Vector3d =
-    x = math.min(upper.x, math.max(x, lower.x))
-    y = math.min(upper.y, math.max(y, lower.y))
-    z = math.min(upper.z, math.max(z, lower.z))
+    x = Math.min(upper.x, Math.max(x, lower.x))
+    y = Math.min(upper.y, Math.max(y, lower.y))
+    z = Math.min(upper.z, Math.max(z, lower.z))
     this
 
   def setCross(f: IVector3d, s: IVector3d): Vector3d =

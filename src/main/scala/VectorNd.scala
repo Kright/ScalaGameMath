@@ -16,14 +16,14 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   def clamp(lower: IVec, upper: IVec): Vec
 
   def dot(v: IVec): Double
-  def cos(v: IVec): Double = this.dot(v) / math.sqrt(this.squareMag + v.squareMag)
+  def cos(v: IVec): Double = this.dot(v) / Math.sqrt(this.squareMag + v.squareMag)
   def normalized(): Vec = this / this.mag
 
   def squareMag: Double = this.dot(this)
   def mag: Double = math.sqrt(squareMag)
 
   def squareDistance(v: IVec): Double
-  def distance(v: IVec): Double = math.sqrt(squareDistance(v))
+  def distance(v: IVec): Double = Math.sqrt(squareDistance(v))
 
   def isEquals(v: IVec, eps: Double = 0.000001): Boolean
 

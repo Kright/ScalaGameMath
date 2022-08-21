@@ -14,10 +14,10 @@ trait IQuaternion:
     Quaternion.multiply(this, q)
 
   def mag: Double =
-    math.sqrt(w * w + x * x + y * y + z * z)
+    Math.sqrt(w * w + x * x + y * y + z * z)
 
   def magXYZ: Double =
-    math.sqrt(x * x + y * y + z * z)
+    Math.sqrt(x * x + y * y + z * z)
 
   def dot(q: IQuaternion): Double =
     w * q.w + x * q.x + y * q.y + z * q.z
@@ -28,7 +28,7 @@ trait IQuaternion:
   /** rotation axis with length of 0.5*angle in radians */
   def getLog(result: Vector3d = new Vector3d): Vector3d =
     val xyz = magXYZ
-    val angle2 = math.atan2(xyz, w)
+    val angle2 = Math.atan2(xyz, w)
     val mul = angle2 / xyz
     result := (x * mul, y * mul, z * mul)
     result
@@ -44,7 +44,7 @@ trait IQuaternion:
     result.normalize()
 
   def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
-    inline def eq(a: Double, b: Double) = math.abs(a - b) < eps
+    inline def eq(a: Double, b: Double) = Math.abs(a - b) < eps
     if (eq(w, q.w)) {
       eq(x, q.x) && eq(y, q.y) && eq(z, q.z)
     } else {
@@ -76,8 +76,8 @@ final class Quaternion(var w: Double,
 
   def :=(angleRadians: Double, axis: IVector3d): Quaternion =
     val realAngle = angleRadians * 0.5
-    val m = math.sin(realAngle) / axis.mag
-    this := (math.cos(realAngle), axis.x * m, axis.y * m, axis.z * m)
+    val m = Math.sin(realAngle) / axis.mag
+    this := (Math.cos(realAngle), axis.x * m, axis.y * m, axis.z * m)
 
   def setIdentity(): Quaternion =
     this := (1.0, 0.0, 0.0, 0.0)
@@ -85,8 +85,8 @@ final class Quaternion(var w: Double,
   /** exponent length is 0.5*angle of rotation */
   def setFromExp(exp: IVector3d): Quaternion =
     val l = exp.mag
-    val m = math.sin(l) / l
-    this := (math.cos(l), exp.x * m, exp.y * m, exp.z * m)
+    val m = Math.sin(l) / l
+    this := (Math.cos(l), exp.x * m, exp.y * m, exp.z * m)
 
   def conjugate(): Quaternion =
     x = -x
@@ -116,9 +116,9 @@ final class Quaternion(var w: Double,
 
   def ^(pow: Double): Quaternion =
     val xyz = magXYZ
-    val alpha = pow * math.atan2(xyz, w)
-    val m = math.sin(alpha) / xyz
-    this := (math.cos(alpha), x * m, y * m, z * m)
+    val alpha = pow * Math.atan2(xyz, w)
+    val m = Math.sin(alpha) / xyz
+    this := (Math.cos(alpha), x * m, y * m, z * m)
 
   override def toString: String =
     s"Quaternion(w=$w, x=$x, y=$y, z=$z)"
@@ -166,11 +166,11 @@ object Quaternion:
       return result
     }
     //copy-paste code from page 213
-    val sinOmega = math.sqrt(1.0 - cosOmega * cosOmega)
+    val sinOmega = Math.sqrt(1.0 - cosOmega * cosOmega)
     val omega = Math.atan2(sinOmega, cosOmega)
     val mult = 1.0 / sinOmega
-    val k0 = math.sin((1f - t) * omega) * mult
-    val k1 = math.sin(t * omega) * mult
+    val k0 = Math.sin((1f - t) * omega) * mult
+    val k1 = Math.sin(t * omega) * mult
     mix(q1, k0, q2, k1, result)
 
   /**
