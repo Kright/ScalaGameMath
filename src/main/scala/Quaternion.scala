@@ -42,7 +42,6 @@ trait IQuaternion:
   def getRotationAxis(result: Vector3d = new Vector3d()): Vector3d =
     result := (x, y, z)
     result.normalize()
-    result
 
   def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
     inline def eq(a: Double, b: Double) = math.abs(a - b) < eps
@@ -133,7 +132,6 @@ object Quaternion:
       first.w * second.y + first.y * second.w + first.z * second.x - first.x * second.z,
       first.w * second.z + first.z * second.w + first.x * second.y - first.y * second.x
     )
-    result
 
   def mix(q1: IQuaternion, k1: Double, q2: IQuaternion, k2: Double, result: Quaternion = new Quaternion()): Quaternion =
     result := (
@@ -142,7 +140,6 @@ object Quaternion:
       q1.y * k1 + q2.y * k2,
       q1.z * k1 + q2.z * k2
     )
-    result
 
   /**
    * spherical linear interpolation.
