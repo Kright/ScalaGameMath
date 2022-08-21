@@ -20,7 +20,7 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   def normalized(): Vec = this / this.mag
 
   def squareMag: Double = this.dot(this)
-  def mag: Double = math.sqrt(squareMag)
+  def mag: Double = Math.sqrt(squareMag)
 
   def squareDistance(v: IVec): Double
   def distance(v: IVec): Double = Math.sqrt(squareDistance(v))
