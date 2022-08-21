@@ -16,7 +16,7 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   def clamp(lower: IVec, upper: IVec): Vec
 
   def dot(v: IVec): Double
-  def cos(v: IVec): Double = this.dot(v) / Math.sqrt(this.squareMag + v.squareMag)
+  def cos(v: IVec): Double = this.dot(v) / Math.sqrt(this.squareMag * v.squareMag)
   def normalized(): Vec = this / this.mag
 
   def squareMag: Double = this.dot(this)
