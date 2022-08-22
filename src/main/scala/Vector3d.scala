@@ -20,6 +20,12 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
   override def /(v: IVector3d): Vector3d =
     new Vector3d(x / v.x, y / v.y, z / v.z)
 
+  override def ^(v: IVector3d): Vector3d =
+    new Vector3d(Math.pow(x, v.x), Math.pow(y, v.y), Math.pow(z, v.z))
+
+  override def ^(pow: Double): Vector3d =
+    new Vector3d(Math.pow(x, pow), Math.pow(y, pow), Math.pow(z, pow))
+
   override def min(v: IVector3d): Vector3d =
     new Vector3d(Math.min(x, v.x), Math.min(y, v.y), Math.min(z, v.z))
 
@@ -100,6 +106,18 @@ final class Vector3d(var x:Double = 0.0,
     x /= v.x
     y /= v.y
     z /= v.z
+    this
+
+  override def ^=(v: IVector3d): Vector3d =
+    x = Math.pow(x, v.x)
+    y = Math.pow(y, v.y)
+    z = Math.pow(z, v.z)
+    this
+
+  override def ^=(pow: Double): Vector3d =
+    x = Math.pow(x, pow)
+    y = Math.pow(y, pow)
+    z = Math.pow(z, pow)
     this
 
   override def setMin(v: IVector3d): Vector3d =

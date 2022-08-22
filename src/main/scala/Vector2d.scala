@@ -19,6 +19,12 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
   override def /(v: IVector2d): Vector2d =
     new Vector2d(x / v.x, y / v.y)
 
+  override def ^(v: IVector2d): Vector2d =
+    new Vector2d(Math.pow(x, v.x), Math.pow(y, v.y))
+    
+  override def ^(pow: Double): Vector2d =
+    new Vector2d(Math.pow(x, pow), Math.pow(y, pow))  
+
   override def min(v: IVector2d): Vector2d =
     new Vector2d(Math.min(x, v.x), Math.min(y, v.y))
 
@@ -82,6 +88,16 @@ final class Vector2d(var x: Double = 0.0,
     x /= v.x
     y /= v.y
     this
+
+  override def ^=(v: IVector2d): Vector2d =
+    x = Math.pow(x, v.x)
+    y = Math.pow(y, v.y)
+    this
+
+  override def ^=(pow: Double): Vector2d =
+    x = Math.pow(x, pow)
+    y = Math.pow(y, pow)
+    this  
 
   override def setMin(v: IVector2d): Vector2d =
     x = Math.min(x, v.x)

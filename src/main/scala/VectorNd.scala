@@ -9,6 +9,8 @@ trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   def *(m: Double): Vec
   def /(v: IVec): Vec
   def /(d: Double): Vec = this * (1.0 / d)
+  def ^(pow: Double): Vec
+  def ^(v: IVec): Vec
   def unary_- : Vec = this * (-1)
 
   def min(v: IVec): Vec
@@ -40,6 +42,8 @@ trait VectorNd[IVec <: IVectorNd[_, _], Vec] extends IVectorNd[IVec, Vec]:
   def madd(v: IVec, multiplier: Double): Vec
   def /=(v: IVec): Vec
   def /=(d: Double): Vec = this *= (1.0 / d)
+  def ^=(v: IVec): Vec
+  def ^=(pow: Double): Vec
 
   def setMin(v: IVec): Vec
   def setMax(v: IVec): Vec
