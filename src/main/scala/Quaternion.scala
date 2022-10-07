@@ -10,8 +10,24 @@ trait IQuaternion:
   def y: Double
   def z: Double
 
+  def copy(): Quaternion =
+    Quaternion(w, x, y, z)
+
+  def conjugated(): Quaternion =
+    Quaternion(w, -x, -y, -z)
+
+  def normalized(): Quaternion =
+    val m = 1.0 / mag
+    Quaternion(w * m, x * m, y * m, z * m)
+
   def *(q: IQuaternion): Quaternion =
     Quaternion.multiply(this, q)
+
+  def ^(pow: Double): Quaternion =
+    copy() ^= pow
+
+  def squareMag: Double =
+    w * w + x * x + y * y + z * z
 
   def mag: Double =
     Math.sqrt(w * w + x * x + y * y + z * z)
@@ -23,15 +39,15 @@ trait IQuaternion:
     w * q.w + x * q.x + y * q.y + z * q.z
 
   def cos(q: IQuaternion): Double =
-    dot(q) / (mag * q.mag)
+    dot(q) / Math.sqrt(squareMag * q.squareMag)
 
   /** rotation axis with length of 0.5*angle in radians */
   def getLog(result: Vector3d = new Vector3d): Vector3d =
     val xyz = magXYZ
+    if (xyz < 0.000001) return result := (0, 0, 0)
     val angle2 = Math.atan2(xyz, w)
     val mul = angle2 / xyz
     result := (x * mul, y * mul, z * mul)
-    result
 
   def rotationAngleRadians(): Double =
     2.0 * Math.acos(w / mag)
@@ -40,8 +56,13 @@ trait IQuaternion:
     2.0 * Math.acos(w)
 
   def getRotationAxis(result: Vector3d = new Vector3d()): Vector3d =
-    result := (x, y, z)
-    result.normalize()
+    val div = magXYZ
+    if (div > 0.000001) {
+      val m = 1.0 / div
+      result := (x * m, y * m, z * m)
+    } else { // no rotation
+      result := (1, 0, 0)
+    }
 
   def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
     inline def eq(a: Double, b: Double) = Math.abs(a - b) < eps
@@ -111,11 +132,15 @@ final class Quaternion(var w: Double,
   def *=(q: Quaternion): Quaternion =
     Quaternion.multiply(this, q, result = this)
 
+  def *>(q: Quaternion): Quaternion =
+    Quaternion.multiply(this, q, result = q)
+
   def normalize(): Quaternion =
     this *= 1.0 / mag
 
-  def ^(pow: Double): Quaternion =
+  def ^=(pow: Double): Quaternion =
     val xyz = magXYZ
+    if (xyz < 0.000001) return this // no rotation
     val alpha = pow * Math.atan2(xyz, w)
     val m = Math.sin(alpha) / xyz
     this := (Math.cos(alpha), x * m, y * m, z * m)
@@ -159,7 +184,7 @@ object Quaternion:
       q2.negate()
       cosOmega = -cosOmega
     }
-    val linearCriteria = 0.8f
+    val linearCriteria = 0.9999f
     //if angle small, cosine is big, and we use linear interpolation
     if (cosOmega > linearCriteria) {
       mix(q1, 1 - t, q2, t, result)
@@ -169,9 +194,9 @@ object Quaternion:
     val sinOmega = Math.sqrt(1.0 - cosOmega * cosOmega)
     val omega = Math.atan2(sinOmega, cosOmega)
     val mult = 1.0 / sinOmega
-    val k0 = Math.sin((1f - t) * omega) * mult
-    val k1 = Math.sin(t * omega) * mult
-    mix(q1, k0, q2, k1, result)
+    val k1 = Math.sin((1f - t) * omega) * mult
+    val k2 = Math.sin(t * omega) * mult
+    mix(q1, k1, q2, k2, result)
 
   /**
    * linear interpolation. Really faster then spherical
@@ -183,3 +208,8 @@ object Quaternion:
       mix(q1, 1 - t, q2, -t, result)
     }
     result
+
+  def fromExp(exp: IVector3d): Quaternion =
+    val l = exp.mag
+    val m = Math.sin(l) / l
+    Quaternion(Math.cos(l), exp.x * m, exp.y * m, exp.z * m)
