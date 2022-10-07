@@ -4,6 +4,9 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
   def x: Double
   def y: Double
 
+  override def copy(): Vector2d =
+    new Vector2d(x, y)
+
   override def +(v: IVector2d): Vector2d =
     new Vector2d(x + v.x, y + v.y)
 

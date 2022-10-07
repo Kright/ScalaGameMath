@@ -2,6 +2,8 @@ package com.kright.math
 
 trait IVectorNd[IVec <: IVectorNd[_, _], Vec]:
   self: IVec =>
+  
+  def copy(): Vec
 
   def +(v: IVec): Vec
   def -(v: IVec): Vec

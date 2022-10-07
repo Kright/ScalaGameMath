@@ -5,6 +5,9 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
   def y: Double
   def z: Double
 
+  override def copy(): Vector3d =
+    new Vector3d(x, y, z)
+
   override def +(v: IVector3d): Vector3d =
     new Vector3d(x + v.x, y + v.y, z + v.z)
 
