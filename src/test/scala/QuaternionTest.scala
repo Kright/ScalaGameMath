@@ -73,7 +73,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
   }
 
   test("magnitude multiplication") {
-    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.01)
+    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.000001)
     forAll(gaussianQuaternions, gaussianQuaternions) { (q0, q1) =>
       assert(q0.mag * q1.mag === (q0 * q1).mag)
     }

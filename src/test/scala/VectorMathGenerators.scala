@@ -21,3 +21,9 @@ object VectorMathGenerators:
          y <- double1;
          z <- double1)
     yield Vector3d(x, y, z)
+    
+  val matrices: Gen[Matrix3d] =
+    for(vx <- vectorsInCube;
+        vy <- vectorsInCube;
+        vz <- vectorsInCube) 
+      yield Matrix3d().setRows(vx, vy, vz)

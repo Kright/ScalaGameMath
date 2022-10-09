@@ -77,6 +77,27 @@ trait IQuaternion:
     } else { // no rotation
       result := (1, 0, 0)
     }
+    
+  def getX(result: Vector3d = Vector3d()): Vector3d = 
+    result := (
+      1.0 - 2.0f * (y * y + z * z),
+      2.0 * (x * y - w * z),
+      2.0 * (x * z + w * y)
+    )
+
+  def getY(result: Vector3d = Vector3d()): Vector3d =
+    result := (
+      2.0 * (x * y + w * z),
+      1.0 - 2.0f * (x * x + z * z),
+      2.0 * (y * z - w * x)
+    )
+
+  def getZ(result: Vector3d = Vector3d()): Vector3d =
+    result := (
+      2.0 * (x * z - w * y),
+      2.0 * (y * z + w * x),
+      1.0 - 2.0 * (x * x + y * y),
+    )  
 
   def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
     inline def eq(a: Double, b: Double) = Math.abs(a - b) < eps
