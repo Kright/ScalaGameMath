@@ -59,9 +59,9 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
     Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps && Math.abs(z - v.z) < eps
 
 
-final class Vector3d(var x:Double = 0.0,
-                     var y:Double = 0.0,
-                     var z:Double = 0.0) extends IVector3d with VectorNd[IVector3d, Vector3d]:
+final case class Vector3d(var x:Double,
+                          var y:Double,
+                          var z:Double) extends IVector3d with VectorNd[IVector3d, Vector3d]:
 
   def :=(x: Double,y: Double,z: Double): Vector3d =
     this.x = x
@@ -150,5 +150,5 @@ final class Vector3d(var x:Double = 0.0,
 
 
 object Vector3d:
-  def apply(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0): Vector3d =
+  inline def apply(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0): Vector3d =
     new Vector3d(x, y, z)

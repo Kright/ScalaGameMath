@@ -49,8 +49,8 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
     Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps
 
 
-final class Vector2d(var x: Double = 0.0,
-                     var y: Double = 0.0) extends IVector2d with VectorNd[IVector2d, Vector2d]:
+final case class Vector2d(var x: Double,
+                          var y: Double) extends IVector2d with VectorNd[IVector2d, Vector2d]:
 
   inline def :=(x: Double,y: Double): Vector2d =
     this.x = x
@@ -124,5 +124,5 @@ final class Vector2d(var x: Double = 0.0,
 
 
 object Vector2d:
-  def apply(x: Double = 0.0, y: Double = 0.0): Vector2d =
+  inline def apply(x: Double = 0.0, y: Double = 0.0): Vector2d =
     new Vector2d(x, y)

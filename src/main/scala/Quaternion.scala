@@ -20,6 +20,15 @@ trait IQuaternion:
     val m = 1.0 / mag
     Quaternion(w * m, x * m, y * m, z * m)
 
+  def safeNormalized(): Quaternion =
+    val selfMag = mag
+    if (selfMag < 0.000001) {
+      Quaternion()
+    } else {
+      val m = 1.0 / mag
+      Quaternion(w * m, x * m, y * m, z * m)
+    }
+
   def *(q: IQuaternion): Quaternion =
     Quaternion.multiply(this, q)
 
@@ -42,7 +51,7 @@ trait IQuaternion:
     dot(q) / Math.sqrt(squareMag * q.squareMag)
 
   /** rotation axis with length of 0.5*angle in radians */
-  def getLog(result: Vector3d = new Vector3d): Vector3d =
+  def getLog(result: Vector3d = Vector3d()): Vector3d =
     val xyz = magXYZ
     if (xyz < 0.000001) return result := (0, 0, 0)
     val angle2 = Math.atan2(xyz, w)
@@ -55,7 +64,7 @@ trait IQuaternion:
   def rotationAngleRadiansForNormalized(): Double =
     2.0 * Math.acos(w)
 
-  def getRotationAxis(result: Vector3d = new Vector3d()): Vector3d =
+  def getRotationAxis(result: Vector3d = Vector3d()): Vector3d =
     val div = magXYZ
     if (div > 0.000001) {
       val m = 1.0 / div
@@ -74,10 +83,10 @@ trait IQuaternion:
 
 
 
-final class Quaternion(var w: Double,
-                       var x: Double,
-                       var y: Double,
-                       var z: Double) extends IQuaternion:
+final case class Quaternion(var w: Double,
+                            var x: Double,
+                            var y: Double,
+                            var z: Double) extends IQuaternion:
 
   def this() = this(1.0, 0.0, 0.0, 0.0)
 
@@ -150,6 +159,8 @@ final class Quaternion(var w: Double,
 
 
 object Quaternion:
+  inline def apply(): Quaternion = new Quaternion()
+
   def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion = new Quaternion()): Quaternion =
     result := (
       first.w * second.w - first.x * second.x - first.y * second.y - first.z * second.z,
@@ -208,8 +219,3 @@ object Quaternion:
       mix(q1, 1 - t, q2, -t, result)
     }
     result
-
-  def fromExp(exp: IVector3d): Quaternion =
-    val l = exp.mag
-    val m = Math.sin(l) / l
-    Quaternion(Math.cos(l), exp.x * m, exp.y * m, exp.z * m)
