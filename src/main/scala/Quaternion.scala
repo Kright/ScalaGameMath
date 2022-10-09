@@ -1,5 +1,7 @@
 package com.kright.math
 
+import scala.annotation.static
+
 /**
  * I used the book:
  * F. Dunn, I. Parberry - 3D Math Primer for Graphics and Game Development
@@ -31,6 +33,9 @@ trait IQuaternion:
 
   def *(q: IQuaternion): Quaternion =
     Quaternion.multiply(this, q)
+
+  def *(v: IVector3d, result: Vector3d = Vector3d()): Vector3d =
+    Quaternion.rotateVector(this, v, result)
 
   def ^(pow: Double): Quaternion =
     copy() ^= pow
@@ -161,7 +166,8 @@ final case class Quaternion(var w: Double,
 object Quaternion:
   inline def apply(): Quaternion = new Quaternion()
 
-  def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion = new Quaternion()): Quaternion =
+  // 16 multiplications, 12 additions
+  @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion = new Quaternion()): Quaternion =
     result := (
       first.w * second.w - first.x * second.x - first.y * second.y - first.z * second.z,
       first.w * second.x + first.x * second.w + first.y * second.z - first.z * second.y,
@@ -169,7 +175,7 @@ object Quaternion:
       first.w * second.z + first.z * second.w + first.x * second.y - first.y * second.x
     )
 
-  def mix(q1: IQuaternion, k1: Double, q2: IQuaternion, k2: Double, result: Quaternion = new Quaternion()): Quaternion =
+  @static def mix(q1: IQuaternion, k1: Double, q2: IQuaternion, k2: Double, result: Quaternion = new Quaternion()): Quaternion =
     result := (
       q1.w * k1 + q2.w * k2,
       q1.x * k1 + q2.x * k2,
@@ -181,7 +187,7 @@ object Quaternion:
    * spherical linear interpolation.
    * works only for normalized quaternions
    */
-  def slerp(q1: IQuaternion, q2: Quaternion, t: Double, result: Quaternion = new Quaternion()): Quaternion =
+  @static def slerp(q1: IQuaternion, q2: Quaternion, t: Double, result: Quaternion = new Quaternion()): Quaternion =
     if (t < 0) {
       result := q1
       return result
@@ -212,10 +218,32 @@ object Quaternion:
   /**
    * linear interpolation. Really faster then spherical
    */
-  def lerp(q1: Quaternion, q2: Quaternion, t: Float, result: Quaternion = new Quaternion()): Quaternion =
+  @static def lerp(q1: Quaternion, q2: Quaternion, t: Float, result: Quaternion = new Quaternion()): Quaternion =
     if (q1.dot(q2) >= 0) {
       mix(q1, 1 - t, q2, t, result)
     } else {
       mix(q1, 1 - t, q2, -t, result)
     }
     result
+
+  @static def rotateVector(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
+    // val r = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
+    // result := (r.x, r.y, r.z)
+
+    val m00 = 1.0 - 2.0f * (q.y * q.y + q.z * q.z)
+    val m01 = 2.0 * (q.x * q.y - q.w * q.z)
+    val m02 = 2.0 * (q.x * q.z + q.w * q.y)
+
+    val m10 = 2.0 * (q.x * q.y + q.w * q.z)
+    val m11 = 1.0 - 2.0f * (q.x * q.x + q.z * q.z)
+    val m12 = 2.0 * (q.y * q.z - q.w * q.x)
+
+    val m20 = 2.0 * (q.x * q.z - q.w * q.y)
+    val m21 = 2.0 * (q.y * q.z + q.w * q.x)
+    val m22 = 1.0 - 2.0 * (q.x * q.x + q.y * q.y)
+    
+    result := (
+      v.x * m00 + v.y * m01 + v.z * m02,
+      v.x * m10 + v.y * m11 + v.z * m12,
+      v.x * m20 + v.y * m21 + v.z * m22,
+    )

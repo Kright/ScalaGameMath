@@ -1,19 +1,13 @@
 package com.kright.math
 
-import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import VectorMathGenerators.{normalizedQuaternions, vectorsInCube, gaussianQuaternions}
+
+import org.scalacheck.Gen
+import org.scalactic.{Equality, TolerantNumerics}
 
 class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
-  private val gaussian = Gen.gaussian(mean = 0, stdDev = 1)
-
-  private val normalizedQuaternions: Gen[Quaternion] =
-    for (w <- gaussian;
-         x <- gaussian;
-         y <- gaussian;
-         z <- gaussian)
-      yield Quaternion(w, x, y, z).safeNormalized()
-
   test("quaternion pow") {
     forAll(normalizedQuaternions) { q =>
       assert((q * q).isEquals(q ^ 2))
@@ -30,7 +24,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
   }
 
   test("quaternion slerp and lerp") {
-    forAll(normalizedQuaternions, normalizedQuaternions) { case (first, second) =>
+    forAll(normalizedQuaternions, normalizedQuaternions) { (first, second) =>
       val lerp = Quaternion.lerp(first, second, 0.5).normalize()
       val slerp = Quaternion.slerp(first, second, 0.5)
 
@@ -50,7 +44,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
   }
 
   test("quaternion slerp") {
-    forAll(normalizedQuaternions, normalizedQuaternions, Gen.double) { case (first, second, t) =>
+    forAll(normalizedQuaternions, normalizedQuaternions, Gen.double) { (first, second, t) =>
       val slerp = Quaternion.slerp(first, second, t)
       val groundTruth = first * (((first ^ -1) * second) ^ t)
       assert(slerp.isEquals(groundTruth))
@@ -63,6 +57,41 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
       val angle = q.rotationAngleRadians()
       val reconstructed = Quaternion() := (angle, axis)
       assert(reconstructed.isEquals(q))
+    }
+  }
+
+  test("vector multiply by math definition") {
+    forAll(normalizedQuaternions, vectorsInCube) { (q, v) =>
+      val r1 = {
+        val qqq = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
+        Vector3d(qqq.x, qqq.y, qqq.z)
+      }
+
+      val r2 = q * v
+      assert(r1.isEquals(r2))
+    }
+  }
+
+  test("magnitude multiplication") {
+    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.01)
+    forAll(gaussianQuaternions, gaussianQuaternions) { (q0, q1) =>
+      assert(q0.mag * q1.mag === (q0 * q1).mag)
+    }
+  }
+
+  test("multiplication associativity") {
+    forAll(normalizedQuaternions, normalizedQuaternions, normalizedQuaternions) { (first, second, third) =>
+      val a = (first * second) * third
+      val b = first * (second * third)
+      assert(a.isEquals(b))
+    }
+  }
+
+  test("multiplication on vector associativity") {
+    forAll(normalizedQuaternions, normalizedQuaternions, vectorsInCube) { (first, second, vec) =>
+      val a = (first * second) * vec
+      val b = first * (second * vec)
+      assert(a.isEquals(b))
     }
   }
 }
