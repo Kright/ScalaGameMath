@@ -155,7 +155,7 @@ final case class Quaternion(var w: Double,
     this := (Math.cos(alpha), x * m, y * m, z * m)
 
   override def toString: String =
-    s"Quaternion(w=$w, x=$x, y=$y, z=$z)"
+    f"Quaternion(w=$w%1.3f, x=$x%1.3f, y=$y%1.3f, z=$z%1.3f)"
 
 
 object Quaternion:
