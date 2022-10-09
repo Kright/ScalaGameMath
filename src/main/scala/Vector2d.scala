@@ -7,36 +7,6 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
   override def copy(): Vector2d =
     new Vector2d(x, y)
 
-  override def +(v: IVector2d): Vector2d =
-    new Vector2d(x + v.x, y + v.y)
-
-  override def -(v: IVector2d): Vector2d =
-    new Vector2d(x - v.x, y - v.y)
-
-  override def *(v: IVector2d): Vector2d =
-    new Vector2d(x * v.x, y * v.y)
-
-  override def *(m: Double): Vector2d =
-    new Vector2d(x * m, y * m)
-
-  override def /(v: IVector2d): Vector2d =
-    new Vector2d(x / v.x, y / v.y)
-
-  override def ^(v: IVector2d): Vector2d =
-    new Vector2d(Math.pow(x, v.x), Math.pow(y, v.y))
-    
-  override def ^(pow: Double): Vector2d =
-    new Vector2d(Math.pow(x, pow), Math.pow(y, pow))  
-
-  override def min(v: IVector2d): Vector2d =
-    new Vector2d(Math.min(x, v.x), Math.min(y, v.y))
-
-  override def max(v: IVector2d): Vector2d =
-    new Vector2d(Math.max(x, v.x), Math.max(y, v.y))
-
-  override def clamp(lower: IVector2d, upper: IVector2d): Vector2d =
-    new Vector2d(Math.min(upper.x, Math.max(x, lower.x)), Math.min(upper.y, Math.max(y, lower.y)))
-
   override def dot(v: IVector2d): Double =
     x * v.x + y * v.y
 
@@ -52,75 +22,58 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
 final case class Vector2d(var x: Double,
                           var y: Double) extends IVector2d with VectorNd[IVector2d, Vector2d]:
 
-  inline def :=(x: Double,y: Double): Vector2d =
+  def :=(x: Double,y: Double): Vector2d =
     this.x = x
     this.y = y
     this
 
   override def :=(v: IVector2d): Vector2d =
-    x = v.x
-    y = v.y
-    this
+    setPerElement(v)((_, c) => c)
 
   override def +=(v: IVector2d): Vector2d =
-    x += v.x
-    y += v.y
-    this
+    setPerElement(v)(_ + _)
 
   override def -=(v: IVector2d): Vector2d =
-    x -= v.x
-    y -= v.y
-    this
+    setPerElement(v)(_ - _)
 
   override def *=(v: IVector2d): Vector2d =
-    x *= v.x
-    y *= v.y
-    this
+    setPerElement(v)(_ * _)
 
   override def *=(m: Double): Vector2d =
-    x *= m
-    y *= m
-    this
+    setPerElement(_ * m)
 
   override def madd(v: IVector2d, multiplier: Double): Vector2d =
-    x += v.x * multiplier
-    y += v.y * multiplier
-    this
+    setPerElement(v)(_ + _ * multiplier)
 
   override def /=(v: IVector2d): Vector2d =
-    x /= v.x
-    y /= v.y
-    this
+    setPerElement(v)(_ / _)
 
   override def ^=(v: IVector2d): Vector2d =
-    x = Math.pow(x, v.x)
-    y = Math.pow(y, v.y)
-    this
+    setPerElement(v)(Math.pow)
 
   override def ^=(pow: Double): Vector2d =
-    x = Math.pow(x, pow)
-    y = Math.pow(y, pow)
-    this  
+    setPerElement(Math.pow(_, pow))
 
   override def setMin(v: IVector2d): Vector2d =
-    x = Math.min(x, v.x)
-    y = Math.min(y, v.y)
-    this
+    setPerElement(v)(Math.min)
 
   override def setMax(v: IVector2d): Vector2d =
-    x = Math.max(x, v.x)
-    y = Math.max(y, v.y)
-    this
-
-  override def setClamp(lower: IVector2d, upper: IVector2d): Vector2d =
-    x = Math.min(upper.x, Math.max(x, lower.x))
-    y = Math.min(upper.y, Math.max(y, lower.y))
-    this
+    setPerElement(v)(Math.max)
 
   def sin(v: IVector2d): Double =
     (x * v.y - y * v.x) / Math.sqrt(squareMag * v.squareMag)
   
   override def toString: String = s"Vector2d($x, $y)"
+
+  private inline def setPerElement(v: IVector2d)(inline f: (Double, Double) => Double): Vector2d =
+    x = f(x, v.x)
+    y = f(y, v.y)
+    this
+
+  private inline def setPerElement(inline f: Double => Double): Vector2d =
+    x = f(x)
+    y = f(y)
+    this
 
 
 object Vector2d:
