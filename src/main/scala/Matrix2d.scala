@@ -1,7 +1,6 @@
 package com.kright.math
 
-import MathUtils.swap
-import MathUtils.loop
+import MathUtils.{loop, swap}
 
 import scala.annotation.static
 
@@ -132,7 +131,7 @@ object Matrix2d:
     )
 
   @static def multiply(a: Matrix2d, m: Double, result: Matrix2d): Matrix2d =
-    result :=(
+    result := (
       a.m00 * m, a.m01 * m,
       a.m10 * m, a.m11 * m
     )
@@ -150,10 +149,10 @@ object Matrix2d:
     )
 
   @static def add(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
-    elementWiseOperation(a, b, result) (_ + _)
+    elementWiseOperation(a, b, result)(_ + _)
 
   @static def sub(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
-    elementWiseOperation(a, b, result) (_ - _)
+    elementWiseOperation(a, b, result)(_ - _)
 
   @static def multiplyAdd(a: Matrix2d, b: Matrix2d, v: Double, result: Matrix2d): Matrix2d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }

@@ -1,7 +1,6 @@
 package com.kright.math
 
-import MathUtils.swap
-import MathUtils.loop
+import MathUtils.{loop, swap}
 
 import scala.annotation.static
 
@@ -127,7 +126,7 @@ final class Matrix3d(val elements: Array[Double]):
     this := (
       m.m00, m.m01, 0.0,
       m.m10, m.m11, 0.0,
-        0.0,   0.0, 1.0
+      0.0, 0.0, 1.0
     )
 
   def :=(q: Quaternion): Matrix3d =
@@ -136,7 +135,7 @@ final class Matrix3d(val elements: Array[Double]):
       q.rotM10, q.rotM11, q.rotM12,
       q.rotM20, q.rotM21, q.rotM22,
     )
-    
+
   def :=(euler: EulerAngles): Matrix3d =
     val cy = Math.cos(euler.yaw)
     val sy = Math.sin(euler.yaw)
@@ -144,7 +143,7 @@ final class Matrix3d(val elements: Array[Double]):
     val sp = Math.sin(euler.pitch)
     val cr = Math.cos(euler.roll)
     val sr = Math.sin(euler.roll)
-    
+
     this := (
       cy * cp, cy * sp * sr - cr * sy, sy * sr + cy * cr * sp,
       cp * sy, cy * cr + sy * sp * sr, cr * sy * sp - cy * sr,
@@ -164,9 +163,9 @@ final class Matrix3d(val elements: Array[Double]):
     val sin = Math.sin(radians)
     val cos = Math.cos(radians)
     this := (
-       cos,-sin, 0.0,
-       sin, cos, 0.0,
-       0.0, 0.0, 1.0,
+      cos,-sin, 0.0,
+      sin, cos, 0.0,
+      0.0, 0.0, 1.0,
     )
 
   def set2dTranslation(shift: Vector2d): Matrix3d =
@@ -200,7 +199,7 @@ final class Matrix3d(val elements: Array[Double]):
     }
     true
 
-  override def toString: String = 
+  override def toString: String =
     s"Matrix3d(${elements.mkString(", ")})"
 
 
@@ -249,10 +248,10 @@ object Matrix3d:
     result
 
   @static def add(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
-    elementWiseOperation(a, b, result) { _ + _ }
+    elementWiseOperation(a, b, result)( _ + _ )
 
   @static def sub(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
-    elementWiseOperation(a, b, result) { _ + _ }
+    elementWiseOperation(a, b, result)( _ + _ )
 
   @static def multiplyAdd(a: Matrix3d, b: Matrix3d, v: Double, result: Matrix3d): Matrix3d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }

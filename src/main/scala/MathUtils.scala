@@ -11,5 +11,5 @@ object MathUtils:
     var i = 0
     while (i < count) {
       body(i)
-      i += 1 
+      i += 1
     }

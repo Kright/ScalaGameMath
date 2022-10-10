@@ -32,10 +32,16 @@ trait IQuaternion:
     }
 
   def *(q: IQuaternion): Quaternion =
-    Quaternion.multiply(this, q)
+    Quaternion.multiply(this, q, result = Quaternion())
+
+  def *>(q: Quaternion): Quaternion =
+    Quaternion.multiply(this, q, result = q)
 
   def *(v: IVector3d, result: Vector3d = Vector3d()): Vector3d =
-    Quaternion.rotateVector(this, v, result)
+    Quaternion.multiply(this, v, result)
+
+  def *>(v: Vector3d): Vector3d =
+    Quaternion.multiply(this, v, v)
 
   def ^(pow: Double): Quaternion =
     copy() ^= pow
@@ -77,8 +83,8 @@ trait IQuaternion:
     } else { // no rotation
       result := (1, 0, 0)
     }
-    
-  def getX(result: Vector3d = Vector3d()): Vector3d = 
+
+  def getX(result: Vector3d = Vector3d()): Vector3d =
     result := (rotM00, rotM01, rotM02)
 
   def getY(result: Vector3d = Vector3d()): Vector3d =
@@ -139,7 +145,7 @@ final case class Quaternion(var w: Double,
     val sp = Math.sin(0.5 * euler.pitch)
     val cr = Math.cos(0.5 * euler.roll)
     val sr = Math.sin(0.5 * euler.roll)
-    
+
     // yaw   axis Z
     // pitch axis Y
     // roll  axis X
@@ -183,9 +189,6 @@ final case class Quaternion(var w: Double,
   def *=(q: Quaternion): Quaternion =
     Quaternion.multiply(this, q, result = this)
 
-  def *>(q: Quaternion): Quaternion =
-    Quaternion.multiply(this, q, result = q)
-
   def normalize(): Quaternion =
     this *= 1.0 / mag
 
@@ -204,7 +207,7 @@ object Quaternion:
   inline def apply(): Quaternion = new Quaternion()
 
   // 16 multiplications, 12 additions
-  @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion = new Quaternion()): Quaternion =
+  @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion): Quaternion =
     result := (
       first.w * second.w - first.x * second.x - first.y * second.y - first.z * second.z,
       first.w * second.x + first.x * second.w + first.y * second.z - first.z * second.y,
@@ -263,10 +266,10 @@ object Quaternion:
     }
     result
 
-  @static def rotateVector(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
+  @static def multiply(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
     // val r = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
     // result := (r.x, r.y, r.z)
-    
+
     result := (
       v.x * q.rotM00 + v.y * q.rotM01 + v.z * q.rotM02,
       v.x * q.rotM10 + v.y * q.rotM11 + v.z * q.rotM12,

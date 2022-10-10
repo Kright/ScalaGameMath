@@ -1,7 +1,6 @@
 package com.kright.math
 
-import MathUtils.loop
-import MathUtils.swap
+import MathUtils.{loop, swap}
 
 import scala.annotation.static
 
@@ -17,6 +16,7 @@ final class Matrix4d(val elements: Array[Double]):
   def this() = this(new Array[Double](16))
 
   inline def apply(y: Int, x: Int): Double = elements(x + y * 4)
+
   inline def update(y: Int, x: Int, value: Double): Unit = elements(x + y * 4) = value
 
   def copy(): Matrix4d =
@@ -36,10 +36,10 @@ final class Matrix4d(val elements: Array[Double]):
 
   def :=(m: Matrix3d): Matrix4d =
     this := (
-      m(0,0), m(0,1), m(0, 2), 0.0,
-      m(1,0), m(1,1), m(1, 2), 0.0,
-      m(2,0), m(2,1), m(2, 2), 0.0,
-         0.0,    0.0,     0.0, 1.0
+      m(0, 0), m(0, 1), m(0, 2), 0.0,
+      m(1, 0), m(1, 1), m(1, 2), 0.0,
+      m(2, 0), m(2, 1), m(2, 2), 0.0,
+          0.0,     0.0,     0.0, 1.0
     )
 
   def :=(m: Matrix2d): Matrix4d =
@@ -79,9 +79,9 @@ final class Matrix4d(val elements: Array[Double]):
          a20: Double, a21: Double, a22: Double, a23: Double,
          a30: Double, a31: Double, a32: Double, a33: Double): Matrix4d =
     val e = elements
-    e(0) = a00; e(1) = a01; e(2) = a02; e(3) = a03
-    e(4) = a10; e(5) = a11; e(6) = a12; e(7) = a13
-    e(8) = a20; e(9) = a21; e(10) = a22; e(11) = a23
+     e(0) = a00;  e(1) = a01;  e(2) = a02;  e(3) = a03
+     e(4) = a10;  e(5) = a11;  e(6) = a12;  e(7) = a13
+     e(8) = a20;  e(9) = a21; e(10) = a22; e(11) = a23
     e(12) = a30; e(13) = a31; e(14) = a32; e(15) = a33
     this
 
@@ -126,17 +126,26 @@ final class Matrix4d(val elements: Array[Double]):
     Matrix4d.sub(this, m, result = new Matrix4d())
 
   def madd(m: Matrix4d, v: Double): Matrix4d =
-    Matrix4d.multiplyAdd(this, m, v, this)
+    Matrix4d.multiplyAdd(this, m, v, result = this)
 
 
-  def *(v: Vector4d): Vector4d =
+  def *(v: IVector4d): Vector4d =
     Matrix4d.multiply(this, v, result = Vector4d())
 
-  def *(v: Vector3d): Vector3d =
+  def *>(v: Vector4d): Vector4d =
+    Matrix4d.multiply(this, v, result = v)
+
+  def *(v: IVector3d): Vector3d =
     Matrix4d.multiply(this, v, vw = 1.0, result = Vector3d())
+
+  def *>(v: Vector3d): Vector3d =
+    Matrix4d.multiply(this, v, vw = 1.0, result = v)
 
   def rotate(v: Vector3d): Vector3d =
     Matrix4d.rotate3d(this, v, result = Vector3d())
+
+  def rotateInplace(v: Vector3d): Vector3d =
+    Matrix4d.rotate3d(this, v, result = v)
 
   def minor(y1: Int, y2: Int, y3: Int, x1: Int, x2: Int, x3: Int): Double =
     Matrix3d.determinant(
@@ -195,11 +204,11 @@ final class Matrix4d(val elements: Array[Double]):
     e.swap(11, 14)
     this
 
-  def setTranslation(shift: Vector3d): Matrix4d =
+  def setTranslation(t: Vector3d): Matrix4d =
     this := (
-      1.0, 0.0, 0.0, shift.x,
-      0.0, 1.0, 0.0, shift.y,
-      0.0, 0.0, 1.0, shift.z, 
+      1.0, 0.0, 0.0, t.x,
+      0.0, 1.0, 0.0, t.y,
+      0.0, 0.0, 1.0, t.z,
       0.0, 0.0, 0.0, 1.0
     )
 
@@ -279,10 +288,10 @@ object Matrix4d:
     result
 
   @static def add(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
-    elementWiseOperation(a, b, result) (_ + _)
+    elementWiseOperation(a, b, result)(_ + _)
 
   @static def sub(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
-    elementWiseOperation(a, b, result) (_ + _)
+    elementWiseOperation(a, b, result)(_ + _)
 
   @static def multiplyAdd(a: Matrix4d, b: Matrix4d, v: Double, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }

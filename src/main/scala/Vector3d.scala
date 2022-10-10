@@ -3,7 +3,6 @@ package com.kright.math
 trait IVector3d extends IVectorNd[IVector3d, Vector3d] :
   def x: Double
   def y: Double
-
   def z: Double
 
   override def copy(): Vector3d =
