@@ -120,7 +120,7 @@ final class Matrix4d(val elements: Array[Double]):
     Matrix4d.multiply(this, v, vw = 1.0, result = Vector3d())
 
   def rotate(v: Vector3d): Vector3d =
-    Matrix4d.multiply(this, v, vw = 0.0, result = Vector3d())
+    Matrix4d.rotate3d(this, v, result = Vector3d())
 
   def minor(y1: Int, y2: Int, y3: Int, x1: Int, x2: Int, x3: Int): Double =
     Matrix3d.determinant(
@@ -244,7 +244,17 @@ object Matrix4d:
   @static def multiply(matrix: Matrix4d, v: IVector3d, vw: Double, result: Vector3d): Vector3d =
     val e = matrix.elements
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z + e(shift + 3) * vw
-    result := (f(0), f(4), f(8))
+    val rx = f(0)
+    val ry = f(4)
+    val rz = f(8)
+    val rw = f(12)
+    val m = 1.0 / rw
+    result := (rx * m, ry * m, rz * m)
+
+  @static def rotate3d(matrix: Matrix4d, v: IVector3d, result: Vector3d): Vector3d =
+    val e = matrix.elements
+    inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z
+    result := (f(0), f(4), f(8))  
 
   private inline def elementWiseOperation(left: Matrix4d, right: Matrix4d, result: Matrix4d)(inline op: (Double, Double) => Double): Matrix4d =
     loop(16) { i =>

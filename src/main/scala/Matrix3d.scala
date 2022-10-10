@@ -41,10 +41,10 @@ final class Matrix3d(val elements: Array[Double]):
     Matrix3d.multiply(this, v, 1.0, v)
 
   def rotate(v: IVector2d): Vector2d =
-    Matrix3d.multiply(this, v, 0.0, Vector2d())
+    Matrix3d.rotate2d(this, v, Vector2d())
 
   def rotateInplace(v: Vector2d): Vector2d =
-    Matrix3d.multiply(this, v, 0.0, v)
+    Matrix3d.rotate2d(this, v, v)
 
 
   def *(right: Matrix3d): Matrix3d =
@@ -154,7 +154,7 @@ final class Matrix3d(val elements: Array[Double]):
        sin, cos, 0.0,
        0.0, 0.0, 1.0,
     )
-    
+
   def set2dTranslation(shift: Vector2d): Matrix3d =
     this := (
       1.0, 0.0, shift.x,
@@ -217,10 +217,16 @@ object Matrix3d:
 
   @static def multiply(a: Matrix3d, v: IVector2d, z: Double, result: Vector2d): Vector2d =
     val e = a.elements
-    result := (
-      e(0) * v.x + e(1) * v.y + e(2) * z,
-      e(3) * v.x + e(4) * v.y + e(5) * z,
-    )
+    val rx = e(0) * v.x + e(1) * v.y + e(2) * z
+    val ry = e(3) * v.x + e(4) * v.y + e(5) * z
+    val rz = e(6) * v.x + e(7) * v.y + e(8) * z
+    result := (rx / rz, ry / rz)
+
+  @static def rotate2d(a: Matrix3d, v: IVector2d, result: Vector2d): Vector2d =
+    val e = a.elements
+    val rx = e(0) * v.x + e(1) * v.y
+    val ry = e(3) * v.x + e(4) * v.y
+    result := (rx, ry)
 
   private inline def elementWiseOperation(left: Matrix3d, right: Matrix3d, result: Matrix3d)(inline op: (Double, Double) => Double): Matrix3d =
     loop(9) { i =>

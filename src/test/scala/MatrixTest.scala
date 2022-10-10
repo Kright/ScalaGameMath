@@ -1,5 +1,6 @@
 package com.kright.math
 
+import org.scalatest.Assertions._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import VectorMathGenerators.{angleRadians, matrices2, matrices3, matrices4, normalizedQuaternions, vectors2InCube, vectors3InCube}
@@ -157,13 +158,25 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     }
   }
 
-  test("2d vec * matrix3d") {
+  test("multiply lower dimension vector") {
     implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.000001)
     forAll(vectors2InCube, matrices3) { (v, m) =>
       val v2 = m * v
       val v3 = m * Vector3d(v.x, v.y, 1.0)
-      assert(v2.x === v3.x)
-      assert(v2.y === v3.y)
+      if (Math.abs(v3.z) > 0.000001) {
+        assert(v2.x === v3.x / v3.z)
+        assert(v2.y === v3.y / v3.z)
+      }
+    }
+
+    forAll(vectors3InCube, matrices4) { (v, m) =>
+      val v2 = m * v
+      val v3 = m * Vector4d(v.x, v.y, v.z, 1.0)
+      if (Math.abs(v3.z) > 0.000001) {
+        assert(v2.x === v3.x / v3.w)
+        assert(v2.y === v3.y / v3.w)
+        assert(v2.z === v3.z / v3.w)
+      }
     }
   }
 

@@ -25,3 +25,7 @@ class VectorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("cross product") {
+    assert(Vector3d(x=1.0).cross(Vector3d(y=1.0)).isEquals(Vector3d(z=1.0)))
+  }
