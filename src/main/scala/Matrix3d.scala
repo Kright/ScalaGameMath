@@ -27,13 +27,25 @@ final class Matrix3d(val elements: Array[Double]):
       0.0, 0.0, 1.0
     )
 
-  def *(v: IVector3d, result: Vector3d = Vector3d()): Vector3d =
-    val e = elements
-    result := (
-      e(0) * v.x + e(1) * v.y + e(2) * v.z,
-      e(3) * v.x + e(4) * v.y + e(5) * v.z,
-      e(6) * v.x + e(7) * v.y + e(8) * v.z,
-    )
+
+  def *(v: IVector3d): Vector3d =
+    Matrix3d.multiply(this, v, Vector3d())
+
+  def *>(v: Vector3d): Vector3d =
+    Matrix3d.multiply(this, v, v)
+
+  def *(v: IVector2d): Vector2d =
+    Matrix3d.multiply(this, v, 1.0, Vector2d())
+
+  def *>(v: Vector2d): Vector2d =
+    Matrix3d.multiply(this, v, 1.0, v)
+
+  def rotate(v: IVector2d): Vector2d =
+    Matrix3d.multiply(this, v, 0.0, Vector2d())
+
+  def rotateInplace(v: Vector2d): Vector2d =
+    Matrix3d.multiply(this, v, 0.0, v)
+
 
   def *(right: Matrix3d): Matrix3d =
     Matrix3d.multiply(this, right, new Matrix3d())
@@ -67,8 +79,7 @@ final class Matrix3d(val elements: Array[Double]):
 
   def det(): Double =
     val f = elements
-    f(0) * f(4) * f(8) + f(2) * f(3) * f(7) + f(1) * f(5) * f(6) -
-      (f(2) * f(4) * f(6) + f(1) * f(3) * f(8) + f(0) * f(5) * f(7))
+    Matrix3d.determinant(f(0), f(1), f(2), f(3), f(4), f(5), f(6), f(7), f(8))
 
   def transpose(): Matrix3d =
     elements.swap(1, 3)
@@ -112,19 +123,19 @@ final class Matrix3d(val elements: Array[Double]):
     System.arraycopy(m.elements, 0, elements, 0, 9)
     this
 
+  def :=(m: Matrix2d): Matrix3d =
+    this := (
+      m.m00, m.m01, 0.0,
+      m.m10, m.m11, 0.0,
+        0.0,   0.0, 1.0
+    )
+
   def :=(q: Quaternion): Matrix3d =
-    elements(0) = 1.0 - 2.0f * (q.y * q.y + q.z * q.z)
-    elements(1) = 2.0 * (q.x * q.y - q.w * q.z)
-    elements(2) = 2.0 * (q.x * q.z + q.w * q.y)
-
-    elements(3) = 2.0 * (q.x * q.y + q.w * q.z)
-    elements(4) = 1.0 - 2.0f * (q.x * q.x + q.z * q.z)
-    elements(5) = 2.0 * (q.y * q.z - q.w * q.x)
-
-    elements(6) = 2.0 * (q.x * q.z - q.w * q.y)
-    elements(7) = 2.0 * (q.y * q.z + q.w * q.x)
-    elements(8) = 1.0 - 2.0 * (q.x * q.x + q.y * q.y)
-    this
+    this := (
+      q.rotM00, q.rotM01, q.rotM02,
+      q.rotM10, q.rotM11, q.rotM12,
+      q.rotM20, q.rotM21, q.rotM22,
+    )
 
   def :=(a00: Double, a01: Double, a02: Double,
          a10: Double, a11: Double, a12: Double,
@@ -135,6 +146,15 @@ final class Matrix3d(val elements: Array[Double]):
     e(6) = a20; e(7) = a21; e(8) = a22
     this
 
+  def set2dRotation(radians: Double): Matrix3d =
+    val sin = Math.sin(radians)
+    val cos = Math.cos(radians)
+    this := (
+       cos,-sin, 0.0,
+       sin, cos, 0.0,
+       0.0, 0.0, 1.0,
+    )
+
   def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
     val el1 = elements
     val el2 = other.elements
@@ -144,6 +164,9 @@ final class Matrix3d(val elements: Array[Double]):
       }
     }
     true
+
+  override def toString: String = 
+    s"Matrix3d(${elements.mkString(", ")})"
 
 
 object Matrix3d:
@@ -163,6 +186,21 @@ object Matrix3d:
     }
     result
 
+  @static def multiply(a: Matrix3d, v: IVector3d, result: Vector3d): Vector3d =
+    val e = a.elements
+    result := (
+      e(0) * v.x + e(1) * v.y + e(2) * v.z,
+      e(3) * v.x + e(4) * v.y + e(5) * v.z,
+      e(6) * v.x + e(7) * v.y + e(8) * v.z,
+    )
+
+  @static def multiply(a: Matrix3d, v: IVector2d, z: Double, result: Vector2d): Vector2d =
+    val e = a.elements
+    result := (
+      e(0) * v.x + e(1) * v.y + e(2) * z,
+      e(3) * v.x + e(4) * v.y + e(5) * z,
+    )
+
   private inline def elementWiseOperation(left: Matrix3d, right: Matrix3d, result: Matrix3d)(inline op: (Double, Double) => Double): Matrix3d =
     loop(9) { i =>
       result.elements(i) = op(left.elements(i), right.elements(i))
@@ -177,6 +215,13 @@ object Matrix3d:
 
   @static def multiplyAdd(a: Matrix3d, b: Matrix3d, v: Double, result: Matrix3d): Matrix3d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }
+
+  inline def determinant(a00: Double, a01: Double, a02: Double,
+                         a10: Double, a11: Double, a12: Double,
+                         a20: Double, a21: Double, a22: Double): Double =
+    a00 * (a11 * a22 - a21 * a12) +
+      a01 * (a12 * a20 - a10 * a22) +
+      a02 * (a10 * a21 - a11 * a20)
 
   @static def invertMatrix(a: Matrix3d, result: Matrix3d): Matrix3d =
     val det = a.det() // this may be 0.0, check if necessary

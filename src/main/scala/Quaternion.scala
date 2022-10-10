@@ -79,25 +79,13 @@ trait IQuaternion:
     }
     
   def getX(result: Vector3d = Vector3d()): Vector3d = 
-    result := (
-      1.0 - 2.0f * (y * y + z * z),
-      2.0 * (x * y - w * z),
-      2.0 * (x * z + w * y)
-    )
+    result := (rotM00, rotM01, rotM02)
 
   def getY(result: Vector3d = Vector3d()): Vector3d =
-    result := (
-      2.0 * (x * y + w * z),
-      1.0 - 2.0f * (x * x + z * z),
-      2.0 * (y * z - w * x)
-    )
+    result := (rotM10, rotM11, rotM12)
 
   def getZ(result: Vector3d = Vector3d()): Vector3d =
-    result := (
-      2.0 * (x * z - w * y),
-      2.0 * (y * z + w * x),
-      1.0 - 2.0 * (x * x + y * y),
-    )  
+    result := (rotM20, rotM21, rotM22)
 
   def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
     inline def eq(a: Double, b: Double) = Math.abs(a - b) < eps
@@ -107,6 +95,15 @@ trait IQuaternion:
       eq(w, -q.w) && eq(x, -q.x) && eq(y, -q.y) && eq(z, -q.z)
     }
 
+  def rotM00: Double = 1.0 - 2.0f * (y * y + z * z)
+  def rotM01: Double = 2.0 * (x * y - w * z)
+  def rotM02: Double = 2.0 * (x * z + w * y)
+  def rotM10: Double = 2.0 * (x * y + w * z)
+  def rotM11: Double = 1.0 - 2.0f * (x * x + z * z)
+  def rotM12: Double = 2.0 * (y * z - w * x)
+  def rotM20: Double = 2.0 * (x * z - w * y)
+  def rotM21: Double = 2.0 * (y * z + w * x)
+  def rotM22: Double = 1.0 - 2.0 * (x * x + y * y)
 
 
 final case class Quaternion(var w: Double,
@@ -250,21 +247,9 @@ object Quaternion:
   @static def rotateVector(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
     // val r = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
     // result := (r.x, r.y, r.z)
-
-    val m00 = 1.0 - 2.0f * (q.y * q.y + q.z * q.z)
-    val m01 = 2.0 * (q.x * q.y - q.w * q.z)
-    val m02 = 2.0 * (q.x * q.z + q.w * q.y)
-
-    val m10 = 2.0 * (q.x * q.y + q.w * q.z)
-    val m11 = 1.0 - 2.0f * (q.x * q.x + q.z * q.z)
-    val m12 = 2.0 * (q.y * q.z - q.w * q.x)
-
-    val m20 = 2.0 * (q.x * q.z - q.w * q.y)
-    val m21 = 2.0 * (q.y * q.z + q.w * q.x)
-    val m22 = 1.0 - 2.0 * (q.x * q.x + q.y * q.y)
     
     result := (
-      v.x * m00 + v.y * m01 + v.z * m02,
-      v.x * m10 + v.y * m11 + v.z * m12,
-      v.x * m20 + v.y * m21 + v.z * m22,
+      v.x * q.rotM00 + v.y * q.rotM01 + v.z * q.rotM02,
+      v.x * q.rotM10 + v.y * q.rotM11 + v.z * q.rotM12,
+      v.x * q.rotM20 + v.y * q.rotM21 + v.z * q.rotM22,
     )

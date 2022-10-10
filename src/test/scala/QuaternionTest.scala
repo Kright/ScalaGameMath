@@ -2,7 +2,7 @@ package com.kright.math
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import VectorMathGenerators.{normalizedQuaternions, vectorsInCube, gaussianQuaternions}
+import VectorMathGenerators.{normalizedQuaternions, vectors3InCube, gaussianQuaternions}
 
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
@@ -61,7 +61,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
   }
 
   test("vector multiply by math definition") {
-    forAll(normalizedQuaternions, vectorsInCube) { (q, v) =>
+    forAll(normalizedQuaternions, vectors3InCube) { (q, v) =>
       val r1 = {
         val qqq = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
         Vector3d(qqq.x, qqq.y, qqq.z)
@@ -88,7 +88,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
   }
 
   test("multiplication on vector associativity") {
-    forAll(normalizedQuaternions, normalizedQuaternions, vectorsInCube) { (first, second, vec) =>
+    forAll(normalizedQuaternions, normalizedQuaternions, vectors3InCube) { (first, second, vec) =>
       val a = (first * second) * vec
       val b = first * (second * vec)
       assert(a.isEquals(b))

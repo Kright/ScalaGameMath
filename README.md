@@ -10,20 +10,14 @@ For other variants see [https://jitpack.io/](https://jitpack.io/).
 
 ## Features:
 
-* Vector2d, Vector3d, Vectors4d
+* Vector2d, Vector3d, Vector4d
 * Quaternions
-* each of this classes has view (for example, IVector2d), interaction with view cannot change object
-* Matrices: 3x3
+* Matrices: 2x2, 3x3, 4x4
 
-for quaternions and matrices multiplication order is math-like, for example:
+Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```
 (matrixA * matrixB) * vec === matrixA * (matrixB * vec)
 (quaternionA * quaternionB) * vec === quaternionA * (quaternionB * vec)
 ```
-
-
-Not implemented yet:
-* Matrices: 2x2, 4x4
-
 
 Library doesn't have any external dependencies.
