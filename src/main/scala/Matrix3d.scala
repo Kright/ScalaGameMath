@@ -162,6 +162,20 @@ final class Matrix3d(val elements: Array[Double]):
       0.0, 0.0, 1.0
     )
 
+  def setScale(s: Vector2d): Matrix3d =
+    this := (
+      s.x, 0.0, 0.0,
+      0.0, s.y, 0.0,
+      0.0, 0.0, 1.0,
+    )
+
+  def setScale(s: Vector3d): Matrix3d =
+    this := (
+      s.x, 0.0, 0.0,
+      0.0, s.y, 0.0,
+      0.0, 0.0, s.z,
+    )
+
   def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
     val el1 = elements
     val el2 = other.elements

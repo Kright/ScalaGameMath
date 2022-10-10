@@ -185,7 +185,23 @@ final class Matrix4d(val elements: Array[Double]):
       0.0, 1.0, 0.0, shift.y,
       0.0, 0.0, 1.0, shift.z, 
       0.0, 0.0, 0.0, 1.0
-    )  
+    )
+
+  def setScale(s: Vector3d): Matrix4d =
+    this := (
+      s.x, 0.0, 0.0, 0.0,
+      0.0, s.y, 0.0, 0.0,
+      0.0, 0.0, s.z, 0.0,
+      0.0, 0.0, 0.0, 1.0
+    )
+
+  def setScale(s: Vector4d): Matrix4d =
+    this := (
+      s.x, 0.0, 0.0, 0.0,
+      0.0, s.y, 0.0, 0.0,
+      0.0, 0.0, s.z, 0.0,
+      0.0, 0.0, 0.0, s.w
+    )
 
   def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
     val el1 = elements

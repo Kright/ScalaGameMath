@@ -105,6 +105,12 @@ final class Matrix2d(var m00: Double, var m01: Double,
       sin, cos,
     )
 
+  def setScale(s: Vector2d): Matrix2d =
+    this := (
+      s.x, 0.0,
+      0.0, s.y
+    )
+
   def isEquals(other: Matrix2d, eps: Double = 0.000001): Boolean =
     Math.abs(m00 - other.m00) < eps &&
       Math.abs(m01 - other.m01) < eps &&
