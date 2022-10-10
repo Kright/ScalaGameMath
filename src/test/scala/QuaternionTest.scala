@@ -1,13 +1,14 @@
 package com.kright.math
 
+import org.scalatest.Assertions._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import VectorMathGenerators.{normalizedQuaternions, vectors3InCube, gaussianQuaternions}
+import VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
 
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
 
-class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
+class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("quaternion pow") {
     forAll(normalizedQuaternions) { q =>
       assert((q * q).isEquals(q ^ 2))
@@ -94,4 +95,3 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks {
       assert(a.isEquals(b))
     }
   }
-}

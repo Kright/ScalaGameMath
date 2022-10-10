@@ -132,6 +132,25 @@ final case class Quaternion(var w: Double,
     val m = Math.sin(realAngle) / axis.mag
     this := (Math.cos(realAngle), axis.x * m, axis.y * m, axis.z * m)
 
+  def :=(euler: EulerAngles): Quaternion =
+    val cy = Math.cos(0.5 * euler.yaw)
+    val sy = Math.sin(0.5 * euler.yaw)
+    val cp = Math.cos(0.5 * euler.pitch)
+    val sp = Math.sin(0.5 * euler.pitch)
+    val cr = Math.cos(0.5 * euler.roll)
+    val sr = Math.sin(0.5 * euler.roll)
+    
+    // yaw   axis Z
+    // pitch axis Y
+    // roll  axis X
+
+    this := (
+      cr * cp * cy + sr * sp * sy,
+      sr * cp * cy - cr * sp * sy,
+      cr * sp * cy + sr * cp * sy,
+      cr * cp * sy - sr * sp * cy,
+    )
+
   def setIdentity(): Quaternion =
     this := (1.0, 0.0, 0.0, 0.0)
 

@@ -35,6 +35,12 @@ object VectorMathGenerators:
          z <- double1;
          w <- double1)
     yield Vector4d(x, y, z, w)
+    
+  val eulerAngles: Gen[EulerAngles] =
+    for(yaw <- double1;
+        pitch <- double1;
+        roll <- double1) 
+      yield new EulerAngles((yaw - 0.5) * 2.0 * Math.PI, (pitch - 0.5) * Math.PI, (roll - 0.5) * 2.0 * Math.PI)
   
   val matrices3: Gen[Matrix3d] =
     for(vx <- vectors3InCube;

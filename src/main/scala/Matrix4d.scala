@@ -58,6 +58,22 @@ final class Matrix4d(val elements: Array[Double]):
            0.0,      0.0,      0.0, 1.0
     )
 
+  def :=(euler: EulerAngles): Matrix4d =
+    val cy = Math.cos(euler.yaw)
+    val sy = Math.sin(euler.yaw)
+    val cp = Math.cos(euler.pitch)
+    val sp = Math.sin(euler.pitch)
+    val cr = Math.cos(euler.roll)
+    val sr = Math.sin(euler.roll)
+
+    this := (
+      cy * cp, cy * sp * sr - cr * sy, sy * sr + cy * cr * sp, 0.0,
+      cp * sy, cy * cr + sy * sp * sr, cr * sy * sp - cy * sr, 0.0,
+          -sp,                cp * sr,                cp * cr, 0.0,
+          0.0,                    0.0,                    0.0, 1.0,
+    )
+
+
   def :=(a00: Double, a01: Double, a02: Double, a03: Double,
          a10: Double, a11: Double, a12: Double, a13: Double,
          a20: Double, a21: Double, a22: Double, a23: Double,

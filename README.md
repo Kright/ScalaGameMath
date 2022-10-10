@@ -13,6 +13,7 @@ For other variants see [https://jitpack.io/](https://jitpack.io/).
 * Vector2d, Vector3d, Vector4d
 * Quaternions
 * Matrices: 2x2, 3x3, 4x4
+* Euler angles: yaw Z, pitch Y, roll X 
 
 Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```
