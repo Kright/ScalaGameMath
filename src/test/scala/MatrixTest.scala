@@ -180,3 +180,13 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       assert(r1.isEquals(r2))
     }
   }
+
+  test("translation") {
+    forAll(vectors2InCube, vectors2InCube) { (tr, v) =>
+      assert((Matrix3d().set2dTranslation(tr) * v).isEquals(tr + v))
+    }
+
+    forAll(vectors3InCube, vectors3InCube) { (tr, v) =>
+      assert((Matrix4d().setTranslation(tr) * v).isEquals(tr + v))
+    }
+  }

@@ -154,6 +154,13 @@ final class Matrix3d(val elements: Array[Double]):
        sin, cos, 0.0,
        0.0, 0.0, 1.0,
     )
+    
+  def set2dTranslation(shift: Vector2d): Matrix3d =
+    this := (
+      1.0, 0.0, shift.x,
+      0.0, 1.0, shift.y,
+      0.0, 0.0, 1.0
+    )
 
   def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
     val el1 = elements

@@ -179,6 +179,14 @@ final class Matrix4d(val elements: Array[Double]):
     e.swap(11, 14)
     this
 
+  def setTranslation(shift: Vector3d): Matrix4d =
+    this := (
+      1.0, 0.0, 0.0, shift.x,
+      0.0, 1.0, 0.0, shift.y,
+      0.0, 0.0, 1.0, shift.z, 
+      0.0, 0.0, 0.0, 1.0
+    )  
+
   def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
     val el1 = elements
     val el2 = other.elements
