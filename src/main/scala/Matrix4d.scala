@@ -228,6 +228,82 @@ final class Matrix4d(val elements: Array[Double]):
       0.0, 0.0, 0.0, s.w
     )
 
+  /**
+   * camera orientation: depth along Z axis
+   * x, y coordinates converted into perspective: x / z / tanX, y / z / tanY
+   *
+   * for flipping X or Y axis just pass negative tangent
+   *
+   * @param near - z coordinate of frustum place converted into z = -1
+   * @param far  - z coordinate of frustum plane converted into z = 1
+   * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
+   * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees
+   * @return self
+   */
+  def setProjectionCamera(tanX: Double, tanY: Double, near: Double, far: Double): Matrix4d =
+    // fit frustum into cube [-1, 1]
+    val depth = far - near
+    val sx = 1.0 / tanX
+    val sy = 1.0 / tanY
+    val sz = (near + far) / depth
+    val sw = -2.0 * far * near / depth
+    this := (
+       sx, 0.0, 0.0, 0.0,
+      0.0,  sy, 0.0, 0.0,
+      0.0, 0.0,  sz,  sw,
+      0.0, 0.0, 1.0, 0.0,
+    )
+
+
+    /**
+     * more precise way for depth at far plane
+     *
+     * camera orientation: along Z axis, z = near and z = far converted to z = -1 and z = 0
+     * x, y coordinates converted into perspective: x / z / tanX, y / z / tanY
+     *
+     * for flipping X or Y axis just pass negative tangent
+     *
+     * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
+     * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees
+     * @param near - z coordinate of frustum plane converted into z = -1
+     * @param far  - z coordinate of frustum plane converted into z = 0
+     * @return self
+     */
+  def setProjectionCameraZ10(tanX: Double, tanY: Double, near: Double, far: Double): Matrix4d =
+    val depth = far - near
+    val sx = 1.0 / tanX
+    val sy = 1.0 / tanY
+    val sz = near / depth
+    val sw = -far * near / depth
+    this := (
+       sx, 0.0, 0.0, 0.0,
+      0.0,  sy, 0.0, 0.0,
+      0.0, 0.0,  sz,  sw,
+      0.0, 0.0, 1.0, 0.0,
+    )
+
+  /**
+   * camera orientation: along Z axis, z = near and z = infinity converted to z = -1 and z = 0
+   * x, y coordinates converted into perspective: x / z / tanX, y / z / tanY
+   *
+   * for flipping X or Y axis just pass negative tangent
+   *
+   * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
+   * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees* 
+   * @param near - z coordinate of frustum plane converted into z = -1
+   * @return self
+   */
+  def setProjectionCameraZ10(tanX: Double, tanY: Double, near: Double): Matrix4d =
+    val sx = 1.0 / tanX
+    val sy = 1.0 / tanY
+    val sw = -near
+    this := (
+       sx, 0.0, 0.0, 0.0,
+      0.0,  sy, 0.0, 0.0,
+      0.0, 0.0, 0.0,  sw,
+      0.0, 0.0, 1.0, 0.0,
+    )
+
   def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
     val el1 = elements
     val el2 = other.elements

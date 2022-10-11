@@ -203,3 +203,36 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       assert((Matrix4d().setTranslation(tr) * v).isEquals(tr + v))
     }
   }
+
+  test("perspective camera") {
+    val near = 0.1
+    val far = 1.0
+    val m = Matrix4d().setProjectionCamera(1.0, 0.5, near, far)
+
+    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, far)).isEquals(Vector3d(0.0, 0.0, 1.0)))
+    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+  }
+
+  test("perspectiveZ10 camera") {
+    val near = 0.1
+    val far = 1.0
+    val m = Matrix4d().setProjectionCameraZ10(1.0, 0.5, near, far)
+
+    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, far)).isEquals(Vector3d(0.0, 0.0, 0.0)))
+    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+  }
+
+  test("perspectiveZ10 camera with infinity far") {
+    val near = 0.1
+    val farExample = 1000.0
+    val m = Matrix4d().setProjectionCameraZ10(1.0, 0.5, near)
+
+    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, farExample)).isEquals(Vector3d(0.0, 0.0, -near / farExample)))
+    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+  }
