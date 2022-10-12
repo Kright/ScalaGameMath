@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "master-SNAPSHOT"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.1.0"
 ```
 For other variants see [https://jitpack.io/](https://jitpack.io/).
 
