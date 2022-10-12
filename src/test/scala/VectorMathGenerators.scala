@@ -40,7 +40,7 @@ object VectorMathGenerators:
     for(yaw <- double1;
         pitch <- double1;
         roll <- double1) 
-      yield new EulerAngles((yaw - 0.5) * 2.0 * Math.PI, (pitch - 0.5) * Math.PI, (roll - 0.5) * 2.0 * Math.PI)
+      yield new EulerAngles(yaw * Math.PI, pitch * 0.5 * Math.PI, roll * Math.PI)
   
   val matrices3: Gen[Matrix3d] =
     for(vx <- vectors3InCube;

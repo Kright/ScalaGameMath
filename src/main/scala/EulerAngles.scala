@@ -1,9 +1,9 @@
 package com.kright.math
 
 /**
- * @param yaw   - angle in radians along Z axis
- * @param pitch - angle in radians along Y axis
- * @param roll  - angle in radians along X axis
+ * @param yaw   - angle in radians around axis Y (up)
+ * @param pitch - angle in radians around axis X (right)
+ * @param roll  - angle in radians around axis Z (forward)
  */
 case class EulerAngles(yaw: Double, pitch: Double, roll: Double)
 

@@ -67,10 +67,10 @@ final class Matrix4d(val elements: Array[Double]):
     val sr = Math.sin(euler.roll)
 
     this := (
-      cy * cp, cy * sp * sr - cr * sy, sy * sr + cy * cr * sp, 0.0,
-      cp * sy, cy * cr + sy * sp * sr, cr * sy * sp - cy * sr, 0.0,
-          -sp,                cp * sr,                cp * cr, 0.0,
-          0.0,                    0.0,                    0.0, 1.0,
+       cy * cr + sy * sp * sr, -cy * sr + sy * sp * cr, sy * cp, 0.0,
+                      cp * sr,                 cp * cr,     -sp, 0.0,
+      -sy * cr + cy * sp * sr,  sy * sr + cy * sp * cr, cy * cp, 0.0,
+                          0.0,                     0.0,     0.0, 1.0,
     )
 
 

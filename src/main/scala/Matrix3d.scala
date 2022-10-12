@@ -162,10 +162,10 @@ final class Matrix3d(val elements: Array[Double]):
     val sr = Math.sin(euler.roll)
 
     this := (
-      cy * cp, cy * sp * sr - cr * sy, sy * sr + cy * cr * sp,
-      cp * sy, cy * cr + sy * sp * sr, cr * sy * sp - cy * sr,
-          -sp,                cp * sr,                cp * cr,
-    )  
+       cy * cr + sy * sp * sr, -cy * sr + sy * sp * cr, sy * cp,
+                      cp * sr,                 cp * cr,     -sp,
+      -sy * cr + cy * sp * sr,  sy * sr + cy * sp * cr, cy * cp,
+    )
 
   def :=(a00: Double, a01: Double, a02: Double,
          a10: Double, a11: Double, a12: Double,

@@ -151,10 +151,10 @@ final case class Quaternion(var w: Double,
     // roll  axis X
 
     this := (
-      cr * cp * cy + sr * sp * sy,
-      sr * cp * cy - cr * sp * sy,
-      cr * sp * cy + sr * cp * sy,
-      cr * cp * sy - sr * sp * cy,
+      cr * cp * cy + sr * sp * sy, // w
+      cr * sp * cy + sr * cp * sy, // y 
+      cr * cp * sy - sr * sp * cy, // z 
+      sr * cp * cy - cr * sp * sy, // x
     )
 
   def setIdentity(): Quaternion =
