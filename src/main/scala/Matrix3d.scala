@@ -129,6 +129,23 @@ final class Matrix3d(val elements: Array[Double]):
       0.0, 0.0, 1.0
     )
 
+  def setRotation(m: Matrix4d): Matrix3d =
+    this := (
+      m(0, 0), m(0, 1), m(0, 2),
+      m(1, 0), m(1, 1), m(1, 2),
+      m(2, 0), m(2, 1), m(2, 2),
+    )
+
+  def setRotation(forwardZ: IVector3d, upY: IVector3d): Matrix3d =
+    val z = forwardZ.normalized()
+    val x = upY.cross(z).normalize()
+    val y = z.cross(x)
+    this := (
+      x.x, x.y, x.z,
+      y.x, y.y, y.z,
+      z.x, z.y, z.z,
+    )
+
   def :=(q: Quaternion): Matrix3d =
     this := (
       q.rotM00, q.rotM01, q.rotM02,
@@ -262,6 +279,9 @@ object Matrix3d:
     a00 * (a11 * a22 - a21 * a12) +
       a01 * (a12 * a20 - a10 * a22) +
       a02 * (a10 * a21 - a11 * a20)
+
+  @static def determinant(x: IVector3d, y: IVector3d, z: IVector3d): Double =
+    determinant(x.x, x.y, x.z, y.x, y.y, y.z, z.x, z.y, z.z)
 
   @static def invertMatrix(a: Matrix3d, result: Matrix3d): Matrix3d =
     val det = a.det() // this may be 0.0, check if necessary

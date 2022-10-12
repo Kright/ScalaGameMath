@@ -236,3 +236,44 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
     assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
   }
+
+  test("Matrix setLookAt with normalized perpendicular axis") {
+    forAll(vectors3InCube, vectors3InCube) { (from, dest) =>
+      val up = Vector3d(0, 1, 0)
+      if (from.distance(dest) > 0.000001 && (dest - from).unprojected(up).mag > 0.000001) {
+        val m4 = Matrix4d().setLookAt(from, dest, up)
+        val m4r = Matrix4d().setRotation(dest - from, up)
+        val m3 = Matrix3d().setRotation(dest - from, up)
+        assert(Matrix3d().setRotation(m4).isEquals(m3))
+        assert(Matrix3d().setRotation(m4r).isEquals(m3))
+        assert((m3 * m3.transposed()).isEquals(Matrix3d().setIdentity()))
+      }
+    }
+  }
+
+  test("Matrix setLookAt") {
+    {
+      val m = Matrix4d().setLookAt(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(0, 1, 0))
+      assert(m.isEquals(Matrix4d().setIdentity()))
+    }
+
+    {
+      val m = Matrix4d().setLookAt(Vector3d(0, 0, 0), Vector3d(1, 0, 0), Vector3d(0, 1, 0))
+      assert((m * Vector3d(1, 0, 0)).isEquals(Vector3d(0, 0, 1)))
+      assert((m * Vector3d(1, 0, 0)).isEquals(Vector3d(0, 0, 1)))
+    }
+
+    val up = Vector3d(0, 1, 0)
+    forAll(vectors3InCube, vectors3InCube) { (from, dest) =>
+      if (from.distance(dest) > 0.000001 && (dest - from).unprojected(up).mag > 0.000001) {
+        val m4 = Matrix4d().setLookAt(from, dest, up)
+        val m3 = Matrix3d().setRotation(dest - from, up)
+        val m4r = Matrix4d().setRotation(dest - from, up)
+
+        require(Matrix3d().setRotation(m4).isEquals(m3))
+        require(Matrix3d().setRotation(m4r).isEquals(m3))
+        require((m4 * from).isEquals(Vector3d(0, 0, 0)))
+        require((m4 * dest).isEquals(Vector3d(0, 0, dest.distance(from))))
+      }
+    }
+  }

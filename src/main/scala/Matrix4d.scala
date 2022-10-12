@@ -289,7 +289,7 @@ final class Matrix4d(val elements: Array[Double]):
    * for flipping X or Y axis just pass negative tangent
    *
    * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
-   * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees* 
+   * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees*
    * @param near - z coordinate of frustum plane converted into z = -1
    * @return self
    */
@@ -302,6 +302,28 @@ final class Matrix4d(val elements: Array[Double]):
       0.0,  sy, 0.0, 0.0,
       0.0, 0.0, 0.0,  sw,
       0.0, 0.0, 1.0, 0.0,
+    )
+
+  def setLookAt(from: IVector3d, to: IVector3d, up: IVector3d): Matrix4d =
+    val z = (to - from).normalize()
+    val x = up.cross(z).normalize()
+    val y = z.cross(x)
+    this := (
+      x.x, x.y, x.z, -from.dot(x),
+      y.x, y.y, y.z, -from.dot(y),
+      z.x, z.y, z.z, -from.dot(z),
+      0.0, 0.0, 0.0,          1.0,
+    )
+
+  def setRotation(forwardZ: IVector3d, upY: IVector3d): Matrix4d =
+    val z = forwardZ.normalized()
+    val x = upY.cross(z).normalize()
+    val y = z.cross(x)
+    this := (
+      x.x, x.y, x.z, 0.0,
+      y.x, y.y, y.z, 0.0,
+      z.x, z.y, z.z, 0.0,
+      0.0, 0.0, 0.0, 1.0,
     )
 
   def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
