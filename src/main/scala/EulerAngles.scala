@@ -31,6 +31,11 @@ case class EulerAngles(var yaw: Double,
       Math.abs(pitch - e.pitch) < eps &&
       Math.abs(roll - e.roll) < eps
 
+  /** print angles in degrees */
+  override def toString: String =
+    inline def d(rads: Double) = f"${Math.toDegrees(rads)}%1.1f"
+    f"EulerAngles(yaw=${d(yaw)}, pitch=${d(pitch)}, roll=${d(roll)})"
+
 object EulerAngles:
   inline def apply(): EulerAngles = new EulerAngles(0.0, 0.0, 0.0)
 
