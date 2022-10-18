@@ -95,3 +95,23 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       assert(a.isEquals(b))
     }
   }
+
+  test("quaternion to matrix and back") {
+    forAll(normalizedQuaternions) { q =>
+      val m3 = Matrix3d() := q
+      val m4 = Matrix4d() := m3
+
+      val r3 = Quaternion().setFromRotation(m3)
+      val r4 = Quaternion().setFromRotation(m4)
+
+      assert(q.isEquals(r3), s"$q != $r3")
+      assert(q.isEquals(r4), s"$q != $r4")
+    }
+  }
+
+  test("quaternion to euler and back") {
+    forAll(normalizedQuaternions) { q =>
+      val eq = Quaternion() := (EulerAngles() := q)
+      assert(eq.isEquals(q), s"$eq != $q")
+    }
+  }

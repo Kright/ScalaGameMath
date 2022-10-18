@@ -51,3 +51,29 @@ class EulerAnglesTest extends AnyFunSuite with ScalaCheckPropertyChecks :
     assert((Matrix4d() := euler).isEquals(Matrix4d().setIdentity()))
   }
 
+  test("up in euler to matrix/quaternion and back") {
+    check(EulerAngles(0.55, Math.PI * 0.5, 0.0))
+  }
+
+  test("down in euler to matrix/quaternion and back") {
+    check(EulerAngles(0.55, -Math.PI * 0.5, 0.0))
+  }
+
+  test("euler to matrix/quaternion and back") {
+    forAll(eulerAngles) { euler =>
+      if ((euler.pitch <= 0.999) && (euler.pitch >= -0.999)) {
+        check(euler)
+      }
+    }
+  }
+
+  private def check(eulerAngles: EulerAngles): Unit = {
+    val e3 = EulerAngles().setFromRotation(Matrix3d() := eulerAngles)
+    val e4 = EulerAngles().setFromRotation(Matrix4d() := eulerAngles)
+    val eq = EulerAngles() := (Quaternion() := eulerAngles)
+
+    assert(e3.isEquals(eulerAngles), s"$e3 != $eulerAngles")
+    assert(e4.isEquals(eulerAngles), s"$e4 != $eulerAngles")
+    assert(eq.isEquals(eulerAngles), s"$eq != $eulerAngles")
+  }
+

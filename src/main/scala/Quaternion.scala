@@ -166,6 +166,12 @@ final case class Quaternion(var w: Double,
     val m = Math.sin(l) / l
     this := (Math.cos(l), exp.x * m, exp.y * m, exp.z * m)
 
+  def setFromRotation(m: Matrix3d): Quaternion =
+    Quaternion.restoreFromRotation(m, this)
+
+  def setFromRotation(m: Matrix4d): Quaternion =
+    Quaternion.restoreFromRotation(m, this)
+
   def conjugate(): Quaternion =
     x = -x
     y = -y
@@ -275,3 +281,91 @@ object Quaternion:
       v.x * q.rotM10 + v.y * q.rotM11 + v.z * q.rotM12,
       v.x * q.rotM20 + v.y * q.rotM21 + v.z * q.rotM22,
     )
+
+  @static def restoreFromRotation(m: Matrix3d, result: Quaternion): Quaternion =
+    val m00 = m(0, 0)
+    val m11 = m(1, 1)
+    val m22 = m(2, 2)
+    val tr = m00 + m11 + m22
+    val max = Math.max(tr, Math.max(m00, Math.max(m11, m22)))
+    if (tr == max) {
+      val w = Math.sqrt(1.0 + m00 + m11 + m22)
+      return result := (
+        0.5 * w,
+        0.5 * (m(2, 1) - m(1, 2)) / w,
+        0.5 * (m(0, 2) - m(2, 0)) / w,
+        0.5 * (m(1, 0) - m(0, 1)) / w,
+      )
+    }
+    if (m00 == max) {
+      val d = Math.sqrt(1.0 + m00 - m11 - m22)
+      return result := (
+        0.5 * (m(2, 1) - m(1, 2)) / d,
+        0.5 * d,
+        0.5 * (m(0, 1) + m(1, 0)) / d,
+        0.5 * (m(2, 0) + m(0, 2)) / d,
+        )
+    }
+    if (m11 == max) {
+      val d = Math.sqrt(1.0 - m00 + m11 - m22)
+      return result := (
+        0.5 * (m(0, 2) - m(2, 0)) / d,
+        0.5 * (m(0, 1) + m(1, 0)) / d,
+        0.5 * d,
+        0.5 * (m(1, 2) + m(2, 1)) / d
+      )
+    }
+    // qz2 == max
+    {
+      val d = Math.sqrt(1.0 - m00 - m11 + m22)
+      return result := (
+        0.5 * (m(1, 0) - m(0, 1)) / d,
+        0.5 * (m(2, 0) + m(0, 2)) / d,
+        0.5 * (m(2, 1) + m(1, 2)) / d,
+        0.5 * d
+      )
+    }
+
+  @static def restoreFromRotation(m: Matrix4d, result: Quaternion): Quaternion =
+    val m00 = m(0, 0)
+    val m11 = m(1, 1)
+    val m22 = m(2, 2)
+    val tr = m00 + m11 + m22
+    val max = Math.max(tr, Math.max(m00, Math.max(m11, m22)))
+    if (tr == max) {
+      val w = Math.sqrt(1.0 + m00 + m11 + m22)
+      return result := (
+        0.5 * w,
+        0.5 * (m(2, 1) - m(1, 2)) / w,
+        0.5 * (m(0, 2) - m(2, 0)) / w,
+        0.5 * (m(1, 0) - m(0, 1)) / w,
+      )
+    }
+    if (m00 == max) {
+      val d = Math.sqrt(1.0 + m00 - m11 - m22)
+      return result := (
+        0.5 * (m(2, 1) - m(1, 2)) / d,
+        0.5 * d,
+        0.5 * (m(0, 1) + m(1, 0)) / d,
+        0.5 * (m(2, 0) + m(0, 2)) / d,
+      )
+    }
+    if (m11 == max) {
+      val d = Math.sqrt(1.0 - m00 + m11 - m22)
+      return result := (
+        0.5 * (m(0, 2) - m(2, 0)) / d,
+        0.5 * (m(0, 1) + m(1, 0)) / d,
+        0.5 * d,
+        0.5 * (m(1, 2) + m(2, 1)) / d
+      )
+    }
+    // qz2 == max
+    {
+      val d = Math.sqrt(1.0 - m00 - m11 + m22)
+      return result := (
+        0.5 * (m(1, 0) - m(0, 1)) / d,
+        0.5 * (m(2, 0) + m(0, 2)) / d,
+        0.5 * (m(2, 1) + m(1, 2)) / d,
+        0.5 * d
+      )
+    }
