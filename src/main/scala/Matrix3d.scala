@@ -146,7 +146,7 @@ final class Matrix3d(val elements: Array[Double]):
       z.x, z.y, z.z,
     )
 
-  def :=(q: Quaternion): Matrix3d =
+  def :=(q: IQuaternion): Matrix3d =
     this := (
       q.rotM00, q.rotM01, q.rotM02,
       q.rotM10, q.rotM11, q.rotM12,
