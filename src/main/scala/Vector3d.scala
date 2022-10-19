@@ -75,9 +75,18 @@ final case class Vector3d(var x: Double,
     setPerElement(v)(Math.max)
 
   def setCross(f: IVector3d, s: IVector3d): Vector3d =
-    this := (f.y * s.z - f.z * s.y,
+    this := (
+      f.y * s.z - f.z * s.y,
       f.z * s.x - f.x * s.z,
-      f.x * s.y - f.y * s.x)
+      f.x * s.y - f.y * s.x
+    )
+
+  def addCross(f: IVector3d, s: IVector3d): Vector3d =
+    this := (
+      this.x + f.y * s.z - f.z * s.y,
+      this.y + f.z * s.x - f.x * s.z,
+      this.z + f.x * s.y - f.y * s.x
+    )
 
   override def toString: String = s"Vector3d($x, $y, $z)"
 
