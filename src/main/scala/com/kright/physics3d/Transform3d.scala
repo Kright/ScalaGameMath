@@ -1,0 +1,19 @@
+package com.kright.physics3d
+
+import com.kright.math.{EulerAngles, Quaternion, Vector3d}
+
+class Transform3d(val position: Vector3d,
+                  val rotation: Quaternion):
+
+  def this() = this(Vector3d(), Quaternion())
+  
+  def copy(): Transform3d =
+    Transform3d(position.copy(), rotation.copy())
+
+  def update(velocity: Velocity3d, dt: Double): Transform3d =
+    position.madd(velocity.linear, dt)
+    val dRot = Quaternion().setFromExp(velocity.angular * (0.5 * dt))
+    dRot *> rotation
+    this
+
+  override def toString: String = s"Transform3d($position, ${EulerAngles() := rotation})"

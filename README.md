@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.1.0"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.2.0"
 ```
 for latest version:
 ```
@@ -15,10 +15,15 @@ For other variants see [https://jitpack.io/](https://jitpack.io/).
 
 ## Features:
 
-* Vector2d, Vector3d, Vector4d
-* Quaternion
-* Matrix: 2x2, 3x3, 4x4
-* Euler angles: yaw Z, pitch Y, roll X 
+* Math:
+  * Vector2d, Vector3d, Vector4d
+  * Quaternion
+  * Matrix: 2x2, 3x3, 4x4
+  * Euler angles: yaw Z, pitch Y, roll X
+* Rigid body physics:
+  * Transform3d (position and orientation)
+  * Inertia3d (mass and tensor of angular mass)
+  * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
 
 Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```
