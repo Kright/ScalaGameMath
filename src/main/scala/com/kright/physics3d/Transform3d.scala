@@ -10,6 +10,11 @@ class Transform3d(val position: Vector3d,
   def copy(): Transform3d =
     Transform3d(position.copy(), rotation.copy())
 
+  def :=(t: Transform3d): Transform3d =
+    position := t.position
+    rotation := t.rotation
+    this
+
   def update(velocity: Velocity3d, dt: Double): Transform3d =
     position.madd(velocity.linear, dt)
     val dRot = Quaternion().setFromExp(velocity.angular * (0.5 * dt))
