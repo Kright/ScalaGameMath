@@ -19,7 +19,8 @@ trait LinearWithAngular[Self <: LinearWithAngular[Self]]:
   def *(multiplier: Double): Self =
     copy() *= multiplier
 
-  def copy(): Self = makeNew(Vector3d(), Vector3d())
+  def copy(): Self =
+    makeNew(linear.copy(), angular.copy())
 
   def *=(multiplier: Double): this.type =
     linear *= multiplier
