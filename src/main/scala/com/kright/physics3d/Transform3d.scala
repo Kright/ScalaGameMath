@@ -19,6 +19,7 @@ class Transform3d(val position: Vector3d,
     position.madd(velocity.linear, dt)
     val dRot = Quaternion().setFromExp(velocity.angular * (0.5 * dt))
     dRot *> rotation
+    rotation.normalize()
     this
 
   override def toString: String = s"Transform3d($position, ${EulerAngles() := rotation})"
