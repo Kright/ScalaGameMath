@@ -1,6 +1,6 @@
 package com.kright.physics3d
 
-import com.kright.math.VectorMathGenerators
+import com.kright.math.{DifferentialSolvers, VectorMathGenerators}
 import com.kright.math.VectorMathGenerators.*
 import com.kright.physics3d.PhysicsGenerator.inertiaMoment
 import org.scalatest.funsuite.AnyFunSuite
@@ -27,35 +27,50 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
       vectors3InCube, normalizedQuaternions,
       vectors3InCube, vectors3InCube) { (I, pos, rot, linearVelocity, angularVelocity) =>
 
-      val body = Inertia3d(1.0, I)
-      val t = Transform3d(pos, rot)
-      val v = Velocity3d(linearVelocity, angularVelocity * 0.1)
-      val initialImpulse = body.getImpulse(t, v)
-      val initialE = body.getEnergy(t, v)
+      for(solverName <- Seq("RK4", "RK2", "Euler2")) {
+        val body = Inertia3d(1.0, I)
+        val s = State3d(Transform3d(pos, rot), Velocity3d(linearVelocity, angularVelocity))
+        val initialImpulse = body.getImpulse(s)
+        val initialE = body.getEnergy(s)
 
-      for (_ <- 0 until 100) {
-        val dt = 0.01
-        updateFreeBody(body, t, v, dt)
-        val currentImpulse = body.getImpulse(t, v)
-        val currentE = body.getEnergy(t, v)
+        for (_ <- 0 until 1000) {
+          val dt = 0.001
+          updateFreeBody(solverName, body, s, dt)
+          val currentImpulse = body.getImpulse(s)
+          val currentE = body.getEnergy(s)
 
-        assert(Math.abs(currentE - initialE) < 0.001)
-        assert(currentImpulse.linear.distance(initialImpulse.linear) < 0.001)
-        assert(currentImpulse.angular.distance(initialImpulse.angular) < 0.001)
+          assert(Math.abs(currentE - initialE) < 0.001, s"solver $solverName failed")
+          assert(currentImpulse.linear.distance(initialImpulse.linear) < 0.001, s"solver $solverName failed")
+          assert(currentImpulse.angular.distance(initialImpulse.angular) < 0.001, s"solver $solverName failed")
+        }
       }
     }
   }
 
   /**
-   * improved Euler method, two-stage
-   * https://en.wikipedia.org/wiki/Heun%27s_method
    */
-  private def updateFreeBody(body: Inertia3d, t: Transform3d, v: Velocity3d, dt: Double): Unit =
+  private def updateFreeBody(solverName: String, body: Inertia3d, state: State3d, dt: Double): Unit =
     val zeroForce = Force3d()
-    val acc = body.getAcceleration(t, v, zeroForce)
-    val nextT = t.copy().update(v, dt)
-    val nextV = v.copy().update(acc, dt)
 
-    val acc2 = body.getAcceleration(nextT, nextV, zeroForce)
-    t.update(v + nextV, 0.5 * dt)
-    v.update(acc + acc2, 0.5 * dt)
+    val newState =
+      solverName match
+        case "RK4" =>
+          DifferentialSolvers.rungeKutta4(state, time=0.0, dt,
+            getDerivative = (state, time) => body.getDerivative(state, zeroForce),
+            nextState = (state, derivative, dt) => state.updated(derivative, dt),
+            newZeroDerivative = () => new State3dDerivative(),
+            madd = (acc, d, m) => acc.madd(d, m)
+          )
+        case "RK2" =>
+          DifferentialSolvers.rungeKutta2(state, time = 0.0, dt,
+            getDerivative = (state, time) => body.getDerivative(state, zeroForce),
+            nextState = (state, derivative, dt) => state.updated(derivative, dt),
+          )
+        case "Euler2" =>
+          DifferentialSolvers.euler2(state, time = 0.0, dt,
+            getDerivative = (state, time) => body.getDerivative(state, zeroForce),
+            nextState = (state, derivative, dt) => state.updated(derivative, dt),
+            newZeroDerivative = () => new State3dDerivative(),
+            madd = (acc, d, m) => acc.madd(d, m)
+          )
+    state := newState
