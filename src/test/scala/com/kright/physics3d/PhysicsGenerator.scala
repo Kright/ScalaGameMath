@@ -10,4 +10,19 @@ object PhysicsGenerator:
          rotation <- normalizedQuaternions;
          positiveVec = Vector3d(10, 10, 10) + vec * 9;
          diagMatrix = Matrix3d().setScale(positiveVec))
-      yield (Matrix3d() := rotation) * diagMatrix * (Matrix3d() := rotation.conjugated())  
+      yield (Matrix3d() := rotation) * diagMatrix * (Matrix3d() := rotation.conjugated())
+
+  val transform: Gen[Transform3d] =
+    for(linear <- vectors3InCube;
+        rot <- normalizedQuaternions)
+      yield Transform3d(linear, rot)
+
+  val velocity: Gen[Velocity3d] =
+    for(linear <- vectors3InCube;
+        w <- vectors3InCube)
+      yield Velocity3d(linear, w)
+
+  val state: Gen[State3d] =
+    for(t <- transform;
+        v <- velocity)
+      yield State3d(t, v)
