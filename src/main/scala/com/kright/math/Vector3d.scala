@@ -1,6 +1,6 @@
 package com.kright.math
 
-trait IVector3d extends IVectorNd[IVector3d, Vector3d] :
+trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
   def x: Double
   def y: Double
   def z: Double
@@ -33,7 +33,7 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d] :
 
 final case class Vector3d(var x: Double,
                           var y: Double,
-                          var z: Double) extends IVector3d with VectorNd[IVector3d, Vector3d] :
+                          var z: Double) extends IVector3d with VectorNd[IVector3d, Vector3d]:
 
   def :=(x: Double, y: Double, z: Double): Vector3d =
     this.x = x

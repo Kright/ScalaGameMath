@@ -1,6 +1,6 @@
 package com.kright.physics3d
 
-import com.kright.math.{DifferentialSolvers, VectorMathGenerators}
+import com.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
 import com.kright.math.VectorMathGenerators.*
 import com.kright.physics3d.PhysicsGenerator.*
 import org.scalatest.funsuite.AnyFunSuite
@@ -45,12 +45,10 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
     }
   }
 
-  test("add impulse") {
-    forAll(inertiaMoment, state, vectors3InCube, vectors3InCube) { (I, state, force, torque) =>
+  test("add impulse by force") {
+    forAll(inertia3d, state, vectors3InCube, vectors3InCube) { (body, state, force, torque) =>
       for (solverName <- Seq("RK4", "RK2", "Euler2")) {
-        val body = Inertia3d(1.0, I)
         val initialImpulse = body.getImpulse(state)
-        val initialE = body.getEnergy(state)
         val forces = Force3d().addForce(force).addTorque(torque)
         var t = 0.0
 
@@ -92,3 +90,26 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
             madd = (acc, d, m) => acc.madd(d, m)
           )
     state := newState
+
+  test("get L for symmetric body") {
+    val m = 3.0
+    val body = Inertia3d(m, Vector3d(m, m, m))
+
+    forAll(normalizedQuaternions, vectors3InCube) { (rot, w) =>
+      val expectedL = w * m
+      val L = body.getL(rot, w)
+      assert(L.isEquals(expectedL))
+    }
+  }
+
+  test("add impulse") {
+    forAll(inertia3d, state, vectors3InCube, vectors3InCube) { (body, state, linear, angular) =>
+      val addImpulse = Impulse3d(linear, angular)
+      val initialImpulse = body.getImpulse(state)
+      val newState = state.updated(body, addImpulse)
+      val newImpulse = body.getImpulse(newState)
+
+      assert(newImpulse.linear.isEquals(initialImpulse.linear + addImpulse.linear))
+      assert(newImpulse.angular.isEquals(initialImpulse.angular + addImpulse.angular))
+    }
+  }

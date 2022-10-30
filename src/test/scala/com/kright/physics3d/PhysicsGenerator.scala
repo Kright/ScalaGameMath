@@ -11,6 +11,11 @@ object PhysicsGenerator:
          positiveVec = Vector3d(10, 10, 10) + vec * 9;
          diagMatrix = Matrix3d().setScale(positiveVec))
       yield (Matrix3d() := rotation) * diagMatrix * (Matrix3d() := rotation.conjugated())
+    
+  val inertia3d: Gen[Inertia3d] =
+    for(mass <- Gen.double;
+        inertia <- inertiaMoment) 
+      yield Inertia3d(mass + 0.01, inertia)
 
   val transform: Gen[Transform3d] =
     for(linear <- vectors3InCube;

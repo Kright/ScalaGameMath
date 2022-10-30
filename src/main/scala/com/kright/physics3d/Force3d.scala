@@ -3,7 +3,7 @@ package com.kright.physics3d
 import com.kright.math.{IVector3d, Vector3d}
 
 class Force3d(val linear: Vector3d,
-              val torque: Vector3d) extends LinearWithAngular[Force3d] :
+              val torque: Vector3d) extends LinearWithAngular[Force3d]:
 
   def this() = this(Vector3d(), Vector3d())
 
