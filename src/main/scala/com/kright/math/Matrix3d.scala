@@ -185,21 +185,21 @@ final class Matrix3d(val elements: Array[Double]):
       0.0, 0.0, 1.0,
     )
 
-  def set2dTranslation(shift: Vector2d): Matrix3d =
+  def set2dTranslation(shift: IVector2d): Matrix3d =
     this := (
       1.0, 0.0, shift.x,
       0.0, 1.0, shift.y,
       0.0, 0.0, 1.0
     )
 
-  def setScale(s: Vector2d): Matrix3d =
+  def setScale(s: IVector2d): Matrix3d =
     this := (
       s.x, 0.0, 0.0,
       0.0, s.y, 0.0,
       0.0, 0.0, 1.0,
     )
 
-  def setScale(s: Vector3d): Matrix3d =
+  def setScale(s: IVector3d): Matrix3d =
     this := (
       s.x, 0.0, 0.0,
       0.0, s.y, 0.0,

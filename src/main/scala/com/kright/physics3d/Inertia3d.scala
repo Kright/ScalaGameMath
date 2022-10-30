@@ -4,7 +4,7 @@ import com.kright.math.{DifferentialSolvers, IQuaternion, IVector3d, Matrix3d, V
 
 class Inertia3d(var mass: Double,
                 val localI: Matrix3d):
-  def this(mass: Double, localI: Vector3d) = this(mass, new Matrix3d().setScale(localI))
+  def this(mass: Double, localI: IVector3d) = this(mass, new Matrix3d().setScale(localI))
 
   def getImpulse(t: Transform3d, v: Velocity3d): Impulse3d =
     Impulse3d(linear = getP(v.linear), angular = getL(t, v))

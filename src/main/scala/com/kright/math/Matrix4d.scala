@@ -204,7 +204,7 @@ final class Matrix4d(val elements: Array[Double]):
     e.swap(11, 14)
     this
 
-  def setTranslation(t: Vector3d): Matrix4d =
+  def setTranslation(t: IVector3d): Matrix4d =
     this := (
       1.0, 0.0, 0.0, t.x,
       0.0, 1.0, 0.0, t.y,
@@ -212,7 +212,7 @@ final class Matrix4d(val elements: Array[Double]):
       0.0, 0.0, 0.0, 1.0
     )
 
-  def setScale(s: Vector3d): Matrix4d =
+  def setScale(s: IVector3d): Matrix4d =
     this := (
       s.x, 0.0, 0.0, 0.0,
       0.0, s.y, 0.0, 0.0,
@@ -220,7 +220,7 @@ final class Matrix4d(val elements: Array[Double]):
       0.0, 0.0, 0.0, 1.0
     )
 
-  def setScale(s: Vector4d): Matrix4d =
+  def setScale(s: IVector4d): Matrix4d =
     this := (
       s.x, 0.0, 0.0, 0.0,
       0.0, s.y, 0.0, 0.0,

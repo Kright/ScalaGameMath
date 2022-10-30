@@ -104,7 +104,7 @@ final class Matrix2d(var m00: Double, var m01: Double,
       sin, cos,
     )
 
-  def setScale(s: Vector2d): Matrix2d =
+  def setScale(s: IVector2d): Matrix2d =
     this := (
       s.x, 0.0,
       0.0, s.y
