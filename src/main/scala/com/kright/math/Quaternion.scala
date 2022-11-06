@@ -40,6 +40,9 @@ trait IQuaternion:
   def *(v: IVector3d, result: Vector3d = Vector3d()): Vector3d =
     Quaternion.multiply(this, v, result)
 
+  def *(m: Double): Quaternion =
+    copy() *= m
+
   def *>(v: Vector3d): Vector3d =
     Quaternion.multiply(this, v, v)
 
@@ -118,6 +121,8 @@ final case class Quaternion(var w: Double,
                             var z: Double) extends IQuaternion:
 
   def this() = this(1.0, 0.0, 0.0, 0.0)
+
+  def this(xyz: IVector3d) = this(0.0, xyz.x, xyz.y, xyz.z)
 
   def :=(w: Double, x: Double, y: Double, z: Double): Quaternion =
     this.w = w
