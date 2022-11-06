@@ -216,6 +216,9 @@ final case class Quaternion(var w: Double,
 
 object Quaternion:
   inline def apply(): Quaternion = new Quaternion()
+  
+  inline def zero: Quaternion = new Quaternion(0.0, 0.0, 0.0, 0.0)
+  inline def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
 
   // 16 multiplications, 12 additions
   @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion): Quaternion =
