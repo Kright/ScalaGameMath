@@ -66,3 +66,17 @@ object DifferentialSolvers:
     madd(kMean, k4, 1.0 / 6.0)
 
     nextState(initial, kMean, dt)
+
+  /**
+   * forth order of precision, Runge-Kutta method
+   * https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods
+   */
+  inline def rungeKutta4K[State, Derivative](initial: State, time: Double, dt: Double,
+                                            inline getDerivative: (State, Double) => Derivative,
+                                            inline nextState: (State, Derivative, Double) => State): (Derivative, Derivative, Derivative, Derivative) =
+    val k1 = getDerivative(initial, time)
+    val k2 = getDerivative(nextState(initial, k1, 0.5 * dt), time + 0.5 * dt)
+    val k3 = getDerivative(nextState(initial, k2, 0.5 * dt), time + 0.5 * dt)
+    val k4 = getDerivative(nextState(initial, k3, dt), time + dt)
+
+    (k1, k2, k3, k4)
