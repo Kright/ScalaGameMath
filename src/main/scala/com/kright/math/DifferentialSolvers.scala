@@ -25,7 +25,7 @@ object DifferentialSolvers:
                                        inline getDerivative: (State, Double) => Derivative,
                                        inline nextState: (State, Derivative, Double) => State,
                                        inline newZeroDerivative: () => Derivative,
-                                       inline madd: (Derivative, Derivative, Double) => Derivative): State =
+                                       inline madd: (Derivative, Derivative, Double) => Unit): State =
     val k1 = getDerivative(initial, time)
     val k2 = getDerivative(nextState(initial, k1, dt), time + dt)
 
@@ -53,7 +53,7 @@ object DifferentialSolvers:
                                             inline getDerivative: (State, Double) => Derivative,
                                             inline nextState: (State, Derivative, Double) => State,
                                             inline newZeroDerivative: () => Derivative,
-                                            inline madd: (Derivative, Derivative, Double) => Derivative): State =
+                                            inline madd: (Derivative, Derivative, Double) => Unit): State =
     val k1 = getDerivative(initial, time)
     val k2 = getDerivative(nextState(initial, k1, 0.5 * dt), time + 0.5 * dt)
     val k3 = getDerivative(nextState(initial, k2, 0.5 * dt), time + 0.5 * dt)
