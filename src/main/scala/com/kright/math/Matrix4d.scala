@@ -393,3 +393,7 @@ object Matrix4d:
 
   @static def multiplyAdd(a: Matrix4d, b: Matrix4d, v: Double, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }
+
+  extension(d: Double)
+    inline def *(m: Matrix4d): Matrix4d =
+      m * d

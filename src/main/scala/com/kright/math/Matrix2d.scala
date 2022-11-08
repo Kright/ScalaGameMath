@@ -165,3 +165,7 @@ object Matrix2d:
       d * a.m11, -d * a.m01,
       -d * a.m10, d * a.m00
     )
+
+  extension (d: Double)
+    inline def *(m: Matrix2d): Matrix2d =
+      m * d   

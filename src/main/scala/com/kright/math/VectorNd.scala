@@ -32,6 +32,12 @@ trait IVectorNd[IVec, Vec]:
   def isEquals(v: IVec, eps: Double = 0.000001): Boolean
 
 
+object IVectorNd:
+  extension (m: Double)
+    inline def *[IVec, Vec](v: IVectorNd[IVec, Vec]): Vec =
+      v * m
+
+
 trait VectorNd[IVec <: IVectorNd[_, _], Vec <: VectorNd[IVec, Vec]] extends IVectorNd[IVec, Vec]:
   self: Vec & IVec =>
 

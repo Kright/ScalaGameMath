@@ -302,3 +302,7 @@ object Matrix3d:
       d * (f(1, 0) * f(0, 2) - f(0, 0) * f(1, 2)),
       d * (f(0, 0) * f(1, 1) - f(1, 0) * f(0, 1)),
     )
+
+  extension (d: Double)
+    inline def *(m: Matrix3d): Matrix3d =
+      m * d 
