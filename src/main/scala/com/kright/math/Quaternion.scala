@@ -31,6 +31,12 @@ trait IQuaternion:
       Quaternion(w * m, x * m, y * m, z * m)
     }
 
+  def +(q: IQuaternion): Quaternion =
+    copy() += q
+
+  def -(q: IQuaternion): Quaternion =
+    copy() -= q
+
   def *(q: IQuaternion): Quaternion =
     Quaternion.multiply(this, q, result = Quaternion())
 
@@ -40,11 +46,14 @@ trait IQuaternion:
   def *(v: IVector3d, result: Vector3d = Vector3d()): Vector3d =
     Quaternion.multiply(this, v, result)
 
+  def *>(v: Vector3d): Vector3d =
+    Quaternion.multiply(this, v, v)
+
   def *(m: Double): Quaternion =
     copy() *= m
 
-  def *>(v: Vector3d): Vector3d =
-    Quaternion.multiply(this, v, v)
+  def /(d: Double): Quaternion =
+    this * (1.0 / d)
 
   def ^(pow: Double): Quaternion =
     copy() ^= pow
@@ -113,6 +122,11 @@ trait IQuaternion:
   def rotM20: Double = 2.0 * (x * z - w * y)
   def rotM21: Double = 2.0 * (y * z + w * x)
   def rotM22: Double = 1.0 - 2.0 * (x * x + y * y)
+
+
+object IQuaternion:
+  extension (m: Double)
+    inline def *(q: IQuaternion): Quaternion = q * m
 
 
 final case class Quaternion(var w: Double,
@@ -190,6 +204,15 @@ final case class Quaternion(var w: Double,
     z = -z
     this
 
+  def +=(q: IQuaternion): Quaternion =
+    setPerElement(q)(_ + _)
+
+  def -=(q: IQuaternion): Quaternion =
+    setPerElement(q)(_ - _)
+
+  def *=(q: Quaternion): Quaternion =
+    Quaternion.multiply(this, q, result = this)
+
   def *=(m: Double): Quaternion =
     w *= m
     x *= m
@@ -197,8 +220,8 @@ final case class Quaternion(var w: Double,
     z *= m
     this
 
-  def *=(q: Quaternion): Quaternion =
-    Quaternion.multiply(this, q, result = this)
+  def /=(d: Double): Quaternion =
+    this *= (1.0 / d)
 
   def normalize(): Quaternion =
     this *= 1.0 / mag
@@ -213,10 +236,17 @@ final case class Quaternion(var w: Double,
   override def toString: String =
     f"Quaternion(w=$w%1.3f, x=$x%1.3f, y=$y%1.3f, z=$z%1.3f)"
 
+  private inline def setPerElement(q: IQuaternion)(inline f: (Double, Double) => Double): Quaternion =
+    w = f(w, q.w)
+    x = f(x, q.x)
+    y = f(y, q.y)
+    z = f(z, q.z)
+    this
+
 
 object Quaternion:
   inline def apply(): Quaternion = new Quaternion()
-  
+
   inline def zero: Quaternion = new Quaternion(0.0, 0.0, 0.0, 0.0)
   inline def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
 
@@ -312,7 +342,7 @@ object Quaternion:
         0.5 * d,
         0.5 * (m(0, 1) + m(1, 0)) / d,
         0.5 * (m(2, 0) + m(0, 2)) / d,
-        )
+      )
     }
     if (m11 == max) {
       val d = Math.sqrt(1.0 - m00 + m11 - m22)
