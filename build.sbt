@@ -1,6 +1,6 @@
 ThisBuild / version := "0.2.4-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.2.0"
+ThisBuild / scalaVersion := "3.2.1"
 
 ThisBuild / licenses := List(License.MIT)
 ThisBuild / startYear := Some(2022)
