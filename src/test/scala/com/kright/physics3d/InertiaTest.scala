@@ -25,7 +25,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   test("energy and impulse are constant during rotation") {
     forAll(inertiaMoment, state) { (I, s) =>
 
-      for(solverName <- Seq("RK4", "RK2", "Euler2", "RK4correct")) {
+      for(solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
         val body = Inertia3d(1.0, I)
         val initialImpulse = body.getImpulse(s)
         val initialE = body.getEnergy(s)
@@ -33,13 +33,13 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
 
         for (_ <- 0 until 1000) {
           val dt = 0.001
-          updateFreeBody(solverName, body, s, dt, zeroForce)
+          updateFreeBody(solverType, body, s, dt, zeroForce)
           val currentImpulse = body.getImpulse(s)
           val currentE = body.getEnergy(s)
 
-          assert(Math.abs(currentE - initialE) < 0.001, s"solver $solverName failed")
-          assert(currentImpulse.linear.distance(initialImpulse.linear) < 0.001, s"solver $solverName failed")
-          assert(currentImpulse.angular.distance(initialImpulse.angular) < 0.001, s"solver $solverName failed")
+          assert(Math.abs(currentE - initialE) < 0.001, s"solver $solverType failed")
+          assert(currentImpulse.linear.distance(initialImpulse.linear) < 0.001, s"solver $solverType failed")
+          assert(currentImpulse.angular.distance(initialImpulse.angular) < 0.001, s"solver $solverType failed")
         }
       }
     }
@@ -47,19 +47,19 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
 
   test("add impulse by force") {
     forAll(inertia3d, state, vectors3InCube, vectors3InCube) { (body, state, force, torque) =>
-      for (solverName <- Seq("RK4", "RK2", "Euler2")) {
+      for (solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
         val initialImpulse = body.getImpulse(state)
         val forces = Force3d().addForce(force).addTorque(torque)
         var t = 0.0
 
         for (_ <- 0 until 1000) {
           val dt = 0.001
-          updateFreeBody(solverName, body, state, dt, forces)
+          updateFreeBody(solverType, body, state, dt, forces)
           t += dt
           val currentImpulse = body.getImpulse(state)
 
-          assert(currentImpulse.linear.distance(initialImpulse.linear + forces.linear * t) < 0.001, s"solver $solverName failed")
-          assert(currentImpulse.angular.distance(initialImpulse.angular + forces.torque * t) < 0.001, s"solver $solverName failed")
+          assert(currentImpulse.linear.distance(initialImpulse.linear + forces.linear * t) < 0.001, s"solver $solverType failed")
+          assert(currentImpulse.angular.distance(initialImpulse.angular + forces.torque * t) < 0.001, s"solver $solverType failed")
         }
       }
     }
@@ -67,10 +67,10 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
 
   /**
    */
-  private def updateFreeBody(solverName: String, body: Inertia3d, state: State3d, dt: Double, force: Force3d): Unit =
+  private def updateFreeBody(solver: SolverType, body: Inertia3d, state: State3d, dt: Double, force: Force3d): Unit =
     val newState =
-      solverName match
-        case "RK4correct" =>
+      solver match
+        case SolverType.RK4 =>
           val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
             getDerivative = (state, time) => State3dDerivative(state, body, force),
             nextState = (state, derivative, dt) => state.copy().madd(derivative, dt).normalize(),
@@ -81,19 +81,21 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
             .madd(k3, dt * (2.0 / 6.0))
             .madd(k4, dt * (1.0 / 6.0))
             .normalize()
-        case "RK4" =>
+        case SolverType.RK4Incorrect =>
+          // actually it has second order of precision, like RK2.
+          // Because true derivative of quaternion is a quaternion, not a vector of angular speed.
           DifferentialSolvers.rungeKutta4(state, time=0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
             nextState = (state, derivative, dt) => state.updated(derivative, dt),
             newZeroDerivative = () => new State3dDerivative(),
             madd = (acc, d, m) => acc.madd(d, m)
           )
-        case "RK2" =>
+        case SolverType.RK2 =>
           DifferentialSolvers.rungeKutta2(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
             nextState = (state, derivative, dt) => state.updated(derivative, dt),
           )
-        case "Euler2" =>
+        case SolverType.Euler2 =>
           DifferentialSolvers.euler2(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
             nextState = (state, derivative, dt) => state.updated(derivative, dt),
@@ -124,3 +126,56 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
       assert(newImpulse.angular.isEquals(initialImpulse.angular + addImpulse.angular))
     }
   }
+
+  test("Precision of Euler2") {
+    val (de, dl) = getMaxRelativeErrors(SolverType.Euler2, 0.01, 10000)
+    assert(de <= 0.0001)
+    assert(dl <= 0.0001)
+  }
+
+  test("Precision of RK2") {
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK2, 0.01, 10000)
+    assert(de <= 0.0001)
+    assert(dl <= 0.0001)
+  }
+
+  test("Precision of RK4 incorrect") {
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK4Incorrect, 0.01, 10000)
+    assert(de <= 0.0001)
+    assert(dl <= 0.0001)
+  }
+
+  test("Precision of RK4") {
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK4, 0.01, 10000)
+    assert(de <= 0.000_000_01)
+    assert(dl <= 0.000_000_01)
+  }
+
+  private def getMaxRelativeErrors(solverType: SolverType, dt: Double, stepsCount: Int): (Double, Double) =
+    val body: Inertia3d = new Inertia3d(1.0, Vector3d(3.0, 2.0, 1.0))
+    val initialState: State3d = new State3d()
+    initialState.velocity.angular := (1.0, 1.0, 1.0)
+
+    val initialE = body.getEnergy(initialState)
+    val initialL = body.getL(initialState)
+
+    val zeroForce = Force3d()
+    val currentState = State3d() := initialState
+
+    var errorE = 0.0
+    var errorL = 0.0
+
+    for (_ <- 0 until stepsCount) {
+      updateFreeBody(solverType, body, currentState, dt, zeroForce)
+
+      val currentE = body.getEnergy(initialState)
+      val currentL = body.getL(initialState)
+
+      errorE = math.max(errorE, math.abs(currentE - initialE) / initialE)
+      errorL = math.max(errorL, (currentL - initialL).mag / initialL.mag)
+    }
+
+    (errorE, errorL)
+
+private enum SolverType:
+  case Euler2, RK2, RK4Incorrect, RK4
