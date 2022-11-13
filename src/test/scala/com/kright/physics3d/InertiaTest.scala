@@ -25,7 +25,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   test("energy and impulse are constant during rotation") {
     forAll(inertiaMoment, state) { (I, s) =>
 
-      for(solverName <- Seq("RK4", "RK2", "Euler2")) {
+      for(solverName <- Seq("RK4", "RK2", "Euler2", "RK4correct")) {
         val body = Inertia3d(1.0, I)
         val initialImpulse = body.getImpulse(s)
         val initialE = body.getEnergy(s)
@@ -70,6 +70,17 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   private def updateFreeBody(solverName: String, body: Inertia3d, state: State3d, dt: Double, force: Force3d): Unit =
     val newState =
       solverName match
+        case "RK4correct" =>
+          val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
+            getDerivative = (state, time) => State3dDerivative(state, body, force),
+            nextState = (state, derivative, dt) => state.copy().madd(derivative, dt).normalize(),
+          )
+          state.copy()
+            .madd(k1, dt * (1.0 / 6.0))
+            .madd(k2, dt * (2.0 / 6.0))
+            .madd(k3, dt * (2.0 / 6.0))
+            .madd(k4, dt * (1.0 / 6.0))
+            .normalize()
         case "RK4" =>
           DifferentialSolvers.rungeKutta4(state, time=0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
