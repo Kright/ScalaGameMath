@@ -14,6 +14,15 @@ class Transform3d(val position: Vector3d,
     position := t.position
     rotation := t.rotation
     this
+    
+  def madd(t: Transform3d, m: Double): Transform3d =
+    position.madd(t.position, m)
+    rotation.madd(t.rotation, m)
+    this
+    
+  def normalize(): Transform3d =
+    rotation.normalize()
+    this 
 
   def update(velocity: Velocity3d, dt: Double): Transform3d =
     position.madd(velocity.linear, dt)
