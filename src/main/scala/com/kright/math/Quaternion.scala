@@ -220,6 +220,9 @@ final case class Quaternion(var w: Double,
     z *= m
     this
 
+  def madd(q: IQuaternion, m: Double): Quaternion =
+    setPerElement(q)(_ + _ * m)
+
   def /=(d: Double): Quaternion =
     this *= (1.0 / d)
 
