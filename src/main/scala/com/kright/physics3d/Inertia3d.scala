@@ -44,7 +44,7 @@ class Inertia3d(var mass: Double,
     getAcceleration(state.transform, state.velocity, force)
     
   def getDerivative(state: State3d, force: Force3d): State3dDerivative =
-    State3dDerivative(state.velocity, getAcceleration(state, force))  
+    new State3dDerivative(state.velocity, getAcceleration(state, force))  
 
   def getGlobalI(rotation: IQuaternion): Matrix3d =
     (Matrix3d() := rotation) *= localI *= (Matrix3d() := rotation.conjugated())
