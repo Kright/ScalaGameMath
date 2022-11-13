@@ -136,8 +136,6 @@ final case class Quaternion(var w: Double,
 
   def this() = this(1.0, 0.0, 0.0, 0.0)
 
-  def this(xyz: IVector3d) = this(0.0, xyz.x, xyz.y, xyz.z)
-
   def :=(w: Double, x: Double, y: Double, z: Double): Quaternion =
     this.w = w
     this.x = x
@@ -249,6 +247,7 @@ final case class Quaternion(var w: Double,
 
 object Quaternion:
   inline def apply(): Quaternion = new Quaternion()
+  inline def apply(xyz: IVector3d) = new Quaternion(0.0, xyz.x, xyz.y, xyz.z)
 
   inline def zero: Quaternion = new Quaternion(0.0, 0.0, 0.0, 0.0)
   inline def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
