@@ -22,7 +22,7 @@ class Transform3d(val position: Vector3d,
     
   def normalize(): Transform3d =
     rotation.normalize()
-    this 
+    this
 
   def update(velocity: Velocity3d, dt: Double): Transform3d =
     position.madd(velocity.linear, dt)

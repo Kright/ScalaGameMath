@@ -113,6 +113,9 @@ trait IQuaternion:
       eq(w, -q.w) && eq(x, -q.x) && eq(y, -q.y) && eq(z, -q.z)
     }
 
+  def toPrettyString: String =
+    f"Quaternion(w=$w%1.3f, x=$x%1.3f, y=$y%1.3f, z=$z%1.3f)"  
+
   def rotM00: Double = 1.0 - 2.0f * (y * y + z * z)
   def rotM01: Double = 2.0 * (x * y - w * z)
   def rotM02: Double = 2.0 * (x * z + w * y)
@@ -235,7 +238,7 @@ final case class Quaternion(var w: Double,
     this := (Math.cos(alpha), x * m, y * m, z * m)
 
   override def toString: String =
-    f"Quaternion(w=$w%1.3f, x=$x%1.3f, y=$y%1.3f, z=$z%1.3f)"
+    f"Quaternion(w=$w, x=$x, y=$y, z=$z)"
 
   private inline def setPerElement(q: IQuaternion)(inline f: (Double, Double) => Double): Quaternion =
     w = f(w, q.w)
