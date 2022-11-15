@@ -1,9 +1,14 @@
-ThisBuild / version := "0.2.6"
+ThisBuild / version := "0.2.7-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.2.1"
 
 ThisBuild / licenses := List(License.MIT)
 ThisBuild / startYear := Some(2022)
+
+scalacOptions ++= Seq(
+  "-Yexplicit-nulls",
+  "-Werror"
+)
 
 lazy val root = (project in file("."))
   .settings(
