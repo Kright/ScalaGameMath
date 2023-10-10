@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.2.6"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.2.7"
 ```
 for latest version:
 ```
@@ -37,11 +37,24 @@ Unfortunately JVM doesn't support lightweight structs, so there are a bunch of h
 ```scala 
 import com.kright.math.Quaternion
 
-val q = Quaternion() // assing reference
+val q = Quaternion() // assign reference
 q := Quaternion()    // assign by value (w, x, y, z)
 val q2 = q * q       // new object created, reference assigned to q2
 q *= q2              // q := q * q2, inplace, no objects created
 q *> q2              // q2 := q * q2, inplace, no objects created
+```
+
+Library provides [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)):
+```scala
+import com.kright.math.{Vector3d, Vector4d}
+
+val v = Vector4d(1, 2, 3, 4)
+v.yx = v 
+// v == (2, 1, 3, 4)
+v.xy = v.yx
+// v == (1, 2, 3, 4)
+v = Vector3d(1, 2, 3).xyzz
+// v == (1, 2, 3, 3)
 ```
 
 Library doesn't have any external dependencies.
