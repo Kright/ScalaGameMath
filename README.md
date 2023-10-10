@@ -49,7 +49,7 @@ Library provides [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(co
 import com.kright.math.{Vector3d, Vector4d}
 
 val v = Vector4d(1, 2, 3, 4)
-v.yx = v 
+v.yx = v.xy
 // v == (2, 1, 3, 4)
 v.xy = v.yx
 // v == (1, 2, 3, 4)
