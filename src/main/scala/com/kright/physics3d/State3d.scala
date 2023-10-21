@@ -32,3 +32,6 @@ class State3d(val transform: Transform3d,
     transform := state.transform
     velocity := state.velocity
     this
+
+  override def toString: String =
+    s"State3d($transform, $velocity})"

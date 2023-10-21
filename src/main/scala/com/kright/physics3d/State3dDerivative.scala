@@ -10,6 +10,9 @@ class State3dDerivative(val velocity: Velocity3d,
     acceleration.madd(s.acceleration, m)
     this
 
+  override def toString: String =
+    s"State3dDerivative($velocity, $acceleration)"
+
 object State3dDerivative:
   def apply(state: State3d, inertia: Inertia3d, force: Force3d): State3d =
     // for Runge-Kutta 4 method it's better to use this 'derivative',
