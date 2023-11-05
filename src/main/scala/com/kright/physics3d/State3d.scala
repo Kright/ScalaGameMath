@@ -1,5 +1,7 @@
 package com.kright.physics3d
 
+import com.kright.math.{IVector3d, Vector3d}
+
 class State3d(val transform: Transform3d,
               val velocity: Velocity3d):
   def this() = this(Transform3d(), Velocity3d())
@@ -32,6 +34,9 @@ class State3d(val transform: Transform3d,
     transform := state.transform
     velocity := state.velocity
     this
+    
+  def getGlobalVelocity(localPos: IVector3d): Vector3d =
+    velocity.linear + velocity.angular.cross(transform.rotation * localPos)
 
   override def toString: String =
     s"State3d($transform, $velocity})"
