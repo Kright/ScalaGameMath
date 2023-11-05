@@ -1,11 +1,11 @@
 package com.kright.physics3d
 
-import com.kright.physics3d.Invariants.MassAndCenter
+import com.kright.math.VectorMathGenerators.{normalizedQuaternions, vectors3InCube}
 import com.kright.math.{IVector3d, Vector3d}
+import com.kright.physics3d.Invariants.MassAndCenter
+import com.kright.physics3d.PhysicsGenerators.{bodies, inertia3d, transforms}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import com.kright.physics3d.PhysicsGenerators.{bodies, inertia3d, transforms}
-import com.kright.math.VectorMathGenerators.{normalizedQuaternions, vectors3InCube}
 
 class InvariantsTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("mass and center") {

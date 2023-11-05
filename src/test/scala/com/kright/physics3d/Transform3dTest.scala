@@ -1,11 +1,10 @@
 package com.kright.physics3d
 
+import com.kright.math.VectorMathGenerators.{normalizedQuaternions, vectors3InCube}
 import com.kright.math.{Quaternion, Vector3d}
+import com.kright.physics3d.PhysicsGenerators.transforms
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import com.kright.math.VectorMathGenerators.vectors3InCube
-import com.kright.math.VectorMathGenerators.normalizedQuaternions
-import com.kright.physics3d.PhysicsGenerators.transforms
 
 class Transform3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("local2global is inversion of global2local") {

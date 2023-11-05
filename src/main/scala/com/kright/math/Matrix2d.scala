@@ -1,6 +1,6 @@
 package com.kright.math
 
-import MathUtils.{loop, swap}
+import com.kright.math.MathUtils.{loop, swap}
 
 import scala.annotation.static
 

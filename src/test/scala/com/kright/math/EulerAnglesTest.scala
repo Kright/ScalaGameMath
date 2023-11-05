@@ -1,7 +1,6 @@
 package com.kright.math
 
-import VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
-
+import com.kright.math.VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.Assertions.*

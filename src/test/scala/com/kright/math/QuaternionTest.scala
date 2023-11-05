@@ -1,12 +1,11 @@
 package com.kright.math
 
-import org.scalatest.Assertions._
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
-
+import com.kright.math.VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
+import org.scalatest.Assertions.*
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("quaternion pow") {

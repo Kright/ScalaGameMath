@@ -1,6 +1,6 @@
 package com.kright.physics3d
 
-import com.kright.math.{DifferentialSolvers, IQuaternion, IVector3d, Matrix3d, Vector3d}
+import com.kright.math.*
 
 class Inertia3d(var mass: Double,
                 val localI: Matrix3d):

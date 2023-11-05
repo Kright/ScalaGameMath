@@ -1,11 +1,11 @@
 package com.kright.physics3d
 
-import org.scalacheck.Gen
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import com.kright.math.{Vector2d, Vector3d, VectorMathGenerators}
 import com.kright.physics3d.Friction
+import org.scalacheck.Gen
 import org.scalatest.Inspectors.forAll
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class FrictionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("magnitude of vector matches with scalar") {

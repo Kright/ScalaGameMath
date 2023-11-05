@@ -1,7 +1,7 @@
 package com.kright.physics3d
 
-import com.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
 import com.kright.math.VectorMathGenerators.*
+import com.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
 import com.kright.physics3d.PhysicsGenerators.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

@@ -1,9 +1,8 @@
 package com.kright.math
 
+import com.kright.math.VectorMathGenerators.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-
-import VectorMathGenerators._
 
 class VectorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("projected and unprojected") {

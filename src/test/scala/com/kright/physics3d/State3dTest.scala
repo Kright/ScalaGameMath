@@ -1,10 +1,10 @@
 package com.kright.physics3d
 
 import com.kright.math.Vector3d
+import com.kright.math.VectorMathGenerators.vectors3InCube
+import com.kright.physics3d.PhysicsGenerators.states
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import com.kright.physics3d.PhysicsGenerators.states
-import com.kright.math.VectorMathGenerators.vectors3InCube
 
 class State3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("getGlobalVelocity when point in body origin") {

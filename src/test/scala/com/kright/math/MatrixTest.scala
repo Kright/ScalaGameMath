@@ -1,11 +1,10 @@
 package com.kright.math
 
-import org.scalatest.Assertions._
+import com.kright.math.VectorMathGenerators.*
+import org.scalactic.{Equality, TolerantNumerics}
+import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import VectorMathGenerators.{angleRadians, matrices2, matrices3, matrices4, normalizedQuaternions, vectors2InCube, vectors3InCube}
-
-import org.scalactic.{Equality, TolerantNumerics}
 
 class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("matrix and quaternion multiplication consistency") {

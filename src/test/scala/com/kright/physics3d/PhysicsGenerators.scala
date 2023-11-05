@@ -1,7 +1,7 @@
 package com.kright.physics3d
 
-import com.kright.math.{Matrix3d, Quaternion, VectorMathGenerators, Vector3d}
-import com.kright.math.VectorMathGenerators.{angleRadians, matrices2, matrices3, matrices4, normalizedQuaternions, vectors2InCube, vectors3InCube}
+import com.kright.math.VectorMathGenerators.*
+import com.kright.math.{Matrix3d, Quaternion, Vector3d, VectorMathGenerators}
 import org.scalacheck.Gen
 
 object PhysicsGenerators:
