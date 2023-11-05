@@ -2,13 +2,13 @@ package com.kright.physics3d
 
 import com.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
 import com.kright.math.VectorMathGenerators.*
-import com.kright.physics3d.PhysicsGenerator.*
+import com.kright.physics3d.PhysicsGenerators.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   test("localI to globalI conversion") {
-    forAll(inertiaMoment, normalizedQuaternions, vectors3InCube) { (I, rot, rotVelocity) =>
+    forAll(inertiaMoments, normalizedQuaternions, vectors3InCube) { (I, rot, rotVelocity) =>
       val inertia = Inertia3d(1.0, I)
 
       val localRotVelocity = rot.conjugated() * rotVelocity
@@ -23,7 +23,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   }
 
   test("energy and impulse are constant during rotation") {
-    forAll(inertiaMoment, state) { (I, s) =>
+    forAll(inertiaMoments, states) { (I, s) =>
 
       for(solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
         val body = Inertia3d(1.0, I)
@@ -46,7 +46,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   }
 
   test("add impulse by force") {
-    forAll(inertia3d, state, vectors3InCube, vectors3InCube) { (body, state, force, torque) =>
+    forAll(inertia3d, states, vectors3InCube, vectors3InCube) { (body, state, force, torque) =>
       for (solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
         val initialImpulse = body.getImpulse(state)
         val forces = Force3d().addForce(force).addTorque(torque)
@@ -116,7 +116,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
   }
 
   test("add impulse") {
-    forAll(inertia3d, state, vectors3InCube, vectors3InCube) { (body, state, linear, angular) =>
+    forAll(inertia3d, states, vectors3InCube, vectors3InCube) { (body, state, linear, angular) =>
       val addImpulse = Impulse3d(linear, angular)
       val initialImpulse = body.getImpulse(state)
       val newState = state.updated(body, addImpulse)

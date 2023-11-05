@@ -5,11 +5,11 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import com.kright.math.VectorMathGenerators.vectors3InCube
 import com.kright.math.VectorMathGenerators.normalizedQuaternions
-import com.kright.physics3d.PhysicsGenerator.transform
+import com.kright.physics3d.PhysicsGenerators.transforms
 
 class Transform3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("local2global is inversion of global2local") {
-    forAll(transform, vectors3InCube) { (transform, localPos) =>
+    forAll(transforms, vectors3InCube) { (transform, localPos) =>
       val global = transform.local2global(localPos)
       val restoredLocalPos = transform.global2local(global)
       assert(restoredLocalPos.isEquals(restoredLocalPos))
@@ -17,7 +17,7 @@ class Transform3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("local2global when localPos in body origin") {
-    forAll(transform) { transform =>
+    forAll(transforms) { transform =>
       val global = transform.local2global(Vector3d())
       assert(global.isEquals(transform.position))
     }
