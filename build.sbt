@@ -15,4 +15,5 @@ lazy val root = (project in file("."))
     name := "scalaGameMath",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
     libraryDependencies += "org.scalatestplus" %% "scalacheck-1-17" % "3.2.17.0" % "test",
+    packageSrc / publishArtifact := true,
   )
