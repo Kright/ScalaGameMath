@@ -32,7 +32,7 @@ object PhysicsGenerators:
          v <- velocities)
     yield State3d(t, v)
 
-  val bodies: Gen[(State3d, Inertia3d)] =
-    for (state <- states;
-         inertia <- inertia3d)
-    yield (state, inertia)
+  val bodies: Gen[(Inertia3d, State3d)] =
+    for (inertia <- inertia3d;
+         state <- states)
+    yield (inertia, state)
