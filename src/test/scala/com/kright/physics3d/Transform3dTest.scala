@@ -7,11 +7,32 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class Transform3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
+  private def assertEq(first: Transform3d, second: Transform3d): Unit =
+    assert(first.position.isEquals(second.position))
+    assert(first.rotation.isEquals(second.rotation))
+
   test("local2global is inversion of global2local") {
-    forAll(transforms, vectors3InCube) { (transform, localPos) =>
+    forAll(transforms, transforms) { (transform, local) =>
+      val localPos = local.position
+
       val global = transform.local2global(localPos)
       val restoredLocalPos = transform.global2local(global)
       assert(restoredLocalPos.isEquals(restoredLocalPos))
+
+      val globalTransform = transform.local2global(local)
+      val restoredLocal = transform.global2local(globalTransform)
+      assertEq(local, restoredLocal)
+    }
+  }
+
+  test("transforms associativity") {
+    forAll(transforms, transforms, transforms) { (t1, t2, t3) =>
+      val first = t1.local2global(t2.local2global(t3))
+      val second = t1.local2global(t2).local2global(t3)
+      assertEq(first, second)
+
+      val pos = t3.position
+      assert(t1.local2global(t2.local2global(pos)).isEquals(t1.local2global(t2).local2global(pos)))
     }
   }
 

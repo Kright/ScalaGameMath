@@ -5,7 +5,7 @@ import com.kright.math.{EulerAngles, IVector3d, Quaternion, Vector3d}
 class Transform3d(val position: Vector3d,
                   val rotation: Quaternion):
 
-  def this() = this(Vector3d(), Quaternion())
+  def this() = this(Vector3d(), Quaternion.id)
 
   def copy(): Transform3d =
     Transform3d(position.copy(), rotation.copy())
@@ -36,5 +36,11 @@ class Transform3d(val position: Vector3d,
 
   def global2local(global: IVector3d): Vector3d =
     rotation.conjugated() * (global - position)
+
+  def local2global(local: Transform3d): Transform3d =
+    Transform3d(local2global(local.position), rotation * local.rotation)
+
+  def global2local(global: Transform3d): Transform3d =
+    Transform3d(global2local(global.position), rotation.conjugated() * global.rotation)
 
   override def toString: String = s"Transform3d($position, ${EulerAngles() := rotation})"
