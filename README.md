@@ -58,3 +58,22 @@ v = Vector3d(1, 2, 3).xyzz
 ```
 
 Library doesn't have any external dependencies.
+
+### How to change this library and try changes locally in other project
+
+Change lib code, publish to local ivy repo:
+
+```bash
+sbt publicLocal
+```
+
+In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.2.8-SNAPSHOT"
+
+After that in other project add local library. In my case it was:
+
+```scala
+libraryDependencies += "scalagamemath" % "scalagamemath_3" % "0.2.8-SNAPSHOT"
+```
+
+May be you will need to remove cached lib of jitpack, it will be placed in path like "~
+/.cache/coursier/v1/https/jitpack.io/com/github/Kright/ScalaGameMath/master-SNAPSHOT".
