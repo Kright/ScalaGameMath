@@ -3,10 +3,11 @@ package com.kright.physics3d
 import com.kright.math.VectorMathGenerators.*
 import com.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
 import com.kright.physics3d.PhysicsGenerators.*
+import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
+class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("localI to globalI conversion") {
     forAll(inertiaMoments, normalizedQuaternions, vectors3InCube) { (I, rot, rotVelocity) =>
       val inertia = Inertia3d(1.0, I)
@@ -22,10 +23,27 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
     }
   }
 
+  test("get energy by different ways") {
+    forAll(bodies) { (inertia, state) =>
+      state.velocity.linear := (0, 0, 0)
+
+      val w = state.velocity.angular
+
+      val explicitEnergy = inertia.getEnergy(state)
+      // E = 1/2 * w dot L
+      val energyWdotL = 0.5 * (w dot inertia.getL(state))
+      val energyWdotIW = 0.5 * (w dot (inertia.getGlobalI(state) * state.velocity.angular))
+
+      implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-6)
+      assert(explicitEnergy === energyWdotL)
+      assert(explicitEnergy === energyWdotIW)
+    }
+  }
+
   test("energy and impulse are constant during rotation") {
     forAll(inertiaMoments, states) { (I, s) =>
 
-      for(solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
+      for (solverType <- Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)) {
         val body = Inertia3d(1.0, I)
         val initialImpulse = body.getImpulse(s)
         val initialE = body.getEnergy(s)
@@ -84,7 +102,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks :
         case SolverType.RK4Incorrect =>
           // actually it has second order of precision, like RK2.
           // Because true derivative of quaternion is a quaternion, not a vector of angular speed.
-          DifferentialSolvers.rungeKutta4(state, time=0.0, dt,
+          DifferentialSolvers.rungeKutta4(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
             nextState = (state, derivative, dt) => state.updated(derivative, dt),
             newZeroDerivative = () => new State3dDerivative(),
