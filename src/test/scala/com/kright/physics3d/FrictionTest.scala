@@ -3,24 +3,26 @@ package com.kright.physics3d
 import com.kright.math.{Vector2d, Vector3d, VectorMathGenerators}
 import com.kright.physics3d.Friction
 import org.scalacheck.Gen
+import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.Inspectors.forAll
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class FrictionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("magnitude of vector matches with scalar") {
+    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-6)
     val eps = 1e-6
     org.scalatest.Inspectors.forAll(allFrictions()) { friction =>
       forAll(VectorMathGenerators.vectors3InCube.filter(_.mag > eps)) { speed =>
         val forceVec3d = friction(speed)
         val forceScalar = friction(speed.mag)
-        assert((forceScalar - forceVec3d.mag) < eps)
+        assert(forceScalar.abs === forceVec3d.mag)
       }
     }
   }
 
   test("friction force is opposite to speed") {
-    val eps = 0.000001
+    val eps = 1e-6
     org.scalatest.Inspectors.forAll(allFrictions()) { friction =>
       forAll(VectorMathGenerators.double1) { velocity =>
         val force = friction(velocity)
