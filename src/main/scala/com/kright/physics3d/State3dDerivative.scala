@@ -1,4 +1,5 @@
 package com.kright.physics3d
+
 import com.kright.math.Quaternion
 
 class State3dDerivative(val velocity: Velocity3d,
@@ -14,9 +15,11 @@ class State3dDerivative(val velocity: Velocity3d,
     s"State3dDerivative($velocity, $acceleration)"
 
 object State3dDerivative:
+  /**
+   * for Runge-Kutta 4 method it's better to use this 'derivative',
+   * it allows to achieve 4rth order of precision
+   */
   def apply(state: State3d, inertia: Inertia3d, force: Force3d): State3d =
-    // for Runge-Kutta 4 method it's better to use this 'derivative',
-    // it gives to achieve 4rth order of precision
     val acc = inertia.getAcceleration(state, force)
     // dq = 0.5 * w * q
     val qDerivative: Quaternion = 0.5 * Quaternion(state.velocity.angular) * state.transform.rotation
@@ -25,7 +28,9 @@ object State3dDerivative:
       Velocity3d(acc.linear, acc.angular)
     )
 
+  /**
+   * ok for Runge-Kutta 2, euler and other solvers, not suitable for RK4
+   */
   def simple(state: State3d, inertia: Inertia3d, force: Force3d): State3dDerivative =
-    // ok for Runge-Kutta 2, euler and other solvers, not suitable for RK4
     val acc = inertia.getAcceleration(state, force)
     new State3dDerivative(state.velocity, acc)
