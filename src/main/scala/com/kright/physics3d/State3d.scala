@@ -1,11 +1,19 @@
 package com.kright.physics3d
 
-import com.kright.math.{IVector3d, Vector3d}
+import com.kright.math.{IVector3d, Quaternion, Vector3d}
 
 class State3d(val transform: Transform3d,
               val velocity: Velocity3d):
   def this() = this(Transform3d(), Velocity3d())
-  
+
+  def v: Vector3d = velocity.v
+
+  def w: Vector3d = velocity.w
+
+  def r: Vector3d = transform.r
+
+  def q: Quaternion = transform.q
+
   def copy(): State3d =
     State3d(transform.copy(), velocity.copy())
 
@@ -23,18 +31,18 @@ class State3d(val transform: Transform3d,
       transform.copy().update(s.velocity, dt),
       velocity.copy().update(s.acceleration, dt)
     )
-    
+
   def updated(body: Inertia3d, impulse: Impulse3d): State3d =
     State3d(
       transform.copy(),
       velocity.copy().update(body, transform, impulse)
-    )  
-    
+    )
+
   def :=(state: State3d): State3d =
     transform := state.transform
     velocity := state.velocity
     this
-    
+
   def getGlobalVelocity(localPos: IVector3d): Vector3d =
     velocity.linear + velocity.angular.cross(transform.rotation * localPos)
 

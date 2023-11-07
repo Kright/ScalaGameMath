@@ -7,6 +7,10 @@ class Transform3d(val position: Vector3d,
 
   def this() = this(Vector3d(), Quaternion.id)
 
+  def r: Vector3d = position
+
+  def q: Quaternion = rotation
+
   def copy(): Transform3d =
     Transform3d(position.copy(), rotation.copy())
 
