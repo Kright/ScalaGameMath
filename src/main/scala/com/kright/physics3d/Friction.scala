@@ -3,8 +3,6 @@ package com.kright.physics3d
 import com.kright.math.*
 import com.kright.math.MathUtils.clamp
 
-import scala.jdk.FunctionWrappers.FromJavaConsumer
-
 
 trait Friction:
   /**
