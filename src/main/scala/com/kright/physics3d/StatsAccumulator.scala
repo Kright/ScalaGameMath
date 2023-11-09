@@ -55,6 +55,10 @@ class StatsAccumulator:
     if (_mass != 0.0) _massR / _mass
     else Vector3d()
 
+  def centerVelocity: Vector3d =
+    if (_mass != 0.0) linearImpulse / _mass
+    else Vector3d()
+
   def angularImpulse: Vector3d =
     _angularImpulse - center.cross(linearImpulse)
 

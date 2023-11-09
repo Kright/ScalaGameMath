@@ -46,5 +46,16 @@ class State3d(val transform: Transform3d,
   def getGlobalVelocity(localPos: IVector3d): Vector3d =
     velocity.linear + velocity.angular.cross(transform.rotation * localPos)
 
+  def getGlobalVelocity(localPos: IVector3d, localVelocity: IVector3d): Vector3d =
+    getGlobalVelocity(localPos) + q * localVelocity
+
+  def isEquals(other: State3d, eps: Double): Boolean =
+    transform.isEquals(other.transform, eps) && velocity.isEquals(other.velocity, eps)
+
   override def toString: String =
     s"State3d($transform, $velocity})"
+
+object State3d:
+  /** key difference is in zero Quaternion */
+  def zeroDerivative: State3d =
+    State3d(Transform3d(Vector3d(), Quaternion.zero), Velocity3d(Vector3d(), Vector3d()))

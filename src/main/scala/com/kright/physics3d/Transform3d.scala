@@ -7,6 +7,8 @@ class Transform3d(val position: Vector3d,
 
   def this() = this(Vector3d(), Quaternion.id)
 
+  def this(vector3d: Vector3d) = this(vector3d, Quaternion.id)
+
   def r: Vector3d = position
 
   def q: Quaternion = rotation
@@ -46,5 +48,8 @@ class Transform3d(val position: Vector3d,
 
   def global2local(global: Transform3d): Transform3d =
     Transform3d(global2local(global.position), rotation.conjugated() * global.rotation)
+
+  def isEquals(other: Transform3d, eps: Double): Boolean =
+    position.isEquals(other.position, eps) && rotation.isEquals(other.rotation, eps)
 
   override def toString: String = s"Transform3d($position, ${EulerAngles() := rotation})"
