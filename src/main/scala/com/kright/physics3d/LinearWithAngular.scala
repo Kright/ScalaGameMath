@@ -39,3 +39,6 @@ trait LinearWithAngular[Self <: LinearWithAngular[Self]]:
   protected def angular: Vector3d
 
   protected def makeNew(newLinear: Vector3d, newAngular: Vector3d): Self
+
+  def isEquals(other: Self, eps: Double = 1e-6): Boolean =
+    linear.isEquals(other.linear, eps) && angular.isEquals(other.angular, eps)
