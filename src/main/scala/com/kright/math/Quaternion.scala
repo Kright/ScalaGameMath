@@ -192,6 +192,14 @@ final case class Quaternion(var w: Double,
   def setFromRotation(m: Matrix4d): Quaternion =
     Quaternion.restoreFromRotation(m, this)
 
+  /** @see [[Quaternion.fromAxisToAxis]] */
+  def setFromAxisToAxis(sourceAxis: IVector3d, targetAxis: IVector3d): Quaternion =
+    Quaternion.fromAxisToAxis(sourceAxis, targetAxis, this)
+
+  /** @see [[Quaternion.fromAxisOverBisection]] */
+  def setFromAxisOverBisection(sourceAxis: IVector3d, bisection: IVector3d): Quaternion =
+    Quaternion.fromAxisOverBisection(sourceAxis, bisection, this)
+
   def conjugate(): Quaternion =
     x = -x
     y = -y
@@ -412,3 +420,34 @@ object Quaternion:
         0.5 * d
       )
     }
+
+  /**
+   * @param sourceAxis : normalized vector
+   * @param targetAxis : normalized vector
+   * @param result     Quaternion for which q * sourceAxis == targetAxis
+   * @return result
+   */
+  @static def fromAxisToAxis(sourceAxis: IVector3d, targetAxis: IVector3d, result: Quaternion = Quaternion()): Quaternion =
+    val mid = sourceAxis + targetAxis
+    if (mid.mag < 1e-12) {
+      // choose any vector perpendicular to sourceAxis
+      mid := (1, 0, 0)
+      val cos = mid.dot(sourceAxis)
+      if (cos > -0.1 && cos < 0.1) {
+        mid := (0, 1, 0)
+      }
+      mid.unprojected(sourceAxis)
+    }
+    mid.normalize()
+    fromAxisOverBisection(sourceAxis, mid, result)
+
+  /**
+   * @param sourceAxis : normalized vector
+   * @param bisection  : normalized bisection between fromAxis and targetAxis
+   * @param result     Quaternion for which q * sourceAxis == targetAxis
+   * @return result
+   */
+  @static def fromAxisOverBisection(sourceAxis: IVector3d, bisection: IVector3d, result: Quaternion = Quaternion()): Quaternion =
+    val w = sourceAxis.dot(bisection)
+    val xyz = sourceAxis.cross(bisection)
+    result := (w, xyz.x, xyz.y, xyz.z)

@@ -29,6 +29,9 @@ object VectorMathGenerators:
          z <- double1)
     yield Vector3d(x, y, z)
 
+  val vectors3normalized: Gen[Vector3d] =
+    vectors3InCube.filter(_.mag > 1e-12).map(_.normalized())
+
   val vectors4InCube: Gen[Vector4d] =
     for (x <- double1;
          y <- double1;

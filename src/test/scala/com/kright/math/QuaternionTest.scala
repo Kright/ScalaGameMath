@@ -1,6 +1,6 @@
 package com.kright.math
 
-import com.kright.math.VectorMathGenerators.{eulerAngles, gaussianQuaternions, normalizedQuaternions, vectors3InCube}
+import com.kright.math.VectorMathGenerators.*
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.Assertions.*
@@ -112,5 +112,33 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions) { q =>
       val eq = Quaternion() := (EulerAngles() := q)
       assert(eq.isEquals(q), s"$eq != $q")
+    }
+  }
+
+  test("quaternion rotation from axis to axis") {
+    val eps = 1e-6
+    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(eps)
+    forAll(vectors3normalized, vectors3normalized) { (sourceAxis, targetAxis) =>
+      val q = Quaternion.fromAxisToAxis(sourceAxis, targetAxis)
+      val q2 = Quaternion().setFromAxisToAxis(sourceAxis, targetAxis)
+
+      assert(q.isEquals(q2))
+      assert((q * sourceAxis).isEquals(targetAxis))
+      assert(q.mag === 1.0)
+    }
+  }
+
+  test("quaternion rotation from axis over bisection") {
+    val eps = 1e-6
+    implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(eps)
+    forAll(vectors3normalized, vectors3normalized) { (sourceAxis, bisection) =>
+      val halfQ = Quaternion.fromAxisToAxis(sourceAxis, bisection)
+
+      val q = Quaternion.fromAxisOverBisection(sourceAxis, bisection)
+      val q2 = Quaternion().setFromAxisOverBisection(sourceAxis, bisection)
+
+      assert(q.isEquals(q2))
+      assert(q.isEquals(halfQ * halfQ))
+      assert(q.mag === 1.0)
     }
   }
