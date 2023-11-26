@@ -104,20 +104,20 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
           // Because true derivative of quaternion is a quaternion, not a vector of angular speed.
           DifferentialSolvers.rungeKutta4(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
-            nextState = (state, derivative, dt) => state.updated(derivative, dt),
-            newZeroDerivative = () => new State3dDerivative(),
+            nextState = (state, derivative, dt) => state.copy().madd(derivative, dt),
+            newZeroDerivative = () => State3dDerivative(),
             madd = (acc, d, m) => acc.madd(d, m)
           )
         case SolverType.RK2 =>
           DifferentialSolvers.rungeKutta2(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
-            nextState = (state, derivative, dt) => state.updated(derivative, dt),
+            nextState = (state, derivative, dt) => state.copy().madd(derivative, dt),
           )
         case SolverType.Euler2 =>
           DifferentialSolvers.euler2(state, time = 0.0, dt,
             getDerivative = (state, time) => body.getDerivative(state, force),
-            nextState = (state, derivative, dt) => state.updated(derivative, dt),
-            newZeroDerivative = () => new State3dDerivative(),
+            nextState = (state, derivative, dt) => state.copy().madd(derivative, dt),
+            newZeroDerivative = () => State3dDerivative(),
             madd = (acc, d, m) => acc.madd(d, m)
           )
     state := newState

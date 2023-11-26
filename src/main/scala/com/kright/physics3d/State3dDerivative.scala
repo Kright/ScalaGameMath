@@ -1,24 +1,25 @@
 package com.kright.physics3d
 
-import com.kright.math.Quaternion
+import com.kright.math.{Quaternion, Vector3d}
 
-class State3dDerivative(val velocity: Velocity3d,
-                        val acceleration: Acceleration3d):
-  def this() = this(Velocity3d(), Acceleration3d())
-
-  def madd(s: State3dDerivative, m: Double): State3dDerivative =
-    velocity.madd(s.velocity, m)
-    acceleration.madd(s.acceleration, m)
-    this
-
-  override def toString: String =
-    s"State3dDerivative($velocity, $acceleration)"
-
+/**
+ * Body orientation is described as Quaternion, but rotation velocity described as vector.
+ *
+ * For solvers with 4-th order of precision this difference is important and derivative of orientation should be
+ * Quaternion too (otherwise precision will be limited to second order).
+ *
+ * So derivative of (rotation: Quaternion, velocity: Vector3d) is (velocity: Quaternion, acceleration: Vector3d)
+ * and not (velocity: Vector3d, acceleration: Vector3d)
+ *
+ * I reuse [[State3d]] for such purpose.
+ */
 object State3dDerivative:
   /**
-   * for Runge-Kutta 4 method it's better to use this 'derivative',
-   * it allows to achieve 4rth order of precision
+   * key difference from [[State3d]] constructor is in zero Quaternion
    */
+  def apply(): State3d =
+    State3d(Transform3d(Vector3d(), Quaternion.zero), Velocity3d(Vector3d(), Vector3d()))
+
   def apply(state: State3d, inertia: Inertia3d, force: Force3d): State3d =
     val acc = inertia.getAcceleration(state, force)
     // dq = 0.5 * w * q
@@ -27,10 +28,3 @@ object State3dDerivative:
       Transform3d(state.velocity.linear, qDerivative),
       Velocity3d(acc.linear, acc.angular)
     )
-
-  /**
-   * ok for Runge-Kutta 2, euler and other solvers, not suitable for RK4
-   */
-  def simple(state: State3d, inertia: Inertia3d, force: Force3d): State3dDerivative =
-    val acc = inertia.getAcceleration(state, force)
-    new State3dDerivative(state.velocity, acc)

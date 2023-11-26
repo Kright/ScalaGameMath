@@ -126,7 +126,7 @@ class BodySystem[Joint <: Joint3d]:
     }
 
   def newZeroDerivative(): Derivative =
-    states.map(_ => State3d.zeroDerivative)
+    states.map(_ => State3dDerivative())
 
   def madd(accum: Derivative, added: Derivative, multiplier: Double): Unit =
     for (i <- accum.indices) {

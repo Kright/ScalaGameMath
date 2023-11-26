@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.2.7"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.3.0-SNAPSHOT"
 ```
 for latest version:
 ```
@@ -24,6 +24,8 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
   * Transform3d (position and orientation)
   * Inertia3d (mass and tensor of angular mass)
   * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
+  * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
+  * BodySystem for handling system of bodies with joints between them
 
 Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```scala
@@ -59,6 +61,16 @@ v = Vector3d(1, 2, 3).xyzz
 
 Library doesn't have any external dependencies.
 
+### Physics
+
+This part is still under development.
+
+I prefer code correctness and simplicity over computational efficiency.
+
+For example, BodySystem allocates a lot of temporary objects.
+So this class could be used as example or as reference implementation for bug-fixing.
+Maybe for some specific case with a lot of objects you will need your own implementation.
+
 ### How to change this library and try changes locally in other project
 
 Change lib code, publish to local ivy repo:
@@ -72,7 +84,7 @@ In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.2.8-SNAPSHOT"
 After that in other project add local library. In my case it was:
 
 ```scala
-libraryDependencies += "scalagamemath" % "scalagamemath_3" % "0.2.8-SNAPSHOT"
+libraryDependencies += "scalagamemath" % "scalagamemath_3" % "0.3.0-SNAPSHOT"
 ```
 
 May be you will need to remove cached lib of jitpack, it will be placed in path like "~
