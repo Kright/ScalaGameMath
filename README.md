@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.3.0-SNAPSHOT"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.3.0"
 ```
 for latest version:
 ```
@@ -71,6 +71,17 @@ For example, BodySystem allocates a lot of temporary objects.
 So this class could be used as example or as reference implementation for bug-fixing.
 Maybe for some specific case with a lot of objects you will need your own implementation.
 
+### Tests
+
+```bash
+sbt test
+```
+
+I use scalaCheck and property based approach. It goes well with checking math properties such as addition or
+multiplication associativity, zero and id elements, morphisms between quaternions and corresponding matrices or euler
+angles.
+For physics, it's ok to check that total energy and impulse are constant in body systems without friction.
+
 ### How to change this library and try changes locally in other project
 
 Change lib code, publish to local ivy repo:
@@ -79,7 +90,7 @@ Change lib code, publish to local ivy repo:
 sbt publicLocal
 ```
 
-In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.2.8-SNAPSHOT"
+In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.3.0-SNAPSHOT"
 
 After that in other project add local library. In my case it was:
 
