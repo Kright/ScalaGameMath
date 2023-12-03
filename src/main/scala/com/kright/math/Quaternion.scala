@@ -256,12 +256,13 @@ final case class Quaternion(var w: Double,
     this
 
 
-object Quaternion:
+object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternion]:
   inline def apply(): Quaternion = new Quaternion()
   inline def apply(xyz: IVector3d) = new Quaternion(0.0, xyz.x, xyz.y, xyz.z)
 
-  inline def zero: Quaternion = new Quaternion(0.0, 0.0, 0.0, 0.0)
-  inline def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
+  override def zero: Quaternion = new Quaternion(0.0, 0.0, 0.0, 0.0)
+
+  override def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
 
   // 16 multiplications, 12 additions
   @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion): Quaternion =

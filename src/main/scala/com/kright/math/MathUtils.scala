@@ -8,6 +8,11 @@ object MathUtils:
       i += 1
     }
 
+  def isEquals(arr1: Array[Double], arr2: Array[Double], eps: Double): Boolean =
+    loop(arr1.length) { i =>
+      if (math.abs(arr1(i) - arr2(i)) > eps) return false
+    }
+    true
 
   extension (arr: Array[Double])
     inline def swap(i: Int, j: Int): Unit =

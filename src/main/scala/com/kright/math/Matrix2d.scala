@@ -1,7 +1,5 @@
 package com.kright.math
 
-import com.kright.math.MathUtils.{loop, swap}
-
 import scala.annotation.static
 
 /**
@@ -9,14 +7,14 @@ import scala.annotation.static
  * m10 m11
  */
 final class Matrix2d(var m00: Double, var m01: Double,
-                     var m10: Double, var m11: Double):
+                     var m10: Double, var m11: Double) extends MatrixNd[Matrix2d]:
 
   def this() = this(0.0, 0.0, 0.0, 0.0)
 
-  def copy(): Matrix2d =
+  override def copy(): Matrix2d =
     new Matrix2d(m00, m01, m10, m11)
 
-  def setIdentity(): Matrix2d =
+  override def setIdentity(): Matrix2d =
     this := (
       1.0, 0.0,
       0.0, 1.0,
@@ -30,58 +28,58 @@ final class Matrix2d(var m00: Double, var m01: Double,
     Matrix2d.multiply(this, v, v)
 
 
-  def *(right: Matrix2d): Matrix2d =
+  override def *(right: Matrix2d): Matrix2d =
     Matrix2d.multiply(this, right, new Matrix2d())
 
-  def *=(right: Matrix2d): Matrix2d =
+  override def *=(right: Matrix2d): Matrix2d =
     Matrix2d.multiply(this, right, result = this)
 
-  def *>(right: Matrix2d): Matrix2d =
+  override def *>(right: Matrix2d): Matrix2d =
     Matrix2d.multiply(this, right, result = right)
 
-  def *=(v: Double): Matrix2d =
+  override def *=(v: Double): Matrix2d =
     Matrix2d.multiply(this, v, result = this)
 
-  def *(v: Double): Matrix2d =
+  override def *(v: Double): Matrix2d =
     Matrix2d.multiply(this, v, new Matrix2d())
 
-  def +=(m: Matrix2d): Matrix2d =
+  override def +=(m: Matrix2d): Matrix2d =
     Matrix2d.add(this, m, result = this)
 
-  def +(m: Matrix2d): Matrix2d =
+  override def +(m: Matrix2d): Matrix2d =
     Matrix2d.add(this, m, result = new Matrix2d())
 
-  def -=(m: Matrix2d): Matrix2d =
+  override def -=(m: Matrix2d): Matrix2d =
     Matrix2d.sub(this, m, result = this)
 
-  def -(m: Matrix2d): Matrix2d =
+  override def -(m: Matrix2d): Matrix2d =
     Matrix2d.sub(this, m, result = new Matrix2d())
 
-  def madd(m: Matrix2d, v: Double): Matrix2d =
+  override def madd(m: Matrix2d, v: Double): Matrix2d =
     Matrix2d.multiplyAdd(this, m, v, this)
 
-  def det(): Double =
+  override def det(): Double =
     m00 * m11 - m01 * m10
 
-  def transpose(): Matrix2d =
+  override def transpose(): Matrix2d =
     val t = m01
     m01 = m10
     m10 = t
     this
 
-  def transposed(): Matrix2d =
+  override def transposed(): Matrix2d =
     new Matrix2d(
       m00, m10,
       m01, m11,
     )
 
-  def invert(): Matrix2d =
+  override def invert(): Matrix2d =
     Matrix2d.invertMatrix(this, result = this)
 
-  def inverted(): Matrix2d =
+  override def inverted(): Matrix2d =
     Matrix2d.invertMatrix(this, result = new Matrix2d())
 
-  def :=(m: Matrix2d): Matrix2d =
+  override def :=(m: Matrix2d): Matrix2d =
     m00 = m.m00
     m01 = m.m01
     m10 = m.m10
@@ -110,7 +108,7 @@ final class Matrix2d(var m00: Double, var m01: Double,
       0.0, s.y
     )
 
-  def isEquals(other: Matrix2d, eps: Double = 0.000001): Boolean =
+  override def isEquals(other: Matrix2d, eps: Double = 0.000001): Boolean =
     Math.abs(m00 - other.m00) < eps &&
       Math.abs(m01 - other.m01) < eps &&
       Math.abs(m10 - other.m10) < eps &&
@@ -120,9 +118,14 @@ final class Matrix2d(var m00: Double, var m01: Double,
     s"Matrix2d($m00, $m01, $m10, $m11)"
 
 
-object Matrix2d:
+object Matrix2d extends MatrixNdFactory[Matrix2d]:
   inline def apply(): Matrix2d = new Matrix2d()
+
   inline def apply(m00: Double, m01: Double, m10: Double, m11: Double) = new Matrix2d(m00, m01, m10, m11)
+
+  override def zero: Matrix2d = new Matrix2d()
+
+  override def id: Matrix2d = new Matrix2d(1.0, 0.0, 0.0, 1.0)
 
   @static def multiply(l: Matrix2d, r: Matrix2d, result: Matrix2d): Matrix2d =
     result := (
@@ -165,7 +168,3 @@ object Matrix2d:
       d * a.m11, -d * a.m01,
       -d * a.m10, d * a.m00
     )
-
-  extension (d: Double)
-    inline def *(m: Matrix2d): Matrix2d =
-      m * d   

@@ -4,36 +4,40 @@ import com.kright.math.MathUtils.{loop, swap}
 
 import scala.annotation.static
 
+
 /**
  * indices in array:
- *    0  1  2  3
- *    4  5  6  7
- *    8  9 10 11
- *   12 13 14 15
  *
+ * @formatter:off
+ *  0  1  2  3
+ *  4  5  6  7
+ *  8  9 10 11
+ * 12 13 14 15
+ * @formatter:on
  */
-final class Matrix4d(val elements: Array[Double]):
+final class Matrix4d(val elements: Array[Double]) extends MatrixNd[Matrix4d]:
   def this() = this(new Array[Double](16))
 
   inline def apply(y: Int, x: Int): Double = elements(x + y * 4)
 
   inline def update(y: Int, x: Int, value: Double): Unit = elements(x + y * 4) = value
 
-  def copy(): Matrix4d =
+  override def copy(): Matrix4d =
     new Matrix4d(elements.clone())
 
-  def setIdentity(): Matrix4d =
+  override def setIdentity(): Matrix4d =
     this := (
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
+      1.0, 0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 1.0
     )
 
-  def :=(m: Matrix4d): Matrix4d =
+  override def :=(m: Matrix4d): Matrix4d =
     System.arraycopy(m.elements, 0, elements, 0, 16)
     this
 
+  // @formatter:off
   def :=(m: Matrix3d): Matrix4d =
     this := (
       m(0, 0), m(0, 1), m(0, 2), 0.0,
@@ -84,12 +88,13 @@ final class Matrix4d(val elements: Array[Double]):
      e(8) = a20;  e(9) = a21; e(10) = a22; e(11) = a23
     e(12) = a30; e(13) = a31; e(14) = a32; e(15) = a33
     this
+  // @formatter:on
 
   def setRow(y: Int, row: IVector4d): Matrix4d =
-    this(y, 0) = row.x
-    this(y, 1) = row.y
-    this(y, 2) = row.z
-    this(y, 3) = row.w
+    this (y, 0) = row.x
+    this (y, 1) = row.y
+    this (y, 2) = row.z
+    this (y, 3) = row.w
     this
 
   def setRows(r0: IVector4d, r1: IVector4d, r2: IVector4d, r3: IVector4d): Matrix4d =
@@ -98,34 +103,34 @@ final class Matrix4d(val elements: Array[Double]):
     setRow(2, r2)
     setRow(3, r3)
 
-  def *(right: Matrix4d): Matrix4d =
+  override def *(right: Matrix4d): Matrix4d =
     Matrix4d.multiply(this, right, new Matrix4d())
 
-  def *=(right: Matrix4d): Matrix4d =
+  override def *=(right: Matrix4d): Matrix4d =
     Matrix4d.multiply(this, right, result = this)
 
-  def *>(right: Matrix4d): Matrix4d =
+  override def *>(right: Matrix4d): Matrix4d =
     Matrix4d.multiply(this, right, result = right)
 
-  def *=(v: Double): Matrix4d =
+  override def *=(v: Double): Matrix4d =
     Matrix4d.multiply(this, v, result = this)
 
-  def *(v: Double): Matrix4d =
+  override def *(v: Double): Matrix4d =
     Matrix4d.multiply(this, v, new Matrix4d())
 
-  def +=(m: Matrix4d): Matrix4d =
+  override def +=(m: Matrix4d): Matrix4d =
     Matrix4d.add(this, m, result = this)
 
-  def +(m: Matrix4d): Matrix4d =
+  override def +(m: Matrix4d): Matrix4d =
     Matrix4d.add(this, m, result = new Matrix4d())
 
-  def -=(m: Matrix4d): Matrix4d =
+  override def -=(m: Matrix4d): Matrix4d =
     Matrix4d.sub(this, m, result = this)
 
-  def -(m: Matrix4d): Matrix4d =
+  override def -(m: Matrix4d): Matrix4d =
     Matrix4d.sub(this, m, result = new Matrix4d())
 
-  def madd(m: Matrix4d, v: Double): Matrix4d =
+  override def madd(m: Matrix4d, v: Double): Matrix4d =
     Matrix4d.multiplyAdd(this, m, v, result = this)
 
 
@@ -167,21 +172,18 @@ final class Matrix4d(val elements: Array[Double]):
   def det3x3(): Double =
     minor(3, 3)
 
-  def det(): Double =
-    // https://en.wikipedia.org/wiki/Laplace_expansion
+  override def det(): Double =
+  // https://en.wikipedia.org/wiki/Laplace_expansion
     this (0, 0) * minor(0, 0) - this (0, 1) * minor(0, 1) +
       this (0, 2) * minor(0, 2) - this (0, 3) * minor(0, 3)
 
-  def inverted(): Matrix4d =
-    copy().invert()
-
-  def invert(): Matrix4d =
+  override def invert(): Matrix4d =
     val m00 = minor(0, 0)
     val m01 = minor(0, 1)
     val m02 = minor(0, 2)
     val m03 = minor(0, 3)
 
-    val det = this(0, 0) * m00 - this(0, 1) * m01 + this(0, 2) * m02 - this(0, 3) * m03
+    val det = this (0, 0) * m00 - this (0, 1) * m01 + this (0, 2) * m02 - this (0, 3) * m03
     val d = 1.0 / det
 
     this := (
@@ -191,10 +193,7 @@ final class Matrix4d(val elements: Array[Double]):
       -d * m03, d * minor(1, 3), -d * minor(2, 3), d * minor(3, 3),
     )
 
-  def transposed(): Matrix4d =
-    copy().transpose()
-
-  def transpose(): Matrix4d =
+  override def transpose(): Matrix4d =
     val e = elements
     e.swap(1, 4)
     e.swap(2, 8)
@@ -247,40 +246,44 @@ final class Matrix4d(val elements: Array[Double]):
     val sy = 1.0 / tanY
     val sz = (near + far) / depth
     val sw = -2.0 * far * near / depth
+    //@formatter:off
     this := (
        sx, 0.0, 0.0, 0.0,
       0.0,  sy, 0.0, 0.0,
       0.0, 0.0,  sz,  sw,
       0.0, 0.0, 1.0, 0.0,
     )
+    //@formatter:on
 
 
-    /**
-     * more precise way for depth at far plane
-     *
-     * camera orientation: along Z axis, z = near and z = far converted to z = -1 and z = 0
-     * x, y coordinates converted into perspective: x / z / tanX, y / z / tanY
-     *
-     * for flipping X or Y axis just pass negative tangent
-     *
-     * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
-     * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees
-     * @param near - z coordinate of frustum plane converted into z = -1
-     * @param far  - z coordinate of frustum plane converted into z = 0
-     * @return self
-     */
+  /**
+   * more precise way for depth at far plane
+   *
+   * camera orientation: along Z axis, z = near and z = far converted to z = -1 and z = 0
+   * x, y coordinates converted into perspective: x / z / tanX, y / z / tanY
+   *
+   * for flipping X or Y axis just pass negative tangent
+   *
+   * @param tanX - tangent of half of the horizontal pov, 1.0 for 45 degrees
+   * @param tanY - tangent of half of the vertical pov, 1.0 for 45 degrees
+   * @param near - z coordinate of frustum plane converted into z = -1
+   * @param far  - z coordinate of frustum plane converted into z = 0
+   * @return self
+   */
   def setProjectionCameraZ10(tanX: Double, tanY: Double, near: Double, far: Double): Matrix4d =
     val depth = far - near
     val sx = 1.0 / tanX
     val sy = 1.0 / tanY
     val sz = near / depth
     val sw = -far * near / depth
+    //@formatter:off
     this := (
        sx, 0.0, 0.0, 0.0,
       0.0,  sy, 0.0, 0.0,
       0.0, 0.0,  sz,  sw,
       0.0, 0.0, 1.0, 0.0,
     )
+    //@formatter:on
 
   /**
    * camera orientation: along Z axis, z = near and z = infinity converted to z = -1 and z = 0
@@ -297,12 +300,14 @@ final class Matrix4d(val elements: Array[Double]):
     val sx = 1.0 / tanX
     val sy = 1.0 / tanY
     val sw = -near
+    //@formatter:off
     this := (
        sx, 0.0, 0.0, 0.0,
       0.0,  sy, 0.0, 0.0,
       0.0, 0.0, 0.0,  sw,
       0.0, 0.0, 1.0, 0.0,
     )
+    //@formatter:on
 
   def setLookAt(from: IVector3d, to: IVector3d, up: IVector3d): Matrix4d =
     val z = (to - from).normalize()
@@ -312,7 +317,7 @@ final class Matrix4d(val elements: Array[Double]):
       x.x, x.y, x.z, -from.dot(x),
       y.x, y.y, y.z, -from.dot(y),
       z.x, z.y, z.z, -from.dot(z),
-      0.0, 0.0, 0.0,          1.0,
+      0.0, 0.0, 0.0, 1.0,
     )
 
   def setRotation(forwardZ: IVector3d, upY: IVector3d): Matrix4d =
@@ -326,21 +331,18 @@ final class Matrix4d(val elements: Array[Double]):
       0.0, 0.0, 0.0, 1.0,
     )
 
-  def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
-    val el1 = elements
-    val el2 = other.elements
-    MathUtils.loop(16) { i =>
-      if (Math.abs(el1(i) - el2(i)) > eps) {
-        return false
-      }
-    }
-    true
+  override def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
+    MathUtils.isEquals(elements, other.elements, eps)
 
   override def toString: String =
     s"Matrix4d(${elements.mkString(", ")})"
 
-object Matrix4d:
+object Matrix4d extends MatrixNdFactory[Matrix4d]:
   inline def apply() = new Matrix4d()
+
+  override def zero: Matrix4d = new Matrix4d()
+
+  override def id: Matrix4d = new Matrix4d().setIdentity()
 
   @static def multiply(a: Matrix4d, m: Double, result: Matrix4d): Matrix4d =
     loop(16) { i =>
@@ -361,12 +363,16 @@ object Matrix4d:
 
   @static def multiply(matrix: Matrix4d, v: IVector4d, result: Vector4d): Vector4d =
     val e = matrix.elements
+
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z + e(shift + 3) * v.w
+
     result := (f(0), f(4), f(8), f(12))
 
   @static def multiply(matrix: Matrix4d, v: IVector3d, vw: Double, result: Vector3d): Vector3d =
     val e = matrix.elements
+
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z + e(shift + 3) * vw
+
     val rx = f(0)
     val ry = f(4)
     val rz = f(8)
@@ -376,8 +382,10 @@ object Matrix4d:
 
   @static def rotate3d(matrix: Matrix4d, v: IVector3d, result: Vector3d): Vector3d =
     val e = matrix.elements
+
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z
-    result := (f(0), f(4), f(8))  
+
+    result := (f(0), f(4), f(8))
 
   private inline def elementWiseOperation(left: Matrix4d, right: Matrix4d, result: Matrix4d)(inline op: (Double, Double) => Double): Matrix4d =
     loop(16) { i =>
@@ -393,7 +401,3 @@ object Matrix4d:
 
   @static def multiplyAdd(a: Matrix4d, b: Matrix4d, v: Double, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }
-
-  extension(d: Double)
-    inline def *(m: Matrix4d): Matrix4d =
-      m * d

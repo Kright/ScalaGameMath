@@ -276,3 +276,20 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("Matrix and scalar multiplication and division") {
+    forAll(matrices2, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
+      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
+      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+    }
+
+    forAll(matrices3, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
+      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
+      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+    }
+
+    forAll(matrices4, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
+      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
+      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+    }
+  }

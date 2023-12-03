@@ -10,16 +10,16 @@ import scala.annotation.static
  *   3 4 5
  *   6 7 8
  */
-final class Matrix3d(val elements: Array[Double]):
+final class Matrix3d(val elements: Array[Double]) extends MatrixNd[Matrix3d]:
   def this() = this(new Array[Double](9))
 
   inline def apply(y: Int, x: Int): Double = elements(x + y * 3)
   inline def update(y: Int, x: Int, value: Double): Unit = elements(x + y * 3) = value
 
-  def copy(): Matrix3d =
+  override def copy(): Matrix3d =
     new Matrix3d(elements.clone())
 
-  def setIdentity(): Matrix3d =
+  override def setIdentity(): Matrix3d =
     this := (
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
@@ -46,53 +46,50 @@ final class Matrix3d(val elements: Array[Double]):
     Matrix3d.rotate2d(this, v, v)
 
 
-  def *(right: Matrix3d): Matrix3d =
+  override def *(right: Matrix3d): Matrix3d =
     Matrix3d.multiply(this, right, new Matrix3d())
 
-  def *=(right: Matrix3d): Matrix3d =
+  override def *=(right: Matrix3d): Matrix3d =
     Matrix3d.multiply(this, right, result = this)
 
-  def *>(right: Matrix3d): Matrix3d =
+  override def *>(right: Matrix3d): Matrix3d =
     Matrix3d.multiply(this, right, result = right)
 
-  def *=(v: Double): Matrix3d =
+  override def *=(v: Double): Matrix3d =
     Matrix3d.multiply(this, v, result = this)
 
-  def *(v: Double): Matrix3d =
+  override def *(v: Double): Matrix3d =
     Matrix3d.multiply(this, v, new Matrix3d())
 
-  def +=(m: Matrix3d): Matrix3d =
+  override def +=(m: Matrix3d): Matrix3d =
     Matrix3d.add(this, m, result = this)
 
-  def +(m: Matrix3d): Matrix3d =
+  override def +(m: Matrix3d): Matrix3d =
     Matrix3d.add(this, m, result = new Matrix3d())
 
-  def -=(m: Matrix3d): Matrix3d =
+  override def -=(m: Matrix3d): Matrix3d =
     Matrix3d.sub(this, m, result = this)
 
-  def -(m: Matrix3d): Matrix3d =
+  override def -(m: Matrix3d): Matrix3d =
     Matrix3d.sub(this, m, result = new Matrix3d())
 
-  def madd(m: Matrix3d, v: Double): Matrix3d =
+  override def madd(m: Matrix3d, v: Double): Matrix3d =
     Matrix3d.multiplyAdd(this, m, v, this)
 
-  def det(): Double =
+  override def det(): Double =
     val f = elements
     Matrix3d.determinant(f(0), f(1), f(2), f(3), f(4), f(5), f(6), f(7), f(8))
 
-  def transpose(): Matrix3d =
+  override def transpose(): Matrix3d =
     elements.swap(1, 3)
     elements.swap(2, 6)
     elements.swap(5, 7)
     this
 
-  def transposed(): Matrix3d =
-    copy().transpose()
-
-  def invert(): Matrix3d =
+  override def invert(): Matrix3d =
     Matrix3d.invertMatrix(this, result = this)
 
-  def inverted(): Matrix3d =
+  override def inverted(): Matrix3d =
     Matrix3d.invertMatrix(this, result = new Matrix3d())
 
   def setRow(row: Int, v: IVector3d): Matrix3d =
@@ -118,7 +115,7 @@ final class Matrix3d(val elements: Array[Double]):
     setColumn(1, c1)
     setColumn(2, c2)
 
-  def :=(m: Matrix3d): Matrix3d =
+  override def :=(m: Matrix3d): Matrix3d =
     System.arraycopy(m.elements, 0, elements, 0, 9)
     this
 
@@ -206,22 +203,19 @@ final class Matrix3d(val elements: Array[Double]):
       0.0, 0.0, s.z,
     )
 
-  def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
-    val el1 = elements
-    val el2 = other.elements
-    MathUtils.loop(9) { i =>
-      if (Math.abs(el1(i) - el2(i)) > eps) {
-        return false
-      }
-    }
-    true
+  override def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
+    MathUtils.isEquals(elements, other.elements, eps)
 
   override def toString: String =
     s"Matrix3d(${elements.mkString(", ")})"
 
 
-object Matrix3d:
+object Matrix3d extends MatrixNdFactory[Matrix3d]:
   inline def apply(): Matrix3d = new Matrix3d()
+
+  override def zero: Matrix3d = new Matrix3d()
+
+  override def id: Matrix3d = new Matrix3d().setIdentity()
 
   @static def multiply(left: Matrix3d, right: Matrix3d, result: Matrix3d): Matrix3d =
     inline def f(y: Int, x: Int) = left(y, 0) * right(0, x) + left(y, 1) * right(1, x) + left(y, 2) * right(2, x)
@@ -302,7 +296,3 @@ object Matrix3d:
       d * (f(1, 0) * f(0, 2) - f(0, 0) * f(1, 2)),
       d * (f(0, 0) * f(1, 1) - f(1, 0) * f(0, 1)),
     )
-
-  extension (d: Double)
-    inline def *(m: Matrix3d): Matrix3d =
-      m * d 
