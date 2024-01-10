@@ -437,7 +437,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
       if (cos > -0.1 && cos < 0.1) {
         mid := (0, 1, 0)
       }
-      mid.unprojected(sourceAxis)
+      mid.rejected(sourceAxis)
     }
     mid.normalize()
     fromAxisOverBisection(sourceAxis, mid, result)

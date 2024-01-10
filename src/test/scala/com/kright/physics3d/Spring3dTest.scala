@@ -30,7 +30,7 @@ class Spring3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val r0 = 0.5
         Spring3d.addSpring(r12, k, r0, dr1global, dr2global, force1, force2)
 
-        assert(force1.linear.unprojected(r12).isEquals(Vector3d()))
+        assert(force1.linear.rejected(r12).isEquals(Vector3d()))
         assert(force1.linear.mag === k * math.abs(r12.mag - r0))
 
         if (r12.mag + eps < r0) {
@@ -72,7 +72,7 @@ class Spring3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       assertBalancedForces { (force1, force2) =>
         Spring3d.addLinearFriction(r12, v12, Friction.linear(3), dr1global, dr2global, force1, force2)
 
-        assert(force1.linear.unprojected(r12).isEquals(Vector3d()))
+        assert(force1.linear.rejected(r12).isEquals(Vector3d()))
         assert(force1.linear.dot(v12) > -eps)
       }
     }

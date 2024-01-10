@@ -239,7 +239,7 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("Matrix setLookAt with normalized perpendicular axis") {
     forAll(vectors3InCube, vectors3InCube) { (from, dest) =>
       val up = Vector3d(0, 1, 0)
-      if (from.distance(dest) > 0.000001 && (dest - from).unprojected(up).mag > 0.000001) {
+      if (from.distance(dest) > 0.000001 && (dest - from).rejected(up).mag > 0.000001) {
         val m4 = Matrix4d().setLookAt(from, dest, up)
         val m4r = Matrix4d().setRotation(dest - from, up)
         val m3 = Matrix3d().setRotation(dest - from, up)
@@ -264,7 +264,7 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
 
     val up = Vector3d(0, 1, 0)
     forAll(vectors3InCube, vectors3InCube) { (from, dest) =>
-      if (from.distance(dest) > 0.000001 && (dest - from).unprojected(up).mag > 0.000001) {
+      if (from.distance(dest) > 0.000001 && (dest - from).rejected(up).mag > 0.000001) {
         val m4 = Matrix4d().setLookAt(from, dest, up)
         val m3 = Matrix3d().setRotation(dest - from, up)
         val m4r = Matrix4d().setRotation(dest - from, up)

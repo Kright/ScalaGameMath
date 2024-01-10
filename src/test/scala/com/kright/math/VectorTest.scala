@@ -8,19 +8,19 @@ class VectorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("projected and unprojected") {
     forAll(vectors2InCube, vectors2InCube) { (v1, axis) =>
       if (axis.mag > 0.000001) {
-        assert(v1.isEquals(v1.projected(axis) + v1.unprojected(axis)))
+        assert(v1.isEquals(v1.projected(axis) + v1.rejected(axis)))
       }
     }
 
     forAll(vectors3InCube, vectors3InCube) { (v1, axis) =>
       if (axis.mag > 0.000001) {
-        assert(v1.isEquals(v1.projected(axis) + v1.unprojected(axis)))
+        assert(v1.isEquals(v1.projected(axis) + v1.rejected(axis)))
       }
     }
 
     forAll(vectors4InCube, vectors4InCube) { (v1, axis) =>
       if (axis.mag > 0.000001) {
-        assert(v1.isEquals(v1.projected(axis) + v1.unprojected(axis)))
+        assert(v1.isEquals(v1.projected(axis) + v1.rejected(axis)))
       }
     }
   }

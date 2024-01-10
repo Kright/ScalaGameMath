@@ -26,7 +26,7 @@ class AngularFriction3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
 
         assert(force1.linear.isEquals(Vector3d()))
         assert(force1.torque.isEquals(-force2.torque))
-        assert(force1.torque.unprojected(r12).isEquals(Vector3d()))
+        assert(force1.torque.rejected(r12).isEquals(Vector3d()))
 
         assert(force1.torque.projected(r12).isEquals((w2.projected(r12) - w1.projected(r12)) * k * 0.5))
       }

@@ -48,7 +48,7 @@ object AngularFriction3d:
     val eps = 1e-12
     if (r12.mag < eps) return
 
-    val w1p = w1.unprojected(r12)
+    val w1p = w1.rejected(r12)
     val moment1p = friction(w1p - wJointP)
     Joint3d.addMomentAndForces(r12, moment1p, dr1global, dr2global, force1, force2)
 

@@ -20,7 +20,11 @@ trait IVectorNd[IVec, Vec]:
   def dot(v: IVec): Double
   def cos(v: IVec): Double
   def projected(axis: IVec): Vec
-  def unprojected(axix: IVec): Vec
+
+  def rejected(axis: IVec): Vec
+
+  @deprecated("use rejected")
+  def unprojected(axis: IVec): Vec = rejected(axis)
   def normalized(): Vec = this / this.mag
 
   def squareMag: Double
@@ -53,7 +57,8 @@ trait VectorNd[IVec <: IVectorNd[_, _], Vec <: VectorNd[IVec, Vec]] extends IVec
   override def clamp(lower: IVec, upper: IVec): Vec = max(lower).setMin(upper)
   override def cos(v: IVec): Double = this.dot(v) / Math.sqrt(this.squareMag * v.squareMag)
   override def projected(axis: IVec): Vec = copy().setProjected(axis)
-  override def unprojected(axis: IVec): Vec = copy().setUnprojected(axis)
+
+  override def rejected(axis: IVec): Vec = copy().setRejected(axis)
   override def squareMag: Double = this.dot(this)
 
   def :=(v: IVec): Vec
@@ -76,8 +81,12 @@ trait VectorNd[IVec <: IVectorNd[_, _], Vec <: VectorNd[IVec, Vec]] extends IVec
     this := axis
     this *= m
 
-  def setUnprojected(axis: IVec): Vec =
+  def setRejected(axis: IVec): Vec =
     val m = this.dot(axis) / axis.squareMag
     this.madd(axis, -m)
+
+  @deprecated("use setRejected")
+  def setUnprojected(axis: IVec): Vec =
+    setRejected(axis)
 
   def normalize(): Vec = this /= this.mag
