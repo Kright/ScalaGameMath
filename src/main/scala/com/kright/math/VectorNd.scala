@@ -23,6 +23,8 @@ trait IVectorNd[IVec, Vec]:
 
   def rejected(axis: IVec): Vec
 
+  def decomposed(axis: IVec): (Vec, Vec) = (projected(axis), rejected(axis))
+
   @deprecated("use rejected")
   def unprojected(axis: IVec): Vec = rejected(axis)
   def normalized(): Vec = this / this.mag
