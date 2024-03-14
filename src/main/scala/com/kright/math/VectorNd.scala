@@ -17,7 +17,7 @@ trait IVectorNd[IVec, Vec]:
   def max(v: IVec): Vec
   def clamp(lower: IVec, upper: IVec): Vec
 
-  def dot(v: IVec): Double
+  infix def dot(v: IVec): Double
   def cos(v: IVec): Double
   def projected(axis: IVec): Vec
 
@@ -44,7 +44,7 @@ object IVectorNd:
       v * m
 
 
-trait VectorNd[IVec <: IVectorNd[_, _], Vec <: VectorNd[IVec, Vec]] extends IVectorNd[IVec, Vec]:
+trait VectorNd[IVec <: IVectorNd[?, ?], Vec <: VectorNd[IVec, Vec]] extends IVectorNd[IVec, Vec]:
   self: Vec & IVec =>
 
   override def +(v: IVec): Vec = copy() += v

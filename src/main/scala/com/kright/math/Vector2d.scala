@@ -7,7 +7,7 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
   override def copy(): Vector2d =
     new Vector2d(x, y)
 
-  override def dot(v: IVector2d): Double =
+  override infix def dot(v: IVector2d): Double =
     x * v.x + y * v.y
 
   def squareDistance(v: IVector2d): Double =
