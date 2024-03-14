@@ -19,12 +19,19 @@ lazy val root = (project in file("."))
   .settings(
     name := "scalaGameMath",
     packageSrc / publishArtifact := true,
-  ).aggregate(math, physics3d)
+  ).aggregate(math, swizzle, physics3d)
 
 lazy val math = (project in file("math")).settings(
   scalatestSettings,
 )
 
+lazy val swizzle = (project in file("swizzle")).settings(
+  scalatestSettings,
+).dependsOn(math)
+
 lazy val physics3d = (project in file("physics3d")).settings(
   scalatestSettings
-).dependsOn(math % "compile->compile;test->test")
+).dependsOn(
+  math % "compile->compile;test->test",
+  swizzle
+)
