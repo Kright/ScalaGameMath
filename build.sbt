@@ -35,6 +35,5 @@ lazy val physics3d = (project in file("physics3d")).settings(
   scalatestSettings
 ).dependsOn(
   math % "compile->compile;test->test",
-  swizzle,
   solvers,
 )
