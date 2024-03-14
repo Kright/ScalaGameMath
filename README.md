@@ -36,8 +36,9 @@ Vectors treated as columns. For quaternions and matrices multiplication order is
 Support conversions between rotation matrix, quaternions and euler angles.
 
 Unfortunately JVM doesn't support lightweight structs, so there are a bunch of helper operators:
+
 ```scala 
-import com.kright.math.Quaternion
+import com.github.kright.math.Quaternion
 
 val q = Quaternion() // assign reference
 q := Quaternion()    // assign by value (w, x, y, z)
@@ -48,7 +49,7 @@ q *> q2              // q2 := q * q2, inplace, no objects created
 
 Library provides [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)):
 ```scala
-import com.kright.math.{Vector3d, Vector4d}
+import com.github.kright.math.{Vector3d, Vector4d}
 
 val v = Vector4d(1, 2, 3, 4)
 v.yx = v.xy
