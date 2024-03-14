@@ -10,10 +10,21 @@ scalacOptions ++= Seq(
   "-Werror"
 )
 
+lazy val scalatestSettings = Seq(
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
+  libraryDependencies += "org.scalatestplus" %% "scalacheck-1-17" % "3.2.17.0" % "test",
+)
+
 lazy val root = (project in file("."))
   .settings(
     name := "scalaGameMath",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
-    libraryDependencies += "org.scalatestplus" %% "scalacheck-1-17" % "3.2.17.0" % "test",
     packageSrc / publishArtifact := true,
-  )
+  ).aggregate(math, physics3d)
+
+lazy val math = (project in file("math")).settings(
+  scalatestSettings,
+)
+
+lazy val physics3d = (project in file("physics3d")).settings(
+  scalatestSettings
+).dependsOn(math % "compile->compile;test->test")
