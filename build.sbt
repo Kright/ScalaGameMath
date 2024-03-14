@@ -1,4 +1,4 @@
-ThisBuild / version := "0.3.1-SNAPSHOT"
+ThisBuild / version := "0.3.1"
 
 ThisBuild / scalaVersion := "3.4.0"
 
@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "scalaGameMath",
     packageSrc / publishArtifact := true,
-  ).aggregate(math, swizzle, physics3d)
+  ).aggregate(math, swizzle, solvers, physics3d)
 
 lazy val math = (project in file("math")).settings(
   scalatestSettings,
@@ -29,9 +29,12 @@ lazy val swizzle = (project in file("swizzle")).settings(
   scalatestSettings,
 ).dependsOn(math)
 
+lazy val solvers = (project in file("solvers"))
+
 lazy val physics3d = (project in file("physics3d")).settings(
   scalatestSettings
 ).dependsOn(
   math % "compile->compile;test->test",
-  swizzle
+  swizzle,
+  solvers,
 )

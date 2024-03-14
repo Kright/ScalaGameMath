@@ -4,8 +4,20 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.3.0"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.4.0"
 ```
+
+Or for separate modules
+
+```
+libraryDependencies += Seq(
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.4.0",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.4.0",
+  "com.github.Kright.ScalaGameMath" %% "swizzle" % "0.4.0",
+  "com.github.Kright.ScalaGameMath" %% "solvers" % "0.4.0",
+)
+```
+
 for latest version:
 ```
 libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "master-SNAPSHOT"
@@ -15,17 +27,19 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 
 ## Features:
 
-* Math:
+* **math**:
   * Vector2d, Vector3d, Vector4d
   * Quaternion
   * Matrix: 2x2, 3x3, 4x4
   * Euler angles: yaw Z, pitch Y, roll X
-* Rigid body physics:
+* **physics3d**: Rigid body physics
   * Transform3d (position and orientation)
   * Inertia3d (mass and tensor of angular mass)
   * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
   * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
   * BodySystem for handling system of bodies with joints between them
+* **swizzle**: swizzle operators for vectors
+* **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 
 Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```scala
@@ -33,7 +47,7 @@ Vectors treated as columns. For quaternions and matrices multiplication order is
 (quaternionA * quaternionB) * vec === quaternionA * (quaternionB * vec)
 ```
 
-Support conversions between rotation matrix, quaternions and euler angles.
+Support conversions between rotation matrix, quaternions and Euler angles.
 
 Unfortunately JVM doesn't support lightweight structs, so there are a bunch of helper operators:
 
@@ -47,7 +61,7 @@ q *= q2              // q := q * q2, inplace, no objects created
 q *> q2              // q2 := q * q2, inplace, no objects created
 ```
 
-Library provides [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)):
+Library had module with [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)):
 ```scala
 import com.github.kright.math.{Vector3d, Vector4d}
 
@@ -88,7 +102,7 @@ For physics, it's ok to check that total energy and impulse are constant in body
 Change lib code, publish to local ivy repo:
 
 ```bash
-sbt publicLocal
+sbt publishLocal
 ```
 
 In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.3.0-SNAPSHOT"
@@ -96,7 +110,7 @@ In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.3.0-SNAPSHOT"
 After that in other project add local library. In my case it was:
 
 ```scala
-libraryDependencies += "scalagamemath" % "scalagamemath_3" % "0.3.0-SNAPSHOT"
+libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.3.0-SNAPSHOT"
 ```
 
 May be you will need to remove cached lib of jitpack, it will be placed in path like "~
