@@ -37,9 +37,6 @@ trait IVectorNd[IVec, Vec] extends IEqualsWithEps[IVec]:
 
   def decomposed(axis: IVec): (Vec, Vec) = (projected(axis), rejected(axis))
 
-  @deprecated("use rejected")
-  def unprojected(axis: IVec): Vec = rejected(axis)
-
   def normalized(): Vec = this / this.mag
 
   def squareMag: Double
@@ -124,9 +121,5 @@ trait VectorNd[IVec <: IVectorNd[?, ?], Vec <: VectorNd[IVec, Vec]] extends IVec
   def setRejected(axis: IVec): Vec =
     val m = this.dot(axis) / axis.squareMag
     this.madd(axis, -m)
-
-  @deprecated("use setRejected")
-  def setUnprojected(axis: IVec): Vec =
-    setRejected(axis)
 
   def normalize(): Vec = this /= this.mag
