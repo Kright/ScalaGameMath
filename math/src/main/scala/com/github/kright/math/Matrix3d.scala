@@ -210,7 +210,7 @@ final class Matrix3d(val elements: Array[Double]) extends MatrixNd[Matrix3d]:
       0.0, 0.0, s.z,
     )
 
-  override def isEquals(other: Matrix3d, eps: Double = 0.000001): Boolean =
+  override def isEquals(other: Matrix3d, eps: Double): Boolean =
     MathUtils.isEquals(elements, other.elements, eps)
 
   override def toString: String =

@@ -29,7 +29,7 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
   def sin(v: IVector3d): Double =
     Math.sqrt(cross(v).squareMag / (squareMag * v.squareMag))
 
-  override def isEquals(v: IVector3d, eps: Double = 0.000001): Boolean =
+  override def isEquals(v: IVector3d, eps: Double): Boolean =
     Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps && Math.abs(z - v.z) < eps
 
 

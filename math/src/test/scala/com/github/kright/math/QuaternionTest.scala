@@ -8,18 +8,20 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
+  private implicit val eps: EqualityEps = EqualityEps(1e-12)
+
   test("quaternion pow") {
     forAll(normalizedQuaternions) { q =>
-      assert((q * q).isEquals(q ^ 2))
-      assert((q * q * q).isEquals(q ^ 3))
+      assert((q * q) === (q ^ 2))
+      assert((q * q * q) === (q ^ 3))
 
       val halfQ = q ^ 0.5
-      assert(q.isEquals(halfQ * halfQ))
+      assert(q === (halfQ * halfQ))
 
-      assert((halfQ.getLog() * 2).isEquals(q.getLog()))
+      assert((halfQ.getLog() * 2) === (q.getLog()))
 
-      assert(q.conjugated().isEquals(q ^ -1))
-      assert(Quaternion().isEquals(q ^ 0.0))
+      assert(q.conjugated() === (q ^ -1))
+      assert(Quaternion() === (q ^ 0.0))
     }
   }
 
@@ -30,8 +32,8 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
 
       val groundTruth = first * (((first ^ -1) * second) ^ 0.5)
 
-      assert(lerp.isEquals(groundTruth))
-      assert(slerp.isEquals(groundTruth))
+      assert(lerp === groundTruth)
+      assert(slerp === groundTruth)
     }
   }
 
@@ -39,7 +41,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions) { q =>
       val exp = q.getLog()
       val q2 = Quaternion().setFromExp(exp)
-      assert(q.isEquals(q2))
+      assert(q === q2)
     }
   }
 
@@ -47,7 +49,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions, normalizedQuaternions, Gen.double) { (first, second, t) =>
       val slerp = Quaternion.slerp(first, second, t)
       val groundTruth = first * (((first ^ -1) * second) ^ t)
-      assert(slerp.isEquals(groundTruth))
+      assert(slerp === groundTruth)
     }
   }
 
@@ -56,7 +58,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val axis = q.getRotationAxis()
       val angle = q.rotationAngleRadians()
       val reconstructed = Quaternion() := (angle, axis)
-      assert(reconstructed.isEquals(q))
+      assert(reconstructed === q)
     }
   }
 
@@ -68,7 +70,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       }
 
       val r2 = q * v
-      assert(r1.isEquals(r2))
+      assert(r1 === r2)
     }
   }
 
@@ -83,7 +85,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions, normalizedQuaternions, normalizedQuaternions) { (first, second, third) =>
       val a = (first * second) * third
       val b = first * (second * third)
-      assert(a.isEquals(b))
+      assert(a === b)
     }
   }
 
@@ -91,7 +93,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions, normalizedQuaternions, vectors3InCube) { (first, second, vec) =>
       val a = (first * second) * vec
       val b = first * (second * vec)
-      assert(a.isEquals(b))
+      assert(a === (b))
     }
   }
 
@@ -103,15 +105,15 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val r3 = Quaternion().setFromRotation(m3)
       val r4 = Quaternion().setFromRotation(m4)
 
-      assert(q.isEquals(r3), s"$q != $r3")
-      assert(q.isEquals(r4), s"$q != $r4")
+      assert(q === r3, s"$q != $r3")
+      assert(q === r4, s"$q != $r4")
     }
   }
 
   test("quaternion to euler and back") {
     forAll(normalizedQuaternions) { q =>
       val eq = Quaternion() := (EulerAngles() := q)
-      assert(eq.isEquals(q), s"$eq != $q")
+      assert(eq === q, s"$eq != $q")
     }
   }
 
@@ -122,8 +124,8 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val q = Quaternion.fromAxisToAxis(sourceAxis, targetAxis)
       val q2 = Quaternion().setFromAxisToAxis(sourceAxis, targetAxis)
 
-      assert(q.isEquals(q2))
-      assert((q * sourceAxis).isEquals(targetAxis))
+      assert(q === q2)
+      assert((q * sourceAxis) === targetAxis)
       assert(q.mag === 1.0)
     }
   }
@@ -137,8 +139,8 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val q = Quaternion.fromAxisOverBisection(sourceAxis, bisection)
       val q2 = Quaternion().setFromAxisOverBisection(sourceAxis, bisection)
 
-      assert(q.isEquals(q2))
-      assert(q.isEquals(halfQ * halfQ))
+      assert(q === q2)
+      assert(q === (halfQ * halfQ))
       assert(q.mag === 1.0)
     }
   }

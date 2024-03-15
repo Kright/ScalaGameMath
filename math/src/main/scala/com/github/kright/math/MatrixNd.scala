@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-trait MatrixNd[Matrix <: MatrixNd[Matrix]]:
+trait MatrixNd[Matrix <: MatrixNd[Matrix]] extends IEqualsWithEps[Matrix]:
   def copy(): Matrix
 
   def setIdentity(): Matrix
@@ -17,7 +17,7 @@ trait MatrixNd[Matrix <: MatrixNd[Matrix]]:
 
   def inverted(): Matrix = copy().invert()
 
-  def isEquals(matrix: Matrix, eps: Double): Boolean
+  override def isEquals(matrix: Matrix, eps: Double): Boolean
 
   /* Matrix arithmetics */
 

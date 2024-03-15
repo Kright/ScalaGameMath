@@ -1,13 +1,14 @@
 package com.github.kright.physics3d
 
-import com.github.kright.math.{IVector3d, Quaternion, Vector3d}
+import com.github.kright.math.{EqualityEps, IVector3d, Quaternion, Vector3d}
 import com.github.kright.physics3d.PhysicsGenerators.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
-  implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-6)
+  private implicit val eps: EqualityEps = EqualityEps(1e-6)
+  private implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(eps.value)
 
   test("mass and center") {
     val acc = StatsAccumulator { acc =>
@@ -19,7 +20,7 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     }
 
     assert(acc.mass === 5.5)
-    assert(acc.center.isEquals(Vector3d()))
+    assert(acc.center === Vector3d())
   }
 
   private def pointBody(mass: Double): Inertia3d =
@@ -41,9 +42,9 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     }
 
     assert(accumulator.mass == 2.0)
-    assert(accumulator.center.isEquals(Vector3d()))
-    assert(accumulator.linearImpulse.isEquals(Vector3d()))
-    assert(accumulator.angularImpulse.isEquals(Vector3d(0, 0, 2)))
+    assert(accumulator.center === Vector3d())
+    assert(accumulator.linearImpulse === Vector3d())
+    assert(accumulator.angularImpulse === Vector3d(0, 0, 2))
     assert(accumulator.kineticEnergy === inertia.getEnergy(state1) + inertia.getEnergy(state2))
   }
 
@@ -72,18 +73,18 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         assert(accumulator.mass == bodies.map(_._1.mass).sum)
         assert(accumulator.mass == transformedAccumulator.mass)
         assert(accumulator.kineticEnergy === transformedAccumulator.kineticEnergy)
-        assert(accumulator.center.isEquals(transform.local2global(transformedAccumulator.center)))
-        assert(accumulator.linearImpulse.isEquals(transform.rotation * transformedAccumulator.linearImpulse))
-        assert(accumulator.angularImpulse.isEquals(transform.rotation * transformedAccumulator.angularImpulse))
+        assert(accumulator.center === transform.local2global(transformedAccumulator.center))
+        assert(accumulator.linearImpulse === (transform.rotation * transformedAccumulator.linearImpulse))
+        assert(accumulator.angularImpulse === (transform.rotation * transformedAccumulator.angularImpulse))
     }
   }
 
   private def assertAllZeros(accumulator: StatsAccumulator): Unit = {
     assert(accumulator.mass == 0.0)
     assert(accumulator.kineticEnergy == 0.0)
-    assert(accumulator.center.isEquals(Vector3d()))
-    assert(accumulator.linearImpulse.isEquals(Vector3d()))
-    assert(accumulator.angularImpulse.isEquals(Vector3d()))
+    assert(accumulator.center === Vector3d.zero)
+    assert(accumulator.linearImpulse === Vector3d.zero)
+    assert(accumulator.angularImpulse === Vector3d.zero)
   }
 
   test("trivial case with no bodies") {
@@ -107,9 +108,9 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
 
       val mass = inertia.mass
       assert(accumulator.mass == mass)
-      assert(accumulator.center.isEquals(state.transform.position))
-      assert(accumulator.linearImpulse.isEquals(state.velocity.linear * mass))
-      assert(accumulator.angularImpulse.isEquals(inertia.getL(state)))
+      assert(accumulator.center === state.transform.position)
+      assert(accumulator.linearImpulse === (state.velocity.linear * mass))
+      assert(accumulator.angularImpulse === inertia.getL(state))
       assert(accumulator.kineticEnergy === inertia.getEnergy(state))
     }
   }

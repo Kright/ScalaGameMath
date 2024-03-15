@@ -331,7 +331,7 @@ final class Matrix4d(val elements: Array[Double]) extends MatrixNd[Matrix4d]:
       0.0, 0.0, 0.0, 1.0,
     )
 
-  override def isEquals(other: Matrix4d, eps: Double = 0.000001): Boolean =
+  override def isEquals(other: Matrix4d, eps: Double): Boolean =
     MathUtils.isEquals(elements, other.elements, eps)
 
   override def toString: String =

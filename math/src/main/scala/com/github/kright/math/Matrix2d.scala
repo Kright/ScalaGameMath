@@ -108,7 +108,7 @@ final class Matrix2d(var m00: Double, var m01: Double,
       0.0, s.y
     )
 
-  override def isEquals(other: Matrix2d, eps: Double = 0.000001): Boolean =
+  override def isEquals(other: Matrix2d, eps: Double): Boolean =
     Math.abs(m00 - other.m00) < eps &&
       Math.abs(m01 - other.m01) < eps &&
       Math.abs(m10 - other.m10) < eps &&

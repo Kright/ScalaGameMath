@@ -22,7 +22,7 @@ trait IVector4d extends IVectorNd[IVector4d, Vector4d]:
     val dw = w - v.w
     dx * dx + dy * dy + dz * dz + dw * dw
 
-  override def isEquals(v: IVector4d, eps: Double = 0.000001): Boolean =
+  override def isEquals(v: IVector4d, eps: Double): Boolean =
     Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps && Math.abs(z - v.z) < eps && Math.abs(w - v.w) < eps
 
 

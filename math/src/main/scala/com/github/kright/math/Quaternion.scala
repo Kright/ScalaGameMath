@@ -6,7 +6,7 @@ import scala.annotation.static
  * I used the book:
  * F. Dunn, I. Parberry - 3D Math Primer for Graphics and Game Development
  */
-trait IQuaternion:
+trait IQuaternion extends IEqualsWithEps[IQuaternion]:
   def w: Double
 
   def x: Double
@@ -108,7 +108,7 @@ trait IQuaternion:
   def getZ(result: Vector3d = Vector3d()): Vector3d =
     result := (rotM20, rotM21, rotM22)
 
-  def isEquals(q: IQuaternion, eps: Double = 0.000001): Boolean =
+  def isEquals(q: IQuaternion, eps: Double): Boolean =
     inline def eq(a: Double, b: Double) = Math.abs(a - b) < eps
 
     if (eq(w, q.w)) {

@@ -7,15 +7,17 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
+  private implicit val eps: EqualityEps = EqualityEps(1e-12)
+
   test("matrix and quaternion multiplication consistency") {
     forAll(normalizedQuaternions, vectors3InCube) { case (q, v) =>
       val mat3 = Matrix3d() := q
       val mat4 = Matrix4d() := q
-      assert((mat3 * v).isEquals(q * v))
-      assert((mat4 * v).isEquals(q * v))
+      assert((mat3 * v) === (q * v))
+      assert((mat4 * v) === (q * v))
 
       mat3.setRows(q.getX(), q.getY(), q.getZ())
-      assert((mat3 * v).isEquals(q * v))
+      assert((mat3 * v) === (q * v))
     }
   }
 
@@ -23,7 +25,7 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions, normalizedQuaternions) { case (q1, q2) =>
       val ma = Matrix3d() := (q1 * q2)
       val mb = (Matrix3d() := q1) * (Matrix3d() := q2)
-      assert(ma.isEquals(mb))
+      assert(ma === (mb))
     }
   }
 
@@ -31,33 +33,33 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(matrices2, matrices2, matrices2) { (a, b, c) =>
       val m1 = (a * b) * c
       val m2 = a * (b * c)
-      assert(m1.isEquals(m2))
+      assert(m1 === (m2))
     }
 
     forAll(matrices3, matrices3, matrices3) { (a, b, c) =>
       val m1 = (a * b) * c
       val m2 = a * (b * c)
-      assert(m1.isEquals(m2))
+      assert(m1 === (m2))
     }
 
     forAll(matrices4, matrices4, matrices4) { (a, b, c) =>
       val m1 = (a * b) * c
       val m2 = a * (b * c)
-      assert(m1.isEquals(m2))
+      assert(m1 === (m2))
     }
   }
 
   test("matrix transpose") {
     forAll(matrices2, matrices2) { (a, b) =>
-      assert((a * b).transposed().isEquals(b.transposed() * a.transposed()))
+      assert((a * b).transposed() === (b.transposed() * a.transposed()))
     }
 
     forAll(matrices3, matrices3) { (a, b) =>
-      assert((a * b).transposed().isEquals(b.transposed() * a.transposed()))
+      assert((a * b).transposed() === (b.transposed() * a.transposed()))
     }
 
     forAll(matrices4, matrices4) { (a, b) =>
-      assert((a * b).transposed().isEquals(b.transposed() * a.transposed()))
+      assert((a * b).transposed() === (b.transposed() * a.transposed()))
     }
   }
 
@@ -65,15 +67,15 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.000001)
 
     val id2 = Matrix2d().setIdentity()
-    assert(id2.isEquals(id2 * id2))
+    assert(id2 === (id2 * id2))
     assert(id2.det() === 1.0)
 
     val id3 = Matrix3d().setIdentity()
-    assert(id3.isEquals(id3 * id3))
+    assert(id3 === (id3 * id3))
     assert(id3.det() === 1.0)
 
     val id4 = Matrix4d().setIdentity()
-    assert(id4.isEquals(id4 * id4))
+    assert(id4 === (id4 * id4))
     assert(id4.det() === 1.0)
   }
 
@@ -97,21 +99,21 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val m = Matrix2d().set2dRotation(angle)
       val mTr = m.transposed()
       val mInv = m.inverted()
-      assert(mTr.isEquals(mInv))
+      assert(mTr === (mInv))
     }
 
     forAll(normalizedQuaternions) { q =>
       val m = Matrix3d() := q
       val mTr = m.transposed()
       val mInv = m.inverted()
-      assert(mTr.isEquals(mInv))
+      assert(mTr === (mInv))
     }
 
     forAll(normalizedQuaternions) { q =>
       val m = Matrix4d() := q
       val mTr = m.transposed()
       val mInv = m.inverted()
-      assert(mTr.isEquals(mInv))
+      assert(mTr === (mInv))
     }
   }
 
@@ -121,8 +123,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix2d().setIdentity()
 
-        assert(id.isEquals(m * inverted))
-        assert(id.isEquals(inverted * m))
+        assert(id === (m * inverted))
+        assert(id === (inverted * m))
       }
     }
 
@@ -131,8 +133,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix3d().setIdentity()
 
-        assert(id.isEquals(m * inverted))
-        assert(id.isEquals(inverted * m))
+        assert(id === (m * inverted))
+        assert(id === (inverted * m))
       }
     }
 
@@ -141,8 +143,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix4d().setIdentity()
 
-        assert(id.isEquals(m * inverted))
-        assert(id.isEquals(inverted * m))
+        assert(id === (m * inverted))
+        assert(id === (inverted * m))
       }
     }
   }
@@ -152,8 +154,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val ma = Matrix3d().set2dRotation(angle)
       val mb = Matrix3d() := (Quaternion() := (angle, Vector3d(0, 0, 1)))
       val mc = Matrix3d() := Matrix2d().set2dRotation(angle)
-      assert(ma.isEquals(mb))
-      assert(ma.isEquals(mc))
+      assert(ma === (mb))
+      assert(ma === (mc))
     }
   }
 
@@ -183,23 +185,23 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(matrices2, matrices2) { (left, right) =>
       val r1 = Matrix3d() := (left * right)
       val r2 = (Matrix3d() := left) * (Matrix3d() := right)
-      assert(r1.isEquals(r2))
+      assert(r1 === (r2))
     }
 
     forAll(matrices3, matrices3) { (left, right) =>
       val r1 = Matrix4d() := (left * right)
       val r2 = (Matrix4d() := left) * (Matrix4d() := right)
-      assert(r1.isEquals(r2))
+      assert(r1 === (r2))
     }
   }
 
   test("translation") {
     forAll(vectors2InCube, vectors2InCube) { (tr, v) =>
-      assert((Matrix3d().set2dTranslation(tr) * v).isEquals(tr + v))
+      assert((Matrix3d().set2dTranslation(tr) * v) === (tr + v))
     }
 
     forAll(vectors3InCube, vectors3InCube) { (tr, v) =>
-      assert((Matrix4d().setTranslation(tr) * v).isEquals(tr + v))
+      assert((Matrix4d().setTranslation(tr) * v) === (tr + v))
     }
   }
 
@@ -208,10 +210,10 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     val far = 1.0
     val m = Matrix4d().setProjectionCamera(1.0, 0.5, near, far)
 
-    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, 0.0, far)).isEquals(Vector3d(0.0, 0.0, 1.0)))
-    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, near)) === (Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, far)) === (Vector3d(0.0, 0.0, 1.0)))
+    assert((m * Vector3d(near, 0.0, near)) === (Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)) === (Vector3d(0.0, 1.0, -1.0)))
   }
 
   test("perspectiveZ10 camera") {
@@ -219,10 +221,10 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     val far = 1.0
     val m = Matrix4d().setProjectionCameraZ10(1.0, 0.5, near, far)
 
-    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, 0.0, far)).isEquals(Vector3d(0.0, 0.0, 0.0)))
-    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, near)) === (Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, far)) === (Vector3d(0.0, 0.0, 0.0)))
+    assert((m * Vector3d(near, 0.0, near)) === (Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)) === (Vector3d(0.0, 1.0, -1.0)))
   }
 
   test("perspectiveZ10 camera with infinity far") {
@@ -230,10 +232,10 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     val farExample = 1000.0
     val m = Matrix4d().setProjectionCameraZ10(1.0, 0.5, near)
 
-    assert((m * Vector3d(0.0, 0.0, near)).isEquals(Vector3d(0.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, 0.0, farExample)).isEquals(Vector3d(0.0, 0.0, -near / farExample)))
-    assert((m * Vector3d(near, 0.0, near)).isEquals(Vector3d(1.0, 0.0, -1.0)))
-    assert((m * Vector3d(0.0, near * 0.5, near)).isEquals(Vector3d(0.0, 1.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, near)) === (Vector3d(0.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, 0.0, farExample)) === (Vector3d(0.0, 0.0, -near / farExample)))
+    assert((m * Vector3d(near, 0.0, near)) === (Vector3d(1.0, 0.0, -1.0)))
+    assert((m * Vector3d(0.0, near * 0.5, near)) === (Vector3d(0.0, 1.0, -1.0)))
   }
 
   test("Matrix setLookAt with normalized perpendicular axis") {
@@ -243,9 +245,9 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val m4 = Matrix4d().setLookAt(from, dest, up)
         val m4r = Matrix4d().setRotation(dest - from, up)
         val m3 = Matrix3d().setRotation(dest - from, up)
-        assert(Matrix3d().setRotation(m4).isEquals(m3))
-        assert(Matrix3d().setRotation(m4r).isEquals(m3))
-        assert((m3 * m3.transposed()).isEquals(Matrix3d().setIdentity()))
+        assert(Matrix3d().setRotation(m4) === (m3))
+        assert(Matrix3d().setRotation(m4r) === (m3))
+        assert((m3 * m3.transposed()) === (Matrix3d().setIdentity()))
       }
     }
   }
@@ -253,13 +255,13 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("Matrix setLookAt") {
     {
       val m = Matrix4d().setLookAt(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(0, 1, 0))
-      assert(m.isEquals(Matrix4d().setIdentity()))
+      assert(m === (Matrix4d().setIdentity()))
     }
 
     {
       val m = Matrix4d().setLookAt(Vector3d(0, 0, 0), Vector3d(1, 0, 0), Vector3d(0, 1, 0))
-      assert((m * Vector3d(1, 0, 0)).isEquals(Vector3d(0, 0, 1)))
-      assert((m * Vector3d(1, 0, 0)).isEquals(Vector3d(0, 0, 1)))
+      assert((m * Vector3d(1, 0, 0)) === (Vector3d(0, 0, 1)))
+      assert((m * Vector3d(1, 0, 0)) === (Vector3d(0, 0, 1)))
     }
 
     val up = Vector3d(0, 1, 0)
@@ -269,27 +271,27 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val m3 = Matrix3d().setRotation(dest - from, up)
         val m4r = Matrix4d().setRotation(dest - from, up)
 
-        require(Matrix3d().setRotation(m4).isEquals(m3))
-        require(Matrix3d().setRotation(m4r).isEquals(m3))
-        require((m4 * from).isEquals(Vector3d(0, 0, 0)))
-        require((m4 * dest).isEquals(Vector3d(0, 0, dest.distance(from))))
+        require(Matrix3d().setRotation(m4) === (m3))
+        require(Matrix3d().setRotation(m4r) === (m3))
+        require((m4 * from) === (Vector3d(0, 0, 0)))
+        require((m4 * dest) === (Vector3d(0, 0, dest.distance(from))))
       }
     }
   }
 
   test("Matrix and scalar multiplication and division") {
     forAll(matrices2, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
-      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
-      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+      require((matrix * m) === (m * matrix))
+      require((matrix / m) === (matrix * (1.0 / m)))
     }
 
     forAll(matrices3, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
-      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
-      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+      require((matrix * m) === (m * matrix))
+      require((matrix / m) === (matrix * (1.0 / m)))
     }
 
     forAll(matrices4, double1.filter(math.abs(_) > 1e-9)) { (matrix, m) =>
-      require((matrix * m).isEquals(m * matrix, eps = 1e-12))
-      require((matrix / m).isEquals(matrix * (1.0 / m), eps = 1e-12))
+      require((matrix * m) === (m * matrix))
+      require((matrix / m) === (matrix * (1.0 / m)))
     }
   }

@@ -1,19 +1,21 @@
 package com.github.kright.physics3d
 
-import com.github.kright.math.Vector3d
 import com.github.kright.math.VectorMathGenerators.vectors3InCube
+import com.github.kright.math.{EqualityEps, Vector3d}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class AngularFriction3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
+  private implicit val eps: EqualityEps = EqualityEps(1e-12)
+
   test("addTwistFriction unit test") {
     assertBalancedForces { (force1, force2) =>
       AngularFriction3d.addTwistFriction(Vector3d(1, 0, 0), Friction.linear(1.1), Vector3d(1, 0, 0), Vector3d(-1, 0, 0),
         force1, force2)
 
-      assert(force1.linear.isEquals(Vector3d()))
-      assert(force1.torque.isEquals(Vector3d(-1.1, 0, 0)), s"got ${force1.torque}")
-      assert(force1.torque.isEquals(-force2.torque))
+      assert(force1.linear === Vector3d())
+      assert(force1.torque === Vector3d(-1.1, 0, 0), s"got ${force1.torque}")
+      assert(force1.torque === (-force2.torque))
     }
   }
 
@@ -24,11 +26,11 @@ class AngularFriction3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val k = 1.1
         AngularFriction3d.addTwistFriction(r12, Friction.linear(k), w1, w2, force1, force2)
 
-        assert(force1.linear.isEquals(Vector3d()))
-        assert(force1.torque.isEquals(-force2.torque))
-        assert(force1.torque.rejected(r12).isEquals(Vector3d()))
+        assert(force1.linear === Vector3d())
+        assert(force1.torque === -force2.torque)
+        assert(force1.torque.rejected(r12) === Vector3d())
 
-        assert(force1.torque.projected(r12).isEquals((w2.projected(r12) - w1.projected(r12)) * k * 0.5))
+        assert(force1.torque.projected(r12) === ((w2.projected(r12) - w1.projected(r12)) * k * 0.5))
       }
     }
   }
@@ -40,9 +42,9 @@ class AngularFriction3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       AngularFriction3d.addBallJointPerpendicularFriction(Vector3d(1, 0, 0), Vector3d(0, 1, 0), Friction.linear(k),
         Vector3d(), Vector3d(), Vector3d(), force1, force2)
 
-      assert(force1.linear.isEquals(Vector3d(0, 0, -k)))
-      assert(force1.torque.isEquals(Vector3d(0, k, 0)))
-      assert(force2.torque.isEquals(Vector3d()))
+      assert(force1.linear === Vector3d(0, 0, -k))
+      assert(force1.torque === Vector3d(0, k, 0))
+      assert(force2.torque === Vector3d())
     }
   }
 
@@ -56,7 +58,7 @@ class AngularFriction3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         AngularFriction3d.addBallJointPerpendicularFriction(r12, wJointP, Friction.linear(k),
           w1, Vector3d(), Vector3d(), force1, force2)
 
-        assert(force1.torque.projected(r12).isEquals(Vector3d()), s"wat ${force1.torque}, ${r12}")
+        assert(force1.torque.projected(r12) === Vector3d(), s"wat ${force1.torque}, ${r12}")
       }
     }
   }

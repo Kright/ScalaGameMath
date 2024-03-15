@@ -9,7 +9,7 @@ import scala.annotation.static
  */
 case class EulerAngles(var yaw: Double,
                        var pitch: Double,
-                       var roll: Double):
+                       var roll: Double) extends IEqualsWithEps[EulerAngles]:
   def :=(yaw: Double, pitch: Double, roll: Double): EulerAngles =
     this.yaw = yaw
     this.pitch = pitch
@@ -26,7 +26,7 @@ case class EulerAngles(var yaw: Double,
     EulerAngles.restoreFromRotation(m, this)
 
 
-  def isEquals(e: EulerAngles, eps: Double = 0.000001): Boolean =
+  override def isEquals(e: EulerAngles, eps: Double): Boolean =
     Math.abs(yaw - e.yaw) < eps &&
       Math.abs(pitch - e.pitch) < eps &&
       Math.abs(roll - e.roll) < eps

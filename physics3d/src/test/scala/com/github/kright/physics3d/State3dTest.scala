@@ -10,7 +10,7 @@ class State3dTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("getGlobalVelocity when point in body origin") {
     forAll(states) { state =>
       val velocity = state.getGlobalVelocity(Vector3d())
-      assert(velocity.isEquals(state.velocity.linear))
+      assert(velocity.isEquals(state.velocity.linear, 1e-12))
     }
   }
 

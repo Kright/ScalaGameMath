@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-trait IVectorNd[IVec, Vec]:
+trait IVectorNd[IVec, Vec] extends IEqualsWithEps[IVec]:
   def copy(): Vec
 
   def +(v: IVec): Vec
@@ -50,7 +50,7 @@ trait IVectorNd[IVec, Vec]:
 
   def distance(v: IVec): Double = Math.sqrt(squareDistance(v))
 
-  def isEquals(v: IVec, eps: Double = 0.000001): Boolean
+  def isEquals(v: IVec, eps: Double): Boolean
 
 
 object IVectorNd:

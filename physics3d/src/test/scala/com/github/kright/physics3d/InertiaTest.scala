@@ -1,13 +1,15 @@
 package com.github.kright.physics3d
 
 import com.github.kright.math.VectorMathGenerators.*
-import com.github.kright.math.{DifferentialSolvers, Vector3d, VectorMathGenerators}
+import com.github.kright.math.{DifferentialSolvers, EqualityEps, Vector3d, VectorMathGenerators}
 import com.github.kright.physics3d.PhysicsGenerators.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
+  private implicit val equalityEps: EqualityEps = EqualityEps(1e-12)
+
   test("localI to globalI conversion") {
     forAll(inertiaMoments, normalizedQuaternions, vectors3InCube) { (I, rot, rotVelocity) =>
       val inertia = Inertia3d(1.0, I)
@@ -18,8 +20,8 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val L2 = inertia.getGlobalI(rot) * rotVelocity
       val L3 = inertia.getL(rot, rotVelocity)
 
-      assert(L1.isEquals(L2))
-      assert(L1.isEquals(L3))
+      assert(L1 === L2)
+      assert(L1 === L3)
     }
   }
 
@@ -129,7 +131,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     forAll(normalizedQuaternions, vectors3InCube) { (rot, w) =>
       val expectedL = w * m
       val L = body.getL(rot, w)
-      assert(L.isEquals(expectedL))
+      assert(L === expectedL)
     }
   }
 
@@ -140,8 +142,8 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val newState = state.updated(body, addImpulse)
       val newImpulse = body.getImpulse(newState)
 
-      assert(newImpulse.linear.isEquals(initialImpulse.linear + addImpulse.linear))
-      assert(newImpulse.angular.isEquals(initialImpulse.angular + addImpulse.angular))
+      assert(newImpulse.linear === (initialImpulse.linear + addImpulse.linear))
+      assert(newImpulse.angular === (initialImpulse.angular + addImpulse.angular))
     }
   }
 
