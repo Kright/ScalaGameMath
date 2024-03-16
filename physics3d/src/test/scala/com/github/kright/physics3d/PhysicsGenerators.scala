@@ -1,5 +1,6 @@
 package com.github.kright.physics3d
 
+import com.github.kright.math.MathGenerators.*
 import com.github.kright.math.VectorMathGenerators.*
 import com.github.kright.math.{Matrix3d, Vector3d, VectorMathGenerators}
 import org.scalacheck.Gen

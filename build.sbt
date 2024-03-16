@@ -1,4 +1,4 @@
-ThisBuild / version := "0.4.1-SNAPSHOT"
+ThisBuild / version := "0.4.1"
 
 ThisBuild / scalaVersion := "3.4.0"
 
@@ -21,13 +21,21 @@ lazy val root = (project in file("."))
     packageSrc / publishArtifact := true,
   ).aggregate(math, swizzle, solvers, physics3d)
 
+lazy val util = (project in file("util")).settings(
+  scalatestSettings
+)
+
+lazy val vector = (project in file("vector")).settings(
+  scalatestSettings
+).dependsOn(util)
+
 lazy val math = (project in file("math")).settings(
   scalatestSettings,
-)
+).dependsOn(vector % "compile->compile;test->test")
 
 lazy val swizzle = (project in file("swizzle")).settings(
   scalatestSettings,
-).dependsOn(math)
+).dependsOn(vector)
 
 lazy val solvers = (project in file("solvers"))
 

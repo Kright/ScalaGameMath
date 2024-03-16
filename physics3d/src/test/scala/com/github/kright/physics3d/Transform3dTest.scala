@@ -1,6 +1,7 @@
 package com.github.kright.physics3d
 
-import com.github.kright.math.VectorMathGenerators.{normalizedQuaternions, vectors3InCube}
+import com.github.kright.math.MathGenerators.*
+import com.github.kright.math.VectorMathGenerators.*
 import com.github.kright.math.{EqualityEps, Quaternion, Vector3d}
 import com.github.kright.physics3d.PhysicsGenerators.transforms
 import org.scalatest.funsuite.AnyFunSuite

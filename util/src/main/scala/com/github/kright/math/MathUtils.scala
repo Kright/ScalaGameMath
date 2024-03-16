@@ -14,6 +14,7 @@ object MathUtils:
     }
     true
 
+
   extension (arr: Array[Double])
     inline def swap(i: Int, j: Int): Unit =
       val t = arr(i)

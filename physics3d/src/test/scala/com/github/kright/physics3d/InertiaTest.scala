@@ -1,5 +1,6 @@
 package com.github.kright.physics3d
 
+import com.github.kright.math.MathGenerators.*
 import com.github.kright.math.VectorMathGenerators.*
 import com.github.kright.math.{DifferentialSolvers, EqualityEps, Vector3d, VectorMathGenerators}
 import com.github.kright.physics3d.PhysicsGenerators.*

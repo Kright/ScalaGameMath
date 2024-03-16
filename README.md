@@ -4,17 +4,15 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.4.0"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.4.1"
 ```
 
 Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.4.0",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.4.0",
-  "com.github.Kright.ScalaGameMath" %% "swizzle" % "0.4.0",
-  "com.github.Kright.ScalaGameMath" %% "solvers" % "0.4.0",
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.4.1",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.4.1",
 )
 ```
 
@@ -25,10 +23,10 @@ libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "master-SNAPSHOT"
 
 For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath).
 
-## Features:
+## Modules
 
+* **vector**: Vector2d, Vector3d, Vector4d
 * **math**:
-  * Vector2d, Vector3d, Vector4d
   * Quaternion
   * Matrix: 2x2, 3x3, 4x4
   * Euler angles: yaw Z, pitch Y, roll X

@@ -1,5 +1,6 @@
 package com.github.kright.math
 
+import com.github.kright.math.MathGenerators.*
 import com.github.kright.math.VectorMathGenerators.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.Assertions.*

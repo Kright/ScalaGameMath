@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-import com.github.kright.math.VectorMathGenerators.eulerAngles
+import com.github.kright.math.MathGenerators.*
 import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
