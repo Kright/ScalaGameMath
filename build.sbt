@@ -1,4 +1,4 @@
-ThisBuild / version := "0.4.1"
+ThisBuild / version := "0.4.2-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.4.0"
 
@@ -11,8 +11,8 @@ scalacOptions ++= Seq(
 )
 
 lazy val scalatestSettings = Seq(
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
-  libraryDependencies += "org.scalatestplus" %% "scalacheck-1-17" % "3.2.17.0" % "test",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.18" % "test",
+  libraryDependencies += "org.scalatestplus" %% "scalacheck-1-17" % "3.2.18.0" % "test",
 )
 
 lazy val root = (project in file("."))
