@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "scalaGameMath",
     packageSrc / publishArtifact := true,
-  ).aggregate(math, swizzle, solvers, physics3d)
+  ).aggregate(math, swizzle, solvers, physics3d, symbolic)
 
 lazy val util = (project in file("util")).settings(
   scalatestSettings
@@ -32,6 +32,10 @@ lazy val vector = (project in file("vector")).settings(
 lazy val math = (project in file("math")).settings(
   scalatestSettings,
 ).dependsOn(vector % "compile->compile;test->test")
+
+lazy val symbolic = (project in file("symbolic")).settings(
+  scalatestSettings,
+)
 
 lazy val swizzle = (project in file("swizzle")).settings(
   scalatestSettings,

@@ -38,6 +38,7 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
   * BodySystem for handling system of bodies with joints between them
 * **swizzle**: swizzle operators for vectors
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
+* **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 
 Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
 ```scala
