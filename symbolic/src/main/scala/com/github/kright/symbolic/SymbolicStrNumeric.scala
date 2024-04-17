@@ -16,7 +16,7 @@ class SymbolicStrNumeric extends Numeric[SymbolicStr]:
 
   override def fromInt(x: Int): SymbolicStr = SymbolicStr(x.toDouble)
 
-  override def parseString(str: String): Option[SymbolicStr] = ???
+  override def parseString(str: String): Option[SymbolicStr] = Numeric[Double].parseString(str).map(SymbolicStr(_))
 
   override def toInt(x: SymbolicStr): Int = ???
 

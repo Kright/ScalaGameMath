@@ -15,13 +15,6 @@ object MathUtils:
     true
 
 
-  extension (arr: Array[Double])
-    inline def swap(i: Int, j: Int): Unit =
-      val t = arr(i)
-      arr(i) = arr(j)
-      arr(j) = t
-
-
   extension (d: Double)
     def clamp(lower: Double, upper: Double): Double =
       if (d < lower) lower
@@ -32,3 +25,20 @@ object MathUtils:
       if (d > 0) 1.0
       else if (d < 0) -1.0
       else 0.0
+
+
+  extension [T](arr: Array[T])
+    inline def swap(i: Int, j: Int): Unit =
+      val t = arr(i)
+      arr(i) = arr(j)
+      arr(j) = t
+    
+    inline def getOrElseUpdate(i: Int, inline update: => T): T =
+      val result = arr(i)
+      if (result != null) {
+        result
+      } else {
+        val newValue = update
+        arr(i) = newValue
+        newValue
+      }

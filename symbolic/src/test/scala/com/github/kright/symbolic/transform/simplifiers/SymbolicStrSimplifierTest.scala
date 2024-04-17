@@ -47,8 +47,14 @@ class SymbolicStrSimplifierTest extends AnyFunSuiteLike:
     assertSimplified(SymbolicStr(1.0) + SymbolicStr(0.0), SymbolicStr(1.0))
     assertSimplified(SymbolicStr(1.0) + SymbolicStr(2.0), SymbolicStr(3.0))
     assertSimplified(x + x, SymbolicStr(2.0) * x)
+    assertSimplified(x + SymbolicStr.zero, x)
     assertSimplified(x - x, SymbolicStr(0.0))
     assertSimplified(x * y - y * x, SymbolicStr(0.0))
     assertSimplified(x * y - y * x * SymbolicStr(0.5), SymbolicStr("*", Seq(SymbolicStr(0.5), x, y)))
     assertSimplified(SymbolicStr(1.0) + SymbolicStr(2.0) + x + y + x - y, SymbolicStr(3.0) + SymbolicStr(2.0) * x)
+  }
+
+  test("Constant should be first in product") {
+    val x = SymbolicStr("x")
+    assertSimplified(x * SymbolicStr(-1.0), SymbolicStr(-1.0) * x)
   }

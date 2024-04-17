@@ -17,7 +17,7 @@ trait IVector2d extends IVectorNd[IVector2d, Vector2d]:
     dx * dx + dy * dy
 
   override def isEquals(v: IVector2d, eps: Double): Boolean =
-    Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps
+    Math.abs(x - v.x) <= eps && Math.abs(y - v.y) <= eps
 
 
 final case class Vector2d(var x: Double,

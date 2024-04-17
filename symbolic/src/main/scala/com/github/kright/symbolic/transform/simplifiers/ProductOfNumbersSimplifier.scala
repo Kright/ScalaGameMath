@@ -1,7 +1,7 @@
 package com.github.kright.symbolic.transform.simplifiers
 
 import com.github.kright.symbolic.Symbolic.Func
-import com.github.kright.symbolic.SymbolicStr.Number
+import com.github.kright.symbolic.SymbolicStr.{Number, isNumber}
 import com.github.kright.symbolic.transform.simplifiers.ProductOfNumbersSimplifier.trySimplify
 import com.github.kright.symbolic.{Symbolic, SymbolicStr}
 
@@ -31,9 +31,9 @@ object ProductOfNumbersSimplifier:
     }
 
     if (numbers.size == 1) {
-      return
-        if (numbers.head == 1.0) Option(makeProductOrSimplify(others.toSeq))
-        else None
+      if (numbers.head == 1.0) return Option(makeProductOrSimplify(others.toSeq))
+      if (!isNumber(elems.head)) return Option(makeProductOrSimplify(Seq(SymbolicStr(numbers.head)) ++ others))
+      return None
     }
 
     // numbers.size >= 2

@@ -4,15 +4,15 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.4.2"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.4.3"
 ```
 
 Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.4.2",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.4.2",
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.4.3",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.4.3",
 )
 ```
 
@@ -39,8 +39,9 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 * **swizzle**: swizzle operators for vectors
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
+* **ga**: experimental support for projective geometric algebra (PGA).
 
-Vectors treated as columns. For quaternions and matrices multiplication order is math-like, for example:
+Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 ```scala
 (matrixA * matrixB) * vec === matrixA * (matrixB * vec)
 (quaternionA * quaternionB) * vec === quaternionA * (quaternionB * vec)
@@ -84,6 +85,11 @@ I prefer code correctness and simplicity over computational efficiency.
 For example, BodySystem allocates a lot of temporary objects.
 So this class could be used as example or as reference implementation for bug-fixing.
 Maybe for some specific case with a lot of objects you will need your own implementation.
+
+### PGA
+
+I'm inspired by https://bivector.net/PGADYN.html
+I want to rewrite physics equations in PGA. Work in progress.
 
 ### Tests
 

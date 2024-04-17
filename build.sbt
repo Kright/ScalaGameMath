@@ -1,4 +1,4 @@
-ThisBuild / version := "0.4.2"
+ThisBuild / version := "0.4.3"
 
 ThisBuild / scalaVersion := "3.4.0"
 
@@ -7,7 +7,8 @@ ThisBuild / startYear := Some(2022)
 
 scalacOptions ++= Seq(
   "-Yexplicit-nulls",
-  "-Werror"
+  "-language:strictEquality",
+  "-Werror",
 )
 
 lazy val scalatestSettings = Seq(
@@ -19,7 +20,16 @@ lazy val root = (project in file("."))
   .settings(
     name := "scalaGameMath",
     packageSrc / publishArtifact := true,
-  ).aggregate(math, swizzle, solvers, physics3d, symbolic)
+  ).aggregate(
+    ga,
+    math,
+    physics3d,
+    solvers,
+    swizzle,
+    symbolic,
+    util,
+    vector,
+  )
 
 lazy val util = (project in file("util")).settings(
   scalatestSettings
@@ -35,6 +45,14 @@ lazy val math = (project in file("math")).settings(
 
 lazy val symbolic = (project in file("symbolic")).settings(
   scalatestSettings,
+)
+
+lazy val ga = (project in file("ga")).settings(
+  scalatestSettings,
+).dependsOn(
+  util,
+  symbolic % "test",
+  vector % "test;test->test"
 )
 
 lazy val swizzle = (project in file("swizzle")).settings(

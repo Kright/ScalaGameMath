@@ -31,11 +31,11 @@ object CombineElemsInSum:
         val mult = lst.map((norm, _) => norm.multiplier).sum
         (first.copy(multiplier = mult), minI)
       }.sortBy((_, minI) => minI)
-      .map((form, _) => form.toProductOrSymbol)
+      .flatMap((form, _) => form.toProductOrSymbolOrNone)
 
     combined match
       case _ if combined.size == elems.size => None
-      case Seq() => ???
+      case Seq() => Option(SymbolicStr.zero)
       case Seq(singleElement) => Option(singleElement)
       case manyElements => Option(Func("+", manyElements))
 
@@ -43,17 +43,19 @@ object CombineElemsInSum:
 private case class NormalizedForm(multiplier: Double,
                                   otherSortedArgs: Seq[SymbolicStr],
                                   otherOriginalArgs: Seq[SymbolicStr]):
-  def toProductOrSymbol: SymbolicStr =
-    if (multiplier == 0.0) return SymbolicStr.zero
+  def toProductOrSymbolOrNone: Option[SymbolicStr] =
+    if (multiplier == 0.0) return None
 
     val allArgs: Seq[SymbolicStr] =
       if (multiplier == 1.0) otherOriginalArgs
       else Seq(SymbolicStr(multiplier)) ++ otherOriginalArgs
 
-    allArgs match
-      case Seq() => SymbolicStr.one
-      case Seq(oneArg) => oneArg
-      case manyArgs => Func("*", manyArgs)
+    Option {
+      allArgs match
+        case Seq() => SymbolicStr.one
+        case Seq(oneArg) => oneArg
+        case manyArgs => Func("*", manyArgs)
+    }
 
 
 object NormalizedForm:

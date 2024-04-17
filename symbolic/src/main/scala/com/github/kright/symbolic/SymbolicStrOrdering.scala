@@ -8,10 +8,10 @@ object SymbolicStrOrdering:
         case leftS: String =>
           right match
             case rightS: String => summon[Ordering[String]].compare(leftS, rightS)
-            case rightD: Double => -1
+            case rightD: Double => 1
         case leftD: Double =>
           right match
-            case rightS: String => 1
+            case rightS: String => -1
             case rightD: Double => summon[Ordering[Double]].compare(leftD, rightD)
 
 
@@ -33,8 +33,8 @@ object SymbolicStrOrdering:
         case Symbolic.Symbol(leftValue) =>
           right match
             case Symbolic.Symbol(rightValue) => symbolOrdering.compare(leftValue, rightValue)
-            case Symbolic.Func(_, _) => 1
+            case Symbolic.Func(_, _) => -1
         case leftF@Symbolic.Func(_, _) =>
           right match
-            case Symbolic.Symbol(_) => -1
+            case Symbolic.Symbol(_) => 1
             case rightF@Symbolic.Func(_, _) => funcOrdering.compare(leftF, rightF)

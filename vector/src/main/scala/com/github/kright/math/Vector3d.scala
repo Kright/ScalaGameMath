@@ -30,7 +30,7 @@ trait IVector3d extends IVectorNd[IVector3d, Vector3d]:
     Math.sqrt(cross(v).squareMag / (squareMag * v.squareMag))
 
   override def isEquals(v: IVector3d, eps: Double): Boolean =
-    Math.abs(x - v.x) < eps && Math.abs(y - v.y) < eps && Math.abs(z - v.z) < eps
+    Math.abs(x - v.x) <= eps && Math.abs(y - v.y) <= eps && Math.abs(z - v.z) <= eps
 
 
 final case class Vector3d(var x: Double,

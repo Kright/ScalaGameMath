@@ -3,6 +3,9 @@ package com.github.kright.symbolic
 object SymbolicToPrettyString:
   def apply[S](expr: Symbolic[String, S]): String =
     toStr(toSymbol(expr))
+      .replace(" + -1.0 * ", " - ")
+      .replace(" + -", " - ")
+      .replace("-1.0 * ", "-")
 
   private def toSymbol[S](expr: Symbolic[String, S]): Symbolic[Nothing, String] =
     expr.flatMap({
