@@ -182,3 +182,22 @@ object MultiVector:
 
     def withoutZeroEps(eps: Double): MultiVector[Double] =
       left.filter((_, v) => Math.abs(v) > eps)
+
+    /**
+     * @return infinite series 1 + x + x^2 / 2! + x^3 / 3! + ...
+     */
+    def exponentSeries: LazyList[MultiVector[Double]] =
+      left.ga.use {
+        def loop(v: MultiVector[Double], n: Int): LazyList[MultiVector[Double]] =
+          v #:: loop((v geometric left) / n, n + 1)
+
+        loop(MultiVector.scalar(1.0), 1)
+      }
+
+    /**
+     * Very straightforward but inefficient code
+     */
+    def exponentBySeriesSum(thresholdNorm: Double, maxSteps: Int = 50): MultiVector[Double] =
+      val thresholdSquaredNorm = thresholdNorm * thresholdNorm
+      val series = exponentSeries.take(maxSteps)
+      series.tail.takeWhile(_.squareMagnitude > thresholdSquaredNorm).fold(series.head)(_ + _)

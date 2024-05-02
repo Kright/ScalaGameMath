@@ -1,5 +1,6 @@
 package com.github.kright.ga
 
+import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -33,5 +34,16 @@ class GATest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     GAGenerator.forAnyGA {
       val a = Sym.multiVector("a")
       assert(a === a.rightComplement.rightComplement.rightComplement.rightComplement)
+    }
+  }
+
+  test("exponent seriers") {
+    given doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-9)
+
+    GAGenerator.forAnyGA {
+      val one = MultiVector.scalar(1.0)
+
+      assert(one.exponentSeries.take(20).reduce(_ + _).norm === Math.E)
+      assert(one.exponentBySeriesSum(1e-11).norm === Math.E)
     }
   }
