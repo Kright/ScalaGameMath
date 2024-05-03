@@ -104,7 +104,7 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val axis = zeroPoint[Double] v point(rotAxis)
 
       val rot1 = rotor(angle, axis)
-      val rot2 = expForRotor(axis * 0.5 * angle)
+      val rot2 = expForLine(axis * 0.5 * angle)
       val rot3 = (axis * 0.5 * angle).exponentBySeriesSum(thresholdNorm = 1e-12)
 
       assert((rot1 - rot3).norm <= 1e-10, s"${rot1.toMultilineString} != ${rot3.toMultilineString}")
@@ -117,11 +117,11 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val axis = point(center) v point(center + rotAxis)
 
       val rot1 = rotor(angle, axis)
-      val rot2 = expForRotor(axis * 0.5 * angle)
+      val rot2 = expForLine(axis * 0.5 * angle)
       val rot3 = (axis * 0.5 * angle).exponentBySeriesSum(thresholdNorm = 1e-15)
 
       assert((rot1 - rot3).norm <= 1e-10, s"${rot1.toMultilineString} != ${rot3.toMultilineString}")
-      assert((rot2 - rot3).norm <= 1e-10, s"${rot1.toMultilineString} != ${rot3.toMultilineString}")
+      assert((rot2 - rot3).norm <= 1e-10, s"${rot2.toMultilineString} != ${rot3.toMultilineString}")
     }
   }
 
@@ -138,4 +138,10 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     )
 
     assert(translateZ.geometric(rotateXY) == rotateXY.geometric(translateZ))
+  }
+
+  test("exp for bivector") {
+    forAll(GAGenerator.bladesGen(grade = 2), MinSuccessful(1000)) { bv =>
+      assert((bv.exponentBySeriesSum(1e-15) - expForBivector(bv)).norm < 1e-14)
+    }
   }

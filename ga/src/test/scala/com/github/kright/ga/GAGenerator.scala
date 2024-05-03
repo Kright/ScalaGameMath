@@ -16,18 +16,17 @@ object GAGenerator:
       }
     }
 
-  extension (ga: GA)
-    def basisBladesGen: Gen[BasisBlade] =
-      Gen.oneOf(ga.blades)
+  def basisBladesGen(using ga: GA): Gen[BasisBlade] =
+    Gen.oneOf(ga.blades)
 
-    def basisMultivectorsGen: Gen[MultiVector[Double]] =
-      basisBladesGen.map(MultiVector(ga, _))
+  def basisMultivectorsGen(using ga: GA): Gen[MultiVector[Double]] =
+    basisBladesGen.map(MultiVector(ga, _))
 
-    def multivectorsGen: Gen[MultiVector[Double]] =
-      Gen.containerOfN[Seq, Double](ga.signature.bladesCount, Gen.double).map { values =>
-        require(values.length == ga.signature.bladesCount)
-        MultiVector(ga.blades.zip(values))(using ga)
-      }
+  def multivectorsGen(using ga: GA): Gen[MultiVector[Double]] =
+    Gen.containerOfN[Seq, Double](ga.signature.bladesCount, Gen.double).map { values =>
+      require(values.length == ga.signature.bladesCount)
+      MultiVector(ga.blades.zip(values))(using ga)
+    }
 
-    def bladesGen(order: Int): Gen[MultiVector[Double]] =
-      multivectorsGen.map(_.filter((b, v) => b.grade == order))
+  def bladesGen(grade: Int)(using ga: GA): Gen[MultiVector[Double]] =
+    multivectorsGen.map(_.filter((b, v) => b.grade == grade))

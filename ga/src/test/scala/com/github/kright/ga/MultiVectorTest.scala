@@ -12,7 +12,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   def checkAssociativityForBasisBlades(op: (MultiVector[Double], MultiVector[Double]) => MultiVector[Double]): Unit =
     forAnyGA {
-      forAll(ga.bladesGen(1), ga.bladesGen(1), ga.bladesGen(1)) { (a, b, c) =>
+      forAll(bladesGen(1), bladesGen(1), bladesGen(1)) { (a, b, c) =>
         val left = op(op(a, b), c)
         val right = op(a, op(b, c))
         assert(left === right)
@@ -21,7 +21,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   def checkDistributivityForMultivectors(op: (MultiVector[Double], MultiVector[Double]) => MultiVector[Double]): Unit =
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen, ga.multivectorsGen) { (a, b, c) =>
+      forAll(multivectorsGen, multivectorsGen, multivectorsGen) { (a, b, c) =>
         assert(op(a + b, c) === op(a, c) + op(b, c))
         assert(op(c, a + b) === op(c, a) + op(c, b))
       }
@@ -29,7 +29,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   def checkAssociativityForMultivectors(op: (MultiVector[Double], MultiVector[Double]) => MultiVector[Double]): Unit =
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen, ga.multivectorsGen) { (a, b, c) =>
+      forAll(multivectorsGen, multivectorsGen, multivectorsGen) { (a, b, c) =>
         assert(op(op(a, b), c) === op(a, op(b, c)))
       }
     }
@@ -61,7 +61,7 @@ class MultiVectorTest extends AnyFunSuite:
   test("wedge product with two same vectors is zero") {
     forAnyGA {
       val zero = MultiVector.zero[Double]
-      forAll(ga.bladesGen(1), ga.multivectorsGen) { (a, m) =>
+      forAll(bladesGen(1), multivectorsGen) { (a, m) =>
         assert((a ∧ a) === zero)
         assert((a ∧ (m ∧ a)) === zero)
         assert(((a ∧ m) ∧ a) === zero)
@@ -72,7 +72,7 @@ class MultiVectorTest extends AnyFunSuite:
   test("geometric product preserves 1-blade length") {
     forAnyGA {
       if (ga.signature.zeros == 0) {
-        forAll(ga.bladesGen(1), ga.bladesGen(1), ga.bladesGen(1)) { (a, b, c) =>
+        forAll(bladesGen(1), bladesGen(1), bladesGen(1)) { (a, b, c) =>
           val ma = a.magnitude
           val mb = b.magnitude
           val mab = (a ⟑ b).magnitude
@@ -85,7 +85,7 @@ class MultiVectorTest extends AnyFunSuite:
   test("geometric product preserves length for a product of blades") {
     forAnyGA {
       if (ga.signature.zeros == 0) {
-        forAll(Gen.containerOfN[Seq, MultiVector[Double]](4, ga.bladesGen(1))) { blades =>
+        forAll(Gen.containerOfN[Seq, MultiVector[Double]](4, bladesGen(1))) { blades =>
           val mags = blades.map(_.magnitude)
           val totalMag = blades.reduce(_ ⟑ _).magnitude
           assert(mags.product === totalMag)
@@ -96,7 +96,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("wedge product is antisymmetric for vectors") {
     forAnyGA {
-      forAll(ga.bladesGen(1), ga.bladesGen(1)) { (a, b) =>
+      forAll(bladesGen(1), bladesGen(1)) { (a, b) =>
         assert(a ∧ b === -(b ∧ a))
       }
     }
@@ -104,7 +104,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("dot product is symmetric for vectors") {
     forAnyGA {
-      forAll(ga.bladesGen(1), ga.bladesGen(1)) { (a, b) =>
+      forAll(bladesGen(1), bladesGen(1)) { (a, b) =>
         assert(a ⋅ b === b ⋅ a)
       }
     }
@@ -112,7 +112,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("geometric product for vectors is a sum of wedge and dot ") {
     forAnyGA {
-      forAll(ga.bladesGen(1), ga.bladesGen(1)) { (a, b) =>
+      forAll(bladesGen(1), bladesGen(1)) { (a, b) =>
         val w = a ∧ b
         val d = a ⋅ b
         val g = a ⟑ b
@@ -129,7 +129,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("geometric antiproduct for psuedovectors is sum of wedge antiproduct and dot antiproduct") {
     forAnyGA {
-      forAll(ga.bladesGen(ga.signature.generatorsCount - 1), ga.bladesGen(ga.signature.generatorsCount - 1)) { (a, b) =>
+      forAll(bladesGen(ga.signature.generatorsCount - 1), bladesGen(ga.signature.generatorsCount - 1)) { (a, b) =>
         val w = a ∨ b
         val d = a ◦ b
         val g = a ⟇ b
@@ -146,7 +146,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("geometric antiproduct corresponds to geometric product") {
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen) { (a, b) =>
+      forAll(multivectorsGen, multivectorsGen) { (a, b) =>
         assert(a.geometric(b).dual === a.dual.antiGeometric(b.dual))
         assert(a.dual.geometric(b.dual) === a.antiGeometric(b).dual)
       }
@@ -155,7 +155,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("wedge antiproduct corresponds to wedge product") {
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen) { (a, b) =>
+      forAll(multivectorsGen, multivectorsGen) { (a, b) =>
         assert(a.wedge(b).dual === a.dual.antiWedge(b.dual))
       }
     }
@@ -163,7 +163,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("dot antiproduct corresponds to dot product") {
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen) { (a, b) =>
+      forAll(multivectorsGen, multivectorsGen) { (a, b) =>
         assert(a.dot(b).dual === a.dual.antiDot(b.dual))
       }
     }
@@ -172,7 +172,7 @@ class MultiVectorTest extends AnyFunSuite:
   test("pseudoScalar commutativity and anticommutativity") {
     forAnyGA {
       val i = MultiVector[Double](ga.pseudoScalarBlade)
-      forAll(ga.bladesGen(1)) { a =>
+      forAll(bladesGen(1)) { a =>
         val isEven = ga.signature.generatorsCount % 2 == 0
         if (isEven) {
           assert((a ⟑ i) === -(i ⟑ a))
@@ -187,7 +187,7 @@ class MultiVectorTest extends AnyFunSuite:
     forAnyGA {
       val i = MultiVector[Double](ga.pseudoScalarBlade)
 
-      forAll(ga.bladesGen(1), ga.bladesGen(1)) { (a, b) =>
+      forAll(bladesGen(1), bladesGen(1)) { (a, b) =>
         val isEven = ga.signature.generatorsCount % 2 == 0
         if (isEven) {
           assert(a ∧ (i ⟑ b) === -(a ⋅ b) ⟑ i)
@@ -200,7 +200,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("bulk and weight sum is a vector itself") {
     forAnyGA {
-      forAll(ga.multivectorsGen) { v =>
+      forAll(multivectorsGen) { v =>
         assert((v.bulk + v.weight) === v)
       }
     }
@@ -208,7 +208,7 @@ class MultiVectorTest extends AnyFunSuite:
 
   test("sandwich products") {
     forAnyGA {
-      forAll(ga.multivectorsGen, ga.multivectorsGen, ga.multivectorsGen) { (a, b, mid) =>
+      forAll(multivectorsGen, multivectorsGen, multivectorsGen) { (a, b, mid) =>
         assert(a ⟑ mid ⟑ a.reverse === a.sandwich(mid))
         assert(a ⟑ b ⟑ mid ⟑ b.reverse ⟑ a.reverse === a.geometric(b).sandwich(mid))
 

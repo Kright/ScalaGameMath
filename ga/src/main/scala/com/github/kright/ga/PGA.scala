@@ -50,9 +50,9 @@ object PGA extends CommonMethods:
       MultiVector.scalar[T](num.one) + idealLine * half
 
     def rotor(angle: Double, line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
-      expForRotor(line * angle * 0.5)
+      expForLine(line * angle * 0.5)
 
-    def expForRotor(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
+    def expForLine(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
       val len = line.bulk.norm
 
       // (1 - len^2 / 3! + len^4 / 5!), but double has 15-17 significant digits and for small len result is just 1.0
@@ -62,3 +62,40 @@ object PGA extends CommonMethods:
 
       MultiVector.scalar(Math.cos(len)) + line * multiplier
 
+    /**
+     * Made by carefully writing formulas on several sheets of paper
+     *
+     * bivector a = (a.wx, a.wy, a.wz, a.xy, a.xz, a.yz)
+     *
+     * len = math.sqrt(a.xy ** 2 + a.xz ** 2 + a.yz ** 2)
+     * betta = (-2.0 * a.wy * a.xz + 2.0 * a.wx * a.yz + 2.0 * a.wz * a.xy)
+     *
+     * exp(bivector) = cos(len) + a * (sin(len) / len) + (a ⟑ I) betta (sin(len) / len - cos (len)) / (2 len**2)
+     */
+    def expForBivector(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
+      require(ga.signature.positives <= 3 && ga.signature.zeros <= 1)
+      // tested on works fine on PGA(3, 0 1), PGA(2, 0, 1), GA(3, 0, 0) and GA(2, 0, 0)
+      // for GA(4, 0, 0) doesn't work
+
+      val bulk = line.bulk
+      val weight = line.weight
+      val len = bulk.norm
+
+      val cos = Math.cos(len)
+
+      // for small values sin(len) / len
+      // (1 - len^2 / 3! + len^4 / 5! - ...), but double has 15-17 significant digits and while len ** 4 < 1e-17, simplified formula is accurate
+      val sinDivLen = if (len > 1e-5) {
+        Math.sin(len) / len
+      } else 1.0 - (len * len) / 6.0
+
+      // (a ⟑ I) betta / 2
+      val aIBettaDiv2 = line.geometric(bulk ^ weight)
+
+      // and (sin(len) / len - cos(len)) / len**2 -> len**2 (1/2 - 1/6) + len ** 4 (1/4! - 1/5!) = (1 / 3) * (1 + 0.8 * len ** 2)
+      // while len ** 4 < 1e-17, simplified formula is accurate, otherwise subtract sin and cos
+      val sinMinusCosDiv2 = if (len > 1e-5) {
+        (sinDivLen - math.cos(len)) / (len * len)
+      } else (1.0 / 3.0) * (1.0 + 0.8 * len * len)
+
+      MultiVector.scalar(Math.cos(len)) + (line + (bulk ^ weight)) * sinDivLen + aIBettaDiv2 / (len * len) * (sinDivLen - cos)

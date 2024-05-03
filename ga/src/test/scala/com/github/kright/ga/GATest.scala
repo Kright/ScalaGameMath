@@ -47,3 +47,14 @@ class GATest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert(one.exponentBySeriesSum(1e-11).norm === Math.E)
     }
   }
+
+  test("exp for bivector") {
+    GAGenerator.forAnyGA {
+      if (ga.signature.positives <= 3 && ga.signature.zeros <= 1) {
+        // GA(4, 0, 1) is not supported
+        forAll(GAGenerator.bladesGen(grade = 2), MinSuccessful(1000)) { bv =>
+          assert((bv.exponentBySeriesSum(1e-15) - PGA.expForBivector(bv)).norm < 1e-14)
+        }
+      }
+    }
+  }
