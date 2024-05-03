@@ -51,7 +51,7 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   test("mass and center for translate and rotation") {
     forAll(bodies, bodies, bodies, transforms) {
       (b1, b2, b3, transform) =>
-        val bodies = Seq(b1, b2, b3)
+        val bodies = Seq(b1(), b2(), b3())
 
         val accumulator = StatsAccumulator()
         val transformedAccumulator = StatsAccumulator()
@@ -93,7 +93,8 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("reset after one body") {
-    forAll(bodies) { (inertia, state) =>
+    forAll(bodies) { factory =>
+      val (inertia, state) = factory()
       val accumulator = StatsAccumulator()
       accumulator.add(inertia, state)
       accumulator.reset()
@@ -102,7 +103,8 @@ class StatsAccumulatorTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("add one body") {
-    forAll(bodies) { (inertia, state) =>
+    forAll(bodies) { factory =>
+      val (inertia, state) = factory()
       val accumulator = StatsAccumulator()
       accumulator.add(inertia, state)
 

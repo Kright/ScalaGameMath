@@ -145,3 +145,19 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       assert(q.mag === 1.0)
     }
   }
+
+  test("exp of zero is id quaternion") {
+    val q = Quaternion().setFromExp(Vector3d(0.0, 0.0, 0.0))
+    assert(q === Quaternion.id)
+  }
+
+  test("exp of very small value is id quaternion + value") {
+    val eps = 1e-50
+
+    val q = Quaternion().setFromExp(Vector3d(eps, 0.0, 0.0))
+    assert(q.w == 1.0)
+    assert(q.x == eps)
+    assert(q.y == 0.0)
+    assert(q.z == 0.0)
+    assert(q.mag == 1.0)
+  }

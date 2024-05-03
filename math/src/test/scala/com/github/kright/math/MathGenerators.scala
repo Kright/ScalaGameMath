@@ -12,7 +12,11 @@ object MathGenerators:
     yield Quaternion(w, x, y, z)
 
   val normalizedQuaternions: Gen[Quaternion] =
-    gaussianQuaternions.map(_.safeNormalized())
+    Gen.oneOf(
+      Gen.const(Quaternion.id),
+      Gen.const(Quaternion.id.negate()),
+      gaussianQuaternions.map(_.normalized())
+    )
 
   val eulerAngles: Gen[EulerAngles] =
     for (yaw <- double1;

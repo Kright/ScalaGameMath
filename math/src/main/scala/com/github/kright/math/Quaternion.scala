@@ -22,16 +22,12 @@ trait IQuaternion extends IEqualsWithEps[IQuaternion]:
     Quaternion(w, -x, -y, -z)
 
   def normalized(): Quaternion =
-    val m = 1.0 / mag
-    Quaternion(w * m, x * m, y * m, z * m)
-
-  def safeNormalized(): Quaternion =
     val selfMag = mag
-    if (selfMag < 0.000001) {
-      Quaternion()
+    // minimal double value is 2.2250738585072014E-308
+    if (selfMag < 1e-150) {
+      Quaternion.id
     } else {
-      val m = 1.0 / mag
-      Quaternion(w * m, x * m, y * m, z * m)
+      this * (1.0 / selfMag)
     }
 
   def +(q: IQuaternion): Quaternion =
@@ -79,7 +75,7 @@ trait IQuaternion extends IEqualsWithEps[IQuaternion]:
   /** rotation axis with length of 0.5*angle in radians */
   def getLog(result: Vector3d = Vector3d()): Vector3d =
     val xyz = magXYZ
-    if (xyz < 0.000001) return result := (0, 0, 0)
+    if (xyz < 1e-12) return result := (0, 0, 0)
     val angle2 = Math.atan2(xyz, w)
     val mul = angle2 / xyz
     result := (x * mul, y * mul, z * mul)
@@ -195,7 +191,13 @@ final case class Quaternion(var w: Double,
   /** exponent length is 0.5*angle of rotation */
   def setFromExp(exp: IVector3d): Quaternion =
     val l = exp.mag
-    val m = Math.sin(l) / l
+
+    // for small numerbs, sin(l) / l => (l - l^3 / 3! + ...) / l = 1 - l^2 / 6
+    // double has 15-17 significant digits, so 1e-9 is small enough
+    val m =
+      if (math.abs(l) > 1e-9) Math.sin(l) / l
+      else 1.0
+
     this := (Math.cos(l), exp.x * m, exp.y * m, exp.z * m)
 
   def setFromRotation(m: Matrix3d): Quaternion =

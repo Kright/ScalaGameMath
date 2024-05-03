@@ -52,7 +52,7 @@ lazy val ga = (project in file("ga")).settings(
 ).dependsOn(
   util,
   symbolic % "test",
-  vector % "test;test->test"
+  vector % "compile->compile;test->test"
 )
 
 lazy val swizzle = (project in file("swizzle")).settings(

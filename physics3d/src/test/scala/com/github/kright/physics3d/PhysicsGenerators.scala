@@ -3,20 +3,44 @@ package com.github.kright.physics3d
 import com.github.kright.math.MathGenerators.*
 import com.github.kright.math.VectorMathGenerators.*
 import com.github.kright.math.{Matrix3d, Vector3d, VectorMathGenerators}
+import com.github.kright.physics3d.InertiaTest.SolverType
 import org.scalacheck.Gen
 
 object PhysicsGenerators:
-  val inertiaMoments: Gen[Matrix3d] =
-    for (vec <- vectors3InCube;
-         rotation <- normalizedQuaternions;
-         positiveVec = Vector3d(10, 10, 10) + vec * 9;
-         diagMatrix = Matrix3d().setScale(positiveVec))
+  /**
+   * it's easy to mutate state and get strange errors in scalacheck
+   * factory will preserve original state and will produce copies of it
+   */
+  trait Factory[T] extends (() => T):
+    override def toString(): String = apply().toString
+
+  val solvers: Gen[PhysicsSolver] =
+    Gen.oneOf(PhysicsSolver.all)
+
+  val solverTypes: Gen[InertiaTest.SolverType] = Gen.oneOf(
+    Seq(SolverType.Euler2, SolverType.RK2, SolverType.RK4Incorrect, SolverType.RK4)
+  )
+
+  def inertiaMomentsDiag(minR: Double, maxR: Double): Gen[Matrix3d] =
+    vectorInAABB(Vector3d(minR, minR, minR), Vector3d(maxR, maxR, maxR)).map { r =>
+      val rr = r * r
+      Matrix3d.id.setScale(Vector3d(rr.y + rr.z, rr.x + rr.z, rr.x + rr.y))
+    }
+
+  def inertiaMoments(minR: Double, maxR: Double): Gen[Matrix3d] =
+    for (diagMatrix <- inertiaMomentsDiag(minR, maxR);
+         rotation <- normalizedQuaternions)
     yield (Matrix3d() := rotation) * diagMatrix * (Matrix3d() := rotation.conjugated())
 
-  val inertia3d: Gen[Inertia3d] =
-    for (mass <- Gen.double;
-         inertia <- inertiaMoments)
-    yield Inertia3d(mass + 0.01, inertia)
+  val inertia3d01 = inertia3d(
+    minMass = 0.1, maxMass = 1.0,
+    minR = 0.1, maxR = 1.0
+  )
+
+  def inertia3d(minMass: Double, maxMass: Double, minR: Double, maxR: Double): Gen[Inertia3d] =
+    for (mass <- doubleInRange(minMass, maxMass);
+         inertia <- inertiaMoments(minR, maxR))
+    yield Inertia3d(mass, inertia * mass)
 
   val transforms: Gen[Transform3d] =
     for (linear <- vectors3InCube;
@@ -28,15 +52,15 @@ object PhysicsGenerators:
          w <- vectors3InCube)
     yield Velocity3d(linear, w)
 
-  val states: Gen[State3d] =
+  val states: Gen[Factory[State3d]] =
     for (t <- transforms;
          v <- velocities)
-    yield State3d(t, v)
+    yield () => State3d(t.copy(), v.copy())
 
-  val bodies: Gen[(Inertia3d, State3d)] =
-    for (inertia <- inertia3d;
-         state <- states)
-    yield (inertia, state)
+  val bodies: Gen[Factory[(Inertia3d, State3d)]] =
+    for (inertia <- inertia3d(minMass = 0.1, maxMass = 1.0, minR = 0.1, maxR = 1.0);
+         stateFactory <- states)
+    yield () => (inertia, stateFactory())
 
   val linearFriction: Gen[Friction] =
     for (k <- Gen.oneOf(Gen.double, Gen.const(0.0));
@@ -68,16 +92,17 @@ object PhysicsGenerators:
          k2 <- Gen.double.map(_ + 0.1))
     yield AngularSpring3d(t1, t2, k1, k2)
 
-  private val emptyBodySystem: Gen[BodySystemT] = Gen.const(new BodySystem())
-
-  def bodySystems(bodiesCount: Int): Gen[BodySystemT] =
+  def bodySystems(bodiesCount: Int): Gen[Factory[BodySystemT]] =
     require(bodiesCount >= 0)
-    var result: Gen[BodySystemT] = emptyBodySystem.map(_.copy())
-    for (_ <- 0 until bodiesCount) {
-      result = for {
-        bs <- result
-        (mass, state) <- bodies
-        _ = bs.addBody(mass, state)
-      } yield bs
-    }
-    result
+
+    Gen.containerOfN[Seq, Factory[(Inertia3d, State3d)]](bodiesCount, bodies)
+      .map { factoriesList =>
+        () => {
+          val bs = new BodySystem()
+          for (factory <- factoriesList) {
+            val (mass, state) = factory()
+            bs.addBody(mass, state)
+          }
+          bs
+        }
+      }

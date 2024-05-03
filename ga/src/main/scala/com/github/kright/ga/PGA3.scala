@@ -1,5 +1,7 @@
 package com.github.kright.ga
 
+import com.github.kright.math.Vector3d
+
 import scala.math.Numeric.Implicits.infixNumericOps
 
 class PGA3(representationConfig: GARepresentationConfig) extends PGA(representationConfig):
@@ -29,6 +31,9 @@ object PGA3 extends PGA.CommonMethods:
       "z" -> z,
       "w" -> num.one,
     ).dual
+
+  def point(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
+    point(v.x, v.y, v.z)
 
   def translator[T](dx: T, dy: T, dz: T)(using ga: PGA3, num: Numeric[T]): MultiVector[T] =
     MultiVector(

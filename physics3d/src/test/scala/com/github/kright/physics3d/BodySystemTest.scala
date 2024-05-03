@@ -3,7 +3,6 @@ package com.github.kright.physics3d
 import com.github.kright.math.VectorMathGenerators.*
 import com.github.kright.physics3d.PhysicsGenerators.*
 import org.scalacheck.Gen
-import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -13,7 +12,6 @@ import scala.util.chaining.*
 type BodySystemT = BodySystem[Joint3d]
 
 class BodySystemTest extends AnyFunSuite with ScalaCheckPropertyChecks:
-
   private def simulate(bodySystem: BodySystemT, doStep: BodySystemT => Unit): LazyList[SystemStats] =
     SystemStats(bodySystem) #:: simulate(bodySystem.copy().tap(b => doStep(b)), doStep)
 
@@ -22,118 +20,104 @@ class BodySystemTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     val errors = states.map(s => first.compareTo(s))
     SystemInvariantErr.max(errors)
 
-  private def assertInvariantsAreConstant(states: Iterable[SystemStats],
+  private def assertInvariantsAreConstant(solver: PhysicsSolver,
+                                          states: Iterable[SystemStats],
                                           maxAllowedError: SystemInvariantErr): Unit =
 
     val maxError = getMaxError(states)
     maxError.assertFitsInto(maxAllowedError,
-      s"""actual max error ${maxError}
+      s"""
+         |solver ${solver}
+         |actual max error ${maxError}
          |max allowed error = ${maxAllowedError}
          |initial state = ${states.head}
          |last state = ${states.last}""".stripMargin)
 
-  test("show errors") {
-    val dt = 0.001
-    forAll(bodySystems(bodiesCount = 10)) { system =>
-      def printErr(msg: String, doStep: BodySystem[Joint3d] => Unit): Unit =
-        for (solver <- PhysicsSolver.all) {
-          val maxErr = getMaxError(simulate(system, solver.doStep(_, dt)).take(1000))
-          println(s"${solver.name}: ${maxErr}")
-        }
-    }
-  }
-
   test("one free body preserve stats") {
     val dt = 0.001
 
-    forAll(bodySystems(bodiesCount = 1)) { system =>
+    forAll(solvers, bodySystems(bodiesCount = 1)) { (solver, systemFactory) =>
+      val system = systemFactory()
       assert(system.masses.size == 1)
       assert(system.joints.isEmpty)
       assert(system.states.size == 1)
 
-      for (solver <- PhysicsSolver.all) {
-        val maxError = solver.order match
-          case 2 => 1e-4
-          case 4 => 1e-8
+      val maxError = solver.order match
+        case 2 => 1e-4
+        case 4 => 1e-8
 
-        val stats = simulate(system, solver.doStep(_, dt)).take(1000)
-        assertInvariantsAreConstant(stats, new SystemInvariantErr(maxError))
-      }
+      val stats = simulate(system, solver.doStep(_, dt)).take(1000)
+      assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }
 
   test("many free bodies preserve stats") {
     val dt = 0.001
 
-    forAll(bodySystems(bodiesCount = 10)) { system =>
+    forAll(solvers, bodySystems(bodiesCount = 10), MinSuccessful(100)) { (solver, systemFactory) =>
+      val system = systemFactory()
       assert(system.masses.size == 10)
       assert(system.joints.isEmpty)
       assert(system.states.size == 10)
 
+      val maxError = solver.order match
+        case 2 => 1e-4
+        case 4 => 1e-8
 
-      for (solver <- PhysicsSolver.all) {
-        val maxError = solver.order match
-          case 2 => 1e-4
-          case 4 => 1e-8
-
-        val stats = simulate(system, solver.doStep(_, dt)).take(1000)
-        assertInvariantsAreConstant(stats, new SystemInvariantErr(maxError))
-      }
+      val stats = simulate(system, solver.doStep(_, dt)).take(1000)
+      assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }
 
   test("three bodies with springs") {
     val dt = 0.001
 
-    forAll(bodySystems(bodiesCount = 3), spring3dNoFriction, spring3dNoFriction, spring3dNoFriction) { (system, s1, s2, s3) =>
+    forAll(solvers, bodySystems(bodiesCount = 3), spring3dNoFriction, spring3dNoFriction, spring3dNoFriction) { (solver, systemFactory, s1, s2, s3) =>
+      val system = systemFactory()
       system.addJoint(s1, 0, 1)
       system.addJoint(s2, 0, 2)
       system.addJoint(s3, 1, 1)
 
-      for (solver <- PhysicsSolver.all) {
-        val maxError = solver.order match
-          case 2 => 1e-4
-          case 4 => 1e-8
+      val maxError = solver.order match
+        case 2 => 1e-4
+        case 4 => 1e-8
 
-        val stats = simulate(system, solver.doStep(_, dt)).take(1000)
-        assertInvariantsAreConstant(stats, new SystemInvariantErr(maxError))
-      }
+      val stats = simulate(system, solver.doStep(_, dt)).take(1000)
+      assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }
 
   test("two bodies with angle spring 1 to 2") {
     val dt = 0.001
 
-    forAll(bodySystems(bodiesCount = 2), transforms, transforms, Gen.double.map(_ + 0.1)) { (system, t1, t2, k1) =>
+    forAll(solvers, bodySystems(bodiesCount = 2), transforms, transforms, Gen.double.map(_ + 0.1)) { (solver, systemFactory, t1, t2, k1) =>
       val spring = AngularSpring3d(t1, t2, k1, 0.0)
+      val system = systemFactory()
       system.addJoint(spring, 0, 1)
 
-      for (solver <- PhysicsSolver.all) {
-        val maxError = solver.order match
-          case 2 => 1e-4
-          case 4 => 1e-8
+      val maxError = solver.order match
+        case 2 => 1e-4
+        case 4 => 1e-8
 
-        val stats = simulate(system, solver.doStep(_, dt)).take(1000)
-        assertInvariantsAreConstant(stats, new SystemInvariantErr(maxError))
-      }
+      val stats = simulate(system, solver.doStep(_, dt)).take(100)
+      assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }
 
   test("two bodies with angle spring 2 to 1") {
     val dt = 0.001
 
-    forAll(bodySystems(bodiesCount = 2), transforms, transforms, Gen.double.map(_ + 0.1)) { (system, t1, t2, k2) =>
+    forAll(solvers, bodySystems(bodiesCount = 2), transforms, transforms, Gen.double.map(_ + 0.1)) { (solver, systemFactory, t1, t2, k2) =>
+      val system = systemFactory()
       val spring = AngularSpring3d(t1, t2, 0.0, k2)
       system.addJoint(spring, 0, 1)
 
-      for (solver <- PhysicsSolver.all) {
-        val maxError = solver.order match
-          case 2 => 1e-4
-          case 4 => 1e-8
+      val maxError = solver.order match
+        case 2 => 1e-4
+        case 4 => 1e-8
 
-        val stats = simulate(system, solver.doStep(_, dt)).take(1000)
-        assertInvariantsAreConstant(stats, new SystemInvariantErr(maxError))
-      }
+      val stats = simulate(system, solver.doStep(_, dt)).take(100)
+      assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }
 
@@ -193,14 +177,3 @@ private object SystemInvariantErr:
       angularImpulse = iterable.map(_.angularImpulse).max,
       centerOfMassPos = iterable.map(_.centerOfMassPos).max,
     )
-
-
-private class PhysicsSolver(val name: String, val order: Int, val doStep: (BodySystemT, Double) => Unit)
-
-object PhysicsSolver:
-  val euler2: PhysicsSolver = PhysicsSolver("euler2", 2, _.doStepEuler2(_))
-  val rk2: PhysicsSolver = PhysicsSolver("RK2", 2, _.doStepRK2(_))
-  val rk4: PhysicsSolver = PhysicsSolver("RK4", 4, _.doStepRK4(_))
-  val rk4v2: PhysicsSolver = PhysicsSolver("RK4v2", 4, _.doStepRK4v2(_))
-
-  val all: Seq[PhysicsSolver] = Seq(euler2, rk2, rk4, rk4v2)

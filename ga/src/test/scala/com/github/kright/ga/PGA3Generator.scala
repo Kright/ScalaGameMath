@@ -1,5 +1,6 @@
 package com.github.kright.ga
 
+import com.github.kright.ga.PGA3.point
 import com.github.kright.math.VectorMathGenerators
 import org.scalacheck.Gen
 

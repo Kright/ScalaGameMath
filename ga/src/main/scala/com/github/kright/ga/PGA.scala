@@ -50,7 +50,7 @@ object PGA extends CommonMethods:
       MultiVector.scalar[T](num.one) + idealLine * half
 
     def rotor(angle: Double, line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
-      MultiVector.scalar(Math.cos(angle * 0.5)) + line.normalizedByBulk * math.sin(angle * 0.5)
+      expForRotor(line * angle * 0.5)
 
     def expForRotor(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
       val len = line.bulk.norm

@@ -1,5 +1,6 @@
 package com.github.kright.ga
 
+import com.github.kright.math.Vector2d
 
 class PGA2(stringMapperParams: GARepresentationConfig) extends PGA(stringMapperParams):
   require(stringMapperParams.signature == Signature.pga2)
@@ -26,3 +27,7 @@ object PGA2 extends PGA.CommonMethods:
       "y" -> y,
       "w" -> num.one,
     ).dual
+
+  def point(v: Vector2d)(using ga: PGA2): MultiVector[Double] =
+    point(v.x, v.y)
+  
