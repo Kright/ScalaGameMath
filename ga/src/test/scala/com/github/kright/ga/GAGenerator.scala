@@ -6,7 +6,7 @@ object GAGenerator:
   def allGASeq: IndexedSeq[GA] =
     IndexedSeq(GA.ga2, GA.ga3, GA.ga4, GA.pga2, GA.pga3)
 
-  def allBasises: Gen[GA] =
+  def allGa: Gen[GA] =
     Gen.oneOf(allGASeq)
 
   def forAnyGA(body: GA ?=> Unit): Unit =

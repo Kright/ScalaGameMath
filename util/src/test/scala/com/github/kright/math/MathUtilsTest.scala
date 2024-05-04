@@ -20,3 +20,8 @@ class MathUtilsTest extends AnyFunSuite:
     assert(5.0.sign == 1.0)
     assert(-10.0.sign == -1.0)
   }
+
+  test("pow") {
+    assert(MathUtils.pow(2, 10, _ * _) == 1024)
+    assert(MathUtils.pow(1, 100, _ + _) == 100)
+  }

@@ -196,6 +196,7 @@ object MultiVector:
 
     /**
      * Very straightforward but inefficient code
+     * Works well for values less then 1, otherwise requires many steps
      */
     def exponentBySeriesSum(thresholdNorm: Double, maxSteps: Int = 50): MultiVector[Double] =
       val thresholdSquaredNorm = thresholdNorm * thresholdNorm

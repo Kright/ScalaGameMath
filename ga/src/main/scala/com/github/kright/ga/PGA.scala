@@ -22,6 +22,8 @@ object PGA extends CommonMethods:
       summon[Numeric[T]].parseString("0.5").get
 
     /**
+     * actually this is exp(line * 0.5)
+     *
      * @return multivector which translates by sandwich product
      *         MultiVector(
      *         1 -> 1.0
@@ -52,15 +54,18 @@ object PGA extends CommonMethods:
     def rotor(angle: Double, line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
       expForLine(line * angle * 0.5)
 
+    /**
+     * simplified case of expForBivector when (bulk ⟑ weight) = 0.0
+     */
     def expForLine(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
       val len = line.bulk.norm
 
       // (1 - len^2 / 3! + len^4 / 5!), but double has 15-17 significant digits and for small len result is just 1.0
-      val multiplier = if (Math.abs(len) > 1e-9) {
+      val sinDivLen = if (len > 1e-5) {
         Math.sin(len) / len
-      } else 1.0
+      } else 1.0 - (len * len) / 6.0
 
-      MultiVector.scalar(Math.cos(len)) + line * multiplier
+      MultiVector.scalar(Math.cos(len)) + line * sinDivLen
 
     /**
      * Made by carefully writing formulas on several sheets of paper
@@ -75,7 +80,7 @@ object PGA extends CommonMethods:
     def expForBivector(line: MultiVector[Double])(using ga: GA): MultiVector[Double] =
       require(ga.signature.positives <= 3 && ga.signature.zeros <= 1)
       // tested on works fine on PGA(3, 0 1), PGA(2, 0, 1), GA(3, 0, 0) and GA(2, 0, 0)
-      // for GA(4, 0, 0) doesn't work
+      // for GA(4, 0, 0) doesn't work because square of 4-vector != 0
 
       val bulk = line.bulk
       val weight = line.weight
@@ -89,8 +94,9 @@ object PGA extends CommonMethods:
         Math.sin(len) / len
       } else 1.0 - (len * len) / 6.0
 
+      val IBdiv2 = bulk ^ weight // = 0.5 of bulk * weight
       // (a ⟑ I) betta / 2
-      val aIBettaDiv2 = line.geometric(bulk ^ weight)
+      val aIBettaDiv2 = line.geometric(IBdiv2)
 
       // and (sin(len) / len - cos(len)) / len**2 -> len**2 (1/2 - 1/6) + len ** 4 (1/4! - 1/5!) = (1 / 3) * (1 + 0.8 * len ** 2)
       // while len ** 4 < 1e-17, simplified formula is accurate, otherwise subtract sin and cos
@@ -98,4 +104,4 @@ object PGA extends CommonMethods:
         (sinDivLen - math.cos(len)) / (len * len)
       } else (1.0 / 3.0) * (1.0 + 0.8 * len * len)
 
-      MultiVector.scalar(Math.cos(len)) + (line + (bulk ^ weight)) * sinDivLen + aIBettaDiv2 / (len * len) * (sinDivLen - cos)
+      MultiVector.scalar(Math.cos(len)) + (line + IBdiv2) * sinDivLen + aIBettaDiv2 * sinMinusCosDiv2

@@ -14,6 +14,16 @@ object MathUtils:
     }
     true
 
+  def pow[T](x: T, power: Int, mult: (T, T) => T): T =
+    require(power >= 1)
+    if (power == 1) return x
+
+    if (power % 2 == 0) {
+      pow(mult(x, x), power / 2, mult)
+    }
+    else {
+      mult(x, pow(mult(x, x), power / 2, mult))
+    }
 
   extension (d: Double)
     def clamp(lower: Double, upper: Double): Double =

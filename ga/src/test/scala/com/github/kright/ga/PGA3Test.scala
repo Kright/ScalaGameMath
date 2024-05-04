@@ -31,7 +31,7 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val pz = plane(zero, zero, one, -z)
 
     val p = point(x, y, z)
-    val intersectionPoint = (px ^ py ^ pz)
+    val intersectionPoint = px ^ py ^ pz
 
     assert(p === intersectionPoint, s"\n${p.toMultilineString} != ${intersectionPoint.toMultilineString}")
   }
@@ -85,11 +85,7 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   test("translated rotor is rotor with translated axis of rotation") {
     forAll(VectorMathGenerators.vectors3InCube, VectorMathGenerators.vectors3normalized, VectorMathGenerators.double1) { (translation, rotAxis, angle) =>
-      val tr = translatorByIdealLine(MultiVector[Double](
-        "wx" -> -translation.x,
-        "wy" -> -translation.y,
-        "wz" -> -translation.z,
-      ))
+      val tr = translator(translation)
 
       val axis = zeroPoint[Double] v point(rotAxis.x, rotAxis.y, rotAxis.z)
       val rot1 = tr.sandwich(rotor(angle, axis))

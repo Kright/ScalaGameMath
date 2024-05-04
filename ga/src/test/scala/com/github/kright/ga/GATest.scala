@@ -1,5 +1,6 @@
 package com.github.kright.ga
 
+import com.github.kright.math.VectorMathGenerators
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -48,13 +49,42 @@ class GATest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     }
   }
 
-  test("exp for bivector") {
+  test("exp for zero bivector") {
     GAGenerator.forAnyGA {
       if (ga.signature.positives <= 3 && ga.signature.zeros <= 1) {
-        // GA(4, 0, 1) is not supported
-        forAll(GAGenerator.bladesGen(grade = 2), MinSuccessful(1000)) { bv =>
-          assert((bv.exponentBySeriesSum(1e-15) - PGA.expForBivector(bv)).norm < 1e-14)
-        }
+        val zero = MultiVector[Double](ga.blades.map(b => b -> 0.0))
+        val one = MultiVector.scalar[Double](1.0)
+
+        assert(zero.exponentBySeriesSum(1e-15).withoutZeros == one)
+        assert(PGA.expForBivector(zero).withoutZeros == one)
+      }
+    }
+  }
+
+  test("exp for bivector for near-zero vectors") {
+    forAll(
+      GAGenerator.allGa
+        .filter(ga => ga.signature.positives <= 3 && ga.signature.zeros <= 1)
+        .flatMap(ga => GAGenerator.bladesGen(grade = 2)(using ga)),
+      VectorMathGenerators.doubleInRange(-100.0, 0.0),
+      MinSuccessful(100)) { (bv, power) =>
+      bv.ga.use {
+        val v = bv * Math.pow(10, power)
+        val vExp = PGA.expForBivector(v)
+
+        assert((v.exponentBySeriesSum(1e-17, maxSteps = 1000) - vExp).norm < 1e-15,
+          s"""
+             |exponentBySeriesSum != expForBivector
+             |ga = ${ga.signature}
+             |v.norm = ${v.norm}
+             |v = $v""".stripMargin)
+
+        assert(((vExp geometric vExp) - PGA.expForBivector(v * 2.0)).norm < 1e-15,
+          s"""
+             |exp(v)**2 != exp(v * 2.0)
+             |ga = ${ga.signature}
+             |v.norm = ${v.norm}
+             |v = $v""".stripMargin)
       }
     }
   }

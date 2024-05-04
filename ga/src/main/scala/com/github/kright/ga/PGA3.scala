@@ -42,3 +42,11 @@ object PGA3 extends PGA.CommonMethods:
       "wy" -> -half * dy,
       "wz" -> -half * dz,
     )
+
+  def translator(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
+    MultiVector(
+      "1" -> 1.0,
+      "wx" -> -0.5 * v.x,
+      "wy" -> -0.5 * v.y,
+      "wz" -> -0.5 * v.z,
+    )  

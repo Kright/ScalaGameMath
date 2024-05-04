@@ -76,7 +76,7 @@ class MultiVectorTest extends AnyFunSuite:
           val ma = a.magnitude
           val mb = b.magnitude
           val mab = (a ⟑ b).magnitude
-          assert(mab === ma * mb, s"wrong dist ${ma} * ${mb} = ${ma * mb} != ${mab}, basis = ${ga}")
+          assert(mab === ma * mb, s"wrong dist $ma * $mb = ${ma * mb} != $mab, basis = $ga")
         }
       }
     }
@@ -118,9 +118,9 @@ class MultiVectorTest extends AnyFunSuite:
         val g = a ⟑ b
 
         assert(g === w + d,
-          s"""g = ${g}
-             |w = ${w}
-             |d = ${d}
+          s"""g = $g
+             |w = $w
+             |d = $d
              |w + d = ${w + d}
              |""".stripMargin)
       }
@@ -135,9 +135,9 @@ class MultiVectorTest extends AnyFunSuite:
         val g = a ⟇ b
 
         assert(g === w + d,
-          s"""g = ${g}
-             |w = ${w}
-             |d = ${d}
+          s"""g = $g
+             |w = $w
+             |d = $d
              |w + d = ${w + d}
              |""".stripMargin)
       }
