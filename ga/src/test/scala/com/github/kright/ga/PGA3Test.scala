@@ -73,6 +73,7 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val pointZ = point(0.0, 0.0, 1.0)
 
     assert((pointCenter v pointZ) == (planeX ^ planeY))
+    assert((pointCenter v pointZ) == (planeX ^ planeY))
   }
 
   test("plane defined by three points") {
@@ -139,5 +140,49 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("exp for bivector") {
     forAll(GAGenerator.bladesGen(grade = 2), MinSuccessful(1000)) { bv =>
       assert((bv.exponentBySeriesSum(1e-15) - expForBivector(bv)).norm < 1e-14)
+    }
+  }
+
+  test("line by points and line by zero dot shift") {
+    GA.pga3.use {
+
+      val shift = MultiVector(
+        "x" -> Sym("s.x"),
+        "y" -> Sym("s.y"),
+        "z" -> Sym("s.z"),
+      )
+
+      {
+        val p = Sym.idealPoint("s")
+        val o = zeroPoint[Sym]
+
+        val expected = MultiVector(
+          "xy" -> Sym("s.z"),
+          "xz" -> -Sym("s.y"),
+          "yz" -> Sym("s.x"),
+        )
+
+        assert((o v (p + o)) == expected)
+        assert((o dot shift) == expected)
+        assert((shift dot o) == expected)
+
+      }
+
+      {
+        val a = Sym.point("a")
+
+        val expected = MultiVector(
+          "wx" -> (Sym("a.y") * Sym("s.z") - Sym("a.z") * Sym("s.y")),
+          "wy" -> (Sym("a.z") * Sym("s.x") - Sym("a.x") * Sym("s.z")),
+          "wz" -> (Sym("a.x") * Sym("s.y") - Sym("a.y") * Sym("s.x")),
+          "xy" -> Sym("s.z"),
+          "xz" -> -Sym("s.y"),
+          "yz" -> Sym("s.x"),
+        )
+
+        assert((a v (a + shift.dual)) == expected)
+        assert((a v shift.dual) == expected)
+        assert((shift dot a) == expected)
+      }
     }
   }

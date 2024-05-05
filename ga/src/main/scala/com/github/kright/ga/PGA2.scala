@@ -28,6 +28,17 @@ object PGA2 extends PGA.CommonMethods:
       "w" -> num.one,
     ).dual
 
+  /**
+   * @return MultiVector.makeNonNegative[T](wx -> y, wy -> -x)
+   */
+  def idealPoint[T](x: T, y: T)(using ga: PGA2, num: Numeric[T]): MultiVector[T] =
+    MultiVector.makeNonNegative[T](
+      "x" -> x,
+      "y" -> y,
+    ).dual
+
   def point(v: Vector2d)(using ga: PGA2): MultiVector[Double] =
     point(v.x, v.y)
-  
+
+  def idealPoint(v: Vector2d)(using ga: PGA2): MultiVector[Double] =
+    idealPoint(v.x, v.y)

@@ -32,8 +32,21 @@ object PGA3 extends PGA.CommonMethods:
       "w" -> num.one,
     ).dual
 
+  /**
+   * @return MultiVector.makeNonNegative[T]("yzw" -> -x, "xzw" -> y, "xyw" -> -z)
+   */
+  def idealPoint[T](x: T, y: T, z: T)(using ga: PGA3, num: Numeric[T]): MultiVector[T] =
+    MultiVector.makeNonNegative[T](
+      "x" -> x,
+      "y" -> y,
+      "z" -> z,
+    ).dual
+  
   def point(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
     point(v.x, v.y, v.z)
+
+  def idealPoint(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
+    idealPoint(v.x, v.y, v.z)  
 
   def translator[T](dx: T, dy: T, dz: T)(using ga: PGA3, num: Numeric[T]): MultiVector[T] =
     MultiVector(

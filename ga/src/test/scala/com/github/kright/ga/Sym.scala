@@ -42,6 +42,9 @@ object Sym:
       }
     ).dual
 
+  def idealPoint(baseName: String)(using ga: PGA): MultiVector[Sym] =
+    point(baseName).weight
+
   def planeX(d: Sym = Sym.zero)(using ga: PGA3): MultiVector[Sym] =
     PGA3.plane(
       Sym.one,
