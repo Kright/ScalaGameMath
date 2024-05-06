@@ -186,3 +186,25 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("bivector split") {
+    forAll(GAGenerator.bladesGen(2)) { b =>
+      val (line, shift) = PGA3.bivectorSplit(b)
+
+      assert(line.values.forall((b, v) => b.grade == 2))
+      assert(shift.values.forall((b, v) => b.grade == 2))
+      assert(shift.withoutZeros.weight == shift)
+
+      val lineExp = PGA3.expForBivector(line)
+      val shiftExp = PGA3.expForBivector(shift)
+
+      def requireEq(a: MultiVector[Double], b: MultiVector[Double]) =
+        require((a - b).norm <= 1e-14)
+
+      requireEq(line + shift, b)
+      requireEq(lineExp ⟑ shiftExp, shiftExp ⟑ lineExp)
+      requireEq(lineExp, PGA.expForLine(line))
+      requireEq(shiftExp, PGA.expForLine(shift))
+      requireEq(PGA.expForBivector(b), lineExp ⟑ shiftExp)
+    }
+  }

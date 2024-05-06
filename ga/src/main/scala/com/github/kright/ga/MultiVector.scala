@@ -6,6 +6,10 @@ import scala.math.Numeric.Implicits.infixNumericOps
 
 case class MultiVector[Value](ga: GA, values: Map[BasisBlade, Value]):
 
+  def scalar(using num: Numeric[Value]): Value = get(ga.scalarBlade).getOrElse(num.zero)
+
+  def pseudoScalar(using num: Numeric[Value]): Value = get(ga.pseudoScalarBlade).getOrElse(num.zero)
+  
   def apply(b: BasisBlade)(using num: Numeric[Value]): Value =
     values.getOrElse(b, num.zero)
 
@@ -17,6 +21,9 @@ case class MultiVector[Value](ga: GA, values: Map[BasisBlade, Value]):
 
   def apply(b: String)(using num: Numeric[Value]): Value =
     apply(ga.representation.basisBladeWithSign(b))
+
+  def get(b: BasisBlade)(using num: Numeric[Value]): Option[Value] =
+    values.get(b)
 
   def get(b: BasisBladeWithSign)(using num: Numeric[Value]): Option[Value] =
     b.sign match

@@ -41,12 +41,12 @@ object PGA3 extends PGA.CommonMethods:
       "y" -> y,
       "z" -> z,
     ).dual
-  
+
   def point(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
     point(v.x, v.y, v.z)
 
   def idealPoint(v: Vector3d)(using ga: PGA3): MultiVector[Double] =
-    idealPoint(v.x, v.y, v.z)  
+    idealPoint(v.x, v.y, v.z)
 
   def translator[T](dx: T, dy: T, dz: T)(using ga: PGA3, num: Numeric[T]): MultiVector[T] =
     MultiVector(
@@ -62,4 +62,13 @@ object PGA3 extends PGA.CommonMethods:
       "wx" -> -0.5 * v.x,
       "wy" -> -0.5 * v.y,
       "wz" -> -0.5 * v.z,
-    )  
+    )
+
+  /**
+   * @param b - any bivector
+   * @return pair: line, shift along line
+   */
+  def bivectorSplit(b: MultiVector[Double])(using ga: PGA3): (MultiVector[Double], MultiVector[Double]) =
+    val shiftAlongLine = b.geometric((b ^ b.reverse) / (2.0 * (b dot b.reverse).scalar))
+    val line = b - shiftAlongLine
+    (line, shiftAlongLine)
