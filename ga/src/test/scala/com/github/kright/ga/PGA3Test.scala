@@ -208,3 +208,18 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       requireEq(PGA.expForBivector(b), lineExp ⟑ shiftExp)
     }
   }
+
+  test("log is inverse of exp") {
+    forAll(GAGenerator.bladesGen(2)) { b =>
+      val exp = PGA3.expForBivector(b)
+      val log = PGA3.motorLog(exp)
+
+      require((b - log).norm < 1e-12,
+        s"""
+           |b = ${b}
+           |exp = ${exp}
+           |log = ${log}
+           |diff = ${log - b}
+           |""".stripMargin)
+    }
+  }

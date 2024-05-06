@@ -36,13 +36,16 @@ object MathUtils:
       else if (d < 0) -1.0
       else 0.0
 
+    def square: Double =
+      d * d
+
 
   extension [T](arr: Array[T])
     inline def swap(i: Int, j: Int): Unit =
       val t = arr(i)
       arr(i) = arr(j)
       arr(j) = t
-    
+
     inline def getOrElseUpdate(i: Int, inline update: => T): T =
       val result = arr(i)
       if (result != null) {

@@ -1,5 +1,6 @@
 package com.github.kright.ga
 
+import com.github.kright.math.MathUtils.square
 import com.github.kright.math.Vector3d
 
 import scala.math.Numeric.Implicits.infixNumericOps
@@ -72,3 +73,27 @@ object PGA3 extends PGA.CommonMethods:
     val shiftAlongLine = b.geometric((b ^ b.reverse) / (2.0 * (b dot b.reverse).scalar))
     val line = b - shiftAlongLine
     (line, shiftAlongLine)
+
+  /**
+   * weird for extreme values, need to be fixed
+   *
+   * @param b
+   * @param ga
+   * @return
+   */
+  def motorLog(v: MultiVector[Double])(using ga: PGA3): MultiVector[Double] =
+    val scalar: Double = v.scalar
+    if (Math.abs(scalar - 1.0) < 1e-9) {
+      return MultiVector(
+        "wx" -> v("wx"),
+        "wy" -> v("wy"),
+        "wz" -> v("wz"),
+      )
+    }
+
+    val a = 1 / (1 - scalar.square) // 1 / sin^2
+    val b = Math.acos(scalar) * Math.sqrt(a)
+    val c = a * v.pseudoScalar * (1.0 - scalar * b)
+    val vb = v.filter((b, _) => b.grade == 2)
+
+    vb * b + vb.bulk.dual * c
