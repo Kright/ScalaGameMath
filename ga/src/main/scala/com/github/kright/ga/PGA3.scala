@@ -82,18 +82,24 @@ object PGA3 extends PGA.CommonMethods:
    * @return
    */
   def motorLog(v: MultiVector[Double])(using ga: PGA3): MultiVector[Double] =
+    val vb = v.filter((b, _) => b.grade == 2)
+
     val scalar: Double = v.scalar
-    if (Math.abs(scalar - 1.0) < 1e-9) {
-      return MultiVector(
-        "wx" -> v("wx"),
-        "wy" -> v("wy"),
-        "wz" -> v("wz"),
-      )
-    }
+    val lenXYZ = vb.bulk.norm
+    val angle = Math.atan2(lenXYZ, scalar)
 
     val a = 1 / (1 - scalar.square) // 1 / sin^2
-    val b = Math.acos(scalar) * Math.sqrt(a)
-    val c = a * v.pseudoScalar * (1.0 - scalar * b)
-    val vb = v.filter((b, _) => b.grade == 2)
+
+    val b = if (Math.abs(angle) > 1e-5) { // angle / sin(angle)
+      angle * Math.sqrt(a)
+    } else {
+      1.0 + angle.square / 6
+    }
+
+    val c = if (Math.abs(angle) > 1e-5) {
+      a * v.pseudoScalar * (1.0 - scalar * b)
+    } else {
+      (1.0 + angle.square / 2) * v.pseudoScalar / 3
+    }
 
     vb * b + vb.bulk.dual * c

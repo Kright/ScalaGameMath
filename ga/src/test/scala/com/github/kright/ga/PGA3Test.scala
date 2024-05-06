@@ -223,3 +223,21 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
            |""".stripMargin)
     }
   }
+
+  test("log is inverse of exp even for small vectors") {
+    forAll(GAGenerator.bladesGen(2).filter(_.norm > 1e-3)) { bb =>
+      for (i <- -10 to 0) {
+        val b = bb * (math.pow(10, i) / bb.norm)
+        val exp = PGA3.expForBivector(b)
+        val log = PGA3.motorLog(exp)
+
+        println()
+
+        val err = (log - b).norm
+        assert(err <= b.norm * 1e-7,
+          s"""
+             |s"$i:(log(exp(b)) - b).norm = ${err}, b.norm = ${b.norm}"
+             |""".stripMargin)
+      }
+    }
+  }
