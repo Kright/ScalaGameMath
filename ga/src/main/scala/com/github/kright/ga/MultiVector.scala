@@ -118,6 +118,9 @@ object MultiVector:
     def sandwich(middle: MultiVector[T]): MultiVector[T] = left.geometric(middle).geometric(left.reverse)
     def antiSandwich(middle: MultiVector[T]): MultiVector[T] = left.antiGeometric(middle).antiGeometric(left.antiReverse)
 
+    /** don't forget to div by 2 */
+    def crossX2(right: MultiVector[T]): MultiVector[T] = left.geometric(right) - right.geometric(left)
+
     def rightComplement: MultiVector[T] = left.ga.operations.complement.right(left)
     def leftComplement: MultiVector[T] = left.ga.operations.complement.left(left)
     def bulk: MultiVector[T] = left.ga.operations.bulk(left)
@@ -189,6 +192,9 @@ object MultiVector:
 
     def withoutZeroEps(eps: Double): MultiVector[Double] =
       left.filter((_, v) => Math.abs(v) > eps)
+
+    def cross(right: MultiVector[Double]): MultiVector[Double] =
+      left.crossX2(right) / 2.0
 
     /**
      * @return infinite series 1 + x + x^2 / 2! + x^3 / 3! + ...

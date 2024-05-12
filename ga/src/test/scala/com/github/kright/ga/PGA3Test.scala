@@ -285,4 +285,33 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     )
   }
 
+  test("inertia") {
+    val x = Sym.point("x")
+
+    val b = Sym.multiVector("b").filter((b, _) => b.grade == 2)
+
+    val mass = Sym("mass")
+    val inertia = (x v x.crossX2(b) * Sym(0.5)) * mass
+
+    val sq = {
+      for (dx <- Seq(-1, 1);
+           dy <- Seq(-2, 2);
+           dz <- Seq(-4, 4);
+           point = PGA3.point(Sym(dx), Sym(dy), Sym(dz));
+           inertia = (point v point.crossX2(b) * Sym(0.5)))
+      yield inertia
+    }.reduce(_ + _).withoutZeros
+
+    assert(
+      sq == MultiVector(
+        "wx" -> Sym("b.yz") * Sym((2 * 2 + 4 * 4) * 8.0),
+        "wy" -> Sym("b.xz") * Sym((1 + 4 * 4) * -8.0),
+        "wz" -> Sym("b.xy") * Sym((1 + 2 * 2) * 8.0),
+        "xy" -> Sym("b.wz") * Sym(8.0),
+        "xz" -> Sym("b.wy") * Sym(-8.0),
+        "yz" -> Sym("b.wx") * Sym(8.0),
+      )
+    )
+  }
+
 
