@@ -70,7 +70,18 @@ object PGA3 extends PGA.CommonMethods:
    * @return pair: line, shift along line
    */
   def bivectorSplit(b: MultiVector[Double])(using ga: PGA3): (MultiVector[Double], MultiVector[Double]) =
-    val shiftAlongLine = b.geometric((b ^ b.reverse) / (2.0 * (b dot b.reverse).scalar))
+    // b ^ b.reverse == MultiVector(
+    //     I -> (-2.0 * a.wx * a.yz - 2.0 * a.wz * a.xy + 2.0 * a.wy * a.xz)
+    // )
+    // b dot b.reverse == MultiVector(
+    //     1 -> (a.xy * a.xy + a.xz * a.xz + a.yz * a.yz)
+    // )
+    val div = 2.0 * (b dot b.reverse).scalar
+    if (div < 1e-100) {
+      return (MultiVector.zero[Double], b)
+    }
+
+    val shiftAlongLine = b.geometric((b ^ b.reverse) / div)
     val line = b - shiftAlongLine
     (line, shiftAlongLine)
 

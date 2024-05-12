@@ -209,6 +209,11 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     }
   }
 
+  test("bivector split for zero") {
+    val zero = MultiVector.zero[Double]
+    assert(bivectorSplit(zero) == (zero, zero))
+  }
+
   test("log is inverse of exp") {
     forAll(GAGenerator.bladesGen(2)) { b =>
       val exp = PGA3.expForBivector(b)
@@ -241,3 +246,43 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("momentum") {
+    val x = Sym.point("pos")
+    val antiX = x - x.weight * Sym(2.0)
+
+    val v = MultiVector(
+      "x" -> Sym("v.x"),
+      "y" -> Sym("v.y"),
+      "z" -> Sym("v.z"),
+    )
+    val mass = Sym("mass")
+    val forque = (v dot x) * mass
+
+    assert(
+      forque.toMultilineString ==
+        """MultiVector(
+          |wx -> (mass * pos.y * v.z - mass * pos.z * v.y)
+          |wy -> (mass * pos.z * v.x - mass * pos.x * v.z)
+          |wz -> (mass * pos.x * v.y - mass * pos.y * v.x)
+          |xy -> mass * v.z
+          |xz -> -mass * v.y
+          |yz -> mass * v.x
+          |)""".stripMargin,
+      s"""
+         |pos = ${x.toMultilineString}
+         |v = ${v.toMultilineString}
+         |forque = (v dot x * mass) = ${(v dot x * mass).toMultilineString}
+         |forque.dual = ${forque.dual.toMultilineString}
+         |
+         |forque in point x = forque - ((v * mass) dot (x.weight) = ${(forque - ((v * mass) dot (x.weight))).toMultilineString}
+         |
+         |antiPos = ${antiX}
+         |impulse + anti = ${((v dot x * mass) + (v dot antiX * mass)).toMultilineString}
+         |
+         |impulse + antiPosSame = ${((v dot x * mass) + (-v dot antiX) * mass).toMultilineString}
+         |""".stripMargin
+    )
+  }
+
+
