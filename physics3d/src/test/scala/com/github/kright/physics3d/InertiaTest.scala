@@ -66,9 +66,6 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val deltaAngularImpulse = currentImpulse.angular.distance(initialImpulse.angular)
 
         val maxDelta = 1e-5
-        if (deltaE < 0.001 && deltaImpulse < 0.001 && deltaAngularImpulse < 0.001) {} else {
-          println("fiasco!!")
-        }
 
         assert(deltaE < maxDelta && deltaImpulse < maxDelta && deltaAngularImpulse < maxDelta,
           s"""

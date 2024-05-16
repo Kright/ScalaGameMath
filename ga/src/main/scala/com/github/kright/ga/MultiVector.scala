@@ -9,7 +9,7 @@ case class MultiVector[Value](ga: GA, values: Map[BasisBlade, Value]):
   def scalar(using num: Numeric[Value]): Value = get(ga.scalarBlade).getOrElse(num.zero)
 
   def pseudoScalar(using num: Numeric[Value]): Value = get(ga.pseudoScalarBlade).getOrElse(num.zero)
-  
+
   def apply(b: BasisBlade)(using num: Numeric[Value]): Value =
     values.getOrElse(b, num.zero)
 
@@ -156,6 +156,11 @@ object MultiVector:
 
     infix def *(scalarMultiplier: T): MultiVector[T] =
       left.map((b, t) => t * scalarMultiplier)
+
+    def multiplyElementwise(right: MultiVector[T]): MultiVector[T] =
+      MultiVector[T]((left.values.keySet.intersect(right.values.keySet)).toSeq.map(b =>
+        b -> (left(b) * right(b))
+      ))(using left.ga)
 
     def apply(right: MultiVector[T]): MultiVector[T] = geometric(right)
 

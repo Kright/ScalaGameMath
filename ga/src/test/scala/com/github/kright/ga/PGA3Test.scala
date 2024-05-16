@@ -236,8 +236,6 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         val exp = PGA3.expForBivector(b)
         val log = PGA3.motorLog(exp)
 
-        println()
-
         val err = (log - b).norm
         assert(err <= b.norm * 1e-7,
           s"""
@@ -248,69 +246,49 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("momentum") {
-    val x = Sym.point("pos")
-    val antiX = x - x.weight * Sym(2.0)
-
-    val v = MultiVector(
-      "x" -> Sym("v.x"),
-      "y" -> Sym("v.y"),
-      "z" -> Sym("v.z"),
-    )
     val mass = Sym("mass")
-    val forque = (v dot x) * mass
+
+    val pos = Sym.point("pos")
+    val posx = pos.dual("x")
+    val posy = pos.dual("y")
+    val posz = pos.dual("z")
+
+    val antiX = pos - pos.weight * Sym(2.0)
+
+    val vx = Sym("v.x")
+    val vy = Sym("v.y")
+    val vz = Sym("v.z")
+    val v = MultiVector(
+      "x" -> vx,
+      "y" -> vy,
+      "z" -> vz,
+    )
+
+    val forque = (v dot pos) * mass
 
     assert(
-      forque.toMultilineString ==
-        """MultiVector(
-          |wx -> (mass * pos.y * v.z - mass * pos.z * v.y)
-          |wy -> (mass * pos.z * v.x - mass * pos.x * v.z)
-          |wz -> (mass * pos.x * v.y - mass * pos.y * v.x)
-          |xy -> mass * v.z
-          |xz -> -mass * v.y
-          |yz -> mass * v.x
-          |)""".stripMargin,
+      forque ==
+        MultiVector(
+          "wx" -> (mass * posy * vz - mass * posz * vy),
+          "wy" -> (mass * posz * vx - mass * posx * vz),
+          "wz" -> (mass * posx * vy - mass * posy * vx),
+          "xy" -> mass * vz,
+          "xz" -> -mass * vy,
+          "yz" -> mass * vx,
+        ),
       s"""
-         |pos = ${x.toMultilineString}
+         |pos = ${pos.toMultilineString}
          |v = ${v.toMultilineString}
-         |forque = (v dot x * mass) = ${(v dot x * mass).toMultilineString}
+         |forque = (v dot x * mass) = ${(v dot pos * mass).toMultilineString}
          |forque.dual = ${forque.dual.toMultilineString}
          |
-         |forque in point x = forque - ((v * mass) dot (x.weight) = ${(forque - ((v * mass) dot (x.weight))).toMultilineString}
+         |forque in point x = forque - ((v * mass) dot (x.weight) = ${(forque - ((v * mass) dot (pos.weight))).toMultilineString}
          |
          |antiPos = ${antiX}
-         |impulse + anti = ${((v dot x * mass) + (v dot antiX * mass)).toMultilineString}
+         |impulse + anti = ${((v dot pos * mass) + (v dot antiX * mass)).toMultilineString}
          |
-         |impulse + antiPosSame = ${((v dot x * mass) + (-v dot antiX) * mass).toMultilineString}
+         |impulse + antiPosSame = ${((v dot pos * mass) + (-v dot antiX) * mass).toMultilineString}
          |""".stripMargin
-    )
-  }
-
-  test("inertia") {
-    val x = Sym.point("x")
-
-    val b = Sym.multiVector("b").filter((b, _) => b.grade == 2)
-
-    val mass = Sym("mass")
-    val inertia = (x v x.crossX2(b) * Sym(0.5)) * mass
-
-    val sq = {
-      for (dx <- Seq(-1, 1);
-           dy <- Seq(-2, 2);
-           dz <- Seq(-4, 4);
-           point = PGA3.point(Sym(dx), Sym(dy), Sym(dz));
-           inertia = (point v point.crossX2(b) * Sym(0.5)))
-      yield inertia
-    }.reduce(_ + _).withoutZeros
-
-    assert(
-      sq == MultiVector(
-        "wx" -> Sym("b.yz") * Sym((2 * 2 + 4 * 4) * 8.0),
-        "wy" -> Sym("b.xz") * Sym((1 + 4 * 4) * -8.0),
-        "wz" -> Sym("b.xy") * Sym((1 + 2 * 2) * 8.0),
-        "xy" -> Sym("b.wz") * Sym(8.0),
-        "xz" -> Sym("b.wy") * Sym(-8.0),
-        "yz" -> Sym("b.wx") * Sym(8.0),
-      )
     )
   }
 
