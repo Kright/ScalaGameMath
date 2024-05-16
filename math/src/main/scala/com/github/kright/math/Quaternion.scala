@@ -116,23 +116,27 @@ trait IQuaternion extends IEqualsWithEps[IQuaternion]:
   def toPrettyString: String =
     f"Quaternion(w=$w%1.3f, x=$x%1.3f, y=$y%1.3f, z=$z%1.3f)"
 
+  // @formatter:off
+  /* Quaternion as matrix */
   def rotM00: Double = 1.0 - 2.0f * (y * y + z * z)
-
   def rotM01: Double = 2.0 * (x * y - w * z)
-
   def rotM02: Double = 2.0 * (x * z + w * y)
 
   def rotM10: Double = 2.0 * (x * y + w * z)
-
   def rotM11: Double = 1.0 - 2.0f * (x * x + z * z)
-
   def rotM12: Double = 2.0 * (y * z - w * x)
 
   def rotM20: Double = 2.0 * (x * z - w * y)
-
   def rotM21: Double = 2.0 * (y * z + w * x)
-
   def rotM22: Double = 1.0 - 2.0 * (x * x + y * y)
+
+  /* Names in terms of geometric algebra */
+  def scalar: Double = w
+
+  def xy: Double = z
+  def yz: Double = x
+  def zx: Double = y
+  // @formatter:on
 
 
 object IQuaternion:
