@@ -29,4 +29,4 @@ object GAGenerator:
     }
 
   def bladesGen(grade: Int)(using ga: GA): Gen[MultiVector[Double]] =
-    multivectorsGen.map(_.filter((b, v) => b.grade == grade))
+    multivectorsGen.map(_.grade(grade))

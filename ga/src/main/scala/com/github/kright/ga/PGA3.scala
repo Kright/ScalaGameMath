@@ -93,7 +93,7 @@ object PGA3 extends PGA.CommonMethods:
    * @return
    */
   def motorLog(v: MultiVector[Double])(using ga: PGA3): MultiVector[Double] =
-    val vb = v.filter((b, _) => b.grade == 2)
+    val vb = v.grade(2)
 
     val scalar: Double = v.scalar
     val lenXYZ = vb.bulk.norm

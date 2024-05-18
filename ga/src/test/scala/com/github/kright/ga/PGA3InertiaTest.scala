@@ -17,7 +17,7 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private given equalityEps: EqualityEps = EqualityEps(eps)
 
-  private val b = Sym.multiVector("b").filter((b, _) => b.grade == 2)
+  private val b = Sym.multiVector("b").grade(2)
 
   // @formatter:off
   private def bxy = b("xy")

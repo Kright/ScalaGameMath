@@ -31,6 +31,9 @@ case class MultiVector[Value](ga: GA, values: Map[BasisBlade, Value]):
       case Sign.Negative => values.get(b.basisBlade).map(v => -v)
       case Sign.Zero => ???
 
+  def grade(grade: Int): MultiVector[Value] =
+    filter((b, _) => b.grade == grade)
+
   def map[V2](f: (BasisBlade, Value) => V2): MultiVector[V2] =
     MultiVector[V2](ga, values.map((b, v) => b -> f(b, v)))
 
