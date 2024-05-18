@@ -292,4 +292,3 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     )
   }
 
-

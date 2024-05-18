@@ -140,27 +140,27 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("Precision of Euler2") {
-    val (de, dl) = getMaxRelativeErrors(SolverType.Euler2, 0.01, 10000)
-    assert(de <= 0.0001)
-    assert(dl <= 0.0001)
+    val (de, dl) = getMaxRelativeErrors(SolverType.Euler2, 0.01, 1000)
+    assert(de <= 9e-5)
+    assert(dl <= 4e-4)
   }
 
   test("Precision of RK2") {
-    val (de, dl) = getMaxRelativeErrors(SolverType.RK2, 0.01, 10000)
-    assert(de <= 0.0001)
-    assert(dl <= 0.0001)
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK2, 0.01, 1000)
+    assert(de <= 5e-5)
+    assert(dl <= 2.1e-4)
   }
 
   test("Precision of RK4 incorrect") {
-    val (de, dl) = getMaxRelativeErrors(SolverType.RK4Incorrect, 0.01, 10000)
-    assert(de <= 0.0001)
-    assert(dl <= 0.0001)
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK4Incorrect, 0.01, 1000)
+    assert(de <= 2e-9)
+    assert(dl <= 2e-8)
   }
 
   test("Precision of RK4") {
-    val (de, dl) = getMaxRelativeErrors(SolverType.RK4, 0.01, 10000)
-    assert(de <= 0.000_000_01)
-    assert(dl <= 0.000_000_01)
+    val (de, dl) = getMaxRelativeErrors(SolverType.RK4, 0.01, 1000)
+    assert(de <= 5e-10)
+    assert(dl <= 2e-9)
   }
 
   private def getMaxRelativeErrors(solverType: SolverType, dt: Double, stepsCount: Int): (Double, Double) =

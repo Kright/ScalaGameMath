@@ -15,6 +15,9 @@ case class PGA3Inertia[T](mass: MultiVector[T],
       invertedMass.mapValues(f)
     )
 
+  def linearMass(using num: Numeric[T]): T =
+    mass("wx")
+
 
 object PGA3Inertia:
   def apply(m: Double, mryz: Double, mrxz: Double, mrxy: Double)(using ga: PGA3): PGA3Inertia[Double] =

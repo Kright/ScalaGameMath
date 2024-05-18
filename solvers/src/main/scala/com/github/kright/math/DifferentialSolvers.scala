@@ -26,14 +26,31 @@ object DifferentialSolvers:
                                        inline nextState: (State, Derivative, Double) => State,
                                        inline newZeroDerivative: () => Derivative,
                                        inline madd: (Derivative, Derivative, Double) => Unit): State =
-    val k1 = getDerivative(initial, time)
-    val k2 = getDerivative(nextState(initial, k1, dt), time + dt)
+    val (k1, k2) = euler2K(initial, time, dt, getDerivative, nextState)
 
     val kMean = newZeroDerivative()
     madd(kMean, k1, 0.5)
     madd(kMean, k2, 0.5)
 
     nextState(initial, kMean, dt)
+
+  /**
+   * second order of precision, improved euler method
+   * https://en.wikipedia.org/wiki/Heun%27s_method
+   *
+   * example of usage:
+   * val (k1, k2) = euler2K(...)
+   *
+   * state += k1 * (0.5 * dt)
+   * state += k2 * (0.5 * dt)
+   * state.normalize()
+   * */
+  inline def euler2K[State, Derivative](initial: State, time: Double, dt: Double,
+                                        inline getDerivative: (State, Double) => Derivative,
+                                        inline nextState: (State, Derivative, Double) => State): (Derivative, Derivative) =
+    val k1 = getDerivative(initial, time)
+    val k2 = getDerivative(nextState(initial, k1, dt), time + dt)
+    (k1, k2)
 
   /**
    * second order of precision, Runge–Kutta method
@@ -54,10 +71,7 @@ object DifferentialSolvers:
                                             inline nextState: (State, Derivative, Double) => State,
                                             inline newZeroDerivative: () => Derivative,
                                             inline madd: (Derivative, Derivative, Double) => Unit): State =
-    val k1 = getDerivative(initial, time)
-    val k2 = getDerivative(nextState(initial, k1, 0.5 * dt), time + 0.5 * dt)
-    val k3 = getDerivative(nextState(initial, k2, 0.5 * dt), time + 0.5 * dt)
-    val k4 = getDerivative(nextState(initial, k3, dt), time + dt)
+    val (k1, k2, k3, k4) = rungeKutta4K(initial, time, dt, getDerivative, nextState)
 
     val kMean = newZeroDerivative()
     madd(kMean, k1, 1.0 / 6.0)
@@ -70,6 +84,15 @@ object DifferentialSolvers:
   /**
    * forth order of precision, Runge-Kutta method
    * https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods
+   *
+   * example of usage:
+   * val (k1, k2, k3, k4) = rungeKutta4K(...)
+   *
+   * state += k1 * (dt * 1.0 / 6.0)
+   * state += k2 * (dt * 2.0 / 6.0)
+   * state += k3 * (dt * 2.0 / 6.0)
+   * state += k4 * (dt * 1.0 / 6.0)
+   * state.normalize()
    */
   inline def rungeKutta4K[State, Derivative](initial: State, time: Double, dt: Double,
                                              inline getDerivative: (State, Double) => Derivative,

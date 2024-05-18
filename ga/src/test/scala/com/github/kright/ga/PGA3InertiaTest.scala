@@ -1,6 +1,6 @@
 package com.github.kright.ga
 
-import com.github.kright.math.{DifferentialSolvers, EqualityEps}
+import com.github.kright.math.EqualityEps
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -157,57 +157,77 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   /** same as [com.github.kright.physics3d.InertiaTest] */
-  test("calculate free rotation body precession") {
-    val stepsCount = 10
+  test("calculate free rotation body precession for RK2") {
+    val forque = MultiVector.zero[Double]
+    val maxError = testOneBodySimple123(100, body => {
+      body.doStepRK2(dt = 0.01, forque)
+      body.getError()
+    }).reduce(_ max _)
+    assert(maxError < PGA3OneBody.Error(errorE = 1e-5, errorL = 1.3e-5))
+  }
+
+  test("calculate free rotation body precession for Euler2") {
+    val forque = MultiVector.zero[Double]
+    val maxError = testOneBodySimple123(100, body => {
+      body.doStepEuler2(dt = 0.01, forque)
+      body.getError()
+    }).reduce(_ max _)
+    assert(maxError < PGA3OneBody.Error(errorE = 3e-7, errorL = 5e-5))
+  }
+
+  test("calculate free rotation body precession for RK4") {
+    val forque = MultiVector.zero[Double]
+    val maxError = testOneBodySimple123(100, body => {
+      body.doStepRK4(dt = 0.01, forque)
+      body.getError()
+    }).reduce(_ max _)
+    assert(maxError < PGA3OneBody.Error(errorE = 6e-11, errorL = 6e-10))
+  }
+
+  private def testOneBodySimple123[T](stepsCount: Int, doStep: PGA3OneBody => T): Iterable[T] = {
+    val body = PGA3OneBody.simple123()
+    val forque = MultiVector.zero[Double]
+
+    assert(body.initialE == 3.0)
+    assert(body.initialL == MultiVector("wx" -> 3.0, "wy" -> 2.0, "wz" -> 1.0))
+
+    for (_ <- 0 until stepsCount)
+      yield doStep(body)
+  }
+
+  test("calculate energy accumulation for linear force during rotation") {
     val dt = 0.01
-    val bodyInertia = PGA3Inertia(1.0, 3.0, 2.0, 1.0)
+    val stepsCount = 100
 
-    val initialState = PGA3State(
-      MultiVector.scalar[Double](1.0),
-      MultiVector[Double](
-        "xy" -> 1.0,
-        "yz" -> 1.0,
-        "zx" -> 1.0,
-      )
-    )
+    val zeroPoint = PGA3.zeroPoint[Double]
+    val forceDirection = MultiVector("x" -> 1.0)
+    val body = PGA3OneBody.simple123()
 
-    var state: PGA3State[Double] = initialState
-    val zeroForce = MultiVector.zero[Double]
+    assert(body.initialE == 3.0)
+    assert(body.initialL == MultiVector("wx" -> 3.0, "wy" -> 2.0, "wz" -> 1.0))
 
-    def getEnergy() = state.getEnergy(bodyInertia)
+    var accumulatedL = body.initialL
 
-    def getL() = state.getL(bodyInertia)
+    val errors = for (step <- 1 to stepsCount) yield {
+      val t = step * dt
 
-    val initialE = getEnergy()
-    val initialL = getL()
+      val bodyCenter = body.state.motor.sandwich(zeroPoint)
+      val globalForque = bodyCenter.dot(forceDirection)
+      body.doStepRK4(dt, globalForque)
 
-    assert(initialE == 3.0)
-    assert(initialL == MultiVector("wx" -> 3.0, "wy" -> 2.0, "wz" -> 1.0))
+      val expectedEnergy = body.initialE + 0.5 * forceDirection.squareMagnitude * t * t / body.inertia.linearMass
+      accumulatedL += globalForque * dt
 
-    var errorE = 0.0
-    var errorL = 0.0
-
-    def getDerivative(state: PGA3State[Double], time: Double): PGA3State[Double] =
-      PGA3State(
-        motor = state.motor.geometric(state.localB) * -0.5,
-        localB = bodyInertia.invert(state.localB.cross(bodyInertia(state.localB)) + zeroForce)
-      )
-
-    def getNextState(state: PGA3State[Double], derivative: PGA3State[Double], dt: Double): PGA3State[Double] =
-      state.madd(derivative, dt).normalized
-
-    for (step <- 0 until stepsCount) {
-      state = DifferentialSolvers.rungeKutta2(state, time = 0.0, dt,
-        getDerivative = getDerivative,
-        nextState = getNextState,
-      )
-
-      val currentE = getEnergy()
-      val currentL = getL()
-
-      errorE = math.max(errorE, math.abs(currentE - initialE) / initialE)
-      errorL = math.max(errorL, (currentL - initialL).norm / initialL.norm)
-
-      //      println(s"step $step, errorE = ${errorE}, errorL = ${errorL}")
+      val err = PGA3OneBody.Error(errorE = math.abs(expectedEnergy - body.getEnergy()), errorL = (accumulatedL - body.getL()).norm)
+      err
     }
+
+    val maxError = errors.reduce(_ max _)
+    assert(maxError < PGA3OneBody.Error(3e-10, 4e-9))
+    println(maxError)
+
+    val endPoint = body.state.motor.sandwich(zeroPoint)
+    val expectedPoint = PGA3.point(0.5, 0.0, 0.0)
+
+    assert((endPoint - expectedPoint).norm < 2e-9)
   }

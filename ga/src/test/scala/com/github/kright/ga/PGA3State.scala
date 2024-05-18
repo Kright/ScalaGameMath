@@ -9,21 +9,19 @@ case class PGA3State[T](motor: MultiVector[T],
       localB = localB + derivative.localB * dt
     )
 
-  def maddV2(derivative: PGA3State[T], dt: T)(using num: Numeric[T]): PGA3State[T] =
-    val m2 = motor + derivative.motor * dt
-    val b2 = localB + derivative.localB * dt
+object PGA3State:
+  def zero(using GA: PGA3): PGA3State[Double] =
     PGA3State(
-      motor = m2,
-      localB = m2.reverse.geometric(motor).sandwich(b2)
+      MultiVector.scalar(1.0),
+      MultiVector.zero,
     )
 
-object PGA3State:
-  extension (state3d: PGA3State[Double])
+  extension (state: PGA3State[Double])
     def normalized: PGA3State[Double] =
-      state3d.copy(motor = state3d.motor.normalizedByNorm)
+      state.copy(motor = state.motor.normalizedByBulk)
 
     def getEnergy(bodyInertia: PGA3Inertia[Double]): Double =
-      (state3d.localB v bodyInertia(state3d.localB)).scalar * 0.5
+      (state.localB v bodyInertia(state.localB)).scalar * 0.5
 
     def getL(bodyInertia: PGA3Inertia[Double]): MultiVector[Double] =
-      state3d.motor.sandwich(bodyInertia(state3d.localB))
+      state.motor.sandwich(bodyInertia(state.localB))
