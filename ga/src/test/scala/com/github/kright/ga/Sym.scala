@@ -29,6 +29,9 @@ object Sym:
   def multiVector(baseName: String)(using ga: GA): MultiVector[Sym] =
     new MultiVector[Sym](ga, ga.blades.map(b => b -> Sym(s"${baseName}.${ga.representation(b)}")).toMap)
 
+  def multiVector(baseName: String, grade: Int)(using ga: GA): MultiVector[Sym] =
+    new MultiVector[Sym](ga, ga.blades.filter(_.grade == grade).map(b => b -> Sym(s"${baseName}.${ga.representation(b)}")).toMap)
+
   def point(baseName: String)(using ga: PGA): MultiVector[Sym] =
     MultiVector[Sym](
       ga.generators.map { g =>

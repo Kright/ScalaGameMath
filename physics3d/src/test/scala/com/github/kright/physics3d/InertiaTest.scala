@@ -171,17 +171,20 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
     val initialE = body.getEnergy(initialState)
     val initialL = body.getL(initialState)
 
+    assert(initialE == 3.0)
+    assert(initialL == Vector3d(3.0, 2.0, 1.0))
+
     val zeroForce = Force3d()
     val currentState = State3d() := initialState
 
     var errorE = 0.0
     var errorL = 0.0
 
-    for (_ <- 0 until stepsCount) {
+    for (step <- 0 until stepsCount) {
       updateFreeBody(solverType, body, currentState, dt, zeroForce)
 
-      val currentE = body.getEnergy(initialState)
-      val currentL = body.getL(initialState)
+      val currentE = body.getEnergy(currentState)
+      val currentL = body.getL(currentState)
 
       errorE = math.max(errorE, math.abs(currentE - initialE) / initialE)
       errorL = math.max(errorL, (currentL - initialL).mag / initialL.mag)

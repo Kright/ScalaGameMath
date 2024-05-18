@@ -39,7 +39,8 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 * **swizzle**: swizzle operators for vectors
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
-* **ga**: experimental support for projective geometric algebra (PGA).
+* **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
+  See [https://bivector.net](https://bivector.net) for more details.
 
 Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 ```scala
