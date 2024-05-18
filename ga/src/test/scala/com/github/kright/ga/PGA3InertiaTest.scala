@@ -199,7 +199,6 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val dt = 0.01
     val stepsCount = 100
 
-    val zeroPoint = PGA3.zeroPoint[Double]
     val forceDirection = MultiVector("x" -> 1.0)
     val body = PGA3OneBody.simple123()
 
@@ -211,7 +210,7 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val errors = for (step <- 1 to stepsCount) yield {
       val t = step * dt
 
-      val bodyCenter = body.state.motor.sandwich(zeroPoint)
+      val bodyCenter = body.state.center
       val globalForque = bodyCenter.dot(forceDirection)
       body.doStepRK4(dt, globalForque)
 
@@ -226,8 +225,59 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(maxError < PGA3OneBody.Error(3e-10, 4e-9))
     println(maxError)
 
-    val endPoint = body.state.motor.sandwich(zeroPoint)
+    val endPoint = body.state.center
     val expectedPoint = PGA3.point(0.5, 0.0, 0.0)
 
     assert((endPoint - expectedPoint).norm < 2e-9)
+  }
+
+  test("calculate energy accumulation for linear spring") {
+    val dt = 0.01
+    val stepsCount = 1000
+
+    val mass = 10.0
+
+    val body = new PGA3OneBody(
+      PGA3Inertia(mass, 1.0, 1.0, 1.0),
+      PGA3State(
+        MultiVector.scalar[Double](1.0),
+        MultiVector.zero[Double]
+      )
+    )
+
+    val springCenter = PGA3.point(3.0, 4.0, 0.0) // len 5
+    val springK = 20
+
+    def getEnergy(): Double = (body.state.center - springCenter).squareMagnitude * 0.5 * springK + body.getEnergy()
+
+    val initialEnergy = getEnergy()
+
+    for (step <- 1 to stepsCount) {
+      val t = step * dt
+
+      body.doStepRK4F(dt, getLocalForque = (state, time) => {
+        val localForque1 = {
+          val bodyCenter = state.center
+          val globalForque = (bodyCenter v springCenter) * springK
+          val localForque = state.motor.reverse.dual.antiSandwich(globalForque)
+          localForque
+        }
+        val localForque2 = {
+          val localSpringPos = state.motor.reverse.sandwich(springCenter)
+          val localForque = (PGA3.zeroPoint[Double] v localSpringPos) * springK
+          localForque
+        }
+        assert((localForque1 - localForque2).norm < 1e-10)
+
+        localForque1
+      })
+
+      val expectedPos = springCenter - springCenter.weight * Math.cos(t * Math.sqrt(springK / mass))
+
+      val dE = math.abs(initialEnergy - getEnergy()) / initialEnergy
+      val dPos = (expectedPos - body.state.center).norm
+
+      assert(dE <= 1.2e-10)
+      assert(dPos <= 2.4e-8)
+    }
   }

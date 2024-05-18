@@ -40,8 +40,22 @@ class PGA3OneBody(val inertia: PGA3Inertia[Double],
       .normalized
 
   def doStepRK4(dt: Double, globalForque: MultiVector[Double]): Unit = {
+    doStepRK4F(dt, (state, time) => {
+      //    val localForque = state.motor.reverse.sandwich(globalForque.dual).dual
+      val localForque = state.motor.reverse.dual.antiSandwich(globalForque)
+      localForque
+    })
+  }
+
+  def doStepRK4F(dt: Double, getLocalForque: (state: PGA3State[Double], time: Double) => MultiVector[Double]): Unit = {
     val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
-      getDerivative = getDerivative(globalForque),
+      getDerivative = (state, time) => {
+        val localForque = getLocalForque(state, time)
+        PGA3State(
+          motor = state.motor.geometric(state.localB) * -0.5,
+          localB = inertia.invert(state.localB.cross(inertia(state.localB)) + localForque)
+        )
+      },
       nextState = getNextState,
     )
 

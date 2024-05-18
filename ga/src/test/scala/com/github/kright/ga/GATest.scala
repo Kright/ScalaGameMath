@@ -88,3 +88,13 @@ class GATest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("dual of geometric is antigeometric of dual") {
+    forAll(GAGenerator.allGa) { ga =>
+      ga.use {
+        val a = Sym.multiVector("a")
+        val b = Sym.multiVector("b")
+        assert(a.geometric(b).dual == a.dual.antiGeometric(b.dual))
+      }
+    }
+  }

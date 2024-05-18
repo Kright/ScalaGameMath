@@ -292,3 +292,14 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     )
   }
 
+  test("dual reverse is reverse dual") {
+    val a = Sym.multiVector("a")
+
+    for (grade <- 0 to 4) {
+      if (grade % 2 == 0) {
+        assert(a.grade(grade).dual.reverse == a.grade(grade).reverse.dual)
+      } else {
+        assert(a.grade(grade).dual.reverse == -a.grade(grade).reverse.dual)
+      }
+    }
+  }

@@ -25,3 +25,6 @@ object PGA3State:
 
     def getL(bodyInertia: PGA3Inertia[Double]): MultiVector[Double] =
       state.motor.sandwich(bodyInertia(state.localB))
+
+    def center(using ga: PGA3): MultiVector[Double] =
+      state.motor.sandwich(PGA3.zeroPoint[Double])  
