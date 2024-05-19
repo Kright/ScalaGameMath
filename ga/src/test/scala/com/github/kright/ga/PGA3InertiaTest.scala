@@ -223,7 +223,6 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val maxError = errors.reduce(_ max _)
     assert(maxError < PGA3OneBody.Error(3e-10, 4e-9))
-    println(maxError)
 
     val endPoint = body.state.center
     val expectedPoint = PGA3.point(0.5, 0.0, 0.0)
