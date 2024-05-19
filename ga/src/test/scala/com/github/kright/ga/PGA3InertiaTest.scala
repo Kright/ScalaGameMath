@@ -259,7 +259,7 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         val localForque1 = {
           val bodyCenter = state.center
           val globalForque = (bodyCenter v springCenter) * springK
-          val localForque = state.motor.reverse.dual.antiSandwich(globalForque)
+          val localForque = state.motor.reverse.sandwich(globalForque)
           localForque
         }
         val localForque2 = {
