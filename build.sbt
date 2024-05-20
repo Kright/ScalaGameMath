@@ -1,4 +1,4 @@
-ThisBuild / version := "0.4.3"
+ThisBuild / version := "0.4.4"
 
 ThisBuild / scalaVersion := "3.4.2"
 
@@ -67,4 +67,18 @@ lazy val physics3d = (project in file("physics3d")).settings(
 ).dependsOn(
   math % "compile->compile;test->test",
   solvers,
+)
+
+lazy val pga3dCodeGen = (project in file("pga3dCodeGen")).settings(
+  scalatestSettings
+).dependsOn(
+  ga,
+  symbolic,
+)
+
+lazy val pga3d = (project in file("pga3d")).settings(
+  scalatestSettings
+).dependsOn(
+  solvers % "test",
+  util % "test",
 )

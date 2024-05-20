@@ -1,6 +1,7 @@
 package com.github.kright.ga
 
 import com.github.kright.math.EqualityEps
+import com.github.kright.symbolic.Sym
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -176,17 +177,19 @@ class PGA3InertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("calculate free rotation body precession for RK4") {
+    val stepsCount = 1000
     val forque = MultiVector.zero[Double]
-    val maxError = testOneBodySimple123(100, body => {
+
+    val maxError = testOneBodySimple123(stepsCount, body => {
       body.doStepRK4(dt = 0.01, forque)
       body.getError()
     }).reduce(_ max _)
-    assert(maxError < PGA3OneBody.Error(errorE = 6e-11, errorL = 6e-10))
+
+    assert(maxError < PGA3OneBody.Error(errorE = 6e-11, errorL = 1e-9))
   }
 
   private def testOneBodySimple123[T](stepsCount: Int, doStep: PGA3OneBody => T): Iterable[T] = {
     val body = PGA3OneBody.simple123()
-    val forque = MultiVector.zero[Double]
 
     assert(body.initialE == 3.0)
     assert(body.initialL == MultiVector("wx" -> 3.0, "wy" -> 2.0, "wz" -> 1.0))

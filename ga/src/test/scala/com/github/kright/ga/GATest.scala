@@ -1,6 +1,7 @@
 package com.github.kright.ga
 
 import com.github.kright.math.VectorMathGenerators
+import com.github.kright.symbolic.Sym
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

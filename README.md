@@ -40,7 +40,13 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
-  See [https://bivector.net](https://bivector.net) for more details.
+  See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
+* **pga3d**: experimental library for 3d PGA with generated code and some common cases (Plane, Point, Bivector, etc).
+  There is a huge amount of similars methods (for each pair of classes for each type of multiplication). Because of
+  generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
+  is a scalar.
+* **pga3dCodeGen**: hand-made code generator for library above. It does operations in symbolic form, and searches the
+  most narrow subclass of multivector for result.
 
 Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 ```scala
