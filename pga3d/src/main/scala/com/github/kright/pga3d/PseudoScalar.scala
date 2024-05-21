@@ -63,6 +63,11 @@ case class PseudoScalar(
       i = (i + mult * v.i),
     )
 
+  def multiplyElementwise(v: PseudoScalar): PseudoScalar =
+    PseudoScalar(
+      i = i * v.i,
+    )
+
   def toMultivector: Multivector =
     Multivector(
       s = 0.0,
@@ -103,26 +108,6 @@ case class PseudoScalar(
       i = i,
     )
 
-  infix def multiplyElementwise(v: Multivector): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: Motor): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: QuaternionDual): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
-    )
-
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = 0.0,
@@ -158,12 +143,11 @@ case class PseudoScalar(
       wyz = i * v.x,
     )
 
-  infix def geometric(v: Bivector): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: Bivector): BivectorWeight =
+    BivectorWeight(
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
-      i = 0.0,
     )
 
   infix def geometric(v: Point): Plane =
@@ -195,6 +179,13 @@ case class PseudoScalar(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
+    )
+
+  infix def geometric(v: BivectorBulk): BivectorWeight =
+    BivectorWeight(
+      wx = -i * v.yz,
+      wy = i * v.xz,
+      wz = -i * v.xy,
     )
 
   infix def geometric(v: PointCenter.type): Plane =
@@ -240,12 +231,11 @@ case class PseudoScalar(
       wyz = i * v.x,
     )
 
-  infix def dot(v: Bivector): QuaternionDual =
-    QuaternionDual(
+  infix def dot(v: Bivector): BivectorWeight =
+    BivectorWeight(
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
-      i = 0.0,
     )
 
   infix def dot(v: Point): Plane =
@@ -277,6 +267,13 @@ case class PseudoScalar(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
+    )
+
+  infix def dot(v: BivectorBulk): BivectorWeight =
+    BivectorWeight(
+      wx = -i * v.yz,
+      wy = i * v.xz,
+      wz = -i * v.xy,
     )
 
   infix def dot(v: PointCenter.type): Plane =
@@ -462,6 +459,20 @@ case class PseudoScalar(
       z = i * v.z,
     )
 
+  infix def antiGeometric(v: BivectorBulk): BivectorBulk =
+    BivectorBulk(
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+    )
+
+  infix def antiGeometric(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+    )
+
   infix def antiGeometric(v: PseudoScalar): PseudoScalar =
     PseudoScalar(
       i = i * v.i,
@@ -569,6 +580,20 @@ case class PseudoScalar(
       x = i * v.x,
       y = i * v.y,
       z = i * v.z,
+    )
+
+  infix def antiDot(v: BivectorBulk): BivectorBulk =
+    BivectorBulk(
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+    )
+
+  infix def antiDot(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
     )
 
   infix def antiDot(v: PseudoScalar): PseudoScalar =
@@ -699,6 +724,24 @@ case class PseudoScalar(
     )
 
   inline infix def v(v: PlaneIdeal): PlaneIdeal = antiWedge(v)
+
+  infix def antiWedge(v: BivectorBulk): BivectorBulk =
+    BivectorBulk(
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+    )
+
+  inline infix def v(v: BivectorBulk): BivectorBulk = antiWedge(v)
+
+  infix def antiWedge(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+    )
+
+  inline infix def v(v: BivectorWeight): BivectorWeight = antiWedge(v)
 
   infix def antiWedge(v: PseudoScalar): PseudoScalar =
     PseudoScalar(

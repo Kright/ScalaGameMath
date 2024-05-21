@@ -2,7 +2,7 @@ package com.github.kright.pga3d.codegen
 
 import com.github.kright.ga.*
 import com.github.kright.math.Sign
-import com.github.kright.pga3d.codegen.MultivectorSubClass.{findMatchingClass, pgaClasses, scalar, zeroCls}
+import com.github.kright.pga3d.codegen.MultivectorSubClass.*
 import com.github.kright.symbolic.Sym
 
 case class MultivectorSubClass(name: String,
@@ -45,8 +45,13 @@ case class MultivectorSubClass(name: String,
     }
 
   def isMatching(vec: MultiVector[Sym]): Boolean = {
-    vec.values.forall { (blade, value) => value == Sym.zero || fieldBlades.contains(blade) }
-      && constantFields.forall { (f, v) => vec.get(f.basisBlade).contains(Sym(v)) }
+    vec.values.forall { (blade, value) => value == Sym.zero || fieldBlades.contains(blade) } &&
+      constantFields.forall { (f, v) =>
+        vec.get(f.basisBlade) match
+          case Some(sym) => sym == Sym(v)
+          case None if v == 0.0 => true
+          case _ => false
+      }
   }
 
   private def makeConstructor(code: CodeGen, result: MultiVector[Sym]): Unit =
@@ -140,21 +145,22 @@ case class MultivectorSubClass(name: String,
       }
 
       {
+        def makeMethod(result: MultiVector[Sym], firstLine: String): Unit = {
+          val resultCls = findMatchingClass(result)
+
+          if (resultCls != zeroCls) {
+            code("", firstLine + s": ${resultCls.typeName} =")
+            code.block {
+              resultCls.makeConstructor(code, result)
+            }
+          }
+        }
+
         val v = makeSymbolic("v")
-        code("", s"def +(v: ${typeName}): ${typeName} =")
-        code.block {
-          makeConstructor(code, self + v)
-        }
-
-        code("", s"def -(v: ${typeName}): ${typeName} =")
-        code.block {
-          makeConstructor(code, self - v)
-        }
-
-        code("", s"def madd(v: ${typeName}, mult: Double): ${typeName} =")
-        code.block {
-          makeConstructor(code, self + (v * Sym("mult")))
-        }
+        makeMethod(self + v, s"def +(v: ${typeName})")
+        makeMethod(self - v, s"def -(v: ${typeName})")
+        makeMethod(self + v * Sym("mult"), s"def madd(v: ${typeName}, mult: Double)")
+        makeMethod(self.multiplyElementwise(v), s"def multiplyElementwise(v: ${typeName})")
       }
 
       for (target <- pgaClasses) {
@@ -167,7 +173,7 @@ case class MultivectorSubClass(name: String,
       }
 
       for (binaryOp <- binaryOps) {
-        for (rightCls <- pgaClasses if (rightCls != zeroCls) && (rightCls != scalar || !binaryOp.ignoreDouble)) {
+        for (rightCls <- pgaClasses if (rightCls != zeroCls) && (rightCls != scalar)) {
           val self = makeSymbolicThis
           val v = rightCls.makeSymbolic("v")
           val result = binaryOp(self, v)
@@ -227,6 +233,10 @@ object MultivectorSubClass:
     val (weight, bulk) = point.variableFields.partition(_.basisBlade.contains(genW))
     MultivectorSubClass("PointNormalized", weight, bulk.map(f => (f, 1.0)))
   }
+
+  val bivectorWeight = MultivectorSubClass("BivectorWeight", bivector.variableFields.filter(f => f.basisBlade.contains(genW)))
+  val bivectorBulk = MultivectorSubClass("BivectorBulk", bivector.variableFields.filter(f => !f.basisBlade.contains(genW)))
+
   val pointCenter = MultivectorSubClass("PointCenter", Seq(), point.variableFields.map(f => (f, (if (f.basisBlade.contains(genW)) 0.0 else 1.0))))
   val zeroCls = MultivectorSubClass("Zero", Seq(), shouldBeGenerated = false)
 
@@ -244,6 +254,9 @@ object MultivectorSubClass:
     pointIdeal,
     pointNormalized,
     planeIdeal,
+
+    bivectorBulk,
+    bivectorWeight,
 
     scalar, // blade 0
     pseudoScalar, // blade 4
@@ -268,15 +281,14 @@ object MultivectorSubClass:
   )
 
   val binaryOperations = Seq(
-    MultivectorBinaryOp(Seq("multiplyElementwise"), (a, b) => a.multiplyElementwise(b), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("geometric"), pga3.operations.multiplication.geometric(_, _), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("dot"), pga3.operations.multiplication.dot(_, _), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("wedge", "^"), pga3.operations.multiplication.wedge(_, _), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("cross"), (a, b) => a.crossX2(b) * Sym(0.5), ignoreDouble = true),
+    MultivectorBinaryOp(Seq("geometric"), pga3.operations.multiplication.geometric(_, _)),
+    MultivectorBinaryOp(Seq("dot"), pga3.operations.multiplication.dot(_, _)),
+    MultivectorBinaryOp(Seq("wedge", "^"), pga3.operations.multiplication.wedge(_, _)),
+    MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),
+    MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b)),
+    MultivectorBinaryOp(Seq("cross"), (a, b) => a.crossX2(b) * Sym(0.5)),
 
-    MultivectorBinaryOp(Seq("antiGeometric"), pga3.operations.anti.geometric(_, _), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("antiDot"), pga3.operations.anti.dot(_, _), ignoreDouble = true),
-    MultivectorBinaryOp(Seq("antiWedge", "v"), pga3.operations.anti.wedge(_, _), ignoreDouble = true),
+    MultivectorBinaryOp(Seq("antiGeometric"), pga3.operations.anti.geometric(_, _)),
+    MultivectorBinaryOp(Seq("antiDot"), pga3.operations.anti.dot(_, _)),
+    MultivectorBinaryOp(Seq("antiWedge", "v"), pga3.operations.anti.wedge(_, _)),
   )

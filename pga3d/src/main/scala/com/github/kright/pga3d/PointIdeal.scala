@@ -83,6 +83,13 @@ case class PointIdeal(
       wyz = (wyz + mult * v.wyz),
     )
 
+  def multiplyElementwise(v: PointIdeal): PointIdeal =
+    PointIdeal(
+      wxy = v.wxy * wxy,
+      wxz = v.wxz * wxz,
+      wyz = v.wyz * wyz,
+    )
+
   def toMultivector: Multivector =
     Multivector(
       s = 0.0,
@@ -109,34 +116,6 @@ case class PointIdeal(
       wxz = wxz,
       wyz = wyz,
       xyz = 0.0,
-    )
-
-  infix def multiplyElementwise(v: Multivector): PointIdeal =
-    PointIdeal(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-    )
-
-  infix def multiplyElementwise(v: Point): PointIdeal =
-    PointIdeal(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-    )
-
-  infix def multiplyElementwise(v: PointIdeal): PointIdeal =
-    PointIdeal(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-    )
-
-  infix def multiplyElementwise(v: PointNormalized): PointIdeal =
-    PointIdeal(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
     )
 
   infix def geometric(v: Multivector): Multivector =
@@ -207,12 +186,11 @@ case class PointIdeal(
       i = 0.0,
     )
 
-  infix def geometric(v: Point): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: Point): BivectorWeight =
+    BivectorWeight(
       wx = -v.xyz * wyz,
       wy = v.xyz * wxz,
       wz = -v.xyz * wxy,
-      i = 0.0,
     )
 
   infix def geometric(v: Quaternion): Multivector =
@@ -235,12 +213,11 @@ case class PointIdeal(
       i = 0.0,
     )
 
-  infix def geometric(v: PointNormalized): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: PointNormalized): BivectorWeight =
+    BivectorWeight(
       wx = -wyz,
       wy = wxz,
       wz = -wxy,
-      i = 0.0,
     )
 
   infix def geometric(v: PlaneIdeal): QuaternionDual =
@@ -251,12 +228,31 @@ case class PointIdeal(
       i = (v.x * wyz + v.z * wxy - v.y * wxz),
     )
 
-  infix def geometric(v: PointCenter.type): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (v.xz * wyz - v.yz * wxz),
+      wxz = (v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz - v.xz * wxy),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def geometric(v: PointCenter.type): BivectorWeight =
+    BivectorWeight(
       wx = -wyz,
       wy = wxz,
       wz = -wxy,
-      i = 0.0,
     )
 
   infix def dot(v: Multivector): Multivector =
@@ -299,12 +295,11 @@ case class PointIdeal(
       i = 0.0,
     )
 
-  infix def dot(v: Plane): QuaternionDual =
-    QuaternionDual(
+  infix def dot(v: Plane): BivectorWeight =
+    BivectorWeight(
       wx = (v.y * wxy + v.z * wxz),
       wy = (v.z * wyz - v.x * wxy),
       wz = (-v.x * wxz - v.y * wyz),
-      i = 0.0,
     )
 
   infix def dot(v: Bivector): Plane =
@@ -335,12 +330,19 @@ case class PointIdeal(
       i = 0.0,
     )
 
-  infix def dot(v: PlaneIdeal): QuaternionDual =
-    QuaternionDual(
+  infix def dot(v: PlaneIdeal): BivectorWeight =
+    BivectorWeight(
       wx = (v.y * wxy + v.z * wxz),
       wy = (v.z * wyz - v.x * wxy),
       wz = (-v.x * wxz - v.y * wyz),
-      i = 0.0,
+    )
+
+  infix def dot(v: BivectorBulk): Plane =
+    Plane(
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
     )
 
   infix def wedge(v: Multivector): Multivector =
@@ -436,12 +438,11 @@ case class PointIdeal(
       wyz = (v.xy * wxz - v.xz * wxy),
     )
 
-  infix def cross(v: Point): QuaternionDual =
-    QuaternionDual(
+  infix def cross(v: Point): BivectorWeight =
+    BivectorWeight(
       wx = -v.xyz * wyz,
       wy = v.xyz * wxz,
       wz = -v.xyz * wxy,
-      i = 0.0,
     )
 
   infix def cross(v: Quaternion): PointIdeal =
@@ -451,12 +452,11 @@ case class PointIdeal(
       wyz = (v.xy * wxz - v.xz * wxy),
     )
 
-  infix def cross(v: PointNormalized): QuaternionDual =
-    QuaternionDual(
+  infix def cross(v: PointNormalized): BivectorWeight =
+    BivectorWeight(
       wx = -wyz,
       wy = wxz,
       wz = -wxy,
-      i = 0.0,
     )
 
   infix def cross(v: PlaneIdeal): PseudoScalar =
@@ -464,12 +464,18 @@ case class PointIdeal(
       i = (v.x * wyz + v.z * wxy - v.y * wxz),
     )
 
-  infix def cross(v: PointCenter.type): QuaternionDual =
-    QuaternionDual(
+  infix def cross(v: BivectorBulk): PointIdeal =
+    PointIdeal(
+      wxy = (v.xz * wyz - v.yz * wxz),
+      wxz = (v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz - v.xz * wxy),
+    )
+
+  infix def cross(v: PointCenter.type): BivectorWeight =
+    BivectorWeight(
       wx = -wyz,
       wy = wxz,
       wz = -wxy,
-      i = 0.0,
     )
 
   infix def antiGeometric(v: Multivector): Multivector =
@@ -624,6 +630,46 @@ case class PointIdeal(
       yz = (-v.y * wxy - v.z * wxz),
     )
 
+  infix def antiGeometric(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = (v.xy * wxz - v.xz * wxy),
+      y = (v.xy * wyz - v.yz * wxy),
+      z = (v.xz * wyz - v.yz * wxz),
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = (v.xy * wxy + v.xz * wxz + v.yz * wyz),
+      i = 0.0,
+    )
+
+  infix def antiGeometric(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wz * wyz),
+      wyz = (v.wy * wxy + v.wz * wxz),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
   infix def antiGeometric(v: PseudoScalar): PointIdeal =
     PointIdeal(
       wxy = v.i * wxy,
@@ -631,9 +677,8 @@ case class PointIdeal(
       wyz = v.i * wyz,
     )
 
-  infix def antiGeometric(v: PointCenter.type): Quaternion =
-    Quaternion(
-      s = 0.0,
+  infix def antiGeometric(v: PointCenter.type): BivectorBulk =
+    BivectorBulk(
       xy = wxy,
       xz = wxz,
       yz = wyz,
@@ -739,12 +784,26 @@ case class PointIdeal(
       i = (v.wxy * wxy + v.wxz * wxz + v.wyz * wyz),
     )
 
-  infix def antiDot(v: PlaneIdeal): Quaternion =
-    Quaternion(
-      s = 0.0,
+  infix def antiDot(v: PlaneIdeal): BivectorBulk =
+    BivectorBulk(
       xy = (v.x * wxz + v.y * wyz),
       xz = (v.z * wyz - v.x * wxy),
       yz = (-v.y * wxy - v.z * wxz),
+    )
+
+  infix def antiDot(v: BivectorBulk): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = (v.xy * wxy + v.xz * wxz + v.yz * wyz),
+    )
+
+  infix def antiDot(v: BivectorWeight): PointIdeal =
+    PointIdeal(
+      wxy = (-v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wz * wyz),
+      wyz = (v.wy * wxy + v.wz * wxz),
     )
 
   infix def antiDot(v: PseudoScalar): PointIdeal =
@@ -856,15 +915,14 @@ case class PointIdeal(
 
   inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
 
-  infix def antiWedge(v: PointIdeal): QuaternionDual =
-    QuaternionDual(
+  infix def antiWedge(v: PointIdeal): BivectorWeight =
+    BivectorWeight(
       wx = (v.wxz * wxy - v.wxy * wxz),
       wy = (v.wyz * wxy - v.wxy * wyz),
       wz = (v.wyz * wxz - v.wxz * wyz),
-      i = 0.0,
     )
 
-  inline infix def v(v: PointIdeal): QuaternionDual = antiWedge(v)
+  inline infix def v(v: PointIdeal): BivectorWeight = antiWedge(v)
 
   infix def antiWedge(v: PointNormalized): Bivector =
     Bivector(
@@ -883,6 +941,25 @@ case class PointIdeal(
 
   inline infix def v(v: PlaneIdeal): Double = antiWedge(v)
 
+  infix def antiWedge(v: BivectorBulk): PlaneIdeal =
+    PlaneIdeal(
+      x = (v.xy * wxz - v.xz * wxy),
+      y = (v.xy * wyz - v.yz * wxy),
+      z = (v.xz * wyz - v.yz * wxz),
+    )
+
+  inline infix def v(v: BivectorBulk): PlaneIdeal = antiWedge(v)
+
+  infix def antiWedge(v: BivectorWeight): Plane =
+    Plane(
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  inline infix def v(v: BivectorWeight): Plane = antiWedge(v)
+
   infix def antiWedge(v: PseudoScalar): PointIdeal =
     PointIdeal(
       wxy = v.i * wxy,
@@ -892,12 +969,11 @@ case class PointIdeal(
 
   inline infix def v(v: PseudoScalar): PointIdeal = antiWedge(v)
 
-  infix def antiWedge(v: PointCenter.type): Quaternion =
-    Quaternion(
-      s = 0.0,
+  infix def antiWedge(v: PointCenter.type): BivectorBulk =
+    BivectorBulk(
       xy = wxy,
       xz = wxz,
       yz = wyz,
     )
 
-  inline infix def v(v: PointCenter.type): Quaternion = antiWedge(v)
+  inline infix def v(v: PointCenter.type): BivectorBulk = antiWedge(v)

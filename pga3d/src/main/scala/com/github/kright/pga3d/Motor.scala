@@ -154,6 +154,18 @@ case class Motor(
       i = (i + mult * v.i),
     )
 
+  def multiplyElementwise(v: Motor): Motor =
+    Motor(
+      s = s * v.s,
+      wx = v.wx * wx,
+      wy = v.wy * wy,
+      wz = v.wz * wz,
+      xy = v.xy * xy,
+      xz = v.xz * xz,
+      yz = v.yz * yz,
+      i = i * v.i,
+    )
+
   def toMultivector: Multivector =
     Multivector(
       s = s,
@@ -172,61 +184,6 @@ case class Motor(
       wyz = 0.0,
       xyz = 0.0,
       i = i,
-    )
-
-  infix def multiplyElementwise(v: Multivector): Motor =
-    Motor(
-      s = s * v.s,
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: Motor): Motor =
-    Motor(
-      s = s * v.s,
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: Bivector): Bivector =
-    Bivector(
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-    )
-
-  infix def multiplyElementwise(v: Quaternion): Quaternion =
-    Quaternion(
-      s = s * v.s,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-    )
-
-  infix def multiplyElementwise(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
     )
 
   infix def geometric(v: Multivector): Multivector =
@@ -391,6 +348,26 @@ case class Motor(
       wyz = (i * v.x + v.z * wy - v.y * wz),
       xyz = (v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
+    )
+
+  infix def geometric(v: BivectorBulk): Motor =
+    Motor(
+      s = (-v.xy * xy - v.xz * xz - v.yz * yz),
+      wx = (-i * v.yz - v.xy * wy - v.xz * wz),
+      wy = (i * v.xz + v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy - i * v.xy),
+      xy = (s * v.xy + v.xz * yz - v.yz * xz),
+      xz = (s * v.xz + v.yz * xy - v.xy * yz),
+      yz = (s * v.yz + v.xy * xz - v.xz * xy),
+      i = (v.xy * wz + v.yz * wx - v.xz * wy),
+    )
+
+  infix def geometric(v: BivectorWeight): QuaternionDual =
+    QuaternionDual(
+      wx = (s * v.wx + v.wy * xy + v.wz * xz),
+      wy = (s * v.wy + v.wz * yz - v.wx * xy),
+      wz = (s * v.wz - v.wx * xz - v.wy * yz),
+      i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
   infix def geometric(v: PseudoScalar): QuaternionDual =
@@ -585,6 +562,25 @@ case class Motor(
       i = 0.0,
     )
 
+  infix def dot(v: BivectorBulk): Motor =
+    Motor(
+      s = (-v.xy * xy - v.xz * xz - v.yz * yz),
+      wx = -i * v.yz,
+      wy = i * v.xz,
+      wz = -i * v.xy,
+      xy = s * v.xy,
+      xz = s * v.xz,
+      yz = s * v.yz,
+      i = 0.0,
+    )
+
+  infix def dot(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = s * v.wx,
+      wy = s * v.wy,
+      wz = s * v.wz,
+    )
+
   infix def dot(v: PseudoScalar): QuaternionDual =
     QuaternionDual(
       wx = -v.i * yz,
@@ -760,6 +756,30 @@ case class Motor(
 
   inline infix def ^(v: PlaneIdeal): Multivector = wedge(v)
 
+  infix def wedge(v: BivectorBulk): Motor =
+    Motor(
+      s = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = s * v.xy,
+      xz = s * v.xz,
+      yz = s * v.yz,
+      i = (v.xy * wz + v.yz * wx - v.xz * wy),
+    )
+
+  inline infix def ^(v: BivectorBulk): Motor = wedge(v)
+
+  infix def wedge(v: BivectorWeight): QuaternionDual =
+    QuaternionDual(
+      wx = s * v.wx,
+      wy = s * v.wy,
+      wz = s * v.wz,
+      i = (v.wx * yz + v.wz * xy - v.wy * xz),
+    )
+
+  inline infix def ^(v: BivectorWeight): QuaternionDual = wedge(v)
+
   infix def wedge(v: PseudoScalar): PseudoScalar =
     PseudoScalar(
       i = s * v.i,
@@ -878,6 +898,23 @@ case class Motor(
       z = (s * s * v.z + v.z * xy * xy - 2.0 * s * v.x * xz - 2.0 * s * v.y * yz - 2.0 * v.y * xy * xz - v.z * xz * xz - v.z * yz * yz + 2.0 * v.x * xy * yz),
     )
 
+  infix def sandwich(v: BivectorBulk): Bivector =
+    Bivector(
+      wx = (-2.0 * i * s * v.yz - 2.0 * i * v.xy * xz - 2.0 * s * v.xy * wy - 2.0 * s * v.xz * wz - 2.0 * v.xz * wy * yz - 2.0 * v.yz * wz * xy + 2.0 * i * v.xz * xy + 2.0 * v.xy * wx * xy + 2.0 * v.xy * wz * yz + 2.0 * v.xz * wx * xz + 2.0 * v.yz * wx * yz + 2.0 * v.yz * wy * xz),
+      wy = (-2.0 * i * v.xy * yz - 2.0 * s * v.yz * wz - 2.0 * v.xy * wz * xz - 2.0 * v.yz * wx * xz + 2.0 * i * s * v.xz + 2.0 * i * v.yz * xy + 2.0 * s * v.xy * wx + 2.0 * v.xy * wy * xy + 2.0 * v.xz * wx * yz + 2.0 * v.xz * wy * xz + 2.0 * v.xz * wz * xy + 2.0 * v.yz * wy * yz),
+      wz = (-2.0 * i * s * v.xy - 2.0 * i * v.xz * yz - 2.0 * v.xy * wx * yz - 2.0 * v.xz * wy * xy + 2.0 * i * v.yz * xz + 2.0 * s * v.xz * wx + 2.0 * s * v.yz * wy + 2.0 * v.xy * wy * xz + 2.0 * v.xy * wz * xy + 2.0 * v.xz * wz * xz + 2.0 * v.yz * wx * xy + 2.0 * v.yz * wz * yz),
+      xy = (s * s * v.xy + v.xy * xy * xy - 2.0 * s * v.yz * xz - v.xy * xz * xz - v.xy * yz * yz + 2.0 * s * v.xz * yz + 2.0 * v.xz * xy * xz + 2.0 * v.yz * xy * yz),
+      xz = (s * s * v.xz + v.xz * xz * xz - 2.0 * s * v.xy * yz - v.xz * xy * xy - v.xz * yz * yz + 2.0 * s * v.yz * xy + 2.0 * v.xy * xy * xz + 2.0 * v.yz * xz * yz),
+      yz = (s * s * v.yz + v.yz * yz * yz - 2.0 * s * v.xz * xy - v.yz * xy * xy - v.yz * xz * xz + 2.0 * s * v.xy * xz + 2.0 * v.xy * xy * yz + 2.0 * v.xz * xz * yz),
+    )
+
+  infix def sandwich(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = (s * s * v.wx + v.wx * yz * yz - 2.0 * v.wy * xz * yz - v.wx * xy * xy - v.wx * xz * xz + 2.0 * s * v.wy * xy + 2.0 * s * v.wz * xz + 2.0 * v.wz * xy * yz),
+      wy = (s * s * v.wy + v.wy * xz * xz - 2.0 * s * v.wx * xy - 2.0 * v.wx * xz * yz - 2.0 * v.wz * xy * xz - v.wy * xy * xy - v.wy * yz * yz + 2.0 * s * v.wz * yz),
+      wz = (s * s * v.wz + v.wz * xy * xy - 2.0 * s * v.wx * xz - 2.0 * s * v.wy * yz - 2.0 * v.wy * xy * xz - v.wz * xz * xz - v.wz * yz * yz + 2.0 * v.wx * xy * yz),
+    )
+
   infix def sandwich(v: PseudoScalar): PseudoScalar =
     PseudoScalar(
       i = (s * s * v.i + v.i * xy * xy + v.i * xz * xz + v.i * yz * yz),
@@ -992,6 +1029,23 @@ case class Motor(
       z = (s * s * v.z + v.z * xy * xy - 2.0 * v.y * xy * xz - v.z * xz * xz - v.z * yz * yz + 2.0 * s * v.x * xz + 2.0 * s * v.y * yz + 2.0 * v.x * xy * yz),
     )
 
+  infix def reverseSandwich(v: BivectorBulk): Bivector =
+    Bivector(
+      wx = (-2.0 * i * s * v.yz - 2.0 * i * v.xz * xy - 2.0 * v.xz * wy * yz - 2.0 * v.yz * wz * xy + 2.0 * i * v.xy * xz + 2.0 * s * v.xy * wy + 2.0 * s * v.xz * wz + 2.0 * v.xy * wx * xy + 2.0 * v.xy * wz * yz + 2.0 * v.xz * wx * xz + 2.0 * v.yz * wx * yz + 2.0 * v.yz * wy * xz),
+      wy = (-2.0 * i * v.yz * xy - 2.0 * s * v.xy * wx - 2.0 * v.xy * wz * xz - 2.0 * v.yz * wx * xz + 2.0 * i * s * v.xz + 2.0 * i * v.xy * yz + 2.0 * s * v.yz * wz + 2.0 * v.xy * wy * xy + 2.0 * v.xz * wx * yz + 2.0 * v.xz * wy * xz + 2.0 * v.xz * wz * xy + 2.0 * v.yz * wy * yz),
+      wz = (-2.0 * i * s * v.xy - 2.0 * i * v.yz * xz - 2.0 * s * v.xz * wx - 2.0 * s * v.yz * wy - 2.0 * v.xy * wx * yz - 2.0 * v.xz * wy * xy + 2.0 * i * v.xz * yz + 2.0 * v.xy * wy * xz + 2.0 * v.xy * wz * xy + 2.0 * v.xz * wz * xz + 2.0 * v.yz * wx * xy + 2.0 * v.yz * wz * yz),
+      xy = (s * s * v.xy + v.xy * xy * xy - 2.0 * s * v.xz * yz - v.xy * xz * xz - v.xy * yz * yz + 2.0 * s * v.yz * xz + 2.0 * v.xz * xy * xz + 2.0 * v.yz * xy * yz),
+      xz = (s * s * v.xz + v.xz * xz * xz - 2.0 * s * v.yz * xy - v.xz * xy * xy - v.xz * yz * yz + 2.0 * s * v.xy * yz + 2.0 * v.xy * xy * xz + 2.0 * v.yz * xz * yz),
+      yz = (s * s * v.yz + v.yz * yz * yz - 2.0 * s * v.xy * xz - v.yz * xy * xy - v.yz * xz * xz + 2.0 * s * v.xz * xy + 2.0 * v.xy * xy * yz + 2.0 * v.xz * xz * yz),
+    )
+
+  infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = (s * s * v.wx + v.wx * yz * yz - 2.0 * s * v.wy * xy - 2.0 * s * v.wz * xz - 2.0 * v.wy * xz * yz - v.wx * xy * xy - v.wx * xz * xz + 2.0 * v.wz * xy * yz),
+      wy = (s * s * v.wy + v.wy * xz * xz - 2.0 * s * v.wz * yz - 2.0 * v.wx * xz * yz - 2.0 * v.wz * xy * xz - v.wy * xy * xy - v.wy * yz * yz + 2.0 * s * v.wx * xy),
+      wz = (s * s * v.wz + v.wz * xy * xy - 2.0 * v.wy * xy * xz - v.wz * xz * xz - v.wz * yz * yz + 2.0 * s * v.wx * xz + 2.0 * s * v.wy * yz + 2.0 * v.wx * xy * yz),
+    )
+
   infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
     PseudoScalar(
       i = (s * s * v.i + v.i * xy * xy + v.i * xz * xz + v.i * yz * yz),
@@ -1095,12 +1149,11 @@ case class Motor(
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def cross(v: QuaternionDual): BivectorWeight =
+    BivectorWeight(
       wx = (v.wy * xy + v.wz * xz),
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
-      i = 0.0,
     )
 
   infix def cross(v: PointIdeal): PointIdeal =
@@ -1148,6 +1201,23 @@ case class Motor(
       wyz = i * v.x,
       xyz = 0.0,
       i = 0.0,
+    )
+
+  infix def cross(v: BivectorBulk): Bivector =
+    Bivector(
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+      xy = (v.xz * yz - v.yz * xz),
+      xz = (v.yz * xy - v.xy * yz),
+      yz = (v.xy * xz - v.xz * xy),
+    )
+
+  infix def cross(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = (v.wy * xy + v.wz * xz),
+      wy = (v.wz * yz - v.wx * xy),
+      wz = (-v.wx * xz - v.wy * yz),
     )
 
   infix def cross(v: PointCenter.type): Multivector =
@@ -1332,6 +1402,26 @@ case class Motor(
       wyz = 0.0,
       xyz = (v.x * wx + v.y * wy + v.z * wz),
       i = 0.0,
+    )
+
+  infix def antiGeometric(v: BivectorBulk): Quaternion =
+    Quaternion(
+      s = (v.xy * wz + v.yz * wx - v.xz * wy),
+      xy = (i * v.xy + v.xz * wx + v.yz * wy),
+      xz = (i * v.xz + v.yz * wz - v.xy * wx),
+      yz = (i * v.yz - v.xy * wy - v.xz * wz),
+    )
+
+  infix def antiGeometric(v: BivectorWeight): Motor =
+    Motor(
+      s = (v.wx * yz + v.wz * xy - v.wy * xz),
+      wx = (i * v.wx + v.wy * wz - v.wz * wy),
+      wy = (i * v.wy + v.wz * wx - v.wx * wz),
+      wz = (i * v.wz + v.wx * wy - v.wy * wx),
+      xy = (-s * v.wz - v.wx * xz - v.wy * yz),
+      xz = (s * v.wy + v.wx * xy - v.wz * yz),
+      yz = (v.wy * xy + v.wz * xz - s * v.wx),
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
   infix def antiGeometric(v: PseudoScalar): Motor =
@@ -1530,6 +1620,25 @@ case class Motor(
       i = 0.0,
     )
 
+  infix def antiDot(v: BivectorBulk): BivectorBulk =
+    BivectorBulk(
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+    )
+
+  infix def antiDot(v: BivectorWeight): Motor =
+    Motor(
+      s = 0.0,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = -s * v.wz,
+      xz = s * v.wy,
+      yz = -s * v.wx,
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
+    )
+
   infix def antiDot(v: PseudoScalar): Motor =
     Motor(
       s = s * v.i,
@@ -1708,6 +1817,30 @@ case class Motor(
     )
 
   inline infix def v(v: PlaneIdeal): PlaneIdeal = antiWedge(v)
+
+  infix def antiWedge(v: BivectorBulk): Quaternion =
+    Quaternion(
+      s = (v.xy * wz + v.yz * wx - v.xz * wy),
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+    )
+
+  inline infix def v(v: BivectorBulk): Quaternion = antiWedge(v)
+
+  infix def antiWedge(v: BivectorWeight): Motor =
+    Motor(
+      s = (v.wx * yz + v.wz * xy - v.wy * xz),
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
+    )
+
+  inline infix def v(v: BivectorWeight): Motor = antiWedge(v)
 
   infix def antiWedge(v: PseudoScalar): Motor =
     Motor(

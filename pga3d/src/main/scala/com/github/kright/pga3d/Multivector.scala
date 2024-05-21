@@ -250,7 +250,7 @@ case class Multivector(
       i = (i + mult * v.i),
     )
 
-  infix def multiplyElementwise(v: Multivector): Multivector =
+  def multiplyElementwise(v: Multivector): Multivector =
     Multivector(
       s = s * v.s,
       w = v.w * w,
@@ -268,95 +268,6 @@ case class Multivector(
       wyz = v.wyz * wyz,
       xyz = v.xyz * xyz,
       i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: Motor): Motor =
-    Motor(
-      s = s * v.s,
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: Plane): Plane =
-    Plane(
-      w = v.w * w,
-      x = v.x * x,
-      y = v.y * y,
-      z = v.z * z,
-    )
-
-  infix def multiplyElementwise(v: Bivector): Bivector =
-    Bivector(
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-    )
-
-  infix def multiplyElementwise(v: Point): Point =
-    Point(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-      xyz = v.xyz * xyz,
-    )
-
-  infix def multiplyElementwise(v: Quaternion): Quaternion =
-    Quaternion(
-      s = s * v.s,
-      xy = v.xy * xy,
-      xz = v.xz * xz,
-      yz = v.yz * yz,
-    )
-
-  infix def multiplyElementwise(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
-      wx = v.wx * wx,
-      wy = v.wy * wy,
-      wz = v.wz * wz,
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: PointIdeal): PointIdeal =
-    PointIdeal(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-    )
-
-  infix def multiplyElementwise(v: PointNormalized): Point =
-    Point(
-      wxy = v.wxy * wxy,
-      wxz = v.wxz * wxz,
-      wyz = v.wyz * wyz,
-      xyz = xyz,
-    )
-
-  infix def multiplyElementwise(v: PlaneIdeal): PlaneIdeal =
-    PlaneIdeal(
-      x = v.x * x,
-      y = v.y * y,
-      z = v.z * z,
-    )
-
-  infix def multiplyElementwise(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = i * v.i,
-    )
-
-  infix def multiplyElementwise(v: PointCenter.type): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = xyz,
     )
 
   infix def geometric(v: Multivector): Multivector =
@@ -557,6 +468,46 @@ case class Multivector(
       wyz = (i * v.x + v.z * wy - v.y * wz),
       xyz = (v.x * yz + v.z * xy - v.y * xz),
       i = (v.x * wyz + v.z * wxy - v.y * wxz),
+    )
+
+  infix def geometric(v: BivectorBulk): Multivector =
+    Multivector(
+      s = (-v.xy * xy - v.xz * xz - v.yz * yz),
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
+      x = (-v.xy * y - v.xz * z - v.yz * xyz),
+      y = (v.xy * x + v.xz * xyz - v.yz * z),
+      z = (v.xz * x + v.yz * y - v.xy * xyz),
+      wx = (-i * v.yz - v.xy * wy - v.xz * wz),
+      wy = (i * v.xz + v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy - i * v.xy),
+      xy = (s * v.xy + v.xz * yz - v.yz * xz),
+      xz = (s * v.xz + v.yz * xy - v.xy * yz),
+      yz = (s * v.yz + v.xy * xz - v.xz * xy),
+      wxy = (v.xy * w + v.xz * wyz - v.yz * wxz),
+      wxz = (v.xz * w + v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz + v.yz * w - v.xz * wxy),
+      xyz = (v.xy * z + v.yz * x - v.xz * y),
+      i = (v.xy * wz + v.yz * wx - v.xz * wy),
+    )
+
+  infix def geometric(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (s * v.wx + v.wy * xy + v.wz * xz),
+      wy = (s * v.wy + v.wz * yz - v.wx * xy),
+      wz = (s * v.wz - v.wx * xz - v.wy * yz),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (v.wx * y - v.wy * x - v.wz * xyz),
+      wxz = (v.wx * z + v.wy * xyz - v.wz * x),
+      wyz = (v.wy * z - v.wx * xyz - v.wz * y),
+      xyz = 0.0,
+      i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
   infix def geometric(v: PseudoScalar): Multivector =
@@ -795,6 +746,46 @@ case class Multivector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def dot(v: BivectorBulk): Multivector =
+    Multivector(
+      s = (-v.xy * xy - v.xz * xz - v.yz * yz),
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
+      x = (-v.xy * y - v.xz * z - v.yz * xyz),
+      y = (v.xy * x + v.xz * xyz - v.yz * z),
+      z = (v.xz * x + v.yz * y - v.xy * xyz),
+      wx = -i * v.yz,
+      wy = i * v.xz,
+      wz = -i * v.xy,
+      xy = s * v.xy,
+      xz = s * v.xz,
+      yz = s * v.yz,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def dot(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = s * v.wx,
+      wy = s * v.wy,
+      wz = s * v.wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
       xyz = 0.0,
       i = 0.0,
     )
@@ -1059,6 +1050,50 @@ case class Multivector(
 
   inline infix def ^(v: PlaneIdeal): Multivector = wedge(v)
 
+  infix def wedge(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = s * v.xy,
+      xz = s * v.xz,
+      yz = s * v.yz,
+      wxy = v.xy * w,
+      wxz = v.xz * w,
+      wyz = v.yz * w,
+      xyz = (v.xy * z + v.yz * x - v.xz * y),
+      i = (v.xy * wz + v.yz * wx - v.xz * wy),
+    )
+
+  inline infix def ^(v: BivectorBulk): Multivector = wedge(v)
+
+  infix def wedge(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = s * v.wx,
+      wy = s * v.wy,
+      wz = s * v.wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (v.wx * y - v.wy * x),
+      wxz = (v.wx * z - v.wz * x),
+      wyz = (v.wy * z - v.wz * y),
+      xyz = 0.0,
+      i = (v.wx * yz + v.wz * xy - v.wy * xz),
+    )
+
+  inline infix def ^(v: BivectorWeight): Multivector = wedge(v)
+
   infix def wedge(v: PseudoScalar): PseudoScalar =
     PseudoScalar(
       i = s * v.i,
@@ -1286,6 +1321,46 @@ case class Multivector(
       wyz = 0.0,
       xyz = 0.0,
       i = (-2.0 * s * v.y * wxz - 2.0 * v.x * w * yz - 2.0 * v.x * wx * xyz - 2.0 * v.x * wxy * xz - 2.0 * v.x * wy * z - 2.0 * v.y * wxy * yz - 2.0 * v.y * wy * xyz - 2.0 * v.y * wz * x - 2.0 * v.z * w * xy - 2.0 * v.z * wx * y - 2.0 * v.z * wxz * yz - 2.0 * v.z * wz * xyz + 2.0 * i * v.x * x + 2.0 * i * v.y * y + 2.0 * i * v.z * z + 2.0 * s * v.x * wyz + 2.0 * s * v.z * wxy + 2.0 * v.x * wxz * xy + 2.0 * v.x * wz * y + 2.0 * v.y * w * xz + 2.0 * v.y * wx * z + 2.0 * v.y * wyz * xy + 2.0 * v.z * wy * x + 2.0 * v.z * wyz * xz),
+    )
+
+  infix def sandwich(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (-2.0 * i * s * v.yz - 2.0 * i * v.xy * xz - 2.0 * s * v.xy * wy - 2.0 * s * v.xz * wz - 2.0 * v.xy * wxy * x - 2.0 * v.xy * wyz * z - 2.0 * v.xz * wxy * xyz - 2.0 * v.xz * wxz * x - 2.0 * v.xz * wy * yz - 2.0 * v.yz * wxz * y - 2.0 * v.yz * wyz * x - 2.0 * v.yz * wz * xy + 2.0 * i * v.xz * xy + 2.0 * v.xy * w * y + 2.0 * v.xy * wx * xy + 2.0 * v.xy * wxz * xyz + 2.0 * v.xy * wz * yz + 2.0 * v.xz * w * z + 2.0 * v.xz * wx * xz + 2.0 * v.xz * wyz * y + 2.0 * v.yz * w * xyz + 2.0 * v.yz * wx * yz + 2.0 * v.yz * wxy * z + 2.0 * v.yz * wy * xz),
+      wy = (-2.0 * i * v.xy * yz - 2.0 * s * v.yz * wz - 2.0 * v.xy * w * x - 2.0 * v.xy * wxy * y - 2.0 * v.xy * wz * xz - 2.0 * v.xz * w * xyz - 2.0 * v.xz * wxy * z - 2.0 * v.xz * wxz * y - 2.0 * v.xz * wyz * x - 2.0 * v.yz * wx * xz - 2.0 * v.yz * wxy * xyz - 2.0 * v.yz * wyz * y + 2.0 * i * s * v.xz + 2.0 * i * v.yz * xy + 2.0 * s * v.xy * wx + 2.0 * v.xy * wxz * z + 2.0 * v.xy * wy * xy + 2.0 * v.xy * wyz * xyz + 2.0 * v.xz * wx * yz + 2.0 * v.xz * wy * xz + 2.0 * v.xz * wz * xy + 2.0 * v.yz * w * z + 2.0 * v.yz * wxz * x + 2.0 * v.yz * wy * yz),
+      wz = (-2.0 * i * s * v.xy - 2.0 * i * v.xz * yz - 2.0 * v.xy * wx * yz - 2.0 * v.xy * wxy * z - 2.0 * v.xy * wxz * y - 2.0 * v.xz * w * x - 2.0 * v.xz * wxz * z - 2.0 * v.xz * wy * xy - 2.0 * v.yz * w * y - 2.0 * v.yz * wxy * x - 2.0 * v.yz * wxz * xyz - 2.0 * v.yz * wyz * z + 2.0 * i * v.yz * xz + 2.0 * s * v.xz * wx + 2.0 * s * v.yz * wy + 2.0 * v.xy * w * xyz + 2.0 * v.xy * wy * xz + 2.0 * v.xy * wyz * x + 2.0 * v.xy * wz * xy + 2.0 * v.xz * wxy * y + 2.0 * v.xz * wyz * xyz + 2.0 * v.xz * wz * xz + 2.0 * v.yz * wx * xy + 2.0 * v.yz * wz * yz),
+      xy = (s * s * v.xy + v.xy * xy * xy + v.xy * xyz * xyz + v.xy * z * z - 2.0 * s * v.yz * xz - 2.0 * v.xz * x * xyz - 2.0 * v.xz * y * z - 2.0 * v.yz * xyz * y - v.xy * x * x - v.xy * xz * xz - v.xy * y * y - v.xy * yz * yz + 2.0 * s * v.xz * yz + 2.0 * v.xz * xy * xz + 2.0 * v.yz * x * z + 2.0 * v.yz * xy * yz),
+      xz = (s * s * v.xz + v.xz * xyz * xyz + v.xz * xz * xz + v.xz * y * y - 2.0 * s * v.xy * yz - 2.0 * v.xy * y * z - 2.0 * v.yz * x * y - 2.0 * v.yz * xyz * z - v.xz * x * x - v.xz * xy * xy - v.xz * yz * yz - v.xz * z * z + 2.0 * s * v.yz * xy + 2.0 * v.xy * x * xyz + 2.0 * v.xy * xy * xz + 2.0 * v.yz * xz * yz),
+      yz = (s * s * v.yz + v.yz * x * x + v.yz * xyz * xyz + v.yz * yz * yz - 2.0 * s * v.xz * xy - 2.0 * v.xz * x * y - v.yz * xy * xy - v.yz * xz * xz - v.yz * y * y - v.yz * z * z + 2.0 * s * v.xy * xz + 2.0 * v.xy * x * z + 2.0 * v.xy * xy * yz + 2.0 * v.xy * xyz * y + 2.0 * v.xz * xyz * z + 2.0 * v.xz * xz * yz),
+      wxy = (-2.0 * i * v.xz * x - 2.0 * i * v.yz * y - 2.0 * s * v.yz * wxz - 2.0 * v.xy * wx * x - 2.0 * v.xy * wxz * xz - 2.0 * v.xy * wy * y - 2.0 * v.xy * wyz * yz - 2.0 * v.xz * wx * xyz - 2.0 * v.xz * wy * z - 2.0 * v.xz * wz * y - 2.0 * v.yz * w * xz - 2.0 * v.yz * wy * xyz + 2.0 * i * v.xy * xyz + 2.0 * s * v.xy * w + 2.0 * s * v.xz * wyz + 2.0 * v.xy * wxy * xy + 2.0 * v.xy * wz * z + 2.0 * v.xz * w * yz + 2.0 * v.xz * wxy * xz + 2.0 * v.xz * wxz * xy + 2.0 * v.yz * wx * z + 2.0 * v.yz * wxy * yz + 2.0 * v.yz * wyz * xy + 2.0 * v.yz * wz * x),
+      wxz = (-2.0 * i * v.yz * z - 2.0 * s * v.xy * wyz - 2.0 * v.xy * w * yz - 2.0 * v.xy * wy * z - 2.0 * v.xy * wz * y - 2.0 * v.xz * wx * x - 2.0 * v.xz * wxy * xy - 2.0 * v.xz * wyz * yz - 2.0 * v.xz * wz * z - 2.0 * v.yz * wx * y - 2.0 * v.yz * wy * x - 2.0 * v.yz * wz * xyz + 2.0 * i * v.xy * x + 2.0 * i * v.xz * xyz + 2.0 * s * v.xz * w + 2.0 * s * v.yz * wxy + 2.0 * v.xy * wx * xyz + 2.0 * v.xy * wxy * xz + 2.0 * v.xy * wxz * xy + 2.0 * v.xz * wxz * xz + 2.0 * v.xz * wy * y + 2.0 * v.yz * w * xy + 2.0 * v.yz * wxz * yz + 2.0 * v.yz * wyz * xz),
+      wyz = (-2.0 * s * v.xz * wxy - 2.0 * v.xz * w * xy - 2.0 * v.xz * wx * y - 2.0 * v.xz * wy * x - 2.0 * v.yz * wxy * xy - 2.0 * v.yz * wxz * xz - 2.0 * v.yz * wy * y - 2.0 * v.yz * wz * z + 2.0 * i * v.xy * y + 2.0 * i * v.xz * z + 2.0 * i * v.yz * xyz + 2.0 * s * v.xy * wxz + 2.0 * s * v.yz * w + 2.0 * v.xy * w * xz + 2.0 * v.xy * wx * z + 2.0 * v.xy * wxy * yz + 2.0 * v.xy * wy * xyz + 2.0 * v.xy * wyz * xy + 2.0 * v.xy * wz * x + 2.0 * v.xz * wxz * yz + 2.0 * v.xz * wyz * xz + 2.0 * v.xz * wz * xyz + 2.0 * v.yz * wx * x + 2.0 * v.yz * wyz * yz),
+      xyz = (-2.0 * s * v.xz * y - 2.0 * v.xz * x * xy - 2.0 * v.yz * xy * y - 2.0 * v.yz * xz * z + 2.0 * s * v.xy * z + 2.0 * s * v.yz * x + 2.0 * v.xy * x * xz + 2.0 * v.xy * xy * xyz + 2.0 * v.xy * y * yz + 2.0 * v.xz * xyz * xz + 2.0 * v.xz * yz * z + 2.0 * v.yz * xyz * yz),
+      i = 0.0,
+    )
+
+  infix def sandwich(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (s * s * v.wx + v.wx * y * y + v.wx * yz * yz + v.wx * z * z - 2.0 * v.wy * x * y - 2.0 * v.wy * xz * yz - 2.0 * v.wz * x * z - 2.0 * v.wz * xyz * y - v.wx * x * x - v.wx * xy * xy - v.wx * xyz * xyz - v.wx * xz * xz + 2.0 * s * v.wy * xy + 2.0 * s * v.wz * xz + 2.0 * v.wy * xyz * z + 2.0 * v.wz * xy * yz),
+      wy = (s * s * v.wy + v.wy * x * x + v.wy * xz * xz + v.wy * z * z - 2.0 * s * v.wx * xy - 2.0 * v.wx * x * y - 2.0 * v.wx * xyz * z - 2.0 * v.wx * xz * yz - 2.0 * v.wz * xy * xz - 2.0 * v.wz * y * z - v.wy * xy * xy - v.wy * xyz * xyz - v.wy * y * y - v.wy * yz * yz + 2.0 * s * v.wz * yz + 2.0 * v.wz * x * xyz),
+      wz = (s * s * v.wz + v.wz * x * x + v.wz * xy * xy + v.wz * y * y - 2.0 * s * v.wx * xz - 2.0 * s * v.wy * yz - 2.0 * v.wx * x * z - 2.0 * v.wy * x * xyz - 2.0 * v.wy * xy * xz - 2.0 * v.wy * y * z - v.wz * xyz * xyz - v.wz * xz * xz - v.wz * yz * yz - v.wz * z * z + 2.0 * v.wx * xy * yz + 2.0 * v.wx * xyz * y),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-2.0 * s * v.wy * x - 2.0 * s * v.wz * xyz - 2.0 * v.wy * xz * z - 2.0 * v.wz * x * yz + 2.0 * s * v.wx * y + 2.0 * v.wx * x * xy + 2.0 * v.wx * xyz * xz + 2.0 * v.wx * yz * z + 2.0 * v.wy * xy * y + 2.0 * v.wy * xyz * yz + 2.0 * v.wz * xy * z + 2.0 * v.wz * xz * y),
+      wxz = (-2.0 * s * v.wz * x - 2.0 * v.wx * xy * xyz - 2.0 * v.wx * y * yz - 2.0 * v.wz * xy * y + 2.0 * s * v.wx * z + 2.0 * s * v.wy * xyz + 2.0 * v.wx * x * xz + 2.0 * v.wy * x * yz + 2.0 * v.wy * xy * z + 2.0 * v.wy * xz * y + 2.0 * v.wz * xyz * yz + 2.0 * v.wz * xz * z),
+      wyz = (-2.0 * s * v.wx * xyz - 2.0 * s * v.wz * y - 2.0 * v.wx * xy * z - 2.0 * v.wy * x * xz - 2.0 * v.wy * xy * xyz - 2.0 * v.wz * xyz * xz + 2.0 * s * v.wy * z + 2.0 * v.wx * x * yz + 2.0 * v.wx * xz * y + 2.0 * v.wy * y * yz + 2.0 * v.wz * x * xy + 2.0 * v.wz * yz * z),
+      xyz = 0.0,
+      i = 0.0,
     )
 
   infix def sandwich(v: PseudoScalar): Multivector =
@@ -1528,6 +1603,46 @@ case class Multivector(
       i = (-2.0 * s * v.x * wyz - 2.0 * s * v.z * wxy - 2.0 * v.x * wx * xyz - 2.0 * v.x * wxy * xz - 2.0 * v.x * wz * y - 2.0 * v.y * w * xz - 2.0 * v.y * wx * z - 2.0 * v.y * wxy * yz - 2.0 * v.y * wy * xyz - 2.0 * v.z * wxz * yz - 2.0 * v.z * wy * x - 2.0 * v.z * wz * xyz + 2.0 * i * v.x * x + 2.0 * i * v.y * y + 2.0 * i * v.z * z + 2.0 * s * v.y * wxz + 2.0 * v.x * w * yz + 2.0 * v.x * wxz * xy + 2.0 * v.x * wy * z + 2.0 * v.y * wyz * xy + 2.0 * v.y * wz * x + 2.0 * v.z * w * xy + 2.0 * v.z * wx * y + 2.0 * v.z * wyz * xz),
     )
 
+  infix def reverseSandwich(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (-2.0 * i * s * v.yz - 2.0 * i * v.xz * xy - 2.0 * v.xz * wxy * xyz - 2.0 * v.xz * wy * yz - 2.0 * v.xz * wyz * y - 2.0 * v.yz * w * xyz - 2.0 * v.yz * wxy * z - 2.0 * v.yz * wz * xy + 2.0 * i * v.xy * xz + 2.0 * s * v.xy * wy + 2.0 * s * v.xz * wz + 2.0 * v.xy * w * y + 2.0 * v.xy * wx * xy + 2.0 * v.xy * wxy * x + 2.0 * v.xy * wxz * xyz + 2.0 * v.xy * wyz * z + 2.0 * v.xy * wz * yz + 2.0 * v.xz * w * z + 2.0 * v.xz * wx * xz + 2.0 * v.xz * wxz * x + 2.0 * v.yz * wx * yz + 2.0 * v.yz * wxz * y + 2.0 * v.yz * wy * xz + 2.0 * v.yz * wyz * x),
+      wy = (-2.0 * i * v.yz * xy - 2.0 * s * v.xy * wx - 2.0 * v.xy * w * x - 2.0 * v.xy * wxz * z - 2.0 * v.xy * wz * xz - 2.0 * v.yz * wx * xz - 2.0 * v.yz * wxy * xyz - 2.0 * v.yz * wxz * x + 2.0 * i * s * v.xz + 2.0 * i * v.xy * yz + 2.0 * s * v.yz * wz + 2.0 * v.xy * wxy * y + 2.0 * v.xy * wy * xy + 2.0 * v.xy * wyz * xyz + 2.0 * v.xz * w * xyz + 2.0 * v.xz * wx * yz + 2.0 * v.xz * wxy * z + 2.0 * v.xz * wxz * y + 2.0 * v.xz * wy * xz + 2.0 * v.xz * wyz * x + 2.0 * v.xz * wz * xy + 2.0 * v.yz * w * z + 2.0 * v.yz * wy * yz + 2.0 * v.yz * wyz * y),
+      wz = (-2.0 * i * s * v.xy - 2.0 * i * v.yz * xz - 2.0 * s * v.xz * wx - 2.0 * s * v.yz * wy - 2.0 * v.xy * w * xyz - 2.0 * v.xy * wx * yz - 2.0 * v.xy * wyz * x - 2.0 * v.xz * w * x - 2.0 * v.xz * wxy * y - 2.0 * v.xz * wy * xy - 2.0 * v.yz * w * y - 2.0 * v.yz * wxz * xyz + 2.0 * i * v.xz * yz + 2.0 * v.xy * wxy * z + 2.0 * v.xy * wxz * y + 2.0 * v.xy * wy * xz + 2.0 * v.xy * wz * xy + 2.0 * v.xz * wxz * z + 2.0 * v.xz * wyz * xyz + 2.0 * v.xz * wz * xz + 2.0 * v.yz * wx * xy + 2.0 * v.yz * wxy * x + 2.0 * v.yz * wyz * z + 2.0 * v.yz * wz * yz),
+      xy = (s * s * v.xy + v.xy * xy * xy + v.xy * xyz * xyz + v.xy * z * z - 2.0 * s * v.xz * yz - 2.0 * v.xz * y * z - v.xy * x * x - v.xy * xz * xz - v.xy * y * y - v.xy * yz * yz + 2.0 * s * v.yz * xz + 2.0 * v.xz * x * xyz + 2.0 * v.xz * xy * xz + 2.0 * v.yz * x * z + 2.0 * v.yz * xy * yz + 2.0 * v.yz * xyz * y),
+      xz = (s * s * v.xz + v.xz * xyz * xyz + v.xz * xz * xz + v.xz * y * y - 2.0 * s * v.yz * xy - 2.0 * v.xy * x * xyz - 2.0 * v.xy * y * z - 2.0 * v.yz * x * y - v.xz * x * x - v.xz * xy * xy - v.xz * yz * yz - v.xz * z * z + 2.0 * s * v.xy * yz + 2.0 * v.xy * xy * xz + 2.0 * v.yz * xyz * z + 2.0 * v.yz * xz * yz),
+      yz = (s * s * v.yz + v.yz * x * x + v.yz * xyz * xyz + v.yz * yz * yz - 2.0 * s * v.xy * xz - 2.0 * v.xy * xyz * y - 2.0 * v.xz * x * y - 2.0 * v.xz * xyz * z - v.yz * xy * xy - v.yz * xz * xz - v.yz * y * y - v.yz * z * z + 2.0 * s * v.xz * xy + 2.0 * v.xy * x * z + 2.0 * v.xy * xy * yz + 2.0 * v.xz * xz * yz),
+      wxy = (-2.0 * i * v.xy * xyz - 2.0 * i * v.xz * x - 2.0 * i * v.yz * y - 2.0 * s * v.xz * wyz - 2.0 * v.xy * wxz * xz - 2.0 * v.xy * wyz * yz - 2.0 * v.xy * wz * z - 2.0 * v.xz * w * yz - 2.0 * v.xz * wx * xyz - 2.0 * v.yz * wx * z - 2.0 * v.yz * wy * xyz - 2.0 * v.yz * wz * x + 2.0 * s * v.xy * w + 2.0 * s * v.yz * wxz + 2.0 * v.xy * wx * x + 2.0 * v.xy * wxy * xy + 2.0 * v.xy * wy * y + 2.0 * v.xz * wxy * xz + 2.0 * v.xz * wxz * xy + 2.0 * v.xz * wy * z + 2.0 * v.xz * wz * y + 2.0 * v.yz * w * xz + 2.0 * v.yz * wxy * yz + 2.0 * v.yz * wyz * xy),
+      wxz = (-2.0 * i * v.xz * xyz - 2.0 * i * v.yz * z - 2.0 * s * v.yz * wxy - 2.0 * v.xz * wxy * xy - 2.0 * v.xz * wy * y - 2.0 * v.xz * wyz * yz - 2.0 * v.yz * w * xy - 2.0 * v.yz * wz * xyz + 2.0 * i * v.xy * x + 2.0 * s * v.xy * wyz + 2.0 * s * v.xz * w + 2.0 * v.xy * w * yz + 2.0 * v.xy * wx * xyz + 2.0 * v.xy * wxy * xz + 2.0 * v.xy * wxz * xy + 2.0 * v.xy * wy * z + 2.0 * v.xy * wz * y + 2.0 * v.xz * wx * x + 2.0 * v.xz * wxz * xz + 2.0 * v.xz * wz * z + 2.0 * v.yz * wx * y + 2.0 * v.yz * wxz * yz + 2.0 * v.yz * wy * x + 2.0 * v.yz * wyz * xz),
+      wyz = (-2.0 * i * v.yz * xyz - 2.0 * s * v.xy * wxz - 2.0 * v.xy * w * xz - 2.0 * v.xy * wx * z - 2.0 * v.xy * wz * x - 2.0 * v.yz * wx * x - 2.0 * v.yz * wxy * xy - 2.0 * v.yz * wxz * xz + 2.0 * i * v.xy * y + 2.0 * i * v.xz * z + 2.0 * s * v.xz * wxy + 2.0 * s * v.yz * w + 2.0 * v.xy * wxy * yz + 2.0 * v.xy * wy * xyz + 2.0 * v.xy * wyz * xy + 2.0 * v.xz * w * xy + 2.0 * v.xz * wx * y + 2.0 * v.xz * wxz * yz + 2.0 * v.xz * wy * x + 2.0 * v.xz * wyz * xz + 2.0 * v.xz * wz * xyz + 2.0 * v.yz * wy * y + 2.0 * v.yz * wyz * yz + 2.0 * v.yz * wz * z),
+      xyz = (-2.0 * s * v.xz * y - 2.0 * v.xy * x * xz - 2.0 * v.xy * y * yz - 2.0 * v.xz * yz * z + 2.0 * s * v.xy * z + 2.0 * s * v.yz * x + 2.0 * v.xy * xy * xyz + 2.0 * v.xz * x * xy + 2.0 * v.xz * xyz * xz + 2.0 * v.yz * xy * y + 2.0 * v.yz * xyz * yz + 2.0 * v.yz * xz * z),
+      i = 0.0,
+    )
+
+  infix def reverseSandwich(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (s * s * v.wx + v.wx * y * y + v.wx * yz * yz + v.wx * z * z - 2.0 * s * v.wy * xy - 2.0 * s * v.wz * xz - 2.0 * v.wy * x * y - 2.0 * v.wy * xyz * z - 2.0 * v.wy * xz * yz - 2.0 * v.wz * x * z - v.wx * x * x - v.wx * xy * xy - v.wx * xyz * xyz - v.wx * xz * xz + 2.0 * v.wz * xy * yz + 2.0 * v.wz * xyz * y),
+      wy = (s * s * v.wy + v.wy * x * x + v.wy * xz * xz + v.wy * z * z - 2.0 * s * v.wz * yz - 2.0 * v.wx * x * y - 2.0 * v.wx * xz * yz - 2.0 * v.wz * x * xyz - 2.0 * v.wz * xy * xz - 2.0 * v.wz * y * z - v.wy * xy * xy - v.wy * xyz * xyz - v.wy * y * y - v.wy * yz * yz + 2.0 * s * v.wx * xy + 2.0 * v.wx * xyz * z),
+      wz = (s * s * v.wz + v.wz * x * x + v.wz * xy * xy + v.wz * y * y - 2.0 * v.wx * x * z - 2.0 * v.wx * xyz * y - 2.0 * v.wy * xy * xz - 2.0 * v.wy * y * z - v.wz * xyz * xyz - v.wz * xz * xz - v.wz * yz * yz - v.wz * z * z + 2.0 * s * v.wx * xz + 2.0 * s * v.wy * yz + 2.0 * v.wx * xy * yz + 2.0 * v.wy * x * xyz),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-2.0 * s * v.wy * x - 2.0 * v.wx * x * xy - 2.0 * v.wx * yz * z - 2.0 * v.wy * xy * y - 2.0 * v.wz * xy * z - 2.0 * v.wz * xz * y + 2.0 * s * v.wx * y + 2.0 * s * v.wz * xyz + 2.0 * v.wx * xyz * xz + 2.0 * v.wy * xyz * yz + 2.0 * v.wy * xz * z + 2.0 * v.wz * x * yz),
+      wxz = (-2.0 * s * v.wy * xyz - 2.0 * s * v.wz * x - 2.0 * v.wx * x * xz - 2.0 * v.wx * xy * xyz - 2.0 * v.wy * x * yz - 2.0 * v.wy * xy * z - 2.0 * v.wy * xz * y - 2.0 * v.wz * xz * z + 2.0 * s * v.wx * z + 2.0 * v.wx * y * yz + 2.0 * v.wz * xy * y + 2.0 * v.wz * xyz * yz),
+      wyz = (-2.0 * s * v.wz * y - 2.0 * v.wx * x * yz - 2.0 * v.wx * xz * y - 2.0 * v.wy * xy * xyz - 2.0 * v.wy * y * yz - 2.0 * v.wz * x * xy - 2.0 * v.wz * xyz * xz - 2.0 * v.wz * yz * z + 2.0 * s * v.wx * xyz + 2.0 * s * v.wy * z + 2.0 * v.wx * xy * z + 2.0 * v.wy * x * xz),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
   infix def reverseSandwich(v: PseudoScalar): Multivector =
     Multivector(
       s = 0.0,
@@ -1766,6 +1881,46 @@ case class Multivector(
       wyz = i * v.x,
       xyz = 0.0,
       i = (v.x * wyz + v.z * wxy - v.y * wxz),
+    )
+
+  infix def cross(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = (-v.xy * y - v.xz * z),
+      y = (v.xy * x - v.yz * z),
+      z = (v.xz * x + v.yz * y),
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+      xy = (v.xz * yz - v.yz * xz),
+      xz = (v.yz * xy - v.xy * yz),
+      yz = (v.xy * xz - v.xz * xy),
+      wxy = (v.xz * wyz - v.yz * wxz),
+      wxz = (v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz - v.xz * wxy),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def cross(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (v.wy * xy + v.wz * xz),
+      wy = (v.wz * yz - v.wx * xy),
+      wz = (-v.wx * xz - v.wy * yz),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = -v.wz * xyz,
+      wxz = v.wy * xyz,
+      wyz = -v.wx * xyz,
+      xyz = 0.0,
+      i = 0.0,
     )
 
   infix def cross(v: PseudoScalar): Multivector =
@@ -2008,6 +2163,46 @@ case class Multivector(
       i = 0.0,
     )
 
+  infix def antiGeometric(v: BivectorBulk): Multivector =
+    Multivector(
+      s = (v.xy * wz + v.yz * wx - v.xz * wy),
+      w = 0.0,
+      x = (v.xy * wxz + v.yz * w - v.xz * wxy),
+      y = (v.xy * wyz - v.xz * w - v.yz * wxy),
+      z = (v.xy * w + v.xz * wyz - v.yz * wxz),
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = (i * v.xy + v.xz * wx + v.yz * wy),
+      xz = (i * v.xz + v.yz * wz - v.xy * wx),
+      yz = (i * v.yz - v.xy * wy - v.xz * wz),
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = (v.xy * wxy + v.xz * wxz + v.yz * wyz),
+      i = 0.0,
+    )
+
+  infix def antiGeometric(v: BivectorWeight): Multivector =
+    Multivector(
+      s = (v.wx * yz + v.wz * xy - v.wy * xz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = (v.wy * z - v.wx * xyz - v.wz * y),
+      y = (v.wz * x - v.wx * z - v.wy * xyz),
+      z = (v.wx * y - v.wy * x - v.wz * xyz),
+      wx = (i * v.wx + v.wy * wz - v.wz * wy),
+      wy = (i * v.wy + v.wz * wx - v.wx * wz),
+      wz = (i * v.wz + v.wx * wy - v.wy * wx),
+      xy = (-s * v.wz - v.wx * xz - v.wy * yz),
+      xz = (s * v.wy + v.wx * xy - v.wz * yz),
+      yz = (v.wy * xy + v.wz * xz - s * v.wx),
+      wxy = (v.wz * w - v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wy * w - v.wz * wyz),
+      wyz = (v.wx * w + v.wy * wxy + v.wz * wxz),
+      xyz = (v.wx * x + v.wy * y + v.wz * z),
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
+    )
+
   infix def antiGeometric(v: PseudoScalar): Multivector =
     Multivector(
       s = s * v.i,
@@ -2246,6 +2441,46 @@ case class Multivector(
       wyz = 0.0,
       xyz = (v.x * wx + v.y * wy + v.z * wz),
       i = 0.0,
+    )
+
+  infix def antiDot(v: BivectorBulk): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = (v.xy * wxy + v.xz * wxz + v.yz * wyz),
+      i = 0.0,
+    )
+
+  infix def antiDot(v: BivectorWeight): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = -s * v.wz,
+      xz = s * v.wy,
+      yz = -s * v.wx,
+      wxy = (v.wz * w - v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wy * w - v.wz * wyz),
+      wyz = (v.wx * w + v.wy * wxy + v.wz * wxz),
+      xyz = (v.wx * x + v.wy * y + v.wz * z),
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
   infix def antiDot(v: PseudoScalar): Multivector =
@@ -2495,6 +2730,50 @@ case class Multivector(
     )
 
   inline infix def v(v: PlaneIdeal): Multivector = antiWedge(v)
+
+  infix def antiWedge(v: BivectorBulk): Multivector =
+    Multivector(
+      s = (v.xy * wz + v.yz * wx - v.xz * wy),
+      w = 0.0,
+      x = (v.xy * wxz - v.xz * wxy),
+      y = (v.xy * wyz - v.yz * wxy),
+      z = (v.xz * wyz - v.yz * wxz),
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = i * v.xy,
+      xz = i * v.xz,
+      yz = i * v.yz,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  inline infix def v(v: BivectorBulk): Multivector = antiWedge(v)
+
+  infix def antiWedge(v: BivectorWeight): Multivector =
+    Multivector(
+      s = (v.wx * yz + v.wz * xy - v.wy * xz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = -v.wx * xyz,
+      y = -v.wy * xyz,
+      z = -v.wz * xyz,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  inline infix def v(v: BivectorWeight): Multivector = antiWedge(v)
 
   infix def antiWedge(v: PseudoScalar): Multivector =
     Multivector(
