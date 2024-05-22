@@ -19,7 +19,7 @@ object SymbolicStr:
     Symbolic.Symbol(symbol)
 
 
-  extension [F](expr: SymbolicStr)
+  extension (expr: SymbolicStr)
     def isZero: Boolean =
       expr match
         case Symbolic.Symbol(0.0) => true
@@ -34,6 +34,11 @@ object SymbolicStr:
       expr match
         case Number(_) => true
         case _ => false
+
+    def size: Int =
+      expr match
+        case Symbolic.Symbol(_) => 1
+        case Symbolic.Func(func, args) => args.map(f => f.size).sum
 
   given ordering: Ordering[SymbolicStr] = SymbolicStrOrdering.ordering
 

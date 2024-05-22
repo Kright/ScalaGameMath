@@ -1,6 +1,6 @@
 package com.github.kright.symbolic
 
-import com.github.kright.symbolic.SymbolicStr.symbolicStrNumeric
+import com.github.kright.symbolic.SymbolicStr.{size, symbolicStrNumeric}
 import com.github.kright.symbolic.transform.PartialTransform
 import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, SymbolicStrSimplifier}
 
@@ -14,6 +14,9 @@ case class Sym(symbol: SymbolicStr):
 
   def groupMultipliers(): Sym =
     Sym.groupMultipliers(symbol).map(new Sym(_)).getOrElse(this)
+
+  def size: Int =
+    symbol.size
 
 
 object Sym:
