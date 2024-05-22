@@ -55,14 +55,15 @@ case class MultivectorSubClass(name: String,
   }
 
   private def makeConstructor(code: CodeGen, result: MultiVector[Sym]): Unit =
+    val groupedResult = result.mapValues(_.groupMultipliers())
     if (name == "Double") {
-      val expr = result.get(variableFields.head.basisBlade).getOrElse(Sym.zero)
+      val expr = groupedResult.get(variableFields.head.basisBlade).getOrElse(Sym.zero)
       code(expr.toString)
     } else if (variableFields.nonEmpty) {
       code(name + "(")
       code.block {
         for (f <- variableFields) {
-          val expr = result.get(f.basisBlade).getOrElse(Sym.zero)
+          val expr = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
           code(s"${f.name} = ${expr},")
         }
       }

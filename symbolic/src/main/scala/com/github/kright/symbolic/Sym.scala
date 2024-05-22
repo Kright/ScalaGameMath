@@ -2,7 +2,7 @@ package com.github.kright.symbolic
 
 import com.github.kright.symbolic.SymbolicStr.symbolicStrNumeric
 import com.github.kright.symbolic.transform.PartialTransform
-import com.github.kright.symbolic.transform.simplifiers.SymbolicStrSimplifier
+import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, SymbolicStrSimplifier}
 
 import scala.math.Numeric.Implicits.infixNumericOps
 
@@ -12,9 +12,14 @@ import scala.math.Numeric.Implicits.infixNumericOps
 case class Sym(symbol: SymbolicStr):
   override def toString: String = SymbolicToPrettyString(symbol)
 
+  def groupMultipliers(): Sym =
+    Sym.groupMultipliers(symbol).map(new Sym(_)).getOrElse(this)
+
 
 object Sym:
-  val simplifier: PartialTransform[SymbolicStr] = SymbolicStrSimplifier.simplify(64).combine(SymbolicStrSimplifier.sortArgs())
+  val argsSorter = SymbolicStrSimplifier.sortArgs()
+  val simplifier: PartialTransform[SymbolicStr] = SymbolicStrSimplifier.simplify(64).combine(argsSorter)
+  val groupMultipliers: PartialTransform[SymbolicStr] = GroupMultipliersInSumOfProducts().combine(argsSorter)
   val zero: Sym = Sym(0.0)
   val one: Sym = Sym(1.0)
 
