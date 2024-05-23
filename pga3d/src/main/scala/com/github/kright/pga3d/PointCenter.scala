@@ -7,6 +7,14 @@ case object PointCenter:
   inline val wyz = 0.0
   inline val xyz = 1.0
 
+  inline def dualX: Double = 0.0
+
+  inline def dualW: Double = 1.0
+
+  inline def dualY: Double = 0.0
+
+  inline def dualZ: Double = 0.0
+
   def dual: Plane =
     Plane(
       w = 1.0,

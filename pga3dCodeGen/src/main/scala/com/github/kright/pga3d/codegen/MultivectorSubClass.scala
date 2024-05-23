@@ -102,6 +102,13 @@ case class MultivectorSubClass(name: String,
         code(s"inline val ${f.name} = ${v}")
       }
 
+      if (name.contains("Point")) {
+        makeSymbolicThis.dual.values.foreach { (b, sym) =>
+          val fName = s"dual${ga.representation(b).toUpperCase}"
+          code("", s"inline def $fName: Double = ${sym}")
+        }
+      }
+
       for (unaryOp <- unaryOps) {
         val result = unaryOp(self)
         val resultCls = findMatchingClass(result)

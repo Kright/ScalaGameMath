@@ -8,6 +8,14 @@ case class Point(
                   xyz: Double = 0.0,
                 ):
 
+  inline def dualX: Double = -wyz
+
+  inline def dualW: Double = xyz
+
+  inline def dualY: Double = wxz
+
+  inline def dualZ: Double = -wxy
+
   def dual: Plane =
     Plane(
       w = xyz,

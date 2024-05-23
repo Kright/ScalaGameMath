@@ -8,6 +8,14 @@ case class PointNormalized(
                           ):
   inline val xyz = 1.0
 
+  inline def dualX: Double = -wyz
+
+  inline def dualW: Double = 1.0
+
+  inline def dualY: Double = wxz
+
+  inline def dualZ: Double = -wxy
+
   def dual: Plane =
     Plane(
       w = 1.0,

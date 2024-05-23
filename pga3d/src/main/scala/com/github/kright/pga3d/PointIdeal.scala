@@ -7,6 +7,12 @@ case class PointIdeal(
                        wyz: Double = 0.0,
                      ):
 
+  inline def dualX: Double = -wyz
+
+  inline def dualY: Double = wxz
+
+  inline def dualZ: Double = -wxy
+
   def dual: PlaneIdeal =
     PlaneIdeal(
       x = -wyz,
