@@ -1,5 +1,6 @@
 package com.github.kright.symbolic
 
+import com.github.kright.symbolic.Sym.argsSorter
 import com.github.kright.symbolic.SymbolicStr.{size, symbolicStrNumeric}
 import com.github.kright.symbolic.transform.PartialTransform
 import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, SymbolicStrSimplifier}
@@ -12,11 +13,15 @@ import scala.math.Numeric.Implicits.infixNumericOps
 case class Sym(symbol: SymbolicStr):
   override def toString: String = SymbolicToPrettyString(symbol)
 
-  def groupMultipliers(): Sym =
-    Sym.groupMultipliers(symbol).map(new Sym(_)).getOrElse(this)
-
   def size: Int =
     symbol.size
+
+  def map(transform: PartialTransform[SymbolicStr]): Sym =
+    transform(symbol).map(new Sym(_)).getOrElse(this)
+
+  def groupMultipliers(): Sym =
+    map(Sym.groupMultipliers)
+
 
 
 object Sym:

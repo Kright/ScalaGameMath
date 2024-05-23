@@ -381,91 +381,6 @@ case class BivectorWeight(
 
   inline infix def ^(v: BivectorBulk): PseudoScalar = wedge(v)
 
-  infix def cross(v: Multivector): Multivector =
-    Multivector(
-      s = 0.0,
-      w = (v.x * wx + v.y * wy + v.z * wz),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = (-v.xy * wy - v.xz * wz),
-      wy = (v.xy * wx - v.yz * wz),
-      wz = (v.xz * wx + v.yz * wy),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = v.xyz * wz,
-      wxz = -v.xyz * wy,
-      wyz = v.xyz * wx,
-      xyz = 0.0,
-      i = 0.0,
-    )
-
-  infix def cross(v: Motor): BivectorWeight =
-    BivectorWeight(
-      wx = (-v.xy * wy - v.xz * wz),
-      wy = (v.xy * wx - v.yz * wz),
-      wz = (v.xz * wx + v.yz * wy),
-    )
-
-  infix def cross(v: Plane): Plane =
-    Plane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
-  infix def cross(v: Bivector): BivectorWeight =
-    BivectorWeight(
-      wx = (-v.xy * wy - v.xz * wz),
-      wy = (v.xy * wx - v.yz * wz),
-      wz = (v.xz * wx + v.yz * wy),
-    )
-
-  infix def cross(v: Point): PointIdeal =
-    PointIdeal(
-      wxy = v.xyz * wz,
-      wxz = -v.xyz * wy,
-      wyz = v.xyz * wx,
-    )
-
-  infix def cross(v: Quaternion): BivectorWeight =
-    BivectorWeight(
-      wx = (-v.xy * wy - v.xz * wz),
-      wy = (v.xy * wx - v.yz * wz),
-      wz = (v.xz * wx + v.yz * wy),
-    )
-
-  infix def cross(v: PointNormalized): PointIdeal =
-    PointIdeal(
-      wxy = wz,
-      wxz = -wy,
-      wyz = wx,
-    )
-
-  infix def cross(v: PlaneIdeal): Plane =
-    Plane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
-  infix def cross(v: BivectorBulk): BivectorWeight =
-    BivectorWeight(
-      wx = (-v.xy * wy - v.xz * wz),
-      wy = (v.xy * wx - v.yz * wz),
-      wz = (v.xz * wx + v.yz * wy),
-    )
-
-  infix def cross(v: PointCenter.type): PointIdeal =
-    PointIdeal(
-      wxy = wz,
-      wxz = -wy,
-      wyz = wx,
-    )
-
   infix def antiGeometric(v: Multivector): Multivector =
     Multivector(
       s = (v.xy * wz + v.yz * wx - v.xz * wy),
@@ -864,3 +779,88 @@ case class BivectorWeight(
     )
 
   inline infix def v(v: PointCenter.type): PlaneIdeal = antiWedge(v)
+
+  infix def cross(v: Multivector): Multivector =
+    Multivector(
+      s = 0.0,
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = v.xyz * wz,
+      wxz = -v.xyz * wy,
+      wyz = v.xyz * wx,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def cross(v: Motor): BivectorWeight =
+    BivectorWeight(
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+    )
+
+  infix def cross(v: Plane): Plane =
+    Plane(
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  infix def cross(v: Bivector): BivectorWeight =
+    BivectorWeight(
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+    )
+
+  infix def cross(v: Point): PointIdeal =
+    PointIdeal(
+      wxy = v.xyz * wz,
+      wxz = -v.xyz * wy,
+      wyz = v.xyz * wx,
+    )
+
+  infix def cross(v: Quaternion): BivectorWeight =
+    BivectorWeight(
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+    )
+
+  infix def cross(v: PointNormalized): PointIdeal =
+    PointIdeal(
+      wxy = wz,
+      wxz = -wy,
+      wyz = wx,
+    )
+
+  infix def cross(v: PlaneIdeal): Plane =
+    Plane(
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  infix def cross(v: BivectorBulk): BivectorWeight =
+    BivectorWeight(
+      wx = (-v.xy * wy - v.xz * wz),
+      wy = (v.xy * wx - v.yz * wz),
+      wz = (v.xz * wx + v.yz * wy),
+    )
+
+  infix def cross(v: PointCenter.type): PointIdeal =
+    PointIdeal(
+      wxy = wz,
+      wxz = -wy,
+      wyz = wx,
+    )

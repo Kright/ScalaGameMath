@@ -305,64 +305,6 @@ case class PseudoScalar(
 
   inline infix def ^(v: Quaternion): PseudoScalar = wedge(v)
 
-  infix def cross(v: Multivector): Multivector =
-    Multivector(
-      s = 0.0,
-      w = -i * v.xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-      xyz = 0.0,
-      i = 0.0,
-    )
-
-  infix def cross(v: Plane): PointIdeal =
-    PointIdeal(
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-    )
-
-  infix def cross(v: Point): Plane =
-    Plane(
-      w = -i * v.xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
-  infix def cross(v: PointNormalized): Plane =
-    Plane(
-      w = -i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
-  infix def cross(v: PlaneIdeal): PointIdeal =
-    PointIdeal(
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-    )
-
-  infix def cross(v: PointCenter.type): Plane =
-    Plane(
-      w = -i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
   infix def antiGeometric(v: Multivector): Multivector =
     Multivector(
       s = i * v.s,
@@ -759,3 +701,61 @@ case class PseudoScalar(
     )
 
   inline infix def v(v: PointCenter.type): Point = antiWedge(v)
+
+  infix def cross(v: Multivector): Multivector =
+    Multivector(
+      s = 0.0,
+      w = -i * v.xyz,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = i * v.z,
+      wxz = -i * v.y,
+      wyz = i * v.x,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def cross(v: Plane): PointIdeal =
+    PointIdeal(
+      wxy = i * v.z,
+      wxz = -i * v.y,
+      wyz = i * v.x,
+    )
+
+  infix def cross(v: Point): Plane =
+    Plane(
+      w = -i * v.xyz,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  infix def cross(v: PointNormalized): Plane =
+    Plane(
+      w = -i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  infix def cross(v: PlaneIdeal): PointIdeal =
+    PointIdeal(
+      wxy = i * v.z,
+      wxz = -i * v.y,
+      wyz = i * v.x,
+    )
+
+  infix def cross(v: PointCenter.type): Plane =
+    Plane(
+      w = -i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )

@@ -4,6 +4,9 @@ import com.github.kright.ga.*
 import com.github.kright.math.Sign
 import com.github.kright.pga3d.codegen.MultivectorSubClass.*
 import com.github.kright.symbolic.Sym
+import com.github.kright.symbolic.transform.simplifiers.ReplaceSumOrProduct
+
+import scala.math.Numeric.Implicits.infixNumericOps
 
 case class MultivectorSubClass(name: String,
                                variableFields: Seq[MultivectorField],
@@ -65,6 +68,7 @@ case class MultivectorSubClass(name: String,
         for (f <- variableFields) {
           val expr = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
           code(s"${f.name} = ${expr},")
+          //          code(s"${f.name} = /* ${expr.size} */ ${expr},")
         }
       }
       code(")")
@@ -180,10 +184,11 @@ case class MultivectorSubClass(name: String,
           val result = binaryOp(self, v)
           val resultCls = findMatchingClass(result)
           if (resultCls != zeroCls) {
-            code("")
-            code(s"infix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
+            code("", s"infix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
             code.block {
-              resultCls.makeConstructor(code, result)
+              binaryOp.name match
+                case "sandwich" | "reverseSandwich" => makeOptimized(self, result, resultCls, code)
+                case _ => resultCls.makeConstructor(code, result)
             }
 
             for (opName <- binaryOp.names.tail) {
@@ -197,6 +202,29 @@ case class MultivectorSubClass(name: String,
 
     code.toString
   }
+
+  private def makeOptimized(self: MultiVector[Sym], result: MultiVector[Sym], resultCls: MultivectorSubClass, code: CodeGen): Unit = {
+    val simplifications: Seq[(Sym, Sym)] =
+      (for ((fx, i) <- variableFields.zipWithIndex;
+            (fy, j) <- variableFields.zipWithIndex if i <= j)
+      yield Sym(s"${fx.name}M${fy.name}") -> self(fx.basisBlade) * self(fy.basisBlade))
+
+    var rr = result
+    for ((simple, expr) <- simplifications) {
+      val replacer = ReplaceSumOrProduct(expr.symbol, simple.symbol)
+      val newRR = rr.mapValues(v => v.map(replacer))
+
+      if ((getSize(newRR) + 1 < getSize(rr))) {
+        rr = newRR
+        code(s"val ${simple.toString} = ${expr.toString}")
+      }
+    }
+
+    resultCls.makeConstructor(code, rr.mapValues(_.map(Sym.argsSorter)))
+  }
+
+  private def getSize(a: MultiVector[Sym]): Int =
+    a.values.map((b, s) => s.size).sum
 
 object MultivectorSubClass:
   private def representationConfig = GARepresentationConfig(
@@ -285,11 +313,12 @@ object MultivectorSubClass:
     MultivectorBinaryOp(Seq("geometric"), pga3.operations.multiplication.geometric(_, _)),
     MultivectorBinaryOp(Seq("dot"), pga3.operations.multiplication.dot(_, _)),
     MultivectorBinaryOp(Seq("wedge", "^"), pga3.operations.multiplication.wedge(_, _)),
-    MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),
-    MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b)),
-    MultivectorBinaryOp(Seq("cross"), (a, b) => a.crossX2(b) * Sym(0.5)),
 
     MultivectorBinaryOp(Seq("antiGeometric"), pga3.operations.anti.geometric(_, _)),
     MultivectorBinaryOp(Seq("antiDot"), pga3.operations.anti.dot(_, _)),
     MultivectorBinaryOp(Seq("antiWedge", "v"), pga3.operations.anti.wedge(_, _)),
+
+    MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),
+    MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b)),
+    MultivectorBinaryOp(Seq("cross"), (a, b) => a.crossX2(b) * Sym(0.5)),
   )

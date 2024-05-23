@@ -520,398 +520,6 @@ case class PointNormalized(
 
   inline infix def ^(v: PlaneIdeal): PseudoScalar = wedge(v)
 
-  infix def sandwich(v: Multivector): Multivector =
-    Multivector(
-      s = v.s,
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
-      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
-      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
-      xyz = v.xyz,
-      i = -v.i,
-    )
-
-  infix def sandwich(v: Motor): Motor =
-    Motor(
-      s = v.s,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      i = -v.i,
-    )
-
-  infix def sandwich(v: Plane): Plane =
-    Plane(
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-    )
-
-  infix def sandwich(v: Bivector): Bivector =
-    Bivector(
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
-
-  infix def sandwich(v: Point): Point =
-    Point(
-      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
-      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
-      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
-      xyz = v.xyz,
-    )
-
-  infix def sandwich(v: Quaternion): Motor =
-    Motor(
-      s = v.s,
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      i = 0.0,
-    )
-
-  infix def sandwich(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-      i = -v.i,
-    )
-
-  infix def sandwich(v: PointIdeal): PointIdeal =
-    PointIdeal(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
-
-  infix def sandwich(v: PointNormalized): PointNormalized =
-    PointNormalized(
-      wxy = (-v.wxy + 2.0 * wxy),
-      wxz = (-v.wxz + 2.0 * wxz),
-      wyz = (-v.wyz + 2.0 * wyz),
-    )
-
-  infix def sandwich(v: PlaneIdeal): Plane =
-    Plane(
-      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-    )
-
-  infix def sandwich(v: BivectorBulk): Bivector =
-    Bivector(
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
-
-  infix def sandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
-
-  infix def sandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
-
-  infix def sandwich(v: PointCenter.type): PointNormalized =
-    PointNormalized(
-      wxy = 2.0 * wxy,
-      wxz = 2.0 * wxz,
-      wyz = 2.0 * wyz,
-    )
-
-  infix def reverseSandwich(v: Multivector): Multivector =
-    Multivector(
-      s = v.s,
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
-      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
-      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
-      xyz = v.xyz,
-      i = -v.i,
-    )
-
-  infix def reverseSandwich(v: Motor): Motor =
-    Motor(
-      s = v.s,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      i = -v.i,
-    )
-
-  infix def reverseSandwich(v: Plane): Plane =
-    Plane(
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-    )
-
-  infix def reverseSandwich(v: Bivector): Bivector =
-    Bivector(
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
-
-  infix def reverseSandwich(v: Point): Point =
-    Point(
-      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
-      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
-      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
-      xyz = v.xyz,
-    )
-
-  infix def reverseSandwich(v: Quaternion): Motor =
-    Motor(
-      s = v.s,
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      i = 0.0,
-    )
-
-  infix def reverseSandwich(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-      i = -v.i,
-    )
-
-  infix def reverseSandwich(v: PointIdeal): PointIdeal =
-    PointIdeal(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
-
-  infix def reverseSandwich(v: PointNormalized): PointNormalized =
-    PointNormalized(
-      wxy = (-v.wxy + 2.0 * wxy),
-      wxz = (-v.wxz + 2.0 * wxz),
-      wyz = (-v.wyz + 2.0 * wyz),
-    )
-
-  infix def reverseSandwich(v: PlaneIdeal): Plane =
-    Plane(
-      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
-      x = v.x,
-      y = v.y,
-      z = v.z,
-    )
-
-  infix def reverseSandwich(v: BivectorBulk): Bivector =
-    Bivector(
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
-
-  infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
-
-  infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
-
-  infix def reverseSandwich(v: PointCenter.type): PointNormalized =
-    PointNormalized(
-      wxy = 2.0 * wxy,
-      wxz = 2.0 * wxz,
-      wyz = 2.0 * wyz,
-    )
-
-  infix def cross(v: Multivector): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = (v.wyz - v.xyz * wyz),
-      wy = (-v.wxz + v.xyz * wxz),
-      wz = (v.wxy - v.xyz * wxy),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
-      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
-      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
-      xyz = 0.0,
-      i = (-v.w + v.x * wyz + v.z * wxy - v.y * wxz),
-    )
-
-  infix def cross(v: Motor): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
-      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
-      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
-      xyz = 0.0,
-      i = 0.0,
-    )
-
-  infix def cross(v: Plane): PseudoScalar =
-    PseudoScalar(
-      i = (-v.w + v.x * wyz + v.z * wxy - v.y * wxz),
-    )
-
-  infix def cross(v: Bivector): PointIdeal =
-    PointIdeal(
-      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
-      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
-      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
-    )
-
-  infix def cross(v: Point): BivectorWeight =
-    BivectorWeight(
-      wx = (v.wyz - v.xyz * wyz),
-      wy = (-v.wxz + v.xyz * wxz),
-      wz = (v.wxy - v.xyz * wxy),
-    )
-
-  infix def cross(v: Quaternion): PointIdeal =
-    PointIdeal(
-      wxy = (v.xz * wyz - v.yz * wxz),
-      wxz = (v.yz * wxy - v.xy * wyz),
-      wyz = (v.xy * wxz - v.xz * wxy),
-    )
-
-  infix def cross(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = -v.wz,
-      wxz = v.wy,
-      wyz = -v.wx,
-      xyz = 0.0,
-      i = 0.0,
-    )
-
-  infix def cross(v: PointIdeal): BivectorWeight =
-    BivectorWeight(
-      wx = v.wyz,
-      wy = -v.wxz,
-      wz = v.wxy,
-    )
-
-  infix def cross(v: PointNormalized): BivectorWeight =
-    BivectorWeight(
-      wx = (v.wyz - wyz),
-      wy = (wxz - v.wxz),
-      wz = (v.wxy - wxy),
-    )
-
-  infix def cross(v: PlaneIdeal): PseudoScalar =
-    PseudoScalar(
-      i = (v.x * wyz + v.z * wxy - v.y * wxz),
-    )
-
-  infix def cross(v: BivectorBulk): PointIdeal =
-    PointIdeal(
-      wxy = (v.xz * wyz - v.yz * wxz),
-      wxz = (v.yz * wxy - v.xy * wyz),
-      wyz = (v.xy * wxz - v.xz * wxy),
-    )
-
-  infix def cross(v: BivectorWeight): PointIdeal =
-    PointIdeal(
-      wxy = -v.wz,
-      wxz = v.wy,
-      wyz = -v.wx,
-    )
-
-  infix def cross(v: PseudoScalar): Plane =
-    Plane(
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
-
-  infix def cross(v: PointCenter.type): BivectorWeight =
-    BivectorWeight(
-      wx = -wyz,
-      wy = wxz,
-      wz = -wxy,
-    )
-
   infix def antiGeometric(v: Multivector): Multivector =
     Multivector(
       s = (v.w + v.y * wxz - v.x * wyz - v.z * wxy),
@@ -1422,3 +1030,395 @@ case class PointNormalized(
     )
 
   inline infix def v(v: PointCenter.type): BivectorBulk = antiWedge(v)
+
+  infix def sandwich(v: Multivector): Multivector =
+    Multivector(
+      s = v.s,
+      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
+      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
+      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
+      xyz = v.xyz,
+      i = -v.i,
+    )
+
+  infix def sandwich(v: Motor): Motor =
+    Motor(
+      s = v.s,
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      i = -v.i,
+    )
+
+  infix def sandwich(v: Plane): Plane =
+    Plane(
+      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+    )
+
+  infix def sandwich(v: Bivector): Bivector =
+    Bivector(
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+    )
+
+  infix def sandwich(v: Point): Point =
+    Point(
+      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
+      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
+      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
+      xyz = v.xyz,
+    )
+
+  infix def sandwich(v: Quaternion): Motor =
+    Motor(
+      s = v.s,
+      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      i = 0.0,
+    )
+
+  infix def sandwich(v: QuaternionDual): QuaternionDual =
+    QuaternionDual(
+      wx = -v.wx,
+      wy = -v.wy,
+      wz = -v.wz,
+      i = -v.i,
+    )
+
+  infix def sandwich(v: PointIdeal): PointIdeal =
+    PointIdeal(
+      wxy = -v.wxy,
+      wxz = -v.wxz,
+      wyz = -v.wyz,
+    )
+
+  infix def sandwich(v: PointNormalized): PointNormalized =
+    PointNormalized(
+      wxy = (-v.wxy + 2.0 * wxy),
+      wxz = (-v.wxz + 2.0 * wxz),
+      wyz = (-v.wyz + 2.0 * wyz),
+    )
+
+  infix def sandwich(v: PlaneIdeal): Plane =
+    Plane(
+      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+    )
+
+  infix def sandwich(v: BivectorBulk): Bivector =
+    Bivector(
+      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+    )
+
+  infix def sandwich(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = -v.wx,
+      wy = -v.wy,
+      wz = -v.wz,
+    )
+
+  infix def sandwich(v: PseudoScalar): PseudoScalar =
+    PseudoScalar(
+      i = -v.i,
+    )
+
+  infix def sandwich(v: PointCenter.type): PointNormalized =
+    PointNormalized(
+      wxy = 2.0 * wxy,
+      wxz = 2.0 * wxz,
+      wyz = 2.0 * wyz,
+    )
+
+  infix def reverseSandwich(v: Multivector): Multivector =
+    Multivector(
+      s = v.s,
+      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
+      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
+      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
+      xyz = v.xyz,
+      i = -v.i,
+    )
+
+  infix def reverseSandwich(v: Motor): Motor =
+    Motor(
+      s = v.s,
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      i = -v.i,
+    )
+
+  infix def reverseSandwich(v: Plane): Plane =
+    Plane(
+      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+    )
+
+  infix def reverseSandwich(v: Bivector): Bivector =
+    Bivector(
+      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+    )
+
+  infix def reverseSandwich(v: Point): Point =
+    Point(
+      wxy = (-v.wxy + 2.0 * v.xyz * wxy),
+      wxz = (-v.wxz + 2.0 * v.xyz * wxz),
+      wyz = (-v.wyz + 2.0 * v.xyz * wyz),
+      xyz = v.xyz,
+    )
+
+  infix def reverseSandwich(v: Quaternion): Motor =
+    Motor(
+      s = v.s,
+      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+      i = 0.0,
+    )
+
+  infix def reverseSandwich(v: QuaternionDual): QuaternionDual =
+    QuaternionDual(
+      wx = -v.wx,
+      wy = -v.wy,
+      wz = -v.wz,
+      i = -v.i,
+    )
+
+  infix def reverseSandwich(v: PointIdeal): PointIdeal =
+    PointIdeal(
+      wxy = -v.wxy,
+      wxz = -v.wxz,
+      wyz = -v.wyz,
+    )
+
+  infix def reverseSandwich(v: PointNormalized): PointNormalized =
+    PointNormalized(
+      wxy = (-v.wxy + 2.0 * wxy),
+      wxz = (-v.wxz + 2.0 * wxz),
+      wyz = (-v.wyz + 2.0 * wyz),
+    )
+
+  infix def reverseSandwich(v: PlaneIdeal): Plane =
+    Plane(
+      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      x = v.x,
+      y = v.y,
+      z = v.z,
+    )
+
+  infix def reverseSandwich(v: BivectorBulk): Bivector =
+    Bivector(
+      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
+      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
+      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      xy = v.xy,
+      xz = v.xz,
+      yz = v.yz,
+    )
+
+  infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
+    BivectorWeight(
+      wx = -v.wx,
+      wy = -v.wy,
+      wz = -v.wz,
+    )
+
+  infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
+    PseudoScalar(
+      i = -v.i,
+    )
+
+  infix def reverseSandwich(v: PointCenter.type): PointNormalized =
+    PointNormalized(
+      wxy = 2.0 * wxy,
+      wxz = 2.0 * wxz,
+      wyz = 2.0 * wyz,
+    )
+
+  infix def cross(v: Multivector): Multivector =
+    Multivector(
+      s = 0.0,
+      w = v.i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = (v.wyz - v.xyz * wyz),
+      wy = (-v.wxz + v.xyz * wxz),
+      wz = (v.wxy - v.xyz * wxy),
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
+      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
+      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
+      xyz = 0.0,
+      i = (-v.w + v.x * wyz + v.z * wxy - v.y * wxz),
+    )
+
+  infix def cross(v: Motor): Multivector =
+    Multivector(
+      s = 0.0,
+      w = v.i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
+      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
+      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def cross(v: Plane): PseudoScalar =
+    PseudoScalar(
+      i = (-v.w + v.x * wyz + v.z * wxy - v.y * wxz),
+    )
+
+  infix def cross(v: Bivector): PointIdeal =
+    PointIdeal(
+      wxy = (-v.wz + v.xz * wyz - v.yz * wxz),
+      wxz = (v.wy + v.yz * wxy - v.xy * wyz),
+      wyz = (-v.wx + v.xy * wxz - v.xz * wxy),
+    )
+
+  infix def cross(v: Point): BivectorWeight =
+    BivectorWeight(
+      wx = (v.wyz - v.xyz * wyz),
+      wy = (-v.wxz + v.xyz * wxz),
+      wz = (v.wxy - v.xyz * wxy),
+    )
+
+  infix def cross(v: Quaternion): PointIdeal =
+    PointIdeal(
+      wxy = (v.xz * wyz - v.yz * wxz),
+      wxz = (v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz - v.xz * wxy),
+    )
+
+  infix def cross(v: QuaternionDual): Multivector =
+    Multivector(
+      s = 0.0,
+      w = v.i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = -v.wz,
+      wxz = v.wy,
+      wyz = -v.wx,
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  infix def cross(v: PointIdeal): BivectorWeight =
+    BivectorWeight(
+      wx = v.wyz,
+      wy = -v.wxz,
+      wz = v.wxy,
+    )
+
+  infix def cross(v: PointNormalized): BivectorWeight =
+    BivectorWeight(
+      wx = (v.wyz - wyz),
+      wy = (wxz - v.wxz),
+      wz = (v.wxy - wxy),
+    )
+
+  infix def cross(v: PlaneIdeal): PseudoScalar =
+    PseudoScalar(
+      i = (v.x * wyz + v.z * wxy - v.y * wxz),
+    )
+
+  infix def cross(v: BivectorBulk): PointIdeal =
+    PointIdeal(
+      wxy = (v.xz * wyz - v.yz * wxz),
+      wxz = (v.yz * wxy - v.xy * wyz),
+      wyz = (v.xy * wxz - v.xz * wxy),
+    )
+
+  infix def cross(v: BivectorWeight): PointIdeal =
+    PointIdeal(
+      wxy = -v.wz,
+      wxz = v.wy,
+      wyz = -v.wx,
+    )
+
+  infix def cross(v: PseudoScalar): Plane =
+    Plane(
+      w = v.i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+    )
+
+  infix def cross(v: PointCenter.type): BivectorWeight =
+    BivectorWeight(
+      wx = -wyz,
+      wy = wxz,
+      wz = -wxy,
+    )

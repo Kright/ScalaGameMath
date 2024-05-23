@@ -457,6 +457,270 @@ case object PointCenter:
 
   inline infix def ^(v: Quaternion): Point = wedge(v)
 
+  infix def antiGeometric(v: Multivector): Multivector =
+    Multivector(
+      s = v.w,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  infix def antiGeometric(v: Motor): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  infix def antiGeometric(v: Plane): Double =
+    v.w
+
+  infix def antiGeometric(v: Bivector): PlaneIdeal =
+    PlaneIdeal(
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+    )
+
+  infix def antiGeometric(v: Point): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  infix def antiGeometric(v: QuaternionDual): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  infix def antiGeometric(v: PointIdeal): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  infix def antiGeometric(v: PointNormalized): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  infix def antiGeometric(v: BivectorWeight): PlaneIdeal =
+    PlaneIdeal(
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+    )
+
+  infix def antiGeometric(v: PseudoScalar): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  infix def antiDot(v: Multivector): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  infix def antiDot(v: Motor): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  infix def antiDot(v: QuaternionDual): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  infix def antiDot(v: PseudoScalar): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  infix def antiWedge(v: Multivector): Multivector =
+    Multivector(
+      s = v.w,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  inline infix def v(v: Multivector): Multivector = antiWedge(v)
+
+  infix def antiWedge(v: Motor): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  inline infix def v(v: Motor): Multivector = antiWedge(v)
+
+  infix def antiWedge(v: Plane): Double =
+    v.w
+
+  inline infix def v(v: Plane): Double = antiWedge(v)
+
+  infix def antiWedge(v: Bivector): PlaneIdeal =
+    PlaneIdeal(
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+    )
+
+  inline infix def v(v: Bivector): PlaneIdeal = antiWedge(v)
+
+  infix def antiWedge(v: Point): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  inline infix def v(v: Point): BivectorBulk = antiWedge(v)
+
+  infix def antiWedge(v: QuaternionDual): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+      i = 0.0,
+    )
+
+  inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
+
+  infix def antiWedge(v: PointIdeal): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  inline infix def v(v: PointIdeal): BivectorBulk = antiWedge(v)
+
+  infix def antiWedge(v: PointNormalized): BivectorBulk =
+    BivectorBulk(
+      xy = -v.wxy,
+      xz = -v.wxz,
+      yz = -v.wyz,
+    )
+
+  inline infix def v(v: PointNormalized): BivectorBulk = antiWedge(v)
+
+  infix def antiWedge(v: BivectorWeight): PlaneIdeal =
+    PlaneIdeal(
+      x = -v.wx,
+      y = -v.wy,
+      z = -v.wz,
+    )
+
+  inline infix def v(v: BivectorWeight): PlaneIdeal = antiWedge(v)
+
+  infix def antiWedge(v: PseudoScalar): Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = v.i,
+    )
+
+  inline infix def v(v: PseudoScalar): Point = antiWedge(v)
+
   infix def sandwich(v: Multivector): Multivector =
     Multivector(
       s = v.s,
@@ -798,267 +1062,3 @@ case object PointCenter:
       y = 0.0,
       z = 0.0,
     )
-
-  infix def antiGeometric(v: Multivector): Multivector =
-    Multivector(
-      s = v.w,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  infix def antiGeometric(v: Motor): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  infix def antiGeometric(v: Plane): Double =
-    v.w
-
-  infix def antiGeometric(v: Bivector): PlaneIdeal =
-    PlaneIdeal(
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-    )
-
-  infix def antiGeometric(v: Point): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  infix def antiGeometric(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  infix def antiGeometric(v: PointIdeal): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  infix def antiGeometric(v: PointNormalized): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  infix def antiGeometric(v: BivectorWeight): PlaneIdeal =
-    PlaneIdeal(
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-    )
-
-  infix def antiGeometric(v: PseudoScalar): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiDot(v: Multivector): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiDot(v: Motor): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiDot(v: QuaternionDual): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiDot(v: PseudoScalar): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiWedge(v: Multivector): Multivector =
-    Multivector(
-      s = v.w,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  inline infix def v(v: Multivector): Multivector = antiWedge(v)
-
-  infix def antiWedge(v: Motor): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  inline infix def v(v: Motor): Multivector = antiWedge(v)
-
-  infix def antiWedge(v: Plane): Double =
-    v.w
-
-  inline infix def v(v: Plane): Double = antiWedge(v)
-
-  infix def antiWedge(v: Bivector): PlaneIdeal =
-    PlaneIdeal(
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-    )
-
-  inline infix def v(v: Bivector): PlaneIdeal = antiWedge(v)
-
-  infix def antiWedge(v: Point): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  inline infix def v(v: Point): BivectorBulk = antiWedge(v)
-
-  infix def antiWedge(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
-
-  infix def antiWedge(v: PointIdeal): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  inline infix def v(v: PointIdeal): BivectorBulk = antiWedge(v)
-
-  infix def antiWedge(v: PointNormalized): BivectorBulk =
-    BivectorBulk(
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-    )
-
-  inline infix def v(v: PointNormalized): BivectorBulk = antiWedge(v)
-
-  infix def antiWedge(v: BivectorWeight): PlaneIdeal =
-    PlaneIdeal(
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-    )
-
-  inline infix def v(v: BivectorWeight): PlaneIdeal = antiWedge(v)
-
-  infix def antiWedge(v: PseudoScalar): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  inline infix def v(v: PseudoScalar): Point = antiWedge(v)
