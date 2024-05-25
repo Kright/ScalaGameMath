@@ -24,7 +24,7 @@ class GroupMultipliersInSumOfProducts extends PartialTransform[SymbolicStr]:
 
     if (commonElements.nonEmpty) {
       val sum = Func("+", elemsAsProducts.map { f =>
-        val others: Seq[SymbolicStr] = f.args.filter(a => !commonElements.contains(a))
+        val others: Seq[SymbolicStr] = remove(f.args, commonElements)
         others.size match
           case 0 => SymbolicStr.one
           case 1 => others.head
@@ -75,6 +75,13 @@ class GroupMultipliersInSumOfProducts extends PartialTransform[SymbolicStr]:
         false
       } else true
     }
+
+  private def remove(elems: Seq[SymbolicStr], toRemove: Iterable[SymbolicStr]): Seq[SymbolicStr] =
+    var result = elems
+    for (e <- toRemove) {
+      result = remove(result, e)
+    }
+    result
 
   private def convertMinusConstToMinusOneAndConst(elems: Seq[SymbolicStr]): Seq[SymbolicStr] =
     elems.flatMap {

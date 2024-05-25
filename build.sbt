@@ -81,4 +81,5 @@ lazy val pga3d = (project in file("pga3d")).settings(
 ).dependsOn(
   solvers % "test",
   util % "test",
+  vector % "test",
 )

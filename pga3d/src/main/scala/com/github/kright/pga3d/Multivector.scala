@@ -1,6 +1,6 @@
 package com.github.kright.pga3d
 
-/** this code is generated, see com.github.kright.pga3d.codegen.MultivectorSubClass */
+/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case class Multivector(
                         s: Double = 0.0,
                         w: Double = 0.0,
@@ -390,27 +390,27 @@ case class Multivector(
       i = (i * v.s + v.xy * wz + v.yz * wx - v.xz * wy),
     )
 
-  infix def geometric(v: QuaternionDual): Multivector =
+  infix def geometric(v: Translator): Multivector =
     Multivector(
-      s = 0.0,
-      w = (v.i * xyz - v.wx * x - v.wy * y - v.wz * z),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = (s * v.wx + v.wy * xy + v.wz * xz - v.i * yz),
-      wy = (s * v.wy + v.i * xz + v.wz * yz - v.wx * xy),
-      wz = (s * v.wz - v.i * xy - v.wx * xz - v.wy * yz),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = (v.wx * y - v.i * z - v.wy * x - v.wz * xyz),
-      wxz = (v.i * y + v.wx * z + v.wy * xyz - v.wz * x),
-      wyz = (v.wy * z - v.i * x - v.wx * xyz - v.wz * y),
-      xyz = 0.0,
-      i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
+      s = s,
+      w = (w - v.wx * x - v.wy * y - v.wz * z),
+      x = x,
+      y = y,
+      z = z,
+      wx = (wx + s * v.wx + v.wy * xy + v.wz * xz),
+      wy = (wy + s * v.wy + v.wz * yz - v.wx * xy),
+      wz = (wz + s * v.wz - v.wx * xz - v.wy * yz),
+      xy = xy,
+      xz = xz,
+      yz = yz,
+      wxy = (wxy + v.wx * y - v.wy * x - v.wz * xyz),
+      wxz = (wxz + v.wx * z + v.wy * xyz - v.wz * x),
+      wyz = (wyz + v.wy * z - v.wx * xyz - v.wz * y),
+      xyz = xyz,
+      i = (i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: PointIdeal): Multivector =
+  infix def geometric(v: Vector): Multivector =
     Multivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
@@ -670,27 +670,27 @@ case class Multivector(
       i = i * v.s,
     )
 
-  infix def dot(v: QuaternionDual): Multivector =
+  infix def dot(v: Translator): Multivector =
     Multivector(
-      s = 0.0,
-      w = (v.i * xyz - v.wx * x - v.wy * y - v.wz * z),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = (s * v.wx - v.i * yz),
-      wy = (s * v.wy + v.i * xz),
-      wz = (s * v.wz - v.i * xy),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = -v.i * z,
-      wxz = v.i * y,
-      wyz = -v.i * x,
-      xyz = 0.0,
-      i = s * v.i,
+      s = s,
+      w = (w - v.wx * x - v.wy * y - v.wz * z),
+      x = x,
+      y = y,
+      z = z,
+      wx = (wx + s * v.wx),
+      wy = (wy + s * v.wy),
+      wz = (wz + s * v.wz),
+      xy = xy,
+      xz = xz,
+      yz = yz,
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+      xyz = xyz,
+      i = i,
     )
 
-  infix def dot(v: PointIdeal): Multivector =
+  infix def dot(v: Vector): Multivector =
     Multivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
@@ -962,29 +962,29 @@ case class Multivector(
 
   inline infix def ^(v: Quaternion): Multivector = wedge(v)
 
-  infix def wedge(v: QuaternionDual): Multivector =
+  infix def wedge(v: Translator): Multivector =
     Multivector(
-      s = 0.0,
-      w = 0.0,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = s * v.wx,
-      wy = s * v.wy,
-      wz = s * v.wz,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = (v.wx * y - v.wy * x),
-      wxz = (v.wx * z - v.wz * x),
-      wyz = (v.wy * z - v.wz * y),
-      xyz = 0.0,
-      i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
+      s = s,
+      w = w,
+      x = x,
+      y = y,
+      z = z,
+      wx = (wx + s * v.wx),
+      wy = (wy + s * v.wy),
+      wz = (wz + s * v.wz),
+      xy = xy,
+      xz = xz,
+      yz = yz,
+      wxy = (wxy + v.wx * y - v.wy * x),
+      wxz = (wxz + v.wx * z - v.wz * x),
+      wyz = (wyz + v.wy * z - v.wz * y),
+      xyz = xyz,
+      i = (i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: QuaternionDual): Multivector = wedge(v)
+  inline infix def ^(v: Translator): Multivector = wedge(v)
 
-  infix def wedge(v: PointIdeal): Multivector =
+  infix def wedge(v: Vector): Multivector =
     Multivector(
       s = 0.0,
       w = 0.0,
@@ -1004,7 +1004,7 @@ case class Multivector(
       i = (v.wxz * y - v.wxy * z - v.wyz * x),
     )
 
-  inline infix def ^(v: PointIdeal): Multivector = wedge(v)
+  inline infix def ^(v: Vector): Multivector = wedge(v)
 
   infix def wedge(v: PointNormalized): Multivector =
     Multivector(
@@ -1243,27 +1243,27 @@ case class Multivector(
       i = 0.0,
     )
 
-  infix def antiGeometric(v: QuaternionDual): Multivector =
+  infix def antiGeometric(v: Translator): Multivector =
     Multivector(
-      s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
-      w = (v.i * w + v.wy * wxz - v.wx * wyz - v.wz * wxy),
-      x = (v.i * x + v.wy * z - v.wx * xyz - v.wz * y),
-      y = (v.i * y + v.wz * x - v.wx * z - v.wy * xyz),
-      z = (v.i * z + v.wx * y - v.wy * x - v.wz * xyz),
-      wx = (i * v.wx + v.i * wx + v.wy * wz - v.wz * wy),
-      wy = (i * v.wy + v.i * wy + v.wz * wx - v.wx * wz),
-      wz = (i * v.wz + v.i * wz + v.wx * wy - v.wy * wx),
-      xy = (v.i * xy - s * v.wz - v.wx * xz - v.wy * yz),
-      xz = (s * v.wy + v.i * xz + v.wx * xy - v.wz * yz),
-      yz = (v.i * yz + v.wy * xy + v.wz * xz - s * v.wx),
-      wxy = (v.i * wxy + v.wz * w - v.wx * wxz - v.wy * wyz),
-      wxz = (v.i * wxz + v.wx * wxy - v.wy * w - v.wz * wyz),
-      wyz = (v.i * wyz + v.wx * w + v.wy * wxy + v.wz * wxz),
-      xyz = (v.i * xyz + v.wx * x + v.wy * y + v.wz * z),
-      i = (i * v.i - v.wx * wx - v.wy * wy - v.wz * wz),
+      s = (i + v.wx * yz + v.wz * xy - v.wy * xz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = (-wyz + v.wy * z - v.wx * xyz - v.wz * y),
+      y = (wxz + v.wz * x - v.wx * z - v.wy * xyz),
+      z = (-wxy + v.wx * y - v.wy * x - v.wz * xyz),
+      wx = (i * v.wx + v.wy * wz - v.wz * wy),
+      wy = (i * v.wy + v.wz * wx - v.wx * wz),
+      wz = (i * v.wz + v.wx * wy - v.wy * wx),
+      xy = (-wz - s * v.wz - v.wx * xz - v.wy * yz),
+      xz = (wy + s * v.wy + v.wx * xy - v.wz * yz),
+      yz = (-wx + v.wy * xy + v.wz * xz - s * v.wx),
+      wxy = (v.wz * w - v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wy * w - v.wz * wyz),
+      wyz = (v.wx * w + v.wy * wxy + v.wz * wxz),
+      xyz = (w + v.wx * x + v.wy * y + v.wz * z),
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
-  infix def antiGeometric(v: PointIdeal): Multivector =
+  infix def antiGeometric(v: Vector): Multivector =
     Multivector(
       s = (v.wxy * z + v.wyz * x - v.wxz * y),
       w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
@@ -1523,27 +1523,27 @@ case class Multivector(
       i = 0.0,
     )
 
-  infix def antiDot(v: QuaternionDual): Multivector =
+  infix def antiDot(v: Translator): Multivector =
     Multivector(
-      s = s * v.i,
-      w = v.i * w,
-      x = v.i * x,
-      y = v.i * y,
-      z = v.i * z,
-      wx = (i * v.wx + v.i * wx),
-      wy = (i * v.wy + v.i * wy),
-      wz = (i * v.wz + v.i * wz),
-      xy = (v.i * xy - s * v.wz),
-      xz = (s * v.wy + v.i * xz),
-      yz = (v.i * yz - s * v.wx),
-      wxy = (v.i * wxy + v.wz * w - v.wx * wxz - v.wy * wyz),
-      wxz = (v.i * wxz + v.wx * wxy - v.wy * w - v.wz * wyz),
-      wyz = (v.i * wyz + v.wx * w + v.wy * wxy + v.wz * wxz),
-      xyz = (v.i * xyz + v.wx * x + v.wy * y + v.wz * z),
-      i = (i * v.i - v.wx * wx - v.wy * wy - v.wz * wz),
+      s = i,
+      w = 0.0,
+      x = -wyz,
+      y = wxz,
+      z = -wxy,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = (-wz - s * v.wz),
+      xz = (wy + s * v.wy),
+      yz = (-wx - s * v.wx),
+      wxy = (v.wz * w - v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wy * w - v.wz * wyz),
+      wyz = (v.wx * w + v.wy * wxy + v.wz * wxz),
+      xyz = (w + v.wx * x + v.wy * y + v.wz * z),
+      i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
-  infix def antiDot(v: PointIdeal): Multivector =
+  infix def antiDot(v: Vector): Multivector =
     Multivector(
       s = 0.0,
       w = 0.0,
@@ -1803,29 +1803,29 @@ case class Multivector(
 
   inline infix def v(v: Quaternion): Multivector = antiWedge(v)
 
-  infix def antiWedge(v: QuaternionDual): Multivector =
+  infix def antiWedge(v: Translator): Multivector =
     Multivector(
-      s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
-      w = (v.i * w + v.wy * wxz - v.wx * wyz - v.wz * wxy),
-      x = (v.i * x - v.wx * xyz),
-      y = (v.i * y - v.wy * xyz),
-      z = (v.i * z - v.wz * xyz),
-      wx = (i * v.wx + v.i * wx),
-      wy = (i * v.wy + v.i * wy),
-      wz = (i * v.wz + v.i * wz),
-      xy = v.i * xy,
-      xz = v.i * xz,
-      yz = v.i * yz,
-      wxy = v.i * wxy,
-      wxz = v.i * wxz,
-      wyz = v.i * wyz,
-      xyz = v.i * xyz,
-      i = i * v.i,
+      s = (i + v.wx * yz + v.wz * xy - v.wy * xz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
+      x = -v.wx * xyz,
+      y = -v.wy * xyz,
+      z = -v.wz * xyz,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = 0.0,
+      i = 0.0,
     )
 
-  inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
+  inline infix def v(v: Translator): Multivector = antiWedge(v)
 
-  infix def antiWedge(v: PointIdeal): Multivector =
+  infix def antiWedge(v: Vector): Multivector =
     Multivector(
       s = (v.wxy * z + v.wyz * x - v.wxz * y),
       w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
@@ -1845,7 +1845,7 @@ case class Multivector(
       i = 0.0,
     )
 
-  inline infix def v(v: PointIdeal): Multivector = antiWedge(v)
+  inline infix def v(v: Vector): Multivector = antiWedge(v)
 
   infix def antiWedge(v: PointNormalized): Multivector =
     Multivector(
@@ -2551,7 +2551,7 @@ case class Multivector(
       i = 2.0 * v.s * (sMi + wyMxz + xMwyz + zMwxy - wMxyz - wxMyz - wzMxy - yMwxz),
     )
 
-  infix def sandwich(v: QuaternionDual): Multivector =
+  infix def sandwich(v: Translator): Multivector =
     val sMs = s * s
     val sMx = s * x
     val sMy = s * y
@@ -2589,11 +2589,11 @@ case class Multivector(
     val yzMxyz = xyz * yz
     val xyzMxyz = xyz * xyz
     Multivector(
-      s = 0.0,
-      w = 2.0 * v.i * (sMxyz + yMxz - xMyz - zMxy),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
+      s = (sMs + xMx + xyMxy + xyzMxyz + xzMxz + yMy + yzMyz + zMz),
+      w = 2.0 * (i * xyz + s * w + wx * x + wxy * xy + wxz * xz + wy * y + wyz * yz + wz * z),
+      x = 2.0 * (sMx + yMxy + yzMxyz + zMxz),
+      y = 2.0 * (sMy + zMyz - xMxy - xzMxyz),
+      z = 2.0 * (sMz + xyMxyz - xMxz - yMyz),
       wx = (2.0 * (v.wy * (sMxy + zMxyz - xMy - xzMyz) + v.wz * (sMxz + xyMyz - xMz - yMxyz)) + v.wx * (sMs + yMy + yzMyz + zMz - xMx - xyMxy - xyzMxyz - xzMxz)),
       wy = (2.0 * (v.wx * (-sMxy - xMy - xzMyz - zMxyz) + v.wz * (sMyz + xMxyz - xyMxz - yMz)) + v.wy * (sMs + xMx + xzMxz + zMz - xyMxy - xyzMxyz - yMy - yzMyz)),
       wz = (2.0 * (v.wx * (xyMyz + yMxyz - sMxz - xMz) + v.wy * (-sMyz - xMxyz - xyMxz - yMz)) + v.wz * (sMs + xMx + xyMxy + yMy - xyzMxyz - xzMxz - yzMyz - zMz)),
@@ -2604,10 +2604,10 @@ case class Multivector(
       wxz = 2.0 * (v.wx * (sMz + xMxz - xyMxyz - yMyz) + v.wy * (sMxyz + xMyz + yMxz + zMxy) + v.wz * (yzMxyz + zMxz - sMx - yMxy)),
       wyz = 2.0 * (v.wx * (xMyz + yMxz - sMxyz - zMxy) + v.wy * (sMz + yMyz - xMxz - xyMxyz) + v.wz * (xMxy + zMyz - sMy - xzMxyz)),
       xyz = 0.0,
-      i = v.i * (sMs + xyMxy + xzMxz + yzMyz - xMx - xyzMxyz - yMy - zMz),
+      i = 2.0 * (i * s + wxy * z + wy * xz + wyz * x - w * xyz - wx * yz - wxz * y - wz * xy),
     )
 
-  infix def sandwich(v: PointIdeal): Multivector =
+  infix def sandwich(v: Vector): Multivector =
     val sMs = s * s
     val sMx = s * x
     val sMy = s * y
@@ -3531,7 +3531,7 @@ case class Multivector(
       i = 2.0 * v.s * (sMi + wMxyz + wyMxz + yMwxz - wxMyz - wzMxy - xMwyz - zMwxy),
     )
 
-  infix def reverseSandwich(v: QuaternionDual): Multivector =
+  infix def reverseSandwich(v: Translator): Multivector =
     val sMs = s * s
     val sMx = s * x
     val sMy = s * y
@@ -3569,11 +3569,11 @@ case class Multivector(
     val yzMxyz = xyz * yz
     val xyzMxyz = xyz * xyz
     Multivector(
-      s = 0.0,
-      w = 2.0 * v.i * (xMyz + zMxy - sMxyz - yMxz),
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
+      s = (sMs + xMx + xyMxy + xyzMxyz + xzMxz + yMy + yzMyz + zMz),
+      w = 2.0 * (s * w + wxy * xy + wxz * xz + wyz * yz - i * xyz - wx * x - wy * y - wz * z),
+      x = 2.0 * (sMx + yzMxyz - yMxy - zMxz),
+      y = 2.0 * (sMy + xMxy - xzMxyz - zMyz),
+      z = 2.0 * (sMz + xMxz + xyMxyz + yMyz),
       wx = (2.0 * (v.wy * (-sMxy - xMy - xzMyz - zMxyz) + v.wz * (xyMyz + yMxyz - sMxz - xMz)) + v.wx * (sMs + yMy + yzMyz + zMz - xMx - xyMxy - xyzMxyz - xzMxz)),
       wy = (2.0 * (v.wx * (sMxy + zMxyz - xMy - xzMyz) + v.wz * (-sMyz - xMxyz - xyMxz - yMz)) + v.wy * (sMs + xMx + xzMxz + zMz - xyMxy - xyzMxyz - yMy - yzMyz)),
       wz = (2.0 * (v.wx * (sMxz + xyMyz - xMz - yMxyz) + v.wy * (sMyz + xMxyz - xyMxz - yMz)) + v.wz * (sMs + xMx + xyMxy + yMy - xyzMxyz - xzMxz - yzMyz - zMz)),
@@ -3584,10 +3584,10 @@ case class Multivector(
       wxz = 2.0 * (v.wx * (sMz + yMyz - xMxz - xyMxyz) + v.wy * (-sMxyz - xMyz - yMxz - zMxy) + v.wz * (yMxy + yzMxyz - sMx - zMxz)),
       wyz = 2.0 * (v.wx * (sMxyz + zMxy - xMyz - yMxz) + v.wy * (sMz + xMxz - xyMxyz - yMyz) + v.wz * (-sMy - xMxy - xzMxyz - zMyz)),
       xyz = 0.0,
-      i = v.i * (sMs + xyMxy + xzMxz + yzMyz - xMx - xyzMxyz - yMy - zMz),
+      i = 2.0 * (i * s + w * xyz + wxz * y + wy * xz - wx * yz - wxy * z - wyz * x - wz * xy),
     )
 
-  infix def reverseSandwich(v: PointIdeal): Multivector =
+  infix def reverseSandwich(v: Vector): Multivector =
     val sMs = s * s
     val sMx = s * x
     val sMy = s * y
@@ -4059,10 +4059,10 @@ case class Multivector(
       i = 0.0,
     )
 
-  infix def cross(v: QuaternionDual): Multivector =
+  infix def cross(v: Translator): Multivector =
     Multivector(
       s = 0.0,
-      w = (v.i * xyz - v.wx * x - v.wy * y - v.wz * z),
+      w = (-v.wx * x - v.wy * y - v.wz * z),
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -4072,14 +4072,14 @@ case class Multivector(
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (-v.i * z - v.wz * xyz),
-      wxz = (v.i * y + v.wy * xyz),
-      wyz = (-v.i * x - v.wx * xyz),
+      wxy = -v.wz * xyz,
+      wxz = v.wy * xyz,
+      wyz = -v.wx * xyz,
       xyz = 0.0,
       i = 0.0,
     )
 
-  infix def cross(v: PointIdeal): Multivector =
+  infix def cross(v: Vector): Multivector =
     Multivector(
       s = 0.0,
       w = 0.0,

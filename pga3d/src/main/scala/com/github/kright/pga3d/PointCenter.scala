@@ -1,6 +1,6 @@
 package com.github.kright.pga3d
 
-/** this code is generated, see com.github.kright.pga3d.codegen.MultivectorSubClass */
+/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case object PointCenter:
   inline val wxy = 0.0
   inline val wxz = 0.0
@@ -232,27 +232,14 @@ case object PointCenter:
       i = 0.0,
     )
 
-  infix def geometric(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
+  infix def geometric(v: Translator): PointNormalized =
+    PointNormalized(
       wxy = -v.wz,
       wxz = v.wy,
       wyz = -v.wx,
-      xyz = 0.0,
-      i = 0.0,
     )
 
-  infix def geometric(v: PointIdeal): BivectorWeight =
+  infix def geometric(v: Vector): BivectorWeight =
     BivectorWeight(
       wx = v.wyz,
       wy = -v.wxz,
@@ -285,8 +272,8 @@ case object PointCenter:
       z = -v.xy,
     )
 
-  infix def geometric(v: BivectorWeight): PointIdeal =
-    PointIdeal(
+  infix def geometric(v: BivectorWeight): Vector =
+    Vector(
       wxy = -v.wz,
       wxz = v.wy,
       wyz = -v.wx,
@@ -380,13 +367,8 @@ case object PointCenter:
       i = 0.0,
     )
 
-  infix def dot(v: QuaternionDual): Plane =
-    Plane(
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-    )
+  infix def dot(v: Translator): PointCenter.type =
+    PointCenter
 
   infix def dot(v: PointNormalized): Double =
     -1.0
@@ -465,6 +447,11 @@ case object PointCenter:
 
   inline infix def ^(v: Quaternion): Point = wedge(v)
 
+  infix def wedge(v: Translator): PointCenter.type =
+    PointCenter
+
+  inline infix def ^(v: Translator): PointCenter.type = wedge(v)
+
   infix def antiGeometric(v: Multivector): Multivector =
     Multivector(
       s = v.w,
@@ -522,27 +509,14 @@ case object PointCenter:
       yz = -v.wyz,
     )
 
-  infix def antiGeometric(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
+  infix def antiGeometric(v: Translator): PlaneIdeal =
+    PlaneIdeal(
       x = -v.wx,
       y = -v.wy,
       z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
     )
 
-  infix def antiGeometric(v: PointIdeal): BivectorBulk =
+  infix def antiGeometric(v: Vector): BivectorBulk =
     BivectorBulk(
       xy = -v.wxy,
       xz = -v.wxz,
@@ -580,14 +554,6 @@ case object PointCenter:
     )
 
   infix def antiDot(v: Motor): Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
-  infix def antiDot(v: QuaternionDual): Point =
     Point(
       wxy = 0.0,
       wxz = 0.0,
@@ -670,36 +636,23 @@ case object PointCenter:
 
   inline infix def v(v: Point): BivectorBulk = antiWedge(v)
 
-  infix def antiWedge(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = 0.0,
+  infix def antiWedge(v: Translator): PlaneIdeal =
+    PlaneIdeal(
       x = -v.wx,
       y = -v.wy,
       z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
     )
 
-  inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
+  inline infix def v(v: Translator): PlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: PointIdeal): BivectorBulk =
+  infix def antiWedge(v: Vector): BivectorBulk =
     BivectorBulk(
       xy = -v.wxy,
       xz = -v.wxz,
       yz = -v.wyz,
     )
 
-  inline infix def v(v: PointIdeal): BivectorBulk = antiWedge(v)
+  inline infix def v(v: Vector): BivectorBulk = antiWedge(v)
 
   infix def antiWedge(v: PointNormalized): BivectorBulk =
     BivectorBulk(
@@ -795,16 +748,15 @@ case object PointCenter:
       yz = v.yz,
     )
 
-  infix def sandwich(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def sandwich(v: Translator): Translator =
+    Translator(
       wx = -v.wx,
       wy = -v.wy,
       wz = -v.wz,
-      i = -v.i,
     )
 
-  infix def sandwich(v: PointIdeal): PointIdeal =
-    PointIdeal(
+  infix def sandwich(v: Vector): Vector =
+    Vector(
       wxy = -v.wxy,
       wxz = -v.wxz,
       wyz = -v.wyz,
@@ -912,16 +864,15 @@ case object PointCenter:
       yz = v.yz,
     )
 
-  infix def reverseSandwich(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def reverseSandwich(v: Translator): Translator =
+    Translator(
       wx = -v.wx,
       wy = -v.wy,
       wz = -v.wz,
-      i = -v.i,
     )
 
-  infix def reverseSandwich(v: PointIdeal): PointIdeal =
-    PointIdeal(
+  infix def reverseSandwich(v: Vector): Vector =
+    Vector(
       wxy = -v.wxy,
       wxz = -v.wxz,
       wyz = -v.wyz,
@@ -1008,8 +959,8 @@ case object PointCenter:
       i = -v.w,
     )
 
-  infix def cross(v: Bivector): PointIdeal =
-    PointIdeal(
+  infix def cross(v: Bivector): Vector =
+    Vector(
       wxy = -v.wz,
       wxz = v.wy,
       wyz = -v.wx,
@@ -1022,27 +973,14 @@ case object PointCenter:
       wz = v.wxy,
     )
 
-  infix def cross(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
+  infix def cross(v: Translator): Vector =
+    Vector(
       wxy = -v.wz,
       wxz = v.wy,
       wyz = -v.wx,
-      xyz = 0.0,
-      i = 0.0,
     )
 
-  infix def cross(v: PointIdeal): BivectorWeight =
+  infix def cross(v: Vector): BivectorWeight =
     BivectorWeight(
       wx = v.wyz,
       wy = -v.wxz,
@@ -1056,8 +994,8 @@ case object PointCenter:
       wz = v.wxy,
     )
 
-  infix def cross(v: BivectorWeight): PointIdeal =
-    PointIdeal(
+  infix def cross(v: BivectorWeight): Vector =
+    Vector(
       wxy = -v.wz,
       wxz = v.wy,
       wyz = -v.wx,

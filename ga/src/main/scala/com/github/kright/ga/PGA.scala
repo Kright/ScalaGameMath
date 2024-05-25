@@ -85,7 +85,6 @@ object PGA extends CommonMethods:
       val bulk = line.bulk
       val weight = line.weight
       val len = bulk.norm
-
       val cos = Math.cos(len)
 
       // for small values sin(len) / len
@@ -101,7 +100,7 @@ object PGA extends CommonMethods:
       // and (sin(len) / len - cos(len)) / len**2 -> len**2 (1/2 - 1/6) + len ** 4 (1/4! - 1/5!) = (1 / 3) * (1 + 0.8 * len ** 2)
       // while len ** 4 < 1e-17, simplified formula is accurate, otherwise subtract sin and cos
       val sinMinusCosDivLen2 = if (len > 1e-5) {
-        (sinDivLen - math.cos(len)) / (len * len)
+        (sinDivLen - cos) / (len * len)
       } else (1.0 / 3.0) * (1.0 + 0.8 * len * len)
 
-      MultiVector.scalar(Math.cos(len)) + (line + IBdiv2) * sinDivLen + aIBettaDiv2 * sinMinusCosDivLen2
+      MultiVector.scalar(cos) + (line + IBdiv2) * sinDivLen + aIBettaDiv2 * sinMinusCosDivLen2

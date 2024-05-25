@@ -20,11 +20,11 @@ object PGA3State:
     def normalized: PGA3State =
       state.copy(motor = state.motor.normalizedByBulk)
 
-    def getEnergy(bodyInertia: PGA3Inertia): Double =
+    def getEnergy(bodyInertia: Inertia): Double =
       (state.localB v bodyInertia(state.localB)) * 0.5
 
-    def getL(bodyInertia: PGA3Inertia): Bivector =
-      state.motor.sandwich(bodyInertia(state.localB))
+    def getL(bodyInertia: Inertia): Bivector =
+      state.motor.sandwich(bodyInertia(state.localB)) 
 
     def center: Point =
       state.motor.sandwich(PointCenter)

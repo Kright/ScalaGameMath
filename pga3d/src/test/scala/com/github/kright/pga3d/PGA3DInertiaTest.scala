@@ -24,22 +24,34 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(maxError < PGA3OneBody.Error(errorE = 6e-11, errorL = 1e-9))
   }
 
-  //  test("calculate performance") {
-  //    val stepsCount = 1000_000
-  //    val forque = Bivector()
-  //
-  //    val body = PGA3OneBody.simple123()
-  //
-  //    assert(body.initialE == 3.0)
-  //    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
-  //
-  //    val start = System.nanoTime()
-  //    for (_ <- 0 until stepsCount) {
-  //      body.doStepRK4(dt = 0.001, forque)
-  //    }
-  //    val end = System.nanoTime()
-  //    println(s"dt = ${(end - start) / stepsCount}ns")
-  //  }
+  test("getAcceleration test") {
+    val body = PGA3OneBody.simple123()
+
+    val localB = Bivector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+    val localForque = Bivector(0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+
+    val acc = body.inertia.getAcceleration(localB, localForque)
+    val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
+
+    assert((acc - accNaive).norm < 2e-16)
+  }
+
+  test("calculate performance") {
+    val stepsCount = 10_000_000
+    val forque = Bivector()
+
+    val body = PGA3OneBody.simple123()
+
+    assert(body.initialE == 3.0)
+    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
+
+    val start = System.nanoTime()
+    for (_ <- 0 until stepsCount) {
+      body.doStepRK4(dt = 0.001, forque)
+    }
+    val end = System.nanoTime()
+    println(s"dt = ${(end - start) / stepsCount}ns")
+  }
 
   private def testOneBodySimple123[T](stepsCount: Int, doStep: PGA3OneBody => T): Iterable[T] = {
     val body = PGA3OneBody.simple123()
@@ -70,7 +82,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val globalForque = bodyCenter.dot(forceDirection)
       body.doStepRK4(dt, globalForque)
 
-      val expectedEnergy = body.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.linearMass
+      val expectedEnergy = body.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.mass
       accumulatedL += globalForque * dt
 
       val err = PGA3OneBody.Error(errorE = math.abs(expectedEnergy - body.getEnergy()), errorL = (accumulatedL - body.getL()).norm)
@@ -93,7 +105,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val mass = 10.0
 
     val body = new PGA3OneBody(
-      PGA3Inertia(mass, 1.0, 1.0, 1.0),
+      Inertia(mass, 1.0, 1.0, 1.0),
       PGA3State.zero,
     )
 

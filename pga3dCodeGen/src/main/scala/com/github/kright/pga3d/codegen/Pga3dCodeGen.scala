@@ -1,24 +1,18 @@
 package com.github.kright.pga3d.codegen
 
-import com.github.kright.pga3d.codegen.MultivectorSubClass.{*, given}
+import com.github.kright.pga3d.codegen.MultivectorSubClass.pgaClasses
 
 import java.io.File
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, StandardOpenOption}
 
 
 @main
 def main(): Unit = {
+  val packageDir = new File("pga3d/src/main/scala/com/github/kright/pga3d")
+  assert(packageDir.exists())
+
   for (cls <- pgaClasses if cls.shouldBeGenerated) {
-    val code = cls.generateCode(unaryOperations, binaryOperations)
-    val dir = new File("pga3d/src/main/scala/com/github/kright/pga3d")
-
-    assert(dir.exists())
-
-    val clsFile = File(dir, s"${cls.name}.scala")
-    Files.write(clsFile.toPath, code.getBytes(StandardCharsets.UTF_8),
-      StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)
-
-    println(s"class generated = ${clsFile}, linesCount = ${code.lines().count()}")
+    cls.writeToFile(packageDir)
   }
+
+  InertiaCodeGen().writeToFile(packageDir)
 }

@@ -1,9 +1,9 @@
 package com.github.kright.pga3d
 
-/** this code is generated, see com.github.kright.pga3d.codegen.MultivectorSubClass */
+/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case class PseudoScalar(
-                         i: Double = 0.0,
-                       ):
+  i: Double = 0.0,
+):
 
   def dual: Double =
     i
@@ -100,14 +100,6 @@ case class PseudoScalar(
       i = i,
     )
 
-  def toQuaternionDual: QuaternionDual =
-    QuaternionDual(
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      i = i,
-    )
-
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = 0.0,
@@ -128,16 +120,20 @@ case class PseudoScalar(
       i = i * v.s,
     )
 
-  infix def geometric(v: Motor): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: Motor): Motor =
+    Motor(
+      s = 0.0,
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
       i = i * v.s,
     )
 
-  infix def geometric(v: Plane): PointIdeal =
-    PointIdeal(
+  infix def geometric(v: Plane): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
@@ -158,12 +154,21 @@ case class PseudoScalar(
       z = 0.0,
     )
 
-  infix def geometric(v: Quaternion): QuaternionDual =
-    QuaternionDual(
+  infix def geometric(v: Quaternion): Motor =
+    Motor(
+      s = 0.0,
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
       i = i * v.s,
+    )
+
+  infix def geometric(v: Translator): PseudoScalar =
+    PseudoScalar(
+      i = i,
     )
 
   infix def geometric(v: PointNormalized): Plane =
@@ -174,8 +179,8 @@ case class PseudoScalar(
       z = 0.0,
     )
 
-  infix def geometric(v: PlaneIdeal): PointIdeal =
-    PointIdeal(
+  infix def geometric(v: PlaneIdeal): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
@@ -216,16 +221,20 @@ case class PseudoScalar(
       i = i * v.s,
     )
 
-  infix def dot(v: Motor): QuaternionDual =
-    QuaternionDual(
+  infix def dot(v: Motor): Motor =
+    Motor(
+      s = 0.0,
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
       i = i * v.s,
     )
 
-  infix def dot(v: Plane): PointIdeal =
-    PointIdeal(
+  infix def dot(v: Plane): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
@@ -246,12 +255,21 @@ case class PseudoScalar(
       z = 0.0,
     )
 
-  infix def dot(v: Quaternion): QuaternionDual =
-    QuaternionDual(
+  infix def dot(v: Quaternion): Motor =
+    Motor(
+      s = 0.0,
       wx = -i * v.yz,
       wy = i * v.xz,
       wz = -i * v.xy,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
       i = i * v.s,
+    )
+
+  infix def dot(v: Translator): PseudoScalar =
+    PseudoScalar(
+      i = i,
     )
 
   infix def dot(v: PointNormalized): Plane =
@@ -262,8 +280,8 @@ case class PseudoScalar(
       z = 0.0,
     )
 
-  infix def dot(v: PlaneIdeal): PointIdeal =
-    PointIdeal(
+  infix def dot(v: PlaneIdeal): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
@@ -304,6 +322,13 @@ case class PseudoScalar(
     )
 
   inline infix def ^(v: Quaternion): PseudoScalar = wedge(v)
+
+  infix def wedge(v: Translator): PseudoScalar =
+    PseudoScalar(
+      i = i,
+    )
+
+  inline infix def ^(v: Translator): PseudoScalar = wedge(v)
 
   infix def antiGeometric(v: Multivector): Multivector =
     Multivector(
@@ -371,16 +396,20 @@ case class PseudoScalar(
       yz = i * v.yz,
     )
 
-  infix def antiGeometric(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def antiGeometric(v: Translator): Motor =
+    Motor(
+      s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      i = i * v.i,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
     )
 
-  infix def antiGeometric(v: PointIdeal): PointIdeal =
-    PointIdeal(
+  infix def antiGeometric(v: Vector): Vector =
+    Vector(
       wxy = i * v.wxy,
       wxz = i * v.wxz,
       wyz = i * v.wyz,
@@ -494,16 +523,20 @@ case class PseudoScalar(
       yz = i * v.yz,
     )
 
-  infix def antiDot(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def antiDot(v: Translator): Motor =
+    Motor(
+      s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      i = i * v.i,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
     )
 
-  infix def antiDot(v: PointIdeal): PointIdeal =
-    PointIdeal(
+  infix def antiDot(v: Vector): Vector =
+    Vector(
       wxy = i * v.wxy,
       wxz = i * v.wxz,
       wyz = i * v.wyz,
@@ -629,24 +662,28 @@ case class PseudoScalar(
 
   inline infix def v(v: Quaternion): Quaternion = antiWedge(v)
 
-  infix def antiWedge(v: QuaternionDual): QuaternionDual =
-    QuaternionDual(
+  infix def antiWedge(v: Translator): Motor =
+    Motor(
+      s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      i = i * v.i,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
     )
 
-  inline infix def v(v: QuaternionDual): QuaternionDual = antiWedge(v)
+  inline infix def v(v: Translator): Motor = antiWedge(v)
 
-  infix def antiWedge(v: PointIdeal): PointIdeal =
-    PointIdeal(
+  infix def antiWedge(v: Vector): Vector =
+    Vector(
       wxy = i * v.wxy,
       wxz = i * v.wxz,
       wyz = i * v.wyz,
     )
 
-  inline infix def v(v: PointIdeal): PointIdeal = antiWedge(v)
+  inline infix def v(v: Vector): Vector = antiWedge(v)
 
   infix def antiWedge(v: PointNormalized): Point =
     Point(
@@ -722,8 +759,8 @@ case class PseudoScalar(
       i = 0.0,
     )
 
-  infix def cross(v: Plane): PointIdeal =
-    PointIdeal(
+  infix def cross(v: Plane): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,
@@ -745,8 +782,8 @@ case class PseudoScalar(
       z = 0.0,
     )
 
-  infix def cross(v: PlaneIdeal): PointIdeal =
-    PointIdeal(
+  infix def cross(v: PlaneIdeal): Vector =
+    Vector(
       wxy = i * v.z,
       wxz = -i * v.y,
       wyz = i * v.x,

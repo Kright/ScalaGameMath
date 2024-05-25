@@ -12,8 +12,9 @@ class CodeGen:
 
   def apply(lines: String*): Unit = {
     val prefix = " ".repeat(pad)
-    for (line <- lines) {
-      code.append(prefix).append(line).append("\n")
+    for (line <- lines;
+         l <- line.split("\n")) {
+      code.append(prefix).append(l).append("\n")
     }
   }
 

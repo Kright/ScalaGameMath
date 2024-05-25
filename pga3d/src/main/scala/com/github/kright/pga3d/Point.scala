@@ -1,12 +1,12 @@
 package com.github.kright.pga3d
 
-/** this code is generated, see com.github.kright.pga3d.codegen.MultivectorSubClass */
+/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case class Point(
-                  wxy: Double = 0.0,
-                  wxz: Double = 0.0,
-                  wyz: Double = 0.0,
-                  xyz: Double = 0.0,
-                ):
+  wxy: Double = 0.0,
+  wxz: Double = 0.0,
+  wyz: Double = 0.0,
+  xyz: Double = 0.0,
+):
 
   inline def dualX: Double = -wyz
 
@@ -24,8 +24,8 @@ case class Point(
       z = -wxy,
     )
 
-  def weight: PointIdeal =
-    PointIdeal(
+  def weight: Vector =
+    Vector(
       wxy = wxy,
       wxz = wxz,
       wyz = wyz,
@@ -118,6 +118,54 @@ case class Point(
       wxz = (wxz + mult * v.wxz),
       wyz = (wyz + mult * v.wyz),
       xyz = (xyz + mult * v.xyz),
+    )
+
+  def +(v: PointNormalized): Point =
+    Point(
+      wxy = (v.wxy + wxy),
+      wxz = (v.wxz + wxz),
+      wyz = (v.wyz + wyz),
+      xyz = (1.0 + xyz),
+    )
+
+  def -(v: PointNormalized): Point =
+    Point(
+      wxy = (wxy - v.wxy),
+      wxz = (wxz - v.wxz),
+      wyz = (wyz - v.wyz),
+      xyz = (-1.0 + xyz),
+    )
+
+  def madd(v: PointNormalized, mult: Double): Point =
+    Point(
+      wxy = (wxy + mult * v.wxy),
+      wxz = (wxz + mult * v.wxz),
+      wyz = (wyz + mult * v.wyz),
+      xyz = (mult + xyz),
+    )
+
+  def +(v: Vector): Point =
+    Point(
+      wxy = (v.wxy + wxy),
+      wxz = (v.wxz + wxz),
+      wyz = (v.wyz + wyz),
+      xyz = xyz,
+    )
+
+  def -(v: Vector): Point =
+    Point(
+      wxy = (wxy - v.wxy),
+      wxz = (wxz - v.wxz),
+      wyz = (wyz - v.wyz),
+      xyz = xyz,
+    )
+
+  def madd(v: Vector, mult: Double): Point =
+    Point(
+      wxy = (wxy + mult * v.wxy),
+      wxz = (wxz + mult * v.wxz),
+      wyz = (wyz + mult * v.wyz),
+      xyz = xyz,
     )
 
   def multiplyElementwise(v: Point): Point =
@@ -252,27 +300,15 @@ case class Point(
       i = 0.0,
     )
 
-  infix def geometric(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i * xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = -v.wz * xyz,
-      wxz = v.wy * xyz,
-      wyz = -v.wx * xyz,
-      xyz = 0.0,
-      i = 0.0,
+  infix def geometric(v: Translator): Point =
+    Point(
+      wxy = (wxy - v.wz * xyz),
+      wxz = (wxz + v.wy * xyz),
+      wyz = (wyz - v.wx * xyz),
+      xyz = xyz,
     )
 
-  infix def geometric(v: PointIdeal): BivectorWeight =
+  infix def geometric(v: Vector): BivectorWeight =
     BivectorWeight(
       wx = v.wyz * xyz,
       wy = -v.wxz * xyz,
@@ -323,8 +359,8 @@ case class Point(
       i = 0.0,
     )
 
-  infix def geometric(v: BivectorWeight): PointIdeal =
-    PointIdeal(
+  infix def geometric(v: BivectorWeight): Vector =
+    Vector(
       wxy = -v.wz * xyz,
       wxz = v.wy * xyz,
       wyz = -v.wx * xyz,
@@ -431,12 +467,12 @@ case class Point(
       i = 0.0,
     )
 
-  infix def dot(v: QuaternionDual): Plane =
-    Plane(
-      w = v.i * xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
+  infix def dot(v: Translator): Point =
+    Point(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+      xyz = xyz,
     )
 
   infix def dot(v: PointNormalized): Double =
@@ -519,6 +555,16 @@ case class Point(
     )
 
   inline infix def ^(v: Quaternion): Point = wedge(v)
+
+  infix def wedge(v: Translator): Point =
+    Point(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+      xyz = xyz,
+    )
+
+  inline infix def ^(v: Translator): Point = wedge(v)
 
   infix def wedge(v: PlaneIdeal): PseudoScalar =
     PseudoScalar(
@@ -631,27 +677,27 @@ case class Point(
       i = 0.0,
     )
 
-  infix def antiGeometric(v: QuaternionDual): Multivector =
+  infix def antiGeometric(v: Translator): Multivector =
     Multivector(
       s = 0.0,
       w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
-      x = -v.wx * xyz,
-      y = -v.wy * xyz,
-      z = -v.wz * xyz,
+      x = (-wyz - v.wx * xyz),
+      y = (wxz - v.wy * xyz),
+      z = (-wxy - v.wz * xyz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (v.i * wxy - v.wx * wxz - v.wy * wyz),
-      wxz = (v.i * wxz + v.wx * wxy - v.wz * wyz),
-      wyz = (v.i * wyz + v.wy * wxy + v.wz * wxz),
-      xyz = v.i * xyz,
+      wxy = (-v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wz * wyz),
+      wyz = (v.wy * wxy + v.wz * wxz),
+      xyz = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: PointIdeal): Motor =
+  infix def antiGeometric(v: Vector): Motor =
     Motor(
       s = 0.0,
       wx = (v.wxz * wxy - v.wxy * wxz),
@@ -821,15 +867,27 @@ case class Point(
       i = 0.0,
     )
 
-  infix def antiDot(v: QuaternionDual): Point =
-    Point(
-      wxy = (v.i * wxy - v.wx * wxz - v.wy * wyz),
-      wxz = (v.i * wxz + v.wx * wxy - v.wz * wyz),
-      wyz = (v.i * wyz + v.wy * wxy + v.wz * wxz),
-      xyz = v.i * xyz,
+  infix def antiDot(v: Translator): Multivector =
+    Multivector(
+      s = 0.0,
+      w = 0.0,
+      x = -wyz,
+      y = wxz,
+      z = -wxy,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (-v.wx * wxz - v.wy * wyz),
+      wxz = (v.wx * wxy - v.wz * wyz),
+      wyz = (v.wy * wxy + v.wz * wxz),
+      xyz = 0.0,
+      i = 0.0,
     )
 
-  infix def antiDot(v: PointIdeal): PseudoScalar =
+  infix def antiDot(v: Vector): PseudoScalar =
     PseudoScalar(
       i = (v.wxy * wxy + v.wxz * wxz + v.wyz * wyz),
     )
@@ -854,8 +912,8 @@ case class Point(
       xyz = (v.xy * wxy + v.xz * wxz + v.yz * wyz),
     )
 
-  infix def antiDot(v: BivectorWeight): PointIdeal =
-    PointIdeal(
+  infix def antiDot(v: BivectorWeight): Vector =
+    Vector(
       wxy = (-v.wx * wxz - v.wy * wyz),
       wxz = (v.wx * wxy - v.wz * wyz),
       wyz = (v.wy * wxy + v.wz * wxz),
@@ -949,29 +1007,17 @@ case class Point(
 
   inline infix def v(v: Quaternion): PlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
+  infix def antiWedge(v: Translator): Plane =
+    Plane(
       w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = -v.wx * xyz,
       y = -v.wy * xyz,
       z = -v.wz * xyz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = v.i * wxy,
-      wxz = v.i * wxz,
-      wyz = v.i * wyz,
-      xyz = v.i * xyz,
-      i = 0.0,
     )
 
-  inline infix def v(v: QuaternionDual): Multivector = antiWedge(v)
+  inline infix def v(v: Translator): Plane = antiWedge(v)
 
-  infix def antiWedge(v: PointIdeal): Bivector =
+  infix def antiWedge(v: Vector): Bivector =
     Bivector(
       wx = (v.wxz * wxy - v.wxy * wxz),
       wy = (v.wyz * wxy - v.wxy * wyz),
@@ -981,7 +1027,7 @@ case class Point(
       yz = -v.wyz * xyz,
     )
 
-  inline infix def v(v: PointIdeal): Bivector = antiWedge(v)
+  inline infix def v(v: Vector): Bivector = antiWedge(v)
 
   infix def antiWedge(v: PointNormalized): Bivector =
     Bivector(
@@ -1126,18 +1172,22 @@ case class Point(
       i = 0.0,
     )
 
-  infix def sandwich(v: QuaternionDual): QuaternionDual =
+  infix def sandwich(v: Translator): Motor =
     val xyzMxyz = xyz * xyz
-    QuaternionDual(
+    Motor(
+      s = xyzMxyz,
       wx = -v.wx * xyzMxyz,
       wy = -v.wy * xyzMxyz,
       wz = -v.wz * xyzMxyz,
-      i = -v.i * xyzMxyz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
     )
 
-  infix def sandwich(v: PointIdeal): PointIdeal =
+  infix def sandwich(v: Vector): Vector =
     val xyzMxyz = xyz * xyz
-    PointIdeal(
+    Vector(
       wxy = -v.wxy * xyzMxyz,
       wxz = -v.wxz * xyzMxyz,
       wyz = -v.wyz * xyzMxyz,
@@ -1284,18 +1334,22 @@ case class Point(
       i = 0.0,
     )
 
-  infix def reverseSandwich(v: QuaternionDual): QuaternionDual =
+  infix def reverseSandwich(v: Translator): Motor =
     val xyzMxyz = xyz * xyz
-    QuaternionDual(
+    Motor(
+      s = xyzMxyz,
       wx = -v.wx * xyzMxyz,
       wy = -v.wy * xyzMxyz,
       wz = -v.wz * xyzMxyz,
-      i = -v.i * xyzMxyz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
     )
 
-  infix def reverseSandwich(v: PointIdeal): PointIdeal =
+  infix def reverseSandwich(v: Vector): Vector =
     val xyzMxyz = xyz * xyz
-    PointIdeal(
+    Vector(
       wxy = -v.wxy * xyzMxyz,
       wxz = -v.wxz * xyzMxyz,
       wyz = -v.wyz * xyzMxyz,
@@ -1399,8 +1453,8 @@ case class Point(
       i = (v.x * wyz + v.z * wxy - v.w * xyz - v.y * wxz),
     )
 
-  infix def cross(v: Bivector): PointIdeal =
-    PointIdeal(
+  infix def cross(v: Bivector): Vector =
+    Vector(
       wxy = (v.xz * wyz - v.wz * xyz - v.yz * wxz),
       wxz = (v.wy * xyz + v.yz * wxy - v.xy * wyz),
       wyz = (v.xy * wxz - v.wx * xyz - v.xz * wxy),
@@ -1413,34 +1467,21 @@ case class Point(
       wz = (v.wxy * xyz - v.xyz * wxy),
     )
 
-  infix def cross(v: Quaternion): PointIdeal =
-    PointIdeal(
+  infix def cross(v: Quaternion): Vector =
+    Vector(
       wxy = (v.xz * wyz - v.yz * wxz),
       wxz = (v.yz * wxy - v.xy * wyz),
       wyz = (v.xy * wxz - v.xz * wxy),
     )
 
-  infix def cross(v: QuaternionDual): Multivector =
-    Multivector(
-      s = 0.0,
-      w = v.i * xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
+  infix def cross(v: Translator): Vector =
+    Vector(
       wxy = -v.wz * xyz,
       wxz = v.wy * xyz,
       wyz = -v.wx * xyz,
-      xyz = 0.0,
-      i = 0.0,
     )
 
-  infix def cross(v: PointIdeal): BivectorWeight =
+  infix def cross(v: Vector): BivectorWeight =
     BivectorWeight(
       wx = v.wyz * xyz,
       wy = -v.wxz * xyz,
@@ -1459,15 +1500,15 @@ case class Point(
       i = (v.x * wyz + v.z * wxy - v.y * wxz),
     )
 
-  infix def cross(v: BivectorBulk): PointIdeal =
-    PointIdeal(
+  infix def cross(v: BivectorBulk): Vector =
+    Vector(
       wxy = (v.xz * wyz - v.yz * wxz),
       wxz = (v.yz * wxy - v.xy * wyz),
       wyz = (v.xy * wxz - v.xz * wxy),
     )
 
-  infix def cross(v: BivectorWeight): PointIdeal =
-    PointIdeal(
+  infix def cross(v: BivectorWeight): Vector =
+    Vector(
       wxy = -v.wz * xyz,
       wxz = v.wy * xyz,
       wyz = -v.wx * xyz,
@@ -1486,4 +1527,14 @@ case class Point(
       wx = -wyz,
       wy = wxz,
       wz = -wxy,
+    )
+
+
+object Point:
+  def fromDual(x: Double, y: Double, z: Double, w: Double): Point =
+    Point(
+      wxy = -z,
+      wxz = y,
+      wyz = -x,
+      xyz = w,
     )
