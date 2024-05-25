@@ -1047,21 +1047,21 @@ case class Bivector(
     val yzMyz = yz * yz
     Multivector(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      w = (v.w * xyMxy + v.w * xzMxz + v.w * yzMyz - 2.0 * v.x * wyMxy - 2.0 * v.x * wzMxz - 2.0 * v.y * wzMyz + 2.0 * v.y * wxMxy + 2.0 * v.z * wxMxz + 2.0 * v.z * wyMyz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      wxy = (v.wxy * xyMxy - 2.0 * v.xyz * wxMxz - 2.0 * v.xyz * wyMyz - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - 2.0 * v.xyz * wzMyz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz + 2.0 * v.xyz * wxMxy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * v.xyz * wyMxy + 2.0 * v.xyz * wzMxz),
+      w = (2.0 * (v.x * (-wyMxy - wzMxz) + v.y * (wxMxy - wzMyz) + v.z * (wxMxz + wyMyz)) + v.w * (xyMxy + xzMxz + yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz + v.xyz * (-wxMxz - wyMyz)) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + v.xyz * (wxMxy - wzMyz)) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + v.xyz * (wyMxy + wzMxz)) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (xyMxy + xzMxz + yzMyz),
-      i = (v.i * xyMxy + v.i * xzMxz + v.i * yzMyz - 2.0 * v.s * wxMyz - 2.0 * v.s * wzMxy + 2.0 * v.s * wyMxz),
+      i = (v.i * (xyMxy + xzMxz + yzMyz) + 2.0 * v.s * (wyMxz - wxMyz - wzMxy)),
     )
 
   infix def sandwich(v: Motor): Motor =
@@ -1082,13 +1082,13 @@ case class Bivector(
     val yzMyz = yz * yz
     Motor(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      i = (v.i * xyMxy + v.i * xzMxz + v.i * yzMyz - 2.0 * v.s * wxMyz - 2.0 * v.s * wzMxy + 2.0 * v.s * wyMxz),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      i = (v.i * (xyMxy + xzMxz + yzMyz) + 2.0 * v.s * (wyMxz - wxMyz - wzMxy)),
     )
 
   infix def sandwich(v: Plane): Plane =
@@ -1099,10 +1099,10 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Plane(
-      w = (v.w * xyMxy + v.w * xzMxz + v.w * yzMyz - 2.0 * v.x * wy * xy - 2.0 * v.x * wz * xz - 2.0 * v.y * wz * yz + 2.0 * v.y * wx * xy + 2.0 * v.z * wx * xz + 2.0 * v.z * wy * yz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
+      w = (2.0 * (v.x * (-wy * xy - wz * xz) + v.y * (wx * xy - wz * yz) + v.z * (wx * xz + wy * yz)) + v.w * (xyMxy + xzMxz + yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def sandwich(v: Bivector): Bivector =
@@ -1122,12 +1122,12 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Bivector(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def sandwich(v: Point): Point =
@@ -1138,9 +1138,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Point(
-      wxy = (v.wxy * xyMxy - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz - 2.0 * v.xyz * wx * xz - 2.0 * v.xyz * wy * yz),
-      wxz = (v.wxz * xzMxz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz - 2.0 * v.xyz * wz * yz + 2.0 * v.xyz * wx * xy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * v.xyz * wy * xy + 2.0 * v.xyz * wz * xz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz + v.xyz * (-wx * xz - wy * yz)) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + v.xyz * (wx * xy - wz * yz)) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + v.xyz * (wy * xy + wz * xz)) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1162,13 +1162,13 @@ case class Bivector(
     val yzMyz = yz * yz
     Motor(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      wx = (-2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (-2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (-2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      i = v.s * (-2.0 * wxMyz - 2.0 * wzMxy + 2.0 * wyMxz),
+      wx = 2.0 * (v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy)),
+      wy = 2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz)),
+      wz = 2.0 * (v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      i = 2.0 * v.s * (wyMxz - wxMyz - wzMxy),
     )
 
   infix def sandwich(v: QuaternionDual): QuaternionDual =
@@ -1179,9 +1179,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     QuaternionDual(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - v.wy * xyMxy - v.wy * yzMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz),
+      wx = (2.0 * (v.wz * xyMyz - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (-v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
       i = v.i * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1193,9 +1193,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     PointIdeal(
-      wxy = (v.wxy * xyMxy - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz) + v.wyz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def sandwich(v: PointNormalized): Point =
@@ -1206,9 +1206,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Point(
-      wxy = (v.wxy * xyMxy - 2.0 * wx * xz - 2.0 * wy * yz - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - 2.0 * wz * yz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz + 2.0 * wx * xy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * wy * xy + 2.0 * wz * xz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz - wx * xz - wy * yz) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + wx * xy - wz * yz) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + wy * xy + wz * xz) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1220,10 +1220,10 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Plane(
-      w = (-2.0 * v.x * wy * xy - 2.0 * v.x * wz * xz - 2.0 * v.y * wz * yz + 2.0 * v.y * wx * xy + 2.0 * v.z * wx * xz + 2.0 * v.z * wy * yz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
+      w = 2.0 * (v.x * (-wy * xy - wz * xz) + v.y * (wx * xy - wz * yz) + v.z * (wx * xz + wy * yz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def sandwich(v: BivectorBulk): Bivector =
@@ -1243,12 +1243,12 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Bivector(
-      wx = (-2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (-2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (-2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
+      wx = 2.0 * (v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy)),
+      wy = 2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz)),
+      wz = 2.0 * (v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def sandwich(v: BivectorWeight): BivectorWeight =
@@ -1259,9 +1259,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     BivectorWeight(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - v.wy * xyMxy - v.wy * yzMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz),
+      wx = (2.0 * (v.wz * xyMyz - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (-v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def sandwich(v: PseudoScalar): PseudoScalar =
@@ -1271,8 +1271,8 @@ case class Bivector(
 
   infix def sandwich(v: PointCenter.type): Point =
     Point(
-      wxy = -2.0 * (wx * xz + wy * yz),
-      wxz = (-2.0 * wz * yz + 2.0 * wx * xy),
+      wxy = 2.0 * (-wx * xz - wy * yz),
+      wxz = 2.0 * (wx * xy - wz * yz),
       wyz = 2.0 * (wy * xy + wz * xz),
       xyz = (xy * xy + xz * xz + yz * yz),
     )
@@ -1295,21 +1295,21 @@ case class Bivector(
     val yzMyz = yz * yz
     Multivector(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      w = (v.w * xyMxy + v.w * xzMxz + v.w * yzMyz - 2.0 * v.x * wyMxy - 2.0 * v.x * wzMxz - 2.0 * v.y * wzMyz + 2.0 * v.y * wxMxy + 2.0 * v.z * wxMxz + 2.0 * v.z * wyMyz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      wxy = (v.wxy * xyMxy - 2.0 * v.xyz * wxMxz - 2.0 * v.xyz * wyMyz - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - 2.0 * v.xyz * wzMyz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz + 2.0 * v.xyz * wxMxy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * v.xyz * wyMxy + 2.0 * v.xyz * wzMxz),
+      w = (2.0 * (v.x * (-wyMxy - wzMxz) + v.y * (wxMxy - wzMyz) + v.z * (wxMxz + wyMyz)) + v.w * (xyMxy + xzMxz + yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz + v.xyz * (-wxMxz - wyMyz)) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + v.xyz * (wxMxy - wzMyz)) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + v.xyz * (wyMxy + wzMxz)) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (xyMxy + xzMxz + yzMyz),
-      i = (v.i * xyMxy + v.i * xzMxz + v.i * yzMyz - 2.0 * v.s * wxMyz - 2.0 * v.s * wzMxy + 2.0 * v.s * wyMxz),
+      i = (v.i * (xyMxy + xzMxz + yzMyz) + 2.0 * v.s * (wyMxz - wxMyz - wzMxy)),
     )
 
   infix def reverseSandwich(v: Motor): Motor =
@@ -1330,13 +1330,13 @@ case class Bivector(
     val yzMyz = yz * yz
     Motor(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      i = (v.i * xyMxy + v.i * xzMxz + v.i * yzMyz - 2.0 * v.s * wxMyz - 2.0 * v.s * wzMxy + 2.0 * v.s * wyMxz),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      i = (v.i * (xyMxy + xzMxz + yzMyz) + 2.0 * v.s * (wyMxz - wxMyz - wzMxy)),
     )
 
   infix def reverseSandwich(v: Plane): Plane =
@@ -1347,10 +1347,10 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Plane(
-      w = (v.w * xyMxy + v.w * xzMxz + v.w * yzMyz - 2.0 * v.x * wy * xy - 2.0 * v.x * wz * xz - 2.0 * v.y * wz * yz + 2.0 * v.y * wx * xy + 2.0 * v.z * wx * xz + 2.0 * v.z * wy * yz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
+      w = (2.0 * (v.x * (-wy * xy - wz * xz) + v.y * (wx * xy - wz * yz) + v.z * (wx * xz + wy * yz)) + v.w * (xyMxy + xzMxz + yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def reverseSandwich(v: Bivector): Bivector =
@@ -1370,12 +1370,12 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Bivector(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - 2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - 2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz - v.wy * xyMxy - v.wy * yzMyz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - 2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
+      wx = (2.0 * (v.wz * xyMyz + v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy) - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz) - v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz + v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz) - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def reverseSandwich(v: Point): Point =
@@ -1386,9 +1386,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Point(
-      wxy = (v.wxy * xyMxy - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz - 2.0 * v.xyz * wx * xz - 2.0 * v.xyz * wy * yz),
-      wxz = (v.wxz * xzMxz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz - 2.0 * v.xyz * wz * yz + 2.0 * v.xyz * wx * xy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * v.xyz * wy * xy + 2.0 * v.xyz * wz * xz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz + v.xyz * (-wx * xz - wy * yz)) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + v.xyz * (wx * xy - wz * yz)) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + v.xyz * (wy * xy + wz * xz)) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1410,13 +1410,13 @@ case class Bivector(
     val yzMyz = yz * yz
     Motor(
       s = v.s * (xyMxy + xzMxz + yzMyz),
-      wx = (-2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (-2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (-2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
-      i = v.s * (-2.0 * wxMyz - 2.0 * wzMxy + 2.0 * wyMxz),
+      wx = 2.0 * (v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy)),
+      wy = 2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz)),
+      wz = 2.0 * (v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
+      i = 2.0 * v.s * (wyMxz - wxMyz - wzMxy),
     )
 
   infix def reverseSandwich(v: QuaternionDual): QuaternionDual =
@@ -1427,9 +1427,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     QuaternionDual(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - v.wy * xyMxy - v.wy * yzMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz),
+      wx = (2.0 * (v.wz * xyMyz - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (-v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
       i = v.i * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1441,9 +1441,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     PointIdeal(
-      wxy = (v.wxy * xyMxy - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz) + v.wyz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def reverseSandwich(v: PointNormalized): Point =
@@ -1454,9 +1454,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Point(
-      wxy = (v.wxy * xyMxy - 2.0 * wx * xz - 2.0 * wy * yz - v.wxy * xzMxz - v.wxy * yzMyz + 2.0 * v.wxz * xyMxz + 2.0 * v.wyz * xyMyz),
-      wxz = (v.wxz * xzMxz - 2.0 * wz * yz - v.wxz * xyMxy - v.wxz * yzMyz + 2.0 * v.wxy * xyMxz + 2.0 * v.wyz * xzMyz + 2.0 * wx * xy),
-      wyz = (v.wyz * yzMyz - v.wyz * xyMxy - v.wyz * xzMxz + 2.0 * v.wxy * xyMyz + 2.0 * v.wxz * xzMyz + 2.0 * wy * xy + 2.0 * wz * xz),
+      wxy = (2.0 * (v.wxz * xyMxz + v.wyz * xyMyz - wx * xz - wy * yz) + v.wxy * (xyMxy - xzMxz - yzMyz)),
+      wxz = (2.0 * (v.wxy * xyMxz + v.wyz * xzMyz + wx * xy - wz * yz) + v.wxz * (xzMxz - xyMxy - yzMyz)),
+      wyz = (2.0 * (v.wxy * xyMyz + v.wxz * xzMyz + wy * xy + wz * xz) + v.wyz * (yzMyz - xyMxy - xzMxz)),
       xyz = (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1468,10 +1468,10 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Plane(
-      w = (-2.0 * v.x * wy * xy - 2.0 * v.x * wz * xz - 2.0 * v.y * wz * yz + 2.0 * v.y * wx * xy + 2.0 * v.z * wx * xz + 2.0 * v.z * wy * yz),
-      x = (v.x * yzMyz - 2.0 * v.y * xzMyz - v.x * xyMxy - v.x * xzMxz + 2.0 * v.z * xyMyz),
-      y = (v.y * xzMxz - 2.0 * v.x * xzMyz - 2.0 * v.z * xyMxz - v.y * xyMxy - v.y * yzMyz),
-      z = (v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * v.x * xyMyz),
+      w = 2.0 * (v.x * (-wy * xy - wz * xz) + v.y * (wx * xy - wz * yz) + v.z * (wx * xz + wy * yz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
+      y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def reverseSandwich(v: BivectorBulk): Bivector =
@@ -1491,12 +1491,12 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Bivector(
-      wx = (-2.0 * v.xz * wyMyz - 2.0 * v.yz * wzMxy + 2.0 * v.xy * wxMxy + 2.0 * v.xy * wzMyz + 2.0 * v.xz * wxMxz + 2.0 * v.yz * wxMyz + 2.0 * v.yz * wyMxz),
-      wy = (-2.0 * v.xy * wzMxz - 2.0 * v.yz * wxMxz + 2.0 * v.xy * wyMxy + 2.0 * v.xz * wxMyz + 2.0 * v.xz * wyMxz + 2.0 * v.xz * wzMxy + 2.0 * v.yz * wyMyz),
-      wz = (-2.0 * v.xy * wxMyz - 2.0 * v.xz * wyMxy + 2.0 * v.xy * wyMxz + 2.0 * v.xy * wzMxy + 2.0 * v.xz * wzMxz + 2.0 * v.yz * wxMxy + 2.0 * v.yz * wzMyz),
-      xy = (v.xy * xyMxy - v.xy * xzMxz - v.xy * yzMyz + 2.0 * v.xz * xyMxz + 2.0 * v.yz * xyMyz),
-      xz = (v.xz * xzMxz - v.xz * xyMxy - v.xz * yzMyz + 2.0 * v.xy * xyMxz + 2.0 * v.yz * xzMyz),
-      yz = (v.yz * yzMyz - v.yz * xyMxy - v.yz * xzMxz + 2.0 * v.xy * xyMyz + 2.0 * v.xz * xzMyz),
+      wx = 2.0 * (v.xy * (wxMxy + wzMyz) + v.xz * (wxMxz - wyMyz) + v.yz * (wxMyz + wyMxz - wzMxy)),
+      wy = 2.0 * (v.xy * (wyMxy - wzMxz) + v.xz * (wxMyz + wyMxz + wzMxy) + v.yz * (wyMyz - wxMxz)),
+      wz = 2.0 * (v.xy * (wyMxz + wzMxy - wxMyz) + v.xz * (wzMxz - wyMxy) + v.yz * (wxMxy + wzMyz)),
+      xy = (2.0 * (v.xz * xyMxz + v.yz * xyMyz) + v.xy * (xyMxy - xzMxz - yzMyz)),
+      xz = (2.0 * (v.xy * xyMxz + v.yz * xzMyz) + v.xz * (xzMxz - xyMxy - yzMyz)),
+      yz = (2.0 * (v.xy * xyMyz + v.xz * xzMyz) + v.yz * (yzMyz - xyMxy - xzMxz)),
     )
 
   infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
@@ -1507,9 +1507,9 @@ case class Bivector(
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     BivectorWeight(
-      wx = (v.wx * yzMyz - 2.0 * v.wy * xzMyz - v.wx * xyMxy - v.wx * xzMxz + 2.0 * v.wz * xyMyz),
-      wy = (v.wy * xzMxz - 2.0 * v.wx * xzMyz - 2.0 * v.wz * xyMxz - v.wy * xyMxy - v.wy * yzMyz),
-      wz = (v.wz * xyMxy - 2.0 * v.wy * xyMxz - v.wz * xzMxz - v.wz * yzMyz + 2.0 * v.wx * xyMyz),
+      wx = (2.0 * (v.wz * xyMyz - v.wy * xzMyz) + v.wx * (yzMyz - xyMxy - xzMxz)),
+      wy = (2.0 * (-v.wx * xzMyz - v.wz * xyMxz) + v.wy * (xzMxz - xyMxy - yzMyz)),
+      wz = (2.0 * (v.wx * xyMyz - v.wy * xyMxz) + v.wz * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
@@ -1519,8 +1519,8 @@ case class Bivector(
 
   infix def reverseSandwich(v: PointCenter.type): Point =
     Point(
-      wxy = -2.0 * (wx * xz + wy * yz),
-      wxz = (-2.0 * wz * yz + 2.0 * wx * xy),
+      wxy = 2.0 * (-wx * xz - wy * yz),
+      wxz = 2.0 * (wx * xy - wz * yz),
       wyz = 2.0 * (wy * xy + wz * xz),
       xyz = (xy * xy + xz * xz + yz * yz),
     )

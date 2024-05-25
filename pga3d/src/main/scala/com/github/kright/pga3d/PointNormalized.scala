@@ -1042,13 +1042,13 @@ case class PointNormalized(
   infix def sandwich(v: Multivector): Multivector =
     Multivector(
       s = v.s,
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = (-v.w + 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x,
       y = v.y,
       z = v.z,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1062,9 +1062,9 @@ case class PointNormalized(
   infix def sandwich(v: Motor): Motor =
     Motor(
       s = v.s,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1073,7 +1073,7 @@ case class PointNormalized(
 
   infix def sandwich(v: Plane): Plane =
     Plane(
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = (-v.w + 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x,
       y = v.y,
       z = v.z,
@@ -1081,9 +1081,9 @@ case class PointNormalized(
 
   infix def sandwich(v: Bivector): Bivector =
     Bivector(
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1100,9 +1100,9 @@ case class PointNormalized(
   infix def sandwich(v: Quaternion): Motor =
     Motor(
       s = v.s,
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = 2.0 * (v.xy * wxz - v.xz * wxy),
+      wy = 2.0 * (v.xy * wyz - v.yz * wxy),
+      wz = 2.0 * (v.xz * wyz - v.yz * wxz),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1133,7 +1133,7 @@ case class PointNormalized(
 
   infix def sandwich(v: PlaneIdeal): Plane =
     Plane(
-      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x,
       y = v.y,
       z = v.z,
@@ -1141,9 +1141,9 @@ case class PointNormalized(
 
   infix def sandwich(v: BivectorBulk): Bivector =
     Bivector(
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = 2.0 * (v.xy * wxz - v.xz * wxy),
+      wy = 2.0 * (v.xy * wyz - v.yz * wxy),
+      wz = 2.0 * (v.xz * wyz - v.yz * wxz),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1171,13 +1171,13 @@ case class PointNormalized(
   infix def reverseSandwich(v: Multivector): Multivector =
     Multivector(
       s = v.s,
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = (-v.w + 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x,
       y = v.y,
       z = v.z,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1191,9 +1191,9 @@ case class PointNormalized(
   infix def reverseSandwich(v: Motor): Motor =
     Motor(
       s = v.s,
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1202,7 +1202,7 @@ case class PointNormalized(
 
   infix def reverseSandwich(v: Plane): Plane =
     Plane(
-      w = (-v.w - 2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = (-v.w + 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x,
       y = v.y,
       z = v.z,
@@ -1210,9 +1210,9 @@ case class PointNormalized(
 
   infix def reverseSandwich(v: Bivector): Bivector =
     Bivector(
-      wx = (-v.wx - 2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-v.wy - 2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-v.wz - 2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = (-v.wx + 2.0 * (v.xy * wxz - v.xz * wxy)),
+      wy = (-v.wy + 2.0 * (v.xy * wyz - v.yz * wxy)),
+      wz = (-v.wz + 2.0 * (v.xz * wyz - v.yz * wxz)),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1229,9 +1229,9 @@ case class PointNormalized(
   infix def reverseSandwich(v: Quaternion): Motor =
     Motor(
       s = v.s,
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = 2.0 * (v.xy * wxz - v.xz * wxy),
+      wy = 2.0 * (v.xy * wyz - v.yz * wxy),
+      wz = 2.0 * (v.xz * wyz - v.yz * wxz),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,
@@ -1262,7 +1262,7 @@ case class PointNormalized(
 
   infix def reverseSandwich(v: PlaneIdeal): Plane =
     Plane(
-      w = (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = 2.0 * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x,
       y = v.y,
       z = v.z,
@@ -1270,9 +1270,9 @@ case class PointNormalized(
 
   infix def reverseSandwich(v: BivectorBulk): Bivector =
     Bivector(
-      wx = (-2.0 * v.xz * wxy + 2.0 * v.xy * wxz),
-      wy = (-2.0 * v.yz * wxy + 2.0 * v.xy * wyz),
-      wz = (-2.0 * v.yz * wxz + 2.0 * v.xz * wyz),
+      wx = 2.0 * (v.xy * wxz - v.xz * wxy),
+      wy = 2.0 * (v.xy * wyz - v.yz * wxy),
+      wz = 2.0 * (v.xz * wyz - v.yz * wxz),
       xy = v.xy,
       xz = v.xz,
       yz = v.yz,

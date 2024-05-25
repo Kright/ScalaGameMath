@@ -1,9 +1,8 @@
 package com.github.kright.symbolic
 
-import com.github.kright.symbolic.Sym.argsSorter
 import com.github.kright.symbolic.SymbolicStr.{size, symbolicStrNumeric}
 import com.github.kright.symbolic.transform.PartialTransform
-import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, SymbolicStrSimplifier}
+import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, ProductFlattener, SymbolicStrSimplifier}
 
 import scala.math.Numeric.Implicits.infixNumericOps
 
@@ -27,7 +26,7 @@ case class Sym(symbol: SymbolicStr):
 object Sym:
   val argsSorter = SymbolicStrSimplifier.sortArgs()
   val simplifier: PartialTransform[SymbolicStr] = SymbolicStrSimplifier.simplify(64).combine(argsSorter)
-  val groupMultipliers: PartialTransform[SymbolicStr] = GroupMultipliersInSumOfProducts().combine(argsSorter)
+  val groupMultipliers: PartialTransform[SymbolicStr] = GroupMultipliersInSumOfProducts().combine(ProductFlattener()).combine(argsSorter)
   val zero: Sym = Sym(0.0)
   val one: Sym = Sym(1.0)
 

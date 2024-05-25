@@ -1045,13 +1045,13 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Multivector(
       s = v.s * xyzMxyz,
-      w = (-2.0 * v.y * wxzMxyz - v.w * xyzMxyz + 2.0 * v.x * wyzMxyz + 2.0 * v.z * wxyMxyz),
+      w = (2.0 * (v.x * wyzMxyz + v.z * wxyMxyz - v.y * wxzMxyz) - v.w * xyzMxyz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1069,9 +1069,9 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Motor(
       s = v.s * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1081,7 +1081,7 @@ case class Point(
   infix def sandwich(v: Plane): Plane =
     val xyzMxyz = xyz * xyz
     Plane(
-      w = (-v.w * xyzMxyz - 2.0 * v.y * wxz * xyz + 2.0 * v.x * wyz * xyz + 2.0 * v.z * wxy * xyz),
+      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
@@ -1093,9 +1093,9 @@ case class Point(
     val wyzMxyz = wyz * xyz
     val xyzMxyz = xyz * xyz
     Bivector(
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1117,9 +1117,9 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Motor(
       s = v.s * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = 2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz),
+      wy = 2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz),
+      wz = 2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1155,7 +1155,7 @@ case class Point(
   infix def sandwich(v: PlaneIdeal): Plane =
     val xyzMxyz = xyz * xyz
     Plane(
-      w = xyz * (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
@@ -1167,9 +1167,9 @@ case class Point(
     val wyzMxyz = wyz * xyz
     val xyzMxyz = xyz * xyz
     Bivector(
-      wx = (-2.0 * v.xz * wxyMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = 2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz),
+      wy = 2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz),
+      wz = 2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1203,13 +1203,13 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Multivector(
       s = v.s * xyzMxyz,
-      w = (-2.0 * v.y * wxzMxyz - v.w * xyzMxyz + 2.0 * v.x * wyzMxyz + 2.0 * v.z * wxyMxyz),
+      w = (2.0 * (v.x * wyzMxyz + v.z * wxyMxyz - v.y * wxzMxyz) - v.w * xyzMxyz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1227,9 +1227,9 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Motor(
       s = v.s * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1239,7 +1239,7 @@ case class Point(
   infix def reverseSandwich(v: Plane): Plane =
     val xyzMxyz = xyz * xyz
     Plane(
-      w = (-v.w * xyzMxyz - 2.0 * v.y * wxz * xyz + 2.0 * v.x * wyz * xyz + 2.0 * v.z * wxy * xyz),
+      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
@@ -1251,9 +1251,9 @@ case class Point(
     val wyzMxyz = wyz * xyz
     val xyzMxyz = xyz * xyz
     Bivector(
-      wx = (-2.0 * v.xz * wxyMxyz - v.wx * xyzMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz - v.wy * xyzMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz - v.wz * xyzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = (2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz) - v.wx * xyzMxyz),
+      wy = (2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz) - v.wy * xyzMxyz),
+      wz = (2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz) - v.wz * xyzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1275,9 +1275,9 @@ case class Point(
     val xyzMxyz = xyz * xyz
     Motor(
       s = v.s * xyzMxyz,
-      wx = (-2.0 * v.xz * wxyMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = 2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz),
+      wy = 2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz),
+      wz = 2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
@@ -1313,7 +1313,7 @@ case class Point(
   infix def reverseSandwich(v: PlaneIdeal): Plane =
     val xyzMxyz = xyz * xyz
     Plane(
-      w = xyz * (-2.0 * v.y * wxz + 2.0 * v.x * wyz + 2.0 * v.z * wxy),
+      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
@@ -1325,9 +1325,9 @@ case class Point(
     val wyzMxyz = wyz * xyz
     val xyzMxyz = xyz * xyz
     Bivector(
-      wx = (-2.0 * v.xz * wxyMxyz + 2.0 * v.xy * wxzMxyz),
-      wy = (-2.0 * v.yz * wxyMxyz + 2.0 * v.xy * wyzMxyz),
-      wz = (-2.0 * v.yz * wxzMxyz + 2.0 * v.xz * wyzMxyz),
+      wx = 2.0 * (v.xy * wxzMxyz - v.xz * wxyMxyz),
+      wy = 2.0 * (v.xy * wyzMxyz - v.yz * wxyMxyz),
+      wz = 2.0 * (v.xz * wyzMxyz - v.yz * wxzMxyz),
       xy = v.xy * xyzMxyz,
       xz = v.xz * xyzMxyz,
       yz = v.yz * xyzMxyz,
