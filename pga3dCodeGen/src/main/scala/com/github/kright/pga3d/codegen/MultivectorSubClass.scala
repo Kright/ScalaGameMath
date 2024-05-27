@@ -11,7 +11,7 @@ import scala.math.Numeric.Implicits.infixNumericOps
 case class MultivectorSubClass(name: String,
                                variableFields: Seq[MultivectorField],
                                constantFields: Seq[(MultivectorField, Double)] = Seq(),
-                               shouldBeGenerated: Boolean = true) extends CodeGenClass:
+                               shouldBeGenerated: Boolean = true)(using pga3: PGA3) extends CodeGenClass:
   private val fieldBlades: Set[BasisBlade] = {
     val variables = variableFields.map(_.basisBlade).toSet
     val constants = constantFields.map(_._1.basisBlade).toSet
@@ -23,7 +23,7 @@ case class MultivectorSubClass(name: String,
 
   override def isObject: Boolean = variableFields.isEmpty
 
-  def makeSymbolic(instanceName: String)(using ga: GA): MultiVector[Sym] =
+  def makeSymbolic(instanceName: String): MultiVector[Sym] =
     if (name == "Double") {
       MultiVector.scalar(Sym(instanceName))
     } else {
@@ -33,7 +33,7 @@ case class MultivectorSubClass(name: String,
       )
     }
 
-  def makeSymbolicThis(using ga: GA): MultiVector[Sym] =
+  private val self: MultiVector[Sym] =
     if (name == "Double") {
       MultiVector.scalar(Sym("this"))
     } else {
@@ -73,12 +73,11 @@ case class MultivectorSubClass(name: String,
     }
 
   override def generateCode(): String =
-    generateCode(unaryOperations, binaryOperations)(using MultivectorSubClass.pga3)
+    generateCode(unaryOperations, binaryOperations)
 
   private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
-                           binaryOps: Seq[MultivectorBinaryOp])(using ga: PGA3): String = {
+                           binaryOps: Seq[MultivectorBinaryOp]): String = {
     val code = CodeGen()
-    val self = makeSymbolicThis
 
     if (isObject) {
       code(s"case object ${name}:")
@@ -98,7 +97,7 @@ case class MultivectorSubClass(name: String,
       }
 
       if (name.contains("Point") || this == vector) {
-        makeSymbolicThis.dual.values.foreach { (b, sym) =>
+        self.dual.values.foreach { (b, sym) =>
           val fName = s"dual${ga.representation(b).toUpperCase}"
           code("", s"inline def $fName: Double = ${sym}")
         }
@@ -206,7 +205,6 @@ case class MultivectorSubClass(name: String,
 
       for (binaryOp <- binaryOps) {
         for (rightCls <- pgaClasses if (rightCls != zeroCls) && (rightCls != scalar)) {
-          val self = makeSymbolicThis
           val v = rightCls.makeSymbolic("v")
           val result = binaryOp(self, v)
           val resultCls = findMatchingClass(result)
@@ -224,7 +222,7 @@ case class MultivectorSubClass(name: String,
                 code("-v")
               } else {
                 binaryOp.name match
-                  case "sandwich" | "reverseSandwich" => makeOptimized(self, result, resultCls, code)
+                  case "sandwich" | "reverseSandwich" => makeOptimized(result, resultCls, code)
                   case _ => resultCls.makeConstructor(code, result)
               }
             }
@@ -262,7 +260,7 @@ case class MultivectorSubClass(name: String,
     code.toString
   }
 
-  private def makeOptimized(self: MultiVector[Sym], result: MultiVector[Sym], resultCls: MultivectorSubClass, code: CodeGen): Unit = {
+  private def makeOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass, code: CodeGen): Unit = {
     val simplifications: Seq[(Sym, Sym)] =
       (for ((fx, i) <- variableFields.zipWithIndex;
             (fy, j) <- variableFields.zipWithIndex if i <= j)
@@ -282,10 +280,9 @@ case class MultivectorSubClass(name: String,
     resultCls.makeConstructor(code, rr.mapValues(_.map(Sym.argsSorter)))
   }
 
-  private def defExpForBivector(code: CodeGen)(using ga: GA): Unit = {
+  private def defExpForBivector(code: CodeGen): Unit = {
     if (this == MultivectorSubClass.bivector) {
       {
-        val self = makeSymbolicThis
         val IBdiv2 = self.bulk ^ self.weight
         val aIBettaDiv2 = self.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
@@ -310,10 +307,10 @@ case class MultivectorSubClass(name: String,
       }
 
       {
-        val self = makeSymbolicThis * Sym("t")
-        val IBdiv2 = self.bulk ^ self.weight
-        val aIBettaDiv2 = self.geometric(IBdiv2)
-        val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
+        val selfMulT = self * Sym("t")
+        val IBdiv2 = selfMulT.bulk ^ selfMulT.weight
+        val aIBettaDiv2 = selfMulT.geometric(IBdiv2)
+        val result = MultiVector.scalar(Sym("cos")) + (selfMulT + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
         code("", "def exp(t: Double): Motor =")
         code.block {
@@ -336,7 +333,6 @@ case class MultivectorSubClass(name: String,
     }
     if (this == MultivectorSubClass.bivectorBulk) {
       {
-        val self = makeSymbolicThis
         val IBdiv2 = self.bulk ^ self.weight
         val aIBettaDiv2 = self.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
@@ -357,10 +353,10 @@ case class MultivectorSubClass(name: String,
       }
 
       {
-        val self = makeSymbolicThis * Sym("t")
-        val IBdiv2 = self.bulk ^ self.weight
-        val aIBettaDiv2 = self.geometric(IBdiv2)
-        val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
+        val selfMulT = self * Sym("t")
+        val IBdiv2 = selfMulT.bulk ^ selfMulT.weight
+        val aIBettaDiv2 = selfMulT.geometric(IBdiv2)
+        val result = MultiVector.scalar(Sym("cos")) + (selfMulT + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
         code("", s"def exp(t: Double): ${quaternion.typeName} =")
         code.block {
@@ -379,7 +375,7 @@ case class MultivectorSubClass(name: String,
     }
     if (this == MultivectorSubClass.bivectorWeight) {
       {
-        val result = MultiVector.scalar(Sym(1.0)) + makeSymbolicThis
+        val result = MultiVector.scalar(Sym(1.0)) + self
         code("", s"def exp(): ${translator.typeName} =")
         code.block {
           translator.makeConstructor(code, result)
@@ -387,7 +383,7 @@ case class MultivectorSubClass(name: String,
       }
 
       {
-        val result = MultiVector.scalar(Sym(1.0)) + makeSymbolicThis * Sym("t")
+        val result = MultiVector.scalar(Sym(1.0)) + self * Sym("t")
         code("", s"def exp(t: Double): ${translator.typeName} =")
         code.block {
           translator.makeConstructor(code, result)
@@ -396,9 +392,9 @@ case class MultivectorSubClass(name: String,
     }
   }
 
-  private def defLogForMotor(code: CodeGen)(using ga: GA): Unit = {
+  private def defLogForMotor(code: CodeGen): Unit = {
     if (this == MultivectorSubClass.motor) {
-      val vb = makeSymbolicThis.grade(2)
+      val vb = self.grade(2)
       val result = vb * Sym("b") + vb.bulk.dual * Sym("c")
 
       code("", s"def log(): ${bivector.typeName} =")
@@ -428,11 +424,11 @@ case class MultivectorSubClass(name: String,
     if (this == MultivectorSubClass.translator) {
       code("", s"def log(): ${bivectorWeight.typeName} =")
       code.block {
-        bivectorWeight.makeConstructor(code, makeSymbolicThis.weight)
+        bivectorWeight.makeConstructor(code, self.weight)
       }
     }
     if (this == MultivectorSubClass.quaternion) {
-      val vb = makeSymbolicThis.grade(2)
+      val vb = self.grade(2)
       val result = vb * Sym("b")
 
       code("", s"def log(): ${bivectorBulk.typeName} =")
@@ -455,12 +451,10 @@ case class MultivectorSubClass(name: String,
     }
   }
 
-  private def defBivectorSplit(code: CodeGen)(using ga: GA): Unit = {
+  private def defBivectorSplit(code: CodeGen): Unit = {
     if (this == bivector) {
       code("\ndef split(): (Bivector, BivectorWeight) =")
       code.block {
-        val self = makeSymbolicThis
-
         code(
           s"""val div = bulkNormSquare
              |if (div < 1e-100) {
