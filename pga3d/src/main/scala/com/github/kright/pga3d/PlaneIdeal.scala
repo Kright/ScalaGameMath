@@ -27,7 +27,7 @@ case class PlaneIdeal(
       z = -z,
     )
 
-  def unary_ : PlaneIdeal =
+  def unary_- : PlaneIdeal =
     PlaneIdeal(
       x = -x,
       y = -y,

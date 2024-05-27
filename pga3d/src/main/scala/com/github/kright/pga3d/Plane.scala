@@ -42,7 +42,7 @@ case class Plane(
       z = -z,
     )
 
-  def unary_ : Plane =
+  def unary_- : Plane =
     Plane(
       w = -w,
       x = -x,

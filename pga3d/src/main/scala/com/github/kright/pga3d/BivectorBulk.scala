@@ -31,7 +31,7 @@ case class BivectorBulk(
       yz = -yz,
     )
 
-  def unary_ : BivectorBulk =
+  def unary_- : BivectorBulk =
     BivectorBulk(
       xy = -xy,
       xz = -xz,

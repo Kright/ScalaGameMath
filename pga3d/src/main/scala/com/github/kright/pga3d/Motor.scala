@@ -68,7 +68,7 @@ case class Motor(
       i = i,
     )
 
-  def unary_ : Motor =
+  def unary_- : Motor =
     Motor(
       s = -s,
       wx = -wx,

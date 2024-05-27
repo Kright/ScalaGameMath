@@ -31,7 +31,7 @@ case class BivectorWeight(
       wz = -wz,
     )
 
-  def unary_ : BivectorWeight =
+  def unary_- : BivectorWeight =
     BivectorWeight(
       wx = -wx,
       wy = -wy,

@@ -54,7 +54,7 @@ case class Bivector(
       yz = -yz,
     )
 
-  def unary_ : Bivector =
+  def unary_- : Bivector =
     Bivector(
       wx = -wx,
       wy = -wy,
@@ -260,7 +260,7 @@ case class Bivector(
     // pseudoScalar = this ^ this.reverse
 
     val pseudoScalar = (wy * xz - wx * yz - wz * xy) / div
-    val shiftAlongLine =
+    val shiftAlongLine = 
       BivectorWeight(
         wx = -pseudoScalar * yz,
         wy = pseudoScalar * xz,

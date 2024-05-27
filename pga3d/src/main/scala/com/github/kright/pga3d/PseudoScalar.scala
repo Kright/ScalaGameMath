@@ -17,7 +17,7 @@ case class PseudoScalar(
   def antiReverse: PseudoScalar =
     this
 
-  def unary_ : PseudoScalar =
+  def unary_- : PseudoScalar =
     PseudoScalar(
       i = -i,
     )

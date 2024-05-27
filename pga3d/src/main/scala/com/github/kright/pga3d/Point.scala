@@ -50,7 +50,7 @@ case class Point(
   def antiReverse: Point =
     this
 
-  def unary_ : Point =
+  def unary_- : Point =
     Point(
       wxy = -wxy,
       wxz = -wxz,

@@ -37,7 +37,7 @@ case object PointCenter:
   def antiReverse: PointCenter.type =
     this
 
-  def unary_ : Point =
+  def unary_- : Point =
     Point(
       wxy = 0.0,
       wxz = 0.0,

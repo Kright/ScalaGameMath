@@ -33,7 +33,7 @@ case class Vector(
   def antiReverse: Vector =
     this
 
-  def unary_ : Vector =
+  def unary_- : Vector =
     Vector(
       wxy = -wxy,
       wxz = -wxz,

@@ -44,7 +44,7 @@ case class Translator(
       wz = -wz,
     )
 
-  def unary_ : Motor =
+  def unary_- : Motor =
     Motor(
       s = -1.0,
       wx = -wx,

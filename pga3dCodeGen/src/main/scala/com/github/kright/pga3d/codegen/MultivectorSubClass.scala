@@ -110,7 +110,7 @@ case class MultivectorSubClass(name: String,
 
         if (resultCls != zeroCls) {
           code("")
-          code(s"def ${unaryOp.name}${if (unaryOp.name.endsWith("_")) " " else ""}: ${resultCls.typeName} =")
+          code(s"def ${unaryOp.name}: ${resultCls.typeName} =")
           code.block {
             if (result == self) {
               code("this")
@@ -551,7 +551,7 @@ object MultivectorSubClass:
     MultivectorUnaryOp("bulk", pga3.operations.bulk(_)),
     MultivectorUnaryOp("reverse", pga3.operations.reverse(_)),
     MultivectorUnaryOp("antiReverse", pga3.operations.antiReverse(_)),
-    MultivectorUnaryOp("unary_", s => -s),
+    MultivectorUnaryOp("unary_- ", s => -s),
     MultivectorUnaryOp("bulkNormSquare", s => s.geometric(s.reverse).grade(0)),
     MultivectorUnaryOp("weightNormSquare", s => s.dual.geometric(s.dual.reverse).grade(0)),
     MultivectorUnaryOp("normSquare", s => s.geometric(s.reverse).grade(0) + s.dual.geometric(s.dual.reverse).grade(0)),

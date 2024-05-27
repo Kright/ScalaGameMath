@@ -120,7 +120,7 @@ case class Multivector(
       i = i,
     )
 
-  def unary_ : Multivector =
+  def unary_- : Multivector =
     Multivector(
       s = -s,
       w = -w,

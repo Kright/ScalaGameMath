@@ -39,7 +39,7 @@ case class Quaternion(
       yz = -yz,
     )
 
-  def unary_ : Quaternion =
+  def unary_- : Quaternion =
     Quaternion(
       s = -s,
       xy = -xy,
