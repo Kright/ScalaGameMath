@@ -53,24 +53,27 @@ case class MultivectorSubClass(name: String,
       }
   }
 
-  def makeConstructor(code: CodeGen, result: MultiVector[Sym]): Unit =
-    val groupedResult = result.mapValues(_.groupMultipliers())
+  def makeConstructor(value: MultiVector[Sym]): String =
+    val groupedResult = value.mapValues(_.groupMultipliers())
     if (name == "Double") {
       val expr = groupedResult.get(variableFields.head.basisBlade).getOrElse(Sym.zero)
-      code(expr.toString)
-    } else if (variableFields.nonEmpty) {
-      code(name + "(")
-      code.block {
-        for (f <- variableFields) {
-          val expr = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
-          code(s"${f.name} = ${expr},")
-          //          code(s"${f.name} = /* ${expr.size} */ ${expr},")
-        }
-      }
-      code(")")
-    } else {
-      code(s"${name}")
+      return expr.toString
     }
+    if (isObject) {
+      return name
+    }
+
+    val code = CodeGen()
+    code(name + "(")
+    code.block {
+      for (f <- variableFields) {
+        val expr = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
+        code(s"${f.name} = ${expr},")
+      }
+    }
+    code(")")
+    code.toString
+
 
   override def generateCode(): String =
     generateCode(unaryOperations, binaryOperations)
@@ -99,7 +102,8 @@ case class MultivectorSubClass(name: String,
       if (name.contains("Point") || this == vector) {
         self.dual.values.foreach { (b, sym) =>
           val fName = s"dual${ga.representation(b).toUpperCase}"
-          code("", s"inline def $fName: Double = ${sym}")
+          code("")
+          code(s"inline def $fName: Double = ${sym}")
         }
       }
 
@@ -115,7 +119,9 @@ case class MultivectorSubClass(name: String,
               code("this")
             } else if (result == -self && resultCls == this && unaryOp.name != "unary_- ") {
               code("-this")
-            } else resultCls.makeConstructor(code, result)
+            } else {
+              code(resultCls.makeConstructor(result))
+            }
           }
         }
       }
@@ -126,12 +132,12 @@ case class MultivectorSubClass(name: String,
         ("norm", "normalizedByNorm")
       )) {
         if (code.toString.contains(s"${normName}Square")) {
-          code("", s"def $normName: Double =")
+          code(s"\ndef $normName: Double =")
           code.block {
             code(s"Math.sqrt(${normName}Square)")
           }
 
-          code("", s"def $normVecName =")
+          code(s"\ndef $normVecName =")
           code.block {
             code(s"this / $normName")
           }
@@ -142,11 +148,11 @@ case class MultivectorSubClass(name: String,
         val v = Sym("v")
         val result = self * v
         val resultCls = findMatchingClass(result)
-        code("", s"def *(v: Double): ${resultCls.typeName} =")
+        code(s"\ndef *(v: Double): ${resultCls.typeName} =")
         code.block {
-          resultCls.makeConstructor(code, result)
+          code(resultCls.makeConstructor(result))
         }
-        code("", s"inline def /(v: Double): ${resultCls.typeName} =")
+        code(s"\ninline def /(v: Double): ${resultCls.typeName} =")
         code.block {
           code("this * (1.0 / v)")
         }
@@ -157,9 +163,10 @@ case class MultivectorSubClass(name: String,
           val resultCls = findMatchingClass(result)
 
           if (resultCls != zeroCls) {
-            code("", firstLine + s": ${resultCls.typeName} =")
+            code("")
+            code(firstLine + s": ${resultCls.typeName} =")
             code.block {
-              resultCls.makeConstructor(code, result)
+              code(resultCls.makeConstructor(result))
             }
           }
         }
@@ -196,9 +203,9 @@ case class MultivectorSubClass(name: String,
 
       for (target <- pgaClasses) {
         if (target != this && target.isMatching(self)) {
-          code("", s"def to${target.typeName.capitalize}: ${target.typeName} =")
+          code(s"\ndef to${target.typeName.capitalize}: ${target.typeName} =")
           code.block {
-            target.makeConstructor(code, self)
+            code(target.makeConstructor(self))
           }
         }
       }
@@ -209,7 +216,7 @@ case class MultivectorSubClass(name: String,
           val result = binaryOp(self, v)
           val resultCls = findMatchingClass(result)
           if (resultCls != zeroCls) {
-            code("", s"infix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
+            code(s"\ninfix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
 
             code.block {
               if (resultCls == this && result == self) {
@@ -222,14 +229,13 @@ case class MultivectorSubClass(name: String,
                 code("-v")
               } else {
                 binaryOp.name match
-                  case "sandwich" | "reverseSandwich" => makeOptimized(result, resultCls, code)
-                  case _ => resultCls.makeConstructor(code, result)
+                  case "sandwich" | "reverseSandwich" => makeOptimized(result, resultCls, code) //todo fix
+                  case _ => code(resultCls.makeConstructor(result))
               }
             }
 
             for (opName <- binaryOp.names.tail) {
-              code("")
-              code(s"inline infix def ${opName}(v: ${rightCls.typeName}): ${resultCls.typeName} = ${binaryOp.name}(v)")
+              code(s"\ninline infix def ${opName}(v: ${rightCls.typeName}): ${resultCls.typeName} = ${binaryOp.name}(v)")
             }
           }
         }
@@ -244,14 +250,14 @@ case class MultivectorSubClass(name: String,
           val v = MultiVector("x" -> Sym("x"), "y" -> Sym("y"), "z" -> Sym("z"), "w" -> Sym("w"))
           code(s"def fromDual(x: Double, y: Double, z: Double, w: Double): ${typeName} =")
           code.block {
-            makeConstructor(code, v.dual)
+            code(makeConstructor(v.dual))
           }
         }
         else {
           val v = MultiVector("x" -> Sym("x"), "y" -> Sym("y"), "z" -> Sym("z"))
           code(s"def fromDual(x: Double, y: Double, z: Double): ${typeName} =")
           code.block {
-            makeConstructor(code, v.dual)
+            code(makeConstructor(v.dual))
           }
         }
       }
@@ -277,7 +283,7 @@ case class MultivectorSubClass(name: String,
       }
     }
 
-    resultCls.makeConstructor(code, rr.mapValues(_.map(Sym.argsSorter)))
+    code(resultCls.makeConstructor(rr.mapValues(_.map(Sym.argsSorter))))
   }
 
   private def defExpForBivector(code: CodeGen): Unit = {
@@ -287,22 +293,23 @@ case class MultivectorSubClass(name: String,
         val aIBettaDiv2 = self.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-        code("", "def exp(): Motor =")
+        code("\ndef exp(): Motor =")
         code.block {
           code(
-            "val len = bulkNorm",
-            "val cos = Math.cos(len)",
-            "",
-            "val sinDivLen = if (len > 1e-5) {",
-            "  Math.sin(len) / len",
-            "} else 1.0 - (len * len) / 6.0",
-            "",
-            "val sinMinusCosDivLen2 = if (len > 1e-5) {",
-            "  (sinDivLen - cos) / (len * len)",
-            "} else (1.0 / 3.0) * (1.0 + 0.8 * len * len)",
-            "",
+            s"""val len = bulkNorm
+               |val cos = Math.cos(len)
+               |
+               |val sinDivLen = if (len > 1e-5) {
+               |  Math.sin(len) / len
+               |} else 1.0 - (len * len) / 6.0
+               |
+               |val sinMinusCosDivLen2 = if (len > 1e-5) {
+               |  (sinDivLen - cos) / (len * len)
+               |} else (1.0 / 3.0) * (1.0 + 0.8 * len * len)
+               |
+               |${motor.makeConstructor(result)}
+               |""".stripMargin
           )
-          motor.makeConstructor(code, result)
         }
       }
 
@@ -312,22 +319,23 @@ case class MultivectorSubClass(name: String,
         val aIBettaDiv2 = selfMulT.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (selfMulT + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-        code("", "def exp(t: Double): Motor =")
+        code("\ndef exp(t: Double): Motor =")
         code.block {
           code(
-            "val len = bulkNorm * Math.abs(t)",
-            "val cos = Math.cos(len)",
-            "",
-            "val sinDivLen = if (len > 1e-5) {",
-            "  Math.sin(len) / len",
-            "} else 1.0 - (len * len) / 6.0",
-            "",
-            "val sinMinusCosDivLen2 = if (len > 1e-5) {",
-            "  (sinDivLen - cos) / (len * len)",
-            "} else (1.0 / 3.0) * (1.0 + 0.8 * len * len)",
-            "",
+            s"""val len = bulkNorm * Math.abs(t)
+               |val cos = Math.cos(len)
+               |
+               |val sinDivLen = if (len > 1e-5) {
+               |  Math.sin(len) / len
+               |} else 1.0 - (len * len) / 6.0
+               |
+               |val sinMinusCosDivLen2 = if (len > 1e-5) {
+               |  (sinDivLen - cos) / (len * len)
+               |} else (1.0 / 3.0) * (1.0 + 0.8 * len * len)
+               |
+               |${motor.makeConstructor(result)}
+               |""".stripMargin
           )
-          motor.makeConstructor(code, result)
         }
       }
     }
@@ -337,18 +345,18 @@ case class MultivectorSubClass(name: String,
         val aIBettaDiv2 = self.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-        code("", s"def exp(): ${quaternion.typeName} =")
+        code(s"\ndef exp(): ${quaternion.typeName} =")
         code.block {
           code(
-            "val len = bulkNorm",
-            "val cos = Math.cos(len)",
-            "",
-            "val sinDivLen = if (len > 1e-5) {",
-            "  Math.sin(len) / len",
-            "} else 1.0 - (len * len) / 6.0",
-            "",
-          )
-          quaternion.makeConstructor(code, result)
+            s"""val len = bulkNorm
+               |val cos = Math.cos(len)
+               |
+               |val sinDivLen = if (len > 1e-5) {
+               |  Math.sin(len) / len
+               |} else 1.0 - (len * len) / 6.0
+               |
+               |${quaternion.makeConstructor(result)}
+               |""".stripMargin)
         }
       }
 
@@ -358,35 +366,35 @@ case class MultivectorSubClass(name: String,
         val aIBettaDiv2 = selfMulT.geometric(IBdiv2)
         val result = MultiVector.scalar(Sym("cos")) + (selfMulT + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-        code("", s"def exp(t: Double): ${quaternion.typeName} =")
+        code(s"\ndef exp(t: Double): ${quaternion.typeName} =")
         code.block {
           code(
-            "val len = bulkNorm * Math.abs(t)",
-            "val cos = Math.cos(len)",
-            "",
-            "val sinDivLen = if (len > 1e-5) {",
-            "  Math.sin(len) / len",
-            "} else 1.0 - (len * len) / 6.0",
-            "",
-          )
-          quaternion.makeConstructor(code, result)
+            s"""val len = bulkNorm * Math.abs(t)
+               |val cos = Math.cos(len)
+               |
+               |val sinDivLen = if (len > 1e-5) {
+               |  Math.sin(len) / len
+               |} else 1.0 - (len * len) / 6.0
+               |
+               |${quaternion.makeConstructor(result)}
+               |""".stripMargin)
         }
       }
     }
     if (this == MultivectorSubClass.bivectorWeight) {
       {
         val result = MultiVector.scalar(Sym(1.0)) + self
-        code("", s"def exp(): ${translator.typeName} =")
+        code(s"\ndef exp(): ${translator.typeName} =")
         code.block {
-          translator.makeConstructor(code, result)
+          code(translator.makeConstructor(result))
         }
       }
 
       {
         val result = MultiVector.scalar(Sym(1.0)) + self * Sym("t")
-        code("", s"def exp(t: Double): ${translator.typeName} =")
+        code(s"\ndef exp(t: Double): ${translator.typeName} =")
         code.block {
-          translator.makeConstructor(code, result)
+          code(translator.makeConstructor(result))
         }
       }
     }
@@ -397,7 +405,7 @@ case class MultivectorSubClass(name: String,
       val vb = self.grade(2)
       val result = vb * Sym("b") + vb.bulk.dual * Sym("c")
 
-      code("", s"def log(): ${bivector.typeName} =")
+      code(s"\ndef log(): ${bivector.typeName} =")
       code.block {
         code(
           s"""val scalar = s
@@ -417,21 +425,22 @@ case class MultivectorSubClass(name: String,
              |} else {
              |  (1.0 + angle * angle / 2.0) * i / 3.0
              |}
-             |""".stripMargin, "")
-        bivector.makeConstructor(code, result)
+             |
+             |${bivector.makeConstructor(result)}
+             |""".stripMargin)
       }
     }
     if (this == MultivectorSubClass.translator) {
-      code("", s"def log(): ${bivectorWeight.typeName} =")
+      code(s"\ndef log(): ${bivectorWeight.typeName} =")
       code.block {
-        bivectorWeight.makeConstructor(code, self.weight)
+        code(bivectorWeight.makeConstructor(self.weight))
       }
     }
     if (this == MultivectorSubClass.quaternion) {
       val vb = self.grade(2)
       val result = vb * Sym("b")
 
-      code("", s"def log(): ${bivectorBulk.typeName} =")
+      code(s"\ndef log(): ${bivectorBulk.typeName} =")
       code.block {
         code(
           s"""val scalar = s
@@ -445,8 +454,9 @@ case class MultivectorSubClass(name: String,
              |} else {
              |  1.0 + angle * angle / 6.0
              |}
-             |""".stripMargin, "")
-        bivectorBulk.makeConstructor(code, result)
+             |
+             |${bivectorBulk.makeConstructor(result)}
+             |""".stripMargin)
       }
     }
   }
@@ -465,13 +475,12 @@ case class MultivectorSubClass(name: String,
              |// pseudoScalar = this ^ this.reverse
              |
              |val pseudoScalar = ${(self ^ self.reverse).pseudoScalar * Sym(0.5)} / div
-             |val shiftAlongLine = """.stripMargin
+             |val shiftAlongLine = ${bivectorWeight.makeConstructor(self.geometric(MultiVector("i" -> Sym("pseudoScalar"))))}
+             |
+             |val line = this - shiftAlongLine
+             |(line, shiftAlongLine)
+             |""".stripMargin
         )
-        code.block {
-          bivectorWeight.makeConstructor(code, self.geometric(MultiVector("i" -> Sym("pseudoScalar"))))
-        }
-        code(s"val line = this - shiftAlongLine")
-        code("(line, shiftAlongLine)")
       }
     }
   }

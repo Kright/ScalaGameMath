@@ -246,12 +246,12 @@ case class Bivector(
     // pseudoScalar = this ^ this.reverse
 
     val pseudoScalar = (wy * xz - wx * yz - wz * xy) / div
-    val shiftAlongLine = 
-      BivectorWeight(
-        wx = -pseudoScalar * yz,
-        wy = pseudoScalar * xz,
-        wz = -pseudoScalar * xy,
-      )
+    val shiftAlongLine = BivectorWeight(
+      wx = -pseudoScalar * yz,
+      wy = pseudoScalar * xz,
+      wz = -pseudoScalar * xy,
+    )
+
     val line = this - shiftAlongLine
     (line, shiftAlongLine)
 

@@ -15,10 +15,10 @@ class InertiaCodeGen extends CodeGenClass:
     val code = CodeGen()
 
     code(
-      "case class Inertia(mass: Double,",
-      "                   mryz: Double,",
-      "                   mrxz: Double,",
-      "                   mrxy: Double):",
+      """case class Inertia(mass: Double,
+        |                   mryz: Double,
+        |                   mrxz: Double,
+        |                   mrxy: Double):""".stripMargin
     )
 
     code.block {
@@ -27,9 +27,14 @@ class InertiaCodeGen extends CodeGenClass:
       generateGetAcceleration(code)
     }
 
-    code("", "", "object Inertia:")
+    code(
+      """
+        |
+        |object Inertia:
+        |""".stripMargin)
     code.block {
-      generateCubeCode(code)
+      code("")
+      code(generateCubeCode())
     }
 
     code.toString
@@ -48,9 +53,9 @@ class InertiaCodeGen extends CodeGenClass:
     val localB = bivector.makeSymbolic("localB")
     val result = localB.multiplyElementwise(massMult).dual
 
-    code("", "def apply(localB: Bivector): Bivector =")
+    code("\ndef apply(localB: Bivector): Bivector =")
     code.block {
-      bivector.makeConstructor(code, result)
+      code(bivector.makeConstructor(result))
     }
   }
 
@@ -58,9 +63,9 @@ class InertiaCodeGen extends CodeGenClass:
     val localInertia = bivector.makeSymbolic("localInertia")
     val result = localInertia.dual.map((b, s) => Sym(s"$s / ${massMult(b)}"))
 
-    code("", "def invert(localInertia: Bivector): Bivector =")
+    code("\ndef invert(localInertia: Bivector): Bivector =")
     code.block {
-      bivector.makeConstructor(code, result)
+      code(bivector.makeConstructor(result))
     }
   }
 
@@ -86,9 +91,10 @@ class InertiaCodeGen extends CodeGenClass:
         |)""".stripMargin, s"result.toMultilineString = '''\n${result.toMultilineString}\n'''")
 
     code(
-      "",
-      "/** invert(localB.cross(apply(localB)) + localForque) */",
-      "def getAcceleration(localB: Bivector, localForque: Bivector): Bivector ="
+      """
+        |/** invert(localB.cross(apply(localB)) + localForque) */
+        |def getAcceleration(localB: Bivector, localForque: Bivector): Bivector =
+        |""".stripMargin
     )
     code.block {
       code("Bivector(")
@@ -104,23 +110,15 @@ class InertiaCodeGen extends CodeGenClass:
     }
   }
 
-  private def generateCubeCode(code: CodeGen): Unit = {
-    code("", "def cube(mass: Double, rx: Double, ry: Double, rz: Double): Inertia =")
-    code.block {
-      code(
-        "val rx2 = rx * rx",
-        "val ry2 = ry * ry",
-        "val rz2 = rz * rz",
-        "Inertia(",
-      )
-      code.block {
-        code(
-          "mass,",
-          "mryz = (ry2 + rz2) * mass / 3,",
-          "mrxz = (rx2 + rz2) * mass / 3,",
-          "mrxy = (rx2 + ry2) * mass / 3,",
-        )
-      }
-      code(")")
-    }
-  }
+  private def generateCubeCode(): String =
+    """def cube(mass: Double, rx: Double, ry: Double, rz: Double): Inertia =
+      |  val rx2 = rx * rx
+      |  val ry2 = ry * ry
+      |  val rz2 = rz * rz
+      |  Inertia(
+      |    mass,
+      |    mryz = (ry2 + rz2) * mass / 3,
+      |    mrxz = (rx2 + rz2) * mass / 3,
+      |    mrxy = (rx2 + ry2) * mass / 3,
+      |  )
+      |""".stripMargin

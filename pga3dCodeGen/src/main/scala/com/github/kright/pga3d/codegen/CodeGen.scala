@@ -10,11 +10,10 @@ class CodeGen:
     pad -= 2
   }
 
-  def apply(lines: String*): Unit = {
+  def apply(lines: String): Unit = {
     val prefix = " ".repeat(pad)
-    for (line <- lines;
-         l <- line.split("\n")) {
-      code.append(prefix).append(l).append("\n")
+    for (line <- lines.split("\n")) {
+      code.append(prefix).append(line).append("\n")
     }
   }
 

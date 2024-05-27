@@ -6,6 +6,7 @@ case class Inertia(mass: Double,
                    mrxz: Double,
                    mrxy: Double):
 
+
   def apply(localB: Bivector): Bivector =
     Bivector(
       wx = localB.yz * mryz,
