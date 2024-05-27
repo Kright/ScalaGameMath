@@ -39,17 +39,6 @@ case class Point(
       xyz = xyz,
     )
 
-  def reverse: Point =
-    Point(
-      wxy = -wxy,
-      wxz = -wxz,
-      wyz = -wyz,
-      xyz = -xyz,
-    )
-
-  def antiReverse: Point =
-    this
-
   def unary_- : Point =
     Point(
       wxy = -wxy,
@@ -57,6 +46,12 @@ case class Point(
       wyz = -wyz,
       xyz = -xyz,
     )
+
+  def reverse: Point =
+    -this
+
+  def antiReverse: Point =
+    this
 
   def bulkNormSquare: Double =
     xyz * xyz
@@ -468,12 +463,7 @@ case class Point(
     )
 
   infix def dot(v: Translator): Point =
-    Point(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-      xyz = xyz,
-    )
+    this
 
   infix def dot(v: PointNormalized): Double =
     -xyz
@@ -557,12 +547,7 @@ case class Point(
   inline infix def ^(v: Quaternion): Point = wedge(v)
 
   infix def wedge(v: Translator): Point =
-    Point(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-      xyz = xyz,
-    )
+    this
 
   inline infix def ^(v: Translator): Point = wedge(v)
 

@@ -23,22 +23,18 @@ case class Vector(
   def weight: Vector =
     this
 
-  def reverse: Vector =
-    Vector(
-      wxy = -wxy,
-      wxz = -wxz,
-      wyz = -wyz,
-    )
-
-  def antiReverse: Vector =
-    this
-
   def unary_- : Vector =
     Vector(
       wxy = -wxy,
       wxz = -wxz,
       wyz = -wyz,
     )
+
+  def reverse: Vector =
+    -this
+
+  def antiReverse: Vector =
+    this
 
   def weightNormSquare: Double =
     (wxy * wxy + wxz * wxz + wyz * wyz)
@@ -271,11 +267,7 @@ case class Vector(
     )
 
   infix def geometric(v: Translator): Vector =
-    Vector(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-    )
+    this
 
   infix def geometric(v: PointNormalized): BivectorWeight =
     BivectorWeight(
@@ -399,11 +391,7 @@ case class Vector(
     )
 
   infix def dot(v: Translator): Vector =
-    Vector(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-    )
+    this
 
   infix def dot(v: PlaneIdeal): BivectorWeight =
     BivectorWeight(
@@ -468,11 +456,7 @@ case class Vector(
   inline infix def ^(v: Quaternion): Vector = wedge(v)
 
   infix def wedge(v: Translator): Vector =
-    Vector(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-    )
+    this
 
   inline infix def ^(v: Translator): Vector = wedge(v)
 

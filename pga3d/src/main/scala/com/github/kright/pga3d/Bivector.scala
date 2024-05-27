@@ -34,26 +34,6 @@ case class Bivector(
       yz = yz,
     )
 
-  def reverse: Bivector =
-    Bivector(
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-      xy = -xy,
-      xz = -xz,
-      yz = -yz,
-    )
-
-  def antiReverse: Bivector =
-    Bivector(
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-      xy = -xy,
-      xz = -xz,
-      yz = -yz,
-    )
-
   def unary_- : Bivector =
     Bivector(
       wx = -wx,
@@ -63,6 +43,12 @@ case class Bivector(
       xz = -xz,
       yz = -yz,
     )
+
+  def reverse: Bivector =
+    -this
+
+  def antiReverse: Bivector =
+    -this
 
   def bulkNormSquare: Double =
     (xy * xy + xz * xz + yz * yz)
@@ -584,14 +570,7 @@ case class Bivector(
     )
 
   infix def dot(v: Translator): Bivector =
-    Bivector(
-      wx = wx,
-      wy = wy,
-      wz = wz,
-      xy = xy,
-      xz = xz,
-      yz = yz,
-    )
+    this
 
   infix def dot(v: Vector): Plane =
     Plane(

@@ -80,6 +80,26 @@ case class Multivector(
       i = 0.0,
     )
 
+  def unary_- : Multivector =
+    Multivector(
+      s = -s,
+      w = -w,
+      x = -x,
+      y = -y,
+      z = -z,
+      wx = -wx,
+      wy = -wy,
+      wz = -wz,
+      xy = -xy,
+      xz = -xz,
+      yz = -yz,
+      wxy = -wxy,
+      wxz = -wxz,
+      wyz = -wyz,
+      xyz = -xyz,
+      i = -i,
+    )
+
   def reverse: Multivector =
     Multivector(
       s = s,
@@ -118,26 +138,6 @@ case class Multivector(
       wyz = wyz,
       xyz = xyz,
       i = i,
-    )
-
-  def unary_- : Multivector =
-    Multivector(
-      s = -s,
-      w = -w,
-      x = -x,
-      y = -y,
-      z = -z,
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-      xy = -xy,
-      xz = -xz,
-      yz = -yz,
-      wxy = -wxy,
-      wxz = -wxz,
-      wyz = -wyz,
-      xyz = -xyz,
-      i = -i,
     )
 
   def bulkNormSquare: Double =

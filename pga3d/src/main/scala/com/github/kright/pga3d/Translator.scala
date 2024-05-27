@@ -30,6 +30,18 @@ case class Translator(
   def bulk: Double =
     1.0
 
+  def unary_- : Motor =
+    Motor(
+      s = -1.0,
+      wx = -wx,
+      wy = -wy,
+      wz = -wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      i = 0.0,
+    )
+
   def reverse: Translator =
     Translator(
       wx = -wx,
@@ -42,18 +54,6 @@ case class Translator(
       wx = -wx,
       wy = -wy,
       wz = -wz,
-    )
-
-  def unary_- : Motor =
-    Motor(
-      s = -1.0,
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
   def bulkNormSquare: Double =
@@ -267,11 +267,7 @@ case class Translator(
     )
 
   infix def geometric(v: Vector): Vector =
-    Vector(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   infix def geometric(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -313,16 +309,10 @@ case class Translator(
     )
 
   infix def geometric(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def geometric(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = v.i,
-    )
+    v
 
   infix def geometric(v: PointCenter.type): PointNormalized =
     PointNormalized(
@@ -372,22 +362,10 @@ case class Translator(
     )
 
   infix def dot(v: Bivector): Bivector =
-    Bivector(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
+    v
 
   infix def dot(v: Point): Point =
-    Point(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-      xyz = v.xyz,
-    )
+    v
 
   infix def dot(v: Quaternion): Motor =
     Motor(
@@ -409,18 +387,10 @@ case class Translator(
     )
 
   infix def dot(v: Vector): Vector =
-    Vector(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   infix def dot(v: PointNormalized): PointNormalized =
-    PointNormalized(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   infix def dot(v: PlaneIdeal): Plane =
     Plane(
@@ -431,26 +401,16 @@ case class Translator(
     )
 
   infix def dot(v: BivectorBulk): BivectorBulk =
-    BivectorBulk(
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-    )
+    v
 
   infix def dot(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def dot(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = v.i,
-    )
+    v
 
   infix def dot(v: PointCenter.type): PointCenter.type =
-    PointCenter
+    v
 
   infix def wedge(v: Multivector): Multivector =
     Multivector(
@@ -525,12 +485,7 @@ case class Translator(
   inline infix def ^(v: Bivector): Motor = wedge(v)
 
   infix def wedge(v: Point): Point =
-    Point(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-      xyz = v.xyz,
-    )
+    v
 
   inline infix def ^(v: Point): Point = wedge(v)
 
@@ -558,20 +513,12 @@ case class Translator(
   inline infix def ^(v: Translator): Translator = wedge(v)
 
   infix def wedge(v: Vector): Vector =
-    Vector(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   inline infix def ^(v: Vector): Vector = wedge(v)
 
   infix def wedge(v: PointNormalized): PointNormalized =
-    PointNormalized(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   inline infix def ^(v: PointNormalized): PointNormalized = wedge(v)
 
@@ -612,23 +559,17 @@ case class Translator(
   inline infix def ^(v: BivectorBulk): Motor = wedge(v)
 
   infix def wedge(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   inline infix def ^(v: BivectorWeight): BivectorWeight = wedge(v)
 
   infix def wedge(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = v.i,
-    )
+    v
 
   inline infix def ^(v: PseudoScalar): PseudoScalar = wedge(v)
 
   infix def wedge(v: PointCenter.type): PointCenter.type =
-    PointCenter
+    v
 
   inline infix def ^(v: PointCenter.type): PointCenter.type = wedge(v)
 
@@ -1173,18 +1114,10 @@ case class Translator(
     )
 
   infix def sandwich(v: Translator): Translator =
-    Translator(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def sandwich(v: Vector): Vector =
-    Vector(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   infix def sandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -1212,16 +1145,10 @@ case class Translator(
     )
 
   infix def sandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def sandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = v.i,
-    )
+    v
 
   infix def sandwich(v: PointCenter.type): PointNormalized =
     PointNormalized(
@@ -1301,18 +1228,10 @@ case class Translator(
     )
 
   infix def reverseSandwich(v: Translator): Translator =
-    Translator(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def reverseSandwich(v: Vector): Vector =
-    Vector(
-      wxy = v.wxy,
-      wxz = v.wxz,
-      wyz = v.wyz,
-    )
+    v
 
   infix def reverseSandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -1340,16 +1259,10 @@ case class Translator(
     )
 
   infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = v.wx,
-      wy = v.wy,
-      wz = v.wz,
-    )
+    v
 
   infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = v.i,
-    )
+    v
 
   infix def reverseSandwich(v: PointCenter.type): PointNormalized =
     PointNormalized(

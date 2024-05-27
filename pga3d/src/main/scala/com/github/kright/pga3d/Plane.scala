@@ -31,17 +31,6 @@ case class Plane(
       z = z,
     )
 
-  def reverse: Plane =
-    this
-
-  def antiReverse: Plane =
-    Plane(
-      w = -w,
-      x = -x,
-      y = -y,
-      z = -z,
-    )
-
   def unary_- : Plane =
     Plane(
       w = -w,
@@ -49,6 +38,12 @@ case class Plane(
       y = -y,
       z = -z,
     )
+
+  def reverse: Plane =
+    this
+
+  def antiReverse: Plane =
+    -this
 
   def bulkNormSquare: Double =
     (x * x + y * y + z * z)

@@ -112,8 +112,10 @@ case class MultivectorSubClass(name: String,
           code("")
           code(s"def ${unaryOp.name}: ${resultCls.typeName} =")
           code.block {
-            if (result == self) {
+            if (result == self && resultCls == this) {
               code("this")
+            } else if (result == -self && resultCls == this && unaryOp.name != "unary_- ") {
+              code("-this")
             } else resultCls.makeConstructor(code, result)
           }
         }
@@ -210,10 +212,21 @@ case class MultivectorSubClass(name: String,
           val resultCls = findMatchingClass(result)
           if (resultCls != zeroCls) {
             code("", s"infix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
+
             code.block {
-              binaryOp.name match
-                case "sandwich" | "reverseSandwich" => makeOptimized(self, result, resultCls, code)
-                case _ => resultCls.makeConstructor(code, result)
+              if (resultCls == this && result == self) {
+                code("this")
+              } else if (resultCls == this && result == -self) {
+                code("-this")
+              } else if (resultCls == rightCls && result == v) {
+                code("v")
+              } else if (resultCls == rightCls && result == -v) {
+                code("-v")
+              } else {
+                binaryOp.name match
+                  case "sandwich" | "reverseSandwich" => makeOptimized(self, result, resultCls, code)
+                  case _ => resultCls.makeConstructor(code, result)
+              }
             }
 
             for (opName <- binaryOp.names.tail) {
@@ -549,9 +562,9 @@ object MultivectorSubClass:
     MultivectorUnaryOp("dual", pga3.operations.dual(_)),
     MultivectorUnaryOp("weight", pga3.operations.weight(_)),
     MultivectorUnaryOp("bulk", pga3.operations.bulk(_)),
+    MultivectorUnaryOp("unary_- ", s => -s),
     MultivectorUnaryOp("reverse", pga3.operations.reverse(_)),
     MultivectorUnaryOp("antiReverse", pga3.operations.antiReverse(_)),
-    MultivectorUnaryOp("unary_- ", s => -s),
     MultivectorUnaryOp("bulkNormSquare", s => s.geometric(s.reverse).grade(0)),
     MultivectorUnaryOp("weightNormSquare", s => s.dual.geometric(s.dual.reverse).grade(0)),
     MultivectorUnaryOp("normSquare", s => s.geometric(s.reverse).grade(0) + s.dual.geometric(s.dual.reverse).grade(0)),

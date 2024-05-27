@@ -34,6 +34,14 @@ case class PointNormalized(
   def bulk: PointCenter.type =
     PointCenter
 
+  def unary_- : Point =
+    Point(
+      wxy = -wxy,
+      wxz = -wxz,
+      wyz = -wyz,
+      xyz = -1.0,
+    )
+
   def reverse: Point =
     Point(
       wxy = -wxy,
@@ -44,14 +52,6 @@ case class PointNormalized(
 
   def antiReverse: PointNormalized =
     this
-
-  def unary_- : Point =
-    Point(
-      wxy = -wxy,
-      wxz = -wxz,
-      wyz = -wyz,
-      xyz = -1.0,
-    )
 
   def bulkNormSquare: Double =
     1.0
@@ -465,11 +465,7 @@ case class PointNormalized(
     )
 
   infix def dot(v: Translator): PointNormalized =
-    PointNormalized(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-    )
+    this
 
   infix def dot(v: PointNormalized): Double =
     -1.0
@@ -553,11 +549,7 @@ case class PointNormalized(
   inline infix def ^(v: Quaternion): Point = wedge(v)
 
   infix def wedge(v: Translator): PointNormalized =
-    PointNormalized(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-    )
+    this
 
   inline infix def ^(v: Translator): PointNormalized = wedge(v)
 
@@ -1157,11 +1149,7 @@ case class PointNormalized(
     )
 
   infix def sandwich(v: Vector): Vector =
-    Vector(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
+    -v
 
   infix def sandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -1189,16 +1177,10 @@ case class PointNormalized(
     )
 
   infix def sandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
+    -v
 
   infix def sandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
+    -v
 
   infix def sandwich(v: PointCenter.type): PointNormalized =
     PointNormalized(
@@ -1285,11 +1267,7 @@ case class PointNormalized(
     )
 
   infix def reverseSandwich(v: Vector): Vector =
-    Vector(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
+    -v
 
   infix def reverseSandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -1317,16 +1295,10 @@ case class PointNormalized(
     )
 
   infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
+    -v
 
   infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
+    -v
 
   infix def reverseSandwich(v: PointCenter.type): PointNormalized =
     PointNormalized(

@@ -44,6 +44,18 @@ case class Motor(
       yz = yz,
     )
 
+  def unary_- : Motor =
+    Motor(
+      s = -s,
+      wx = -wx,
+      wy = -wy,
+      wz = -wz,
+      xy = -xy,
+      xz = -xz,
+      yz = -yz,
+      i = -i,
+    )
+
   def reverse: Motor =
     Motor(
       s = s,
@@ -66,18 +78,6 @@ case class Motor(
       xz = -xz,
       yz = -yz,
       i = i,
-    )
-
-  def unary_- : Motor =
-    Motor(
-      s = -s,
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-      xy = -xy,
-      xz = -xz,
-      yz = -yz,
-      i = -i,
     )
 
   def bulkNormSquare: Double =

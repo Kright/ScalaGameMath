@@ -17,26 +17,18 @@ case class BivectorWeight(
   def weight: BivectorWeight =
     this
 
-  def reverse: BivectorWeight =
-    BivectorWeight(
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-    )
-
-  def antiReverse: BivectorWeight =
-    BivectorWeight(
-      wx = -wx,
-      wy = -wy,
-      wz = -wz,
-    )
-
   def unary_- : BivectorWeight =
     BivectorWeight(
       wx = -wx,
       wy = -wy,
       wz = -wz,
     )
+
+  def reverse: BivectorWeight =
+    -this
+
+  def antiReverse: BivectorWeight =
+    -this
 
   def weightNormSquare: Double =
     (wx * wx + wy * wy + wz * wz)
@@ -294,11 +286,7 @@ case class BivectorWeight(
     )
 
   infix def geometric(v: Translator): BivectorWeight =
-    BivectorWeight(
-      wx = wx,
-      wy = wy,
-      wz = wz,
-    )
+    this
 
   infix def geometric(v: PointNormalized): Vector =
     Vector(
@@ -389,11 +377,7 @@ case class BivectorWeight(
     )
 
   infix def dot(v: Translator): BivectorWeight =
-    BivectorWeight(
-      wx = wx,
-      wy = wy,
-      wz = wz,
-    )
+    this
 
   infix def dot(v: PlaneIdeal): Plane =
     Plane(
@@ -470,11 +454,7 @@ case class BivectorWeight(
   inline infix def ^(v: Quaternion): Motor = wedge(v)
 
   infix def wedge(v: Translator): BivectorWeight =
-    BivectorWeight(
-      wx = wx,
-      wy = wy,
-      wz = wz,
-    )
+    this
 
   inline infix def ^(v: Translator): BivectorWeight = wedge(v)
 

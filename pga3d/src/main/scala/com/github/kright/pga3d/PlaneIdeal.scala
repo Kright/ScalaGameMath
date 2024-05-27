@@ -17,22 +17,18 @@ case class PlaneIdeal(
   def bulk: PlaneIdeal =
     this
 
-  def reverse: PlaneIdeal =
-    this
-
-  def antiReverse: PlaneIdeal =
-    PlaneIdeal(
-      x = -x,
-      y = -y,
-      z = -z,
-    )
-
   def unary_- : PlaneIdeal =
     PlaneIdeal(
       x = -x,
       y = -y,
       z = -z,
     )
+
+  def reverse: PlaneIdeal =
+    this
+
+  def antiReverse: PlaneIdeal =
+    -this
 
   def bulkNormSquare: Double =
     (x * x + y * y + z * z)

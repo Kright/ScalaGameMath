@@ -11,16 +11,16 @@ case class PseudoScalar(
   def weight: PseudoScalar =
     this
 
+  def unary_- : PseudoScalar =
+    PseudoScalar(
+      i = -i,
+    )
+
   def reverse: PseudoScalar =
     this
 
   def antiReverse: PseudoScalar =
     this
-
-  def unary_- : PseudoScalar =
-    PseudoScalar(
-      i = -i,
-    )
 
   def weightNormSquare: Double =
     i * i
@@ -167,9 +167,7 @@ case class PseudoScalar(
     )
 
   infix def geometric(v: Translator): PseudoScalar =
-    PseudoScalar(
-      i = i,
-    )
+    this
 
   infix def geometric(v: PointNormalized): Plane =
     Plane(
@@ -268,9 +266,7 @@ case class PseudoScalar(
     )
 
   infix def dot(v: Translator): PseudoScalar =
-    PseudoScalar(
-      i = i,
-    )
+    this
 
   infix def dot(v: PointNormalized): Plane =
     Plane(
@@ -324,9 +320,7 @@ case class PseudoScalar(
   inline infix def ^(v: Quaternion): PseudoScalar = wedge(v)
 
   infix def wedge(v: Translator): PseudoScalar =
-    PseudoScalar(
-      i = i,
-    )
+    this
 
   inline infix def ^(v: Translator): PseudoScalar = wedge(v)
 

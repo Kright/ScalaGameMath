@@ -23,6 +23,14 @@ case class Quaternion(
   def bulk: Quaternion =
     this
 
+  def unary_- : Quaternion =
+    Quaternion(
+      s = -s,
+      xy = -xy,
+      xz = -xz,
+      yz = -yz,
+    )
+
   def reverse: Quaternion =
     Quaternion(
       s = s,
@@ -34,14 +42,6 @@ case class Quaternion(
   def antiReverse: Quaternion =
     Quaternion(
       s = s,
-      xy = -xy,
-      xz = -xz,
-      yz = -yz,
-    )
-
-  def unary_- : Quaternion =
-    Quaternion(
-      s = -s,
       xy = -xy,
       xz = -xz,
       yz = -yz,

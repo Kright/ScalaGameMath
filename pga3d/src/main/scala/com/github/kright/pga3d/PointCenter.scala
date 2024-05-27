@@ -26,6 +26,14 @@ case object PointCenter:
   def bulk: PointCenter.type =
     PointCenter
 
+  def unary_- : Point =
+    Point(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = -1.0,
+    )
+
   def reverse: Point =
     Point(
       wxy = 0.0,
@@ -36,14 +44,6 @@ case object PointCenter:
 
   def antiReverse: PointCenter.type =
     this
-
-  def unary_- : Point =
-    Point(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = -1.0,
-    )
 
   def bulkNormSquare: Double =
     1.0
@@ -368,7 +368,7 @@ case object PointCenter:
     )
 
   infix def dot(v: Translator): PointCenter.type =
-    PointCenter
+    this
 
   infix def dot(v: PointNormalized): Double =
     -1.0
@@ -448,7 +448,7 @@ case object PointCenter:
   inline infix def ^(v: Quaternion): Point = wedge(v)
 
   infix def wedge(v: Translator): PointCenter.type =
-    PointCenter
+    this
 
   inline infix def ^(v: Translator): PointCenter.type = wedge(v)
 
@@ -756,11 +756,7 @@ case object PointCenter:
     )
 
   infix def sandwich(v: Vector): Vector =
-    Vector(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
+    -v
 
   infix def sandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -784,19 +780,13 @@ case object PointCenter:
     )
 
   infix def sandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
+    -v
 
   infix def sandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
+    -v
 
   infix def sandwich(v: PointCenter.type): PointCenter.type =
-    PointCenter
+    this
 
   infix def reverseSandwich(v: Multivector): Multivector =
     Multivector(
@@ -872,11 +862,7 @@ case object PointCenter:
     )
 
   infix def reverseSandwich(v: Vector): Vector =
-    Vector(
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-    )
+    -v
 
   infix def reverseSandwich(v: PointNormalized): PointNormalized =
     PointNormalized(
@@ -900,19 +886,13 @@ case object PointCenter:
     )
 
   infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-    )
+    -v
 
   infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
-      i = -v.i,
-    )
+    -v
 
   infix def reverseSandwich(v: PointCenter.type): PointCenter.type =
-    PointCenter
+    this
 
   infix def cross(v: Multivector): Multivector =
     Multivector(
