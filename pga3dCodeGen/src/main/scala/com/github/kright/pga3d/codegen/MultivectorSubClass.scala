@@ -229,7 +229,7 @@ case class MultivectorSubClass(name: String,
                 code("-v")
               } else {
                 binaryOp.name match
-                  case "sandwich" | "reverseSandwich" => makeOptimized(result, resultCls, code) //todo fix
+                  case "sandwich" | "reverseSandwich" => code(makeOptimized(result, resultCls))
                   case _ => code(resultCls.makeConstructor(result))
               }
             }
@@ -266,7 +266,9 @@ case class MultivectorSubClass(name: String,
     code.toString
   }
 
-  private def makeOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass, code: CodeGen): Unit = {
+  private def makeOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {
+    val code = CodeGen()
+
     val simplifications: Seq[(Sym, Sym)] =
       (for ((fx, i) <- variableFields.zipWithIndex;
             (fy, j) <- variableFields.zipWithIndex if i <= j)
@@ -284,6 +286,7 @@ case class MultivectorSubClass(name: String,
     }
 
     code(resultCls.makeConstructor(rr.mapValues(_.map(Sym.argsSorter))))
+    code.toString
   }
 
   private def defExpForBivector(code: CodeGen): Unit = {
