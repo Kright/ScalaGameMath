@@ -36,22 +36,22 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert((acc - accNaive).norm < 2e-16)
   }
 
-  test("calculate performance") {
-    val stepsCount = 10_000_000
-    val forque = Bivector()
-
-    val body = PGA3OneBody.simple123()
-
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
-
-    val start = System.nanoTime()
-    for (_ <- 0 until stepsCount) {
-      body.doStepRK4(dt = 0.001, forque)
-    }
-    val end = System.nanoTime()
-    println(s"dt = ${(end - start) / stepsCount}ns")
-  }
+  //  test("calculate performance") {
+  //    val stepsCount = 10_000_000
+  //    val forque = Bivector()
+  //
+  //    val body = PGA3OneBody.simple123()
+  //
+  //    assert(body.initialE == 3.0)
+  //    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
+  //
+  //    val start = System.nanoTime()
+  //    for (_ <- 0 until stepsCount) {
+  //      body.doStepRK4(dt = 0.001, forque)
+  //    }
+  //    val end = System.nanoTime()
+  //    println(s"dt = ${(end - start) / stepsCount}ns")
+  //  }
 
   private def testOneBodySimple123[T](stepsCount: Int, doStep: PGA3OneBody => T): Iterable[T] = {
     val body = PGA3OneBody.simple123()
