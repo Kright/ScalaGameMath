@@ -1,4 +1,4 @@
-ThisBuild / version := "0.4.4"
+ThisBuild / version := "0.4.5"
 
 ThisBuild / scalaVersion := "3.4.2"
 
@@ -21,7 +21,6 @@ lazy val root = (project in file("."))
     name := "scalaGameMath",
     packageSrc / publishArtifact := true,
   ).aggregate(
-    ga,
     math,
     physics3d,
     solvers,
@@ -29,6 +28,8 @@ lazy val root = (project in file("."))
     symbolic,
     util,
     vector,
+    ga,
+    pga3d,
   )
 
 lazy val util = (project in file("util")).settings(
