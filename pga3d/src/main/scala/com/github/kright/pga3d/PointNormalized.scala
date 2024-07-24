@@ -1,11 +1,9 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class PointNormalized(
-  wxy: Double = 0.0,
-  wxz: Double = 0.0,
-  wyz: Double = 0.0,
-):
+case class PointNormalized(wxy: Double = 0.0,
+                           wxz: Double = 0.0,
+                           wyz: Double = 0.0):
   inline val xyz = 1.0
 
   inline def dualX: Double = -wyz
@@ -56,23 +54,23 @@ case class PointNormalized(
   def bulkNormSquare: Double =
     1.0
 
-  def weightNormSquare: Double =
-    (wxy * wxy + wxz * wxz + wyz * wyz)
-
-  def normSquare: Double =
-    (1.0 + wxy * wxy + wxz * wxz + wyz * wyz)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
 
+  def weightNormSquare: Double =
+    (wxy * wxy + wxz * wxz + wyz * wyz)
+
   def weightNorm: Double =
     Math.sqrt(weightNormSquare)
 
   def normalizedByWeight =
     this / weightNorm
+
+  def normSquare: Double =
+    (1.0 + wxy * wxy + wxz * wxz + wyz * wyz)
 
   def norm: Double =
     Math.sqrt(normSquare)

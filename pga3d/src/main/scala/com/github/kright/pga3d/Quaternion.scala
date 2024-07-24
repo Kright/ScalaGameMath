@@ -1,12 +1,10 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Quaternion(
-  s: Double = 0.0,
-  xy: Double = 0.0,
-  xz: Double = 0.0,
-  yz: Double = 0.0,
-):
+case class Quaternion(s: Double = 0.0,
+                      xy: Double = 0.0,
+                      xz: Double = 0.0,
+                      yz: Double = 0.0):
 
   def dual: Motor =
     Motor(
@@ -50,14 +48,14 @@ case class Quaternion(
   def bulkNormSquare: Double =
     (s * s + xy * xy + xz * xz + yz * yz)
 
-  def normSquare: Double =
-    (s * s + xy * xy + xz * xz + yz * yz)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
+
+  def normSquare: Double =
+    (s * s + xy * xy + xz * xz + yz * yz)
 
   def norm: Double =
     Math.sqrt(normSquare)

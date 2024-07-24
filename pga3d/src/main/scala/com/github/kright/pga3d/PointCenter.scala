@@ -48,14 +48,14 @@ case object PointCenter:
   def bulkNormSquare: Double =
     1.0
 
-  def normSquare: Double =
-    1.0
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
+
+  def normSquare: Double =
+    1.0
 
   def norm: Double =
     Math.sqrt(normSquare)

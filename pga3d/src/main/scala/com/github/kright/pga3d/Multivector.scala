@@ -1,24 +1,22 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Multivector(
-                        s: Double = 0.0,
-                        w: Double = 0.0,
-                        x: Double = 0.0,
-                        y: Double = 0.0,
-                        z: Double = 0.0,
-                        wx: Double = 0.0,
-                        wy: Double = 0.0,
-                        wz: Double = 0.0,
-                        xy: Double = 0.0,
-                        xz: Double = 0.0,
-                        yz: Double = 0.0,
-                        wxy: Double = 0.0,
-                        wxz: Double = 0.0,
-                        wyz: Double = 0.0,
-                        xyz: Double = 0.0,
-                        i: Double = 0.0,
-                      ):
+case class Multivector(s: Double = 0.0,
+                       w: Double = 0.0,
+                       x: Double = 0.0,
+                       y: Double = 0.0,
+                       z: Double = 0.0,
+                       wx: Double = 0.0,
+                       wy: Double = 0.0,
+                       wz: Double = 0.0,
+                       xy: Double = 0.0,
+                       xz: Double = 0.0,
+                       yz: Double = 0.0,
+                       wxy: Double = 0.0,
+                       wxz: Double = 0.0,
+                       wyz: Double = 0.0,
+                       xyz: Double = 0.0,
+                       i: Double = 0.0):
 
   def dual: Multivector =
     Multivector(
@@ -143,23 +141,23 @@ case class Multivector(
   def bulkNormSquare: Double =
     (s * s + x * x + xy * xy + xyz * xyz + xz * xz + y * y + yz * yz + z * z)
 
-  def weightNormSquare: Double =
-    (i * i + w * w + wx * wx + wxy * wxy + wxz * wxz + wy * wy + wyz * wyz + wz * wz)
-
-  def normSquare: Double =
-    (i * i + s * s + w * w + wx * wx + wxy * wxy + wxz * wxz + wy * wy + wyz * wyz + wz * wz + x * x + xy * xy + xyz * xyz + xz * xz + y * y + yz * yz + z * z)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
 
+  def weightNormSquare: Double =
+    (i * i + w * w + wx * wx + wxy * wxy + wxz * wxz + wy * wy + wyz * wyz + wz * wz)
+
   def weightNorm: Double =
     Math.sqrt(weightNormSquare)
 
   def normalizedByWeight =
     this / weightNorm
+
+  def normSquare: Double =
+    (i * i + s * s + w * w + wx * wx + wxy * wxy + wxz * wxz + wy * wy + wyz * wyz + wz * wz + x * x + xy * xy + xyz * xyz + xz * xz + y * y + yz * yz + z * z)
 
   def norm: Double =
     Math.sqrt(normSquare)

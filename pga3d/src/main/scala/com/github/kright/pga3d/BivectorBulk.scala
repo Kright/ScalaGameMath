@@ -1,11 +1,9 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class BivectorBulk(
-                         xy: Double = 0.0,
-                         xz: Double = 0.0,
-                         yz: Double = 0.0,
-                       ):
+case class BivectorBulk(xy: Double = 0.0,
+                        xz: Double = 0.0,
+                        yz: Double = 0.0):
 
   def dual: BivectorWeight =
     BivectorWeight(
@@ -33,14 +31,14 @@ case class BivectorBulk(
   def bulkNormSquare: Double =
     (xy * xy + xz * xz + yz * yz)
 
-  def normSquare: Double =
-    (xy * xy + xz * xz + yz * yz)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
+
+  def normSquare: Double =
+    (xy * xy + xz * xz + yz * yz)
 
   def norm: Double =
     Math.sqrt(normSquare)

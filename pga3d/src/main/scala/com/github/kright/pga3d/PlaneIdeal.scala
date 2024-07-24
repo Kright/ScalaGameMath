@@ -1,11 +1,9 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class PlaneIdeal(
-  x: Double = 0.0,
-  y: Double = 0.0,
-  z: Double = 0.0,
-):
+case class PlaneIdeal(x: Double = 0.0,
+                      y: Double = 0.0,
+                      z: Double = 0.0):
 
   def dual: Vector =
     Vector(
@@ -33,14 +31,14 @@ case class PlaneIdeal(
   def bulkNormSquare: Double =
     (x * x + y * y + z * z)
 
-  def normSquare: Double =
-    (x * x + y * y + z * z)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
+
+  def normSquare: Double =
+    (x * x + y * y + z * z)
 
   def norm: Double =
     Math.sqrt(normSquare)

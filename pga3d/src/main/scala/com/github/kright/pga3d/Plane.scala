@@ -1,12 +1,10 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Plane(
-  w: Double = 0.0,
-  x: Double = 0.0,
-  y: Double = 0.0,
-  z: Double = 0.0,
-):
+case class Plane(w: Double = 0.0,
+                 x: Double = 0.0,
+                 y: Double = 0.0,
+                 z: Double = 0.0):
 
   def dual: Point =
     Point(
@@ -48,23 +46,23 @@ case class Plane(
   def bulkNormSquare: Double =
     (x * x + y * y + z * z)
 
-  def weightNormSquare: Double =
-    w * w
-
-  def normSquare: Double =
-    (w * w + x * x + y * y + z * z)
-
   def bulkNorm: Double =
     Math.sqrt(bulkNormSquare)
 
   def normalizedByBulk =
     this / bulkNorm
 
+  def weightNormSquare: Double =
+    w * w
+
   def weightNorm: Double =
     Math.sqrt(weightNormSquare)
 
   def normalizedByWeight =
     this / weightNorm
+
+  def normSquare: Double =
+    (w * w + x * x + y * y + z * z)
 
   def norm: Double =
     Math.sqrt(normSquare)

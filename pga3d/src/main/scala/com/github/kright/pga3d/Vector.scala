@@ -1,11 +1,9 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Vector(
-                   wxy: Double = 0.0,
-                   wxz: Double = 0.0,
-                   wyz: Double = 0.0,
-                 ):
+case class Vector(wxy: Double = 0.0,
+                  wxz: Double = 0.0,
+                  wyz: Double = 0.0):
 
   inline def dualX: Double = -wyz
 
@@ -39,14 +37,14 @@ case class Vector(
   def weightNormSquare: Double =
     (wxy * wxy + wxz * wxz + wyz * wyz)
 
-  def normSquare: Double =
-    (wxy * wxy + wxz * wxz + wyz * wyz)
-
   def weightNorm: Double =
     Math.sqrt(weightNormSquare)
 
   def normalizedByWeight =
     this / weightNorm
+
+  def normSquare: Double =
+    (wxy * wxy + wxz * wxz + wyz * wyz)
 
   def norm: Double =
     Math.sqrt(normSquare)

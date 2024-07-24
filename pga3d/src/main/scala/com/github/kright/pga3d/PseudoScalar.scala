@@ -1,9 +1,7 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class PseudoScalar(
-  i: Double = 0.0,
-):
+case class PseudoScalar(i: Double = 0.0):
 
   def dual: Double =
     i
@@ -25,14 +23,14 @@ case class PseudoScalar(
   def weightNormSquare: Double =
     i * i
 
-  def normSquare: Double =
-    i * i
-
   def weightNorm: Double =
     Math.sqrt(weightNormSquare)
 
   def normalizedByWeight =
     this / weightNorm
+
+  def normSquare: Double =
+    i * i
 
   def norm: Double =
     Math.sqrt(normSquare)
