@@ -263,6 +263,18 @@ case class MultivectorSubClass(name: String,
       }
     }
 
+    if (this == translator) {
+      code(s"\n\nobject ${typeName}:")
+      code.block {
+        code(s"def addVector(v: ${vector.typeName}): ${typeName} =")
+        code.block {
+          val v = vector.makeSymbolic("v")
+          val mult = MultiVector("w" -> Sym(-0.5))
+          code(makeConstructor(mult.geometric(v.dual)))
+        }
+      }
+    }
+
     code.toString
   }
 

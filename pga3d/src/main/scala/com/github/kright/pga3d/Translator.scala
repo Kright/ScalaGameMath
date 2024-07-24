@@ -1355,3 +1355,12 @@ case class Translator(
       wxz = -wy,
       wyz = wx,
     )
+
+
+object Translator:
+  def addVector(v: Vector): Translator =
+    Translator(
+      wx = 0.5 * v.wyz,
+      wy = -0.5 * v.wxz,
+      wz = 0.5 * v.wxy,
+    )
