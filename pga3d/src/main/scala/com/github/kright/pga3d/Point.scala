@@ -210,6 +210,46 @@ case class Point(wxy: Double = 0.0,
       wyz = wyz / xyz,
     )
 
+  /** fused plane.dot(point).geometric(plane) */
+  def projectOntoPlane(plane: Plane): Point =
+    Point(
+      wxy = (plane.z * (plane.w * xyz + plane.y * wxz - plane.x * wyz) + wxy * (plane.x * plane.x + plane.y * plane.y)),
+      wxz = (plane.y * (plane.x * wyz + plane.z * wxy - plane.w * xyz) + wxz * (plane.x * plane.x + plane.z * plane.z)),
+      wyz = (plane.x * (plane.w * xyz + plane.y * wxz - plane.z * wxy) + wyz * (plane.y * plane.y + plane.z * plane.z)),
+      xyz = xyz * (plane.x * plane.x + plane.y * plane.y + plane.z * plane.z),
+    )
+
+  /**
+   * fused line.dot(point).geometric(line).toPointUnsafe
+   * not applicable for Bivector, input should be a line
+   * example of result for Bivector:
+   * Multivector(
+   * s = 0.0,
+   * w = xyz * (line.wx * line.yz + line.wz * line.xy - line.wy * line.xz),
+   * x = 0.0,
+   * y = 0.0,
+   * z = 0.0,
+   * wx = 0.0,
+   * wy = 0.0,
+   * wz = 0.0,
+   * xy = 0.0,
+   * xz = 0.0,
+   * yz = 0.0,
+   * wxy = (line.xy * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wx * line.xz + line.wy * line.yz)),
+   * wxz = (line.xz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wz * line.yz - line.wx * line.xy)),
+   * wyz = (line.yz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (-line.wy * line.xy - line.wz * line.xz)),
+   * xyz = xyz * (-line.xy * line.xy - line.xz * line.xz - line.yz * line.yz),
+   * i = 0.0,
+   * )
+   */
+  def projectOntoLine(line: Bivector): Point =
+    Point(
+      wxy = (line.xy * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wx * line.xz + line.wy * line.yz)),
+      wxz = (line.xz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wz * line.yz - line.wx * line.xy)),
+      wyz = (line.yz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (-line.wy * line.xy - line.wz * line.xz)),
+      xyz = xyz * (-line.xy * line.xy - line.xz * line.xz - line.yz * line.yz),
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = -v.xyz * xyz,

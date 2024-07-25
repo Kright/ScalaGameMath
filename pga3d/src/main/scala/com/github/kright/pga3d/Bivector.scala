@@ -314,6 +314,28 @@ case class Bivector(wx: Double = 0.0,
       wz = wz,
     )
 
+  /** fused plane.dot(line).geometric(plane) */
+  def projectOntoPlane(plane: Plane): Bivector =
+    Bivector(
+      wx = (plane.w * (-plane.y * xy - plane.z * xz) + plane.x * (plane.x * wx + plane.y * wy + plane.z * wz)),
+      wy = (plane.w * (plane.x * xy - plane.z * yz) + plane.y * (plane.x * wx + plane.y * wy + plane.z * wz)),
+      wz = (plane.w * (plane.x * xz + plane.y * yz) + plane.z * (plane.x * wx + plane.y * wy + plane.z * wz)),
+      xy = (plane.x * (plane.x * xy - plane.z * yz) + plane.y * (plane.y * xy + plane.z * xz)),
+      xz = (plane.x * (plane.x * xz + plane.y * yz) + plane.z * (plane.y * xy + plane.z * xz)),
+      yz = (plane.x * (plane.y * xz - plane.z * xy) + yz * (plane.y * plane.y + plane.z * plane.z)),
+    )
+
+  /** fused plane.dot(line).geometric(plane) */
+  def projectOntoPlane(plane: PlaneIdeal): Bivector =
+    Bivector(
+      wx = plane.x * (plane.x * wx + plane.y * wy + plane.z * wz),
+      wy = plane.y * (plane.x * wx + plane.y * wy + plane.z * wz),
+      wz = plane.z * (plane.x * wx + plane.y * wy + plane.z * wz),
+      xy = (plane.x * (plane.x * xy - plane.z * yz) + plane.y * (plane.y * xy + plane.z * xz)),
+      xz = (plane.x * (plane.x * xz + plane.y * yz) + plane.z * (plane.y * xy + plane.z * xz)),
+      yz = (plane.x * (plane.y * xz - plane.z * xy) + yz * (plane.y * plane.y + plane.z * plane.z)),
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),

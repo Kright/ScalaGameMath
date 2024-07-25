@@ -301,6 +301,7 @@ object MultivectorSubClass:
     DefLogForMotor(),
     DefBivectorSplit(),
     DefConvertTo(),
+    DefProjection(),
   )
 
   val binaryOperations = Seq(
