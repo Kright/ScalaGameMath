@@ -216,6 +216,45 @@ case class Motor(s: Double = 0.0,
       i = i,
     )
 
+  def asBivectorUnsafe: Bivector =
+    Bivector(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asQuaternionUnsafe: Quaternion =
+    Quaternion(
+      s = s,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asTranslatorUnsafe: Translator =
+    Translator(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
+  def asBivectorBulkUnsafe: BivectorBulk =
+    BivectorBulk(
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asBivectorWeightUnsafe: BivectorWeight =
+    BivectorWeight(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),

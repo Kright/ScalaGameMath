@@ -200,6 +200,13 @@ case class BivectorWeight(wx: Double = 0.0,
       yz = 0.0,
     )
 
+  def asTranslatorUnsafe: Translator =
+    Translator(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = 0.0,

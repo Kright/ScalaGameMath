@@ -117,15 +117,6 @@ case class MultivectorSubClass(name: String,
         }
       }
 
-      for (target <- pgaClasses) {
-        if (target != this && target.isMatching(self)) {
-          code(s"\ndef to${target.typeName.capitalize}: ${target.typeName} =")
-          code.block {
-            code(target.makeConstructor(self))
-          }
-        }
-      }
-
       for (binaryOp <- binaryOps) {
         for (rightCls <- pgaClasses if (rightCls != zeroCls) && (rightCls != scalar)) {
           val v = rightCls.makeSymbolic("v")
@@ -145,7 +136,7 @@ case class MultivectorSubClass(name: String,
                 code("-v")
               } else {
                 binaryOp.name match
-                  case "sandwich" | "reverseSandwich" => code(makeOptimized(result, resultCls))
+                  case "sandwich" | "reverseSandwich" => code(makeConstructorOptimized(result, resultCls))
                   case _ => code(resultCls.makeConstructor(result))
               }
             }
@@ -194,7 +185,7 @@ case class MultivectorSubClass(name: String,
     code.toString
   }
 
-  private def makeOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {
+  def makeConstructorOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {
     val code = CodeGen()
 
     val simplifications: Seq[(Sym, Sym)] =
@@ -309,6 +300,7 @@ object MultivectorSubClass:
     DefExpForBivector(),
     DefLogForMotor(),
     DefBivectorSplit(),
+    DefConvertTo(),
   )
 
   val binaryOperations = Seq(

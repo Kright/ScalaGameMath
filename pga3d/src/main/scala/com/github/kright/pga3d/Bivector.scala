@@ -285,6 +285,35 @@ case class Bivector(wx: Double = 0.0,
       i = 0.0,
     )
 
+  def asQuaternionUnsafe: Quaternion =
+    Quaternion(
+      s = 0.0,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asTranslatorUnsafe: Translator =
+    Translator(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
+  def asBivectorBulkUnsafe: BivectorBulk =
+    BivectorBulk(
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asBivectorWeightUnsafe: BivectorWeight =
+    BivectorWeight(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),

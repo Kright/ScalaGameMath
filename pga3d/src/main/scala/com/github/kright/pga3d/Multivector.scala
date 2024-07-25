@@ -268,6 +268,94 @@ case class Multivector(s: Double = 0.0,
       i = i * v.i,
     )
 
+  def asMotorUnsafe: Motor =
+    Motor(
+      s = s,
+      wx = wx,
+      wy = wy,
+      wz = wz,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+      i = i,
+    )
+
+  def asPlaneUnsafe: Plane =
+    Plane(
+      w = w,
+      x = x,
+      y = y,
+      z = z,
+    )
+
+  def asBivectorUnsafe: Bivector =
+    Bivector(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asPointUnsafe: Point =
+    Point(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+      xyz = xyz,
+    )
+
+  def asQuaternionUnsafe: Quaternion =
+    Quaternion(
+      s = s,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asTranslatorUnsafe: Translator =
+    Translator(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
+  def asVectorUnsafe: Vector =
+    Vector(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+    )
+
+  def asPointNormalizedUnsafe: PointNormalized =
+    PointNormalized(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+    )
+
+  def asPlaneIdealUnsafe: PlaneIdeal =
+    PlaneIdeal(
+      x = x,
+      y = y,
+      z = z,
+    )
+
+  def asBivectorBulkUnsafe: BivectorBulk =
+    BivectorBulk(
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asBivectorWeightUnsafe: BivectorWeight =
+    BivectorWeight(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (s * v.s + v.x * x + v.y * y + v.z * z - v.xy * xy - v.xyz * xyz - v.xz * xz - v.yz * yz),

@@ -173,6 +173,31 @@ case class Translator(wx: Double = 0.0,
       i = 0.0,
     )
 
+  def asBivectorUnsafe: Bivector =
+    Bivector(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+    )
+
+  def asQuaternionUnsafe: Quaternion =
+    Quaternion(
+      s = 1.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+    )
+
+  def asBivectorWeightUnsafe: BivectorWeight =
+    BivectorWeight(
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = v.s,

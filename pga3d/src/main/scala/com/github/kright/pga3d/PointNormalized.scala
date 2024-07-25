@@ -192,6 +192,13 @@ case class PointNormalized(wxy: Double = 0.0,
       xyz = 1.0,
     )
 
+  def asVectorUnsafe: Vector =
+    Vector(
+      wxy = wxy,
+      wxz = wxz,
+      wyz = wyz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = -v.xyz,

@@ -121,6 +121,13 @@ case object PointCenter:
       xyz = 1.0,
     )
 
+  def asVectorUnsafe: Vector =
+    Vector(
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+    )
+
   def toPointNormalized: PointNormalized =
     PointNormalized(
       wxy = 0.0,

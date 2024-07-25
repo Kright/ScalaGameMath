@@ -157,6 +157,23 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
+  def asBivectorUnsafe: Bivector =
+    Bivector(
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
+  def asBivectorBulkUnsafe: BivectorBulk =
+    BivectorBulk(
+      xy = xy,
+      xz = xz,
+      yz = yz,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),

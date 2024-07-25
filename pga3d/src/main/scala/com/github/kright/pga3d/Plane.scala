@@ -133,6 +133,13 @@ case class Plane(w: Double = 0.0,
       i = 0.0,
     )
 
+  def asPlaneIdealUnsafe: PlaneIdeal =
+    PlaneIdeal(
+      x = x,
+      y = y,
+      z = z,
+    )
+
   infix def geometric(v: Multivector): Multivector =
     Multivector(
       s = (v.x * x + v.y * y + v.z * z),
