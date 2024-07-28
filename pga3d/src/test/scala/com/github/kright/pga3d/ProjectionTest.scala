@@ -22,9 +22,12 @@ class ProjectionTest extends AnyFunSuiteLike:
     val cy = center v y
     val cz = center v z
 
-    assert(p.projectOntoLine(cx).toPointNormalized == PointNormalized.fromDual(px, center.dualY, center.dualZ))
-    assert(p.projectOntoLine(cy).toPointNormalized == PointNormalized.fromDual(center.dualX, py, center.dualZ))
-    assert(p.projectOntoLine(cz).toPointNormalized == PointNormalized.fromDual(center.dualX, center.dualY, pz))
+    assert(p.projectOntoLine(cx) == Point.fromDual(px, center.dualY, center.dualZ, w = 1.0))
+    assert(p.projectOntoLine(cy) == Point.fromDual(center.dualX, py, center.dualZ, w = 1.0))
+    assert(p.projectOntoLine(cz) == Point.fromDual(center.dualX, center.dualY, pz, w = 1.0))
+
+    assert(p.projectOntoLine(center v x).dualW == 1.0)
+    assert(p.projectOntoLine(center v -x).dualW == 1.0)
   }
 
   test("project point onto plane") {
@@ -40,9 +43,12 @@ class ProjectionTest extends AnyFunSuiteLike:
     val cxz = center v x v z
     val cyz = center v y v z
 
-    assert(p.projectOntoPlane(cxy).toPointNormalized == PointNormalized.fromDual(px, py, center.dualZ))
-    assert(p.projectOntoPlane(cxz).toPointNormalized == PointNormalized.fromDual(px, center.dualY, pz))
-    assert(p.projectOntoPlane(cyz).toPointNormalized == PointNormalized.fromDual(center.dualX, py, pz))
+    assert(p.projectOntoPlane(cxy) == Point.fromDual(px, py, center.dualZ, w = 1.0))
+    assert(p.projectOntoPlane(cxz) == Point.fromDual(px, center.dualY, pz, w = 1.0))
+    assert(p.projectOntoPlane(cyz) == Point.fromDual(center.dualX, py, pz, w = 1.0))
+
+    assert(p.projectOntoPlane(center v x v y).dualW == 1.0)
+    assert(p.projectOntoPlane(center v x v -y).dualW == 1.0)
   }
 
   test("project line onto plane") {

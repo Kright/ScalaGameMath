@@ -220,7 +220,7 @@ case class Point(wxy: Double = 0.0,
     )
 
   /**
-   * fused line.dot(point).geometric(line).toPointUnsafe
+   * fused -line.dot(point).geometric(line).toPointUnsafe
    * not applicable for Bivector, input should be a line
    * example of result for Bivector:
    * Multivector(
@@ -244,10 +244,10 @@ case class Point(wxy: Double = 0.0,
    */
   def projectOntoLine(line: Bivector): Point =
     Point(
-      wxy = (line.xy * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wx * line.xz + line.wy * line.yz)),
-      wxz = (line.xz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (line.wz * line.yz - line.wx * line.xy)),
-      wyz = (line.yz * (-line.xy * wxy - line.xz * wxz - line.yz * wyz) + xyz * (-line.wy * line.xy - line.wz * line.xz)),
-      xyz = xyz * (-line.xy * line.xy - line.xz * line.xz - line.yz * line.yz),
+      wxy = (line.xy * (line.xy * wxy + line.xz * wxz + line.yz * wyz) + xyz * (-line.wx * line.xz - line.wy * line.yz)),
+      wxz = (line.xz * (line.xy * wxy + line.xz * wxz + line.yz * wyz) + xyz * (line.wx * line.xy - line.wz * line.yz)),
+      wyz = (line.yz * (line.xy * wxy + line.xz * wxz + line.yz * wyz) + xyz * (line.wy * line.xy + line.wz * line.xz)),
+      xyz = xyz * (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
     )
 
   infix def geometric(v: Multivector): Multivector =

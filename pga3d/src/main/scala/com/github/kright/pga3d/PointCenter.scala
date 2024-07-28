@@ -145,7 +145,7 @@ case object PointCenter:
     )
 
   /**
-   * fused line.dot(point).geometric(line).toPointUnsafe
+   * fused -line.dot(point).geometric(line).toPointUnsafe
    * not applicable for Bivector, input should be a line
    * example of result for Bivector:
    * Multivector(
@@ -169,10 +169,10 @@ case object PointCenter:
    */
   def projectOntoLine(line: Bivector): Point =
     Point(
-      wxy = (line.wx * line.xz + line.wy * line.yz),
-      wxz = (line.wz * line.yz - line.wx * line.xy),
-      wyz = (-line.wy * line.xy - line.wz * line.xz),
-      xyz = (-line.xy * line.xy - line.xz * line.xz - line.yz * line.yz),
+      wxy = (-line.wx * line.xz - line.wy * line.yz),
+      wxz = (line.wx * line.xy - line.wz * line.yz),
+      wyz = (line.wy * line.xy + line.wz * line.xz),
+      xyz = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
     )
 
   infix def geometric(v: Multivector): Multivector =

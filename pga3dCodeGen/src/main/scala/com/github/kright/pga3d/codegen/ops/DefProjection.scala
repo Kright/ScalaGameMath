@@ -24,7 +24,7 @@ object DefProjection:
             val plane = planeClass.makeSymbolic("plane")
             val result = -plane.dot(line).geometric(plane)
             val resultCls = MultivectorSubClass.findMatchingClass(result)
-            
+
             code(
               s"""
                  |/** fused plane.dot(line).geometric(plane) */
@@ -54,14 +54,14 @@ object DefProjection:
 
           {
             val line = lineClass.makeSymbolic("line")
-            val result = line.dot(point).geometric(line)
+            val result = -line.dot(point).geometric(line)
             val tunedResult = result.filter((b, _) => b.grade != 1)
             val tunedResultCls = MultivectorSubClass.findMatchingClass(tunedResult)
 
             code(
               """
                 |/**
-                | * fused line.dot(point).geometric(line).toPointUnsafe
+                | * fused -line.dot(point).geometric(line).toPointUnsafe
                 | * not applicable for Bivector, input should be a line
                 | * example of result for Bivector:
                 |""".stripMargin
