@@ -182,6 +182,20 @@ case class MultivectorSubClass(name: String,
       }
     }
 
+    if (this == quaternion) {
+      code(s"\n\nobject ${typeName}:")
+      code.block {
+        code(s"val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0)")
+      }
+    }
+
+    if (this == motor) {
+      code(s"\n\nobject ${typeName}:")
+      code.block {
+        code(s"val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)")
+      }
+    }
+
     code.toString
   }
 

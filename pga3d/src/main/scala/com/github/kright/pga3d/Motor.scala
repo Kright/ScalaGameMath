@@ -2384,3 +2384,7 @@ case class Motor(s: Double = 0.0,
       xyz = 0.0,
       i = 0.0,
     )
+
+
+object Motor:
+  val id: Motor = Motor(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

@@ -1710,3 +1710,7 @@ case class Quaternion(s: Double = 0.0,
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
     )
+
+
+object Quaternion:
+  val id: Quaternion = Quaternion(1.0, 0.0, 0.0, 0.0)
