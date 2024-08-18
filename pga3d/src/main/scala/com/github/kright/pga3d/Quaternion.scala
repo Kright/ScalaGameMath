@@ -108,6 +108,8 @@ case class Quaternion(s: Double = 0.0,
 
   def log(): BivectorBulk =
     val scalar = s
+    if (s < 0.0) return (-this).log()
+
     val lenXYZ = Math.sqrt(xy * xy + xz * xz + yz * yz)
     val angle = Math.atan2(lenXYZ, scalar)
 
