@@ -1714,3 +1714,34 @@ case class Quaternion(s: Double = 0.0,
 
 object Quaternion:
   val id: Quaternion = Quaternion(1.0, 0.0, 0.0, 0.0)
+
+  def rotation(from: PlaneIdeal, to: PlaneIdeal): Quaternion = {
+    val norm = Math.sqrt(from.normSquare * to.normSquare)
+    val q2a = to.geometric(from) / norm
+    val dot = q2a.s
+
+    if (dot > -1.0 + 1e-6) {
+      val newCos = Math.sqrt((1.0 + dot) / 2)
+      val newSinDivSin2 = 0.5 / newCos
+      return Quaternion(newCos, q2a.xy * newSinDivSin2, q2a.xz * newSinDivSin2, q2a.yz * newSinDivSin2)
+    }
+
+    val sin2a = Math.sqrt(q2a.xy * q2a.xy + q2a.xz * q2a.xz + q2a.yz * q2a.yz)
+
+    if (sin2a > 1e-8) {
+      val angle2 = Math.atan2(sin2a, q2a.s)
+      val propAngle = angle2 * 0.5
+      val mult = Math.sin(propAngle) / sin2a
+      return Quaternion(Math.cos(propAngle), q2a.xy * mult, q2a.xz * mult, q2a.yz * mult).normalizedByNorm
+    }
+
+    // choose any axis
+    val orthogonalPlane =
+      if (Math.abs(from.x) > Math.abs(from.z)) PlaneIdeal(-from.y, from.x, 0)
+      else PlaneIdeal(0, -from.z, from.y)
+
+    Quaternion(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
+  }
+
+  def rotation(from: Vector, to: Vector): Quaternion =
+    rotation(from.dual, to.dual)
