@@ -1,10 +1,13 @@
 package com.github.kright.ga
 
 import com.github.kright.ga.GAGenerator.*
+import com.github.kright.symbolic.Sym
 import org.scalacheck.Gen
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
+
+import scala.math.Numeric.Implicits.infixNumericOps
 
 class MultiVectorTest extends AnyFunSuite:
   private implicit val doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-9)
@@ -215,5 +218,25 @@ class MultiVectorTest extends AnyFunSuite:
         assert(a ⟇ mid ⟇ a.antiReverse === a.antiSandwich(mid))
         assert(a ⟇ b ⟇ mid ⟇ b.antiReverse ⟇ a.antiReverse === a.antiGeometric(b).antiSandwich(mid))
       }
+    }
+  }
+
+  test("my project") {
+    GA.pga3.use {
+
+      val p = Sym.point("p")
+
+      val planeZ = PGA3.plane(
+        Sym.zero,
+        Sym.zero,
+        Sym.one,
+        -Sym.one
+      )
+
+      val centerPoint =
+        PGA3.point(Sym.zero, Sym.zero, Sym.zero)
+
+      //      println(((centerPoint v p) ^ planeZ).toMultilineString)
+      //      println(((centerPoint v p) ^ planeZ).dual.toMultilineString)
     }
   }

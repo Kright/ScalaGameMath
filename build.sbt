@@ -1,6 +1,6 @@
-ThisBuild / version := "0.4.8"
+ThisBuild / version := "0.5.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.6.2"
 
 ThisBuild / licenses := List(License.MIT)
 ThisBuild / startYear := Some(2022)
@@ -32,55 +32,51 @@ lazy val root = (project in file("."))
     pga3d,
   )
 
-lazy val util = (project in file("util")).settings(
-  scalatestSettings
-)
+lazy val util = (project in file("util"))
+  .settings(scalatestSettings *)
 
-lazy val vector = (project in file("vector")).settings(
-  scalatestSettings
-).dependsOn(util)
+lazy val vector = (project in file("vector"))
+  .settings(scalatestSettings *).dependsOn(util)
 
-lazy val math = (project in file("math")).settings(
-  scalatestSettings,
-).dependsOn(vector % "compile->compile;test->test")
+lazy val math = (project in file("math"))
+  .settings(scalatestSettings *)
+  .dependsOn(vector % "compile->compile;test->test")
 
-lazy val symbolic = (project in file("symbolic")).settings(
-  scalatestSettings,
-)
+lazy val symbolic = (project in file("symbolic"))
+  .settings(scalatestSettings *)
 
-lazy val ga = (project in file("ga")).settings(
-  scalatestSettings,
-).dependsOn(
-  util,
-  symbolic % "test",
-  vector % "compile->compile;test->test",
-  solvers % "test",
-)
+lazy val ga = (project in file("ga")).
+  settings(scalatestSettings *)
+  .dependsOn(
+    util,
+    symbolic % "test",
+    vector % "compile->compile;test->test",
+    solvers % "test",
+  )
 
-lazy val swizzle = (project in file("swizzle")).settings(
-  scalatestSettings,
-).dependsOn(vector)
+lazy val swizzle = (project in file("swizzle"))
+  .settings(scalatestSettings *).dependsOn(vector)
 
 lazy val solvers = (project in file("solvers"))
 
-lazy val physics3d = (project in file("physics3d")).settings(
-  scalatestSettings
-).dependsOn(
-  math % "compile->compile;test->test",
-  solvers,
-)
+lazy val physics3d = (project in file("physics3d"))
+  .settings(scalatestSettings *)
+  .dependsOn(
+    math % "compile->compile;test->test",
+    solvers,
+  )
 
-lazy val pga3dCodeGen = (project in file("pga3dCodeGen")).settings(
-  scalatestSettings
-).dependsOn(
-  ga,
-  symbolic,
-)
+lazy val pga3dCodeGen = (project in file("pga3dCodeGen"))
+  .settings(scalatestSettings *)
+  .dependsOn(
+    ga,
+    symbolic,
+  )
 
-lazy val pga3d = (project in file("pga3d")).settings(
-  scalatestSettings
-).dependsOn(
-  solvers % "test",
-  util % "test",
-  vector % "test",
-)
+lazy val pga3d = (project in file("pga3d"))
+  .settings(scalatestSettings *)
+  .dependsOn(
+    solvers % "test",
+    util % "test",
+    vector % "test->test",
+  )

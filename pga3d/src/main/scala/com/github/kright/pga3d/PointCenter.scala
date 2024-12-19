@@ -150,7 +150,7 @@ case object PointCenter:
    * example of result for Bivector:
    * Multivector(
    * s = 0.0,
-   * w = (line.wx * line.yz + line.wz * line.xy - line.wy * line.xz),
+   * w = (line.wy * line.xz - line.wx * line.yz - line.wz * line.xy),
    * x = 0.0,
    * y = 0.0,
    * z = 0.0,
@@ -160,10 +160,10 @@ case object PointCenter:
    * xy = 0.0,
    * xz = 0.0,
    * yz = 0.0,
-   * wxy = (line.wx * line.xz + line.wy * line.yz),
-   * wxz = (line.wz * line.yz - line.wx * line.xy),
-   * wyz = (-line.wy * line.xy - line.wz * line.xz),
-   * xyz = (-line.xy * line.xy - line.xz * line.xz - line.yz * line.yz),
+   * wxy = (-line.wx * line.xz - line.wy * line.yz),
+   * wxz = (line.wx * line.xy - line.wz * line.yz),
+   * wyz = (line.wy * line.xy + line.wz * line.xz),
+   * xyz = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
    * i = 0.0,
    * )
    */

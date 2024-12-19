@@ -209,14 +209,14 @@ case class MultivectorSubClass(name: String,
             |  }
             |
             |  // choose any axis
-            |  val orthogonalPlane = 
+            |  val orthogonalPlane =
             |    if (Math.abs(from.x) > Math.abs(from.z)) PlaneIdeal(-from.y, from.x, 0)
             |    else PlaneIdeal(0, -from.z, from.y)
             |
             |  Quaternion(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
             |}
             |
-            |def rotation(from: Vector, to: Vector): Quaternion = 
+            |def rotation(from: Vector, to: Vector): Quaternion =
             |  rotation(from.dual, to.dual)
             |""".stripMargin)
       }
@@ -225,7 +225,10 @@ case class MultivectorSubClass(name: String,
     if (this == motor) {
       code(s"\n\nobject ${typeName}:")
       code.block {
-        code(s"val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)")
+        code(
+          s"""val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+             |
+             |def addVector(v: ${vector.typeName}): ${typeName} = Translator.addVector(v).toMotor""".stripMargin)
       }
     }
 

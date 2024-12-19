@@ -2388,3 +2388,5 @@ case class Motor(s: Double = 0.0,
 
 object Motor:
   val id: Motor = Motor(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+  def addVector(v: Vector): Motor = Translator.addVector(v).toMotor
