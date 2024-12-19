@@ -1,6 +1,7 @@
 package com.github.kright.pga3d.codegen
 
-import com.github.kright.ga.BasisBlade
+import com.github.kright.ga.{BasisBlade, BasisBladeWithSign}
 
 case class MultivectorField(name: String,
-                            basisBlade: BasisBlade)
+                            basisBladeWithSign: BasisBladeWithSign):
+  def basisBlade: BasisBlade = basisBladeWithSign.basisBlade
