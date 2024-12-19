@@ -1,13 +1,13 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Quaternion(s: Double = 0.0,
-                      xy: Double = 0.0,
-                      xz: Double = 0.0,
-                      yz: Double = 0.0):
+case class Pga3dQuaternion(s: Double = 0.0,
+                           xy: Double = 0.0,
+                           xz: Double = 0.0,
+                           yz: Double = 0.0):
 
-  def dual: Motor =
-    Motor(
+  def dual: Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = yz,
       wy = -xz,
@@ -18,27 +18,27 @@ case class Quaternion(s: Double = 0.0,
       i = s,
     )
 
-  def bulk: Quaternion =
+  def bulk: Pga3dQuaternion =
     this
 
-  def unary_- : Quaternion =
-    Quaternion(
+  def unary_- : Pga3dQuaternion =
+    Pga3dQuaternion(
       s = -s,
       xy = -xy,
       xz = -xz,
       yz = -yz,
     )
 
-  def reverse: Quaternion =
-    Quaternion(
+  def reverse: Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s,
       xy = -xy,
       xz = -xz,
       yz = -yz,
     )
 
-  def antiReverse: Quaternion =
-    Quaternion(
+  def antiReverse: Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s,
       xy = -xy,
       xz = -xz,
@@ -63,50 +63,50 @@ case class Quaternion(s: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
-  def *(v: Double): Quaternion =
-    Quaternion(
+  def *(v: Double): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v,
       xy = v * xy,
       xz = v * xz,
       yz = v * yz,
     )
 
-  inline def /(v: Double): Quaternion =
+  inline def /(v: Double): Pga3dQuaternion =
     this * (1.0 / v)
 
-  def +(v: Quaternion): Quaternion =
-    Quaternion(
+  def +(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s + v.s),
       xy = (v.xy + xy),
       xz = (v.xz + xz),
       yz = (v.yz + yz),
     )
 
-  def -(v: Quaternion): Quaternion =
-    Quaternion(
+  def -(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s - v.s),
       xy = (xy - v.xy),
       xz = (xz - v.xz),
       yz = (yz - v.yz),
     )
 
-  def madd(v: Quaternion, mult: Double): Quaternion =
-    Quaternion(
+  def madd(v: Pga3dQuaternion, mult: Double): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s + mult * v.s),
       xy = (xy + mult * v.xy),
       xz = (xz + mult * v.xz),
       yz = (yz + mult * v.yz),
     )
 
-  def multiplyElementwise(v: Quaternion): Quaternion =
-    Quaternion(
+  def multiplyElementwise(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.s,
       xy = v.xy * xy,
       xz = v.xz * xz,
       yz = v.yz * yz,
     )
 
-  def log(): BivectorBulk =
+  def log(): Pga3dBivectorBulk =
     val scalar = s
     if (s < 0.0) return (-this).log()
 
@@ -121,14 +121,14 @@ case class Quaternion(s: Double = 0.0,
       1.0 + angle * angle / 6.0
     }
 
-    BivectorBulk(
+    Pga3dBivectorBulk(
       xy = b * xy,
       xz = b * xz,
       yz = b * yz,
     )
 
-  def toMultivector: Multivector =
-    Multivector(
+  def toMultivector: Pga3dMultivector =
+    Pga3dMultivector(
       s = s,
       w = 0.0,
       x = 0.0,
@@ -147,8 +147,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  def toMotor: Motor =
-    Motor(
+  def toMotor: Pga3dMotor =
+    Pga3dMotor(
       s = s,
       wx = 0.0,
       wy = 0.0,
@@ -159,8 +159,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  def asBivectorUnsafe: Bivector =
-    Bivector(
+  def asBivectorUnsafe: Pga3dBivector =
+    Pga3dBivector(
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
@@ -169,15 +169,15 @@ case class Quaternion(s: Double = 0.0,
       yz = yz,
     )
 
-  def asBivectorBulkUnsafe: BivectorBulk =
-    BivectorBulk(
+  def asBivectorBulkUnsafe: Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = xy,
       xz = xz,
       yz = yz,
     )
 
-  infix def geometric(v: Multivector): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       w = (s * v.w - v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = (s * v.x + v.y * xy + v.z * xz - v.xyz * yz),
@@ -196,8 +196,8 @@ case class Quaternion(s: Double = 0.0,
       i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: Motor): Motor =
-    Motor(
+  infix def geometric(v: Pga3dMotor): Pga3dMotor =
+    Pga3dMotor(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       wx = (s * v.wx + v.wy * xy + v.wz * xz - v.i * yz),
       wy = (s * v.wy + v.i * xz + v.wz * yz - v.wx * xy),
@@ -208,8 +208,8 @@ case class Quaternion(s: Double = 0.0,
       i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: Plane): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dPlane): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = s * v.w,
       x = (s * v.x + v.y * xy + v.z * xz),
@@ -228,8 +228,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: Bivector): Motor =
-    Motor(
+  infix def geometric(v: Pga3dBivector): Pga3dMotor =
+    Pga3dMotor(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),
       wx = (s * v.wx + v.wy * xy + v.wz * xz),
       wy = (s * v.wy + v.wz * yz - v.wx * xy),
@@ -240,8 +240,8 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: Point): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dPoint): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = -v.xyz * yz,
@@ -260,16 +260,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: Quaternion): Quaternion =
-    Quaternion(
+  infix def geometric(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       xy = (s * v.xy + v.s * xy + v.xz * yz - v.yz * xz),
       xz = (s * v.xz + v.s * xz + v.yz * xy - v.xy * yz),
       yz = (s * v.yz + v.s * yz + v.xy * xz - v.xz * xy),
     )
 
-  infix def geometric(v: Translator): Motor =
-    Motor(
+  infix def geometric(v: Pga3dTranslator): Pga3dMotor =
+    Pga3dMotor(
       s = s,
       wx = (s * v.wx + v.wy * xy + v.wz * xz),
       wy = (s * v.wy + v.wz * yz - v.wx * xy),
@@ -280,8 +280,8 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: Vector): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dVector): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = 0.0,
@@ -300,8 +300,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: PointNormalized): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dPointNormalized): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = -yz,
@@ -320,8 +320,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: PlaneIdeal): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dPlaneIdeal): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = (s * v.x + v.y * xy + v.z * xz),
@@ -340,16 +340,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: BivectorBulk): Quaternion =
-    Quaternion(
+  infix def geometric(v: Pga3dBivectorBulk): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),
       xy = (s * v.xy + v.xz * yz - v.yz * xz),
       xz = (s * v.xz + v.yz * xy - v.xy * yz),
       yz = (s * v.yz + v.xy * xz - v.xz * xy),
     )
 
-  infix def geometric(v: BivectorWeight): Motor =
-    Motor(
+  infix def geometric(v: Pga3dBivectorWeight): Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = (s * v.wx + v.wy * xy + v.wz * xz),
       wy = (s * v.wy + v.wz * yz - v.wx * xy),
@@ -360,8 +360,8 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  infix def geometric(v: PseudoScalar): Motor =
-    Motor(
+  infix def geometric(v: Pga3dPseudoScalar): Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = -v.i * yz,
       wy = v.i * xz,
@@ -372,8 +372,8 @@ case class Quaternion(s: Double = 0.0,
       i = s * v.i,
     )
 
-  infix def geometric(v: PointCenter.type): Multivector =
-    Multivector(
+  infix def geometric(v: Pga3dPointCenter.type): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = -yz,
@@ -392,8 +392,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: Multivector): Multivector =
-    Multivector(
+  infix def dot(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       w = (s * v.w - v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = (s * v.x + v.y * xy + v.z * xz - v.xyz * yz),
@@ -412,8 +412,8 @@ case class Quaternion(s: Double = 0.0,
       i = s * v.i,
     )
 
-  infix def dot(v: Motor): Motor =
-    Motor(
+  infix def dot(v: Pga3dMotor): Pga3dMotor =
+    Pga3dMotor(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       wx = (s * v.wx - v.i * yz),
       wy = (s * v.wy + v.i * xz),
@@ -424,16 +424,16 @@ case class Quaternion(s: Double = 0.0,
       i = s * v.i,
     )
 
-  infix def dot(v: Plane): Plane =
-    Plane(
+  infix def dot(v: Pga3dPlane): Pga3dPlane =
+    Pga3dPlane(
       w = s * v.w,
       x = (s * v.x + v.y * xy + v.z * xz),
       y = (s * v.y + v.z * yz - v.x * xy),
       z = (s * v.z - v.x * xz - v.y * yz),
     )
 
-  infix def dot(v: Bivector): Motor =
-    Motor(
+  infix def dot(v: Pga3dBivector): Pga3dMotor =
+    Pga3dMotor(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),
       wx = s * v.wx,
       wy = s * v.wy,
@@ -444,8 +444,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: Point): Multivector =
-    Multivector(
+  infix def dot(v: Pga3dPoint): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = -v.xyz * yz,
@@ -464,16 +464,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: Quaternion): Quaternion =
-    Quaternion(
+  infix def dot(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
       xy = (s * v.xy + v.s * xy),
       xz = (s * v.xz + v.s * xz),
       yz = (s * v.yz + v.s * yz),
     )
 
-  infix def dot(v: Translator): Motor =
-    Motor(
+  infix def dot(v: Pga3dTranslator): Pga3dMotor =
+    Pga3dMotor(
       s = s,
       wx = s * v.wx,
       wy = s * v.wy,
@@ -484,8 +484,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: Vector): Multivector =
-    Multivector(
+  infix def dot(v: Pga3dVector): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = 0.0,
@@ -504,8 +504,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: PointNormalized): Multivector =
-    Multivector(
+  infix def dot(v: Pga3dPointNormalized): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
       x = -yz,
@@ -524,30 +524,30 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: PlaneIdeal): PlaneIdeal =
-    PlaneIdeal(
+  infix def dot(v: Pga3dPlaneIdeal): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (s * v.x + v.y * xy + v.z * xz),
       y = (s * v.y + v.z * yz - v.x * xy),
       z = (s * v.z - v.x * xz - v.y * yz),
     )
 
-  infix def dot(v: BivectorBulk): Quaternion =
-    Quaternion(
+  infix def dot(v: Pga3dBivectorBulk): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (-v.xy * xy - v.xz * xz - v.yz * yz),
       xy = s * v.xy,
       xz = s * v.xz,
       yz = s * v.yz,
     )
 
-  infix def dot(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
+  infix def dot(v: Pga3dBivectorWeight): Pga3dBivectorWeight =
+    Pga3dBivectorWeight(
       wx = s * v.wx,
       wy = s * v.wy,
       wz = s * v.wz,
     )
 
-  infix def dot(v: PseudoScalar): Motor =
-    Motor(
+  infix def dot(v: Pga3dPseudoScalar): Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = -v.i * yz,
       wy = v.i * xz,
@@ -558,8 +558,8 @@ case class Quaternion(s: Double = 0.0,
       i = s * v.i,
     )
 
-  infix def dot(v: PointCenter.type): Multivector =
-    Multivector(
+  infix def dot(v: Pga3dPointCenter.type): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = -yz,
@@ -578,8 +578,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def wedge(v: Multivector): Multivector =
-    Multivector(
+  infix def wedge(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = s * v.s,
       w = s * v.w,
       x = s * v.x,
@@ -598,10 +598,10 @@ case class Quaternion(s: Double = 0.0,
       i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: Multivector): Multivector = wedge(v)
+  inline infix def ^(v: Pga3dMultivector): Pga3dMultivector = wedge(v)
 
-  infix def wedge(v: Motor): Motor =
-    Motor(
+  infix def wedge(v: Pga3dMotor): Pga3dMotor =
+    Pga3dMotor(
       s = s * v.s,
       wx = s * v.wx,
       wy = s * v.wy,
@@ -612,10 +612,10 @@ case class Quaternion(s: Double = 0.0,
       i = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: Motor): Motor = wedge(v)
+  inline infix def ^(v: Pga3dMotor): Pga3dMotor = wedge(v)
 
-  infix def wedge(v: Plane): Multivector =
-    Multivector(
+  infix def wedge(v: Pga3dPlane): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = s * v.w,
       x = s * v.x,
@@ -634,10 +634,10 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  inline infix def ^(v: Plane): Multivector = wedge(v)
+  inline infix def ^(v: Pga3dPlane): Pga3dMultivector = wedge(v)
 
-  infix def wedge(v: Bivector): Motor =
-    Motor(
+  infix def wedge(v: Pga3dBivector): Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = s * v.wx,
       wy = s * v.wy,
@@ -648,30 +648,30 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: Bivector): Motor = wedge(v)
+  inline infix def ^(v: Pga3dBivector): Pga3dMotor = wedge(v)
 
-  infix def wedge(v: Point): Point =
-    Point(
+  infix def wedge(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       wxy = s * v.wxy,
       wxz = s * v.wxz,
       wyz = s * v.wyz,
       xyz = s * v.xyz,
     )
 
-  inline infix def ^(v: Point): Point = wedge(v)
+  inline infix def ^(v: Pga3dPoint): Pga3dPoint = wedge(v)
 
-  infix def wedge(v: Quaternion): Quaternion =
-    Quaternion(
+  infix def wedge(v: Pga3dQuaternion): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.s,
       xy = (s * v.xy + v.s * xy),
       xz = (s * v.xz + v.s * xz),
       yz = (s * v.yz + v.s * yz),
     )
 
-  inline infix def ^(v: Quaternion): Quaternion = wedge(v)
+  inline infix def ^(v: Pga3dQuaternion): Pga3dQuaternion = wedge(v)
 
-  infix def wedge(v: Translator): Motor =
-    Motor(
+  infix def wedge(v: Pga3dTranslator): Pga3dMotor =
+    Pga3dMotor(
       s = s,
       wx = s * v.wx,
       wy = s * v.wy,
@@ -682,29 +682,29 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: Translator): Motor = wedge(v)
+  inline infix def ^(v: Pga3dTranslator): Pga3dMotor = wedge(v)
 
-  infix def wedge(v: Vector): Vector =
-    Vector(
+  infix def wedge(v: Pga3dVector): Pga3dVector =
+    Pga3dVector(
       wxy = s * v.wxy,
       wxz = s * v.wxz,
       wyz = s * v.wyz,
     )
 
-  inline infix def ^(v: Vector): Vector = wedge(v)
+  inline infix def ^(v: Pga3dVector): Pga3dVector = wedge(v)
 
-  infix def wedge(v: PointNormalized): Point =
-    Point(
+  infix def wedge(v: Pga3dPointNormalized): Pga3dPoint =
+    Pga3dPoint(
       wxy = s * v.wxy,
       wxz = s * v.wxz,
       wyz = s * v.wyz,
       xyz = s,
     )
 
-  inline infix def ^(v: PointNormalized): Point = wedge(v)
+  inline infix def ^(v: Pga3dPointNormalized): Pga3dPoint = wedge(v)
 
-  infix def wedge(v: PlaneIdeal): Multivector =
-    Multivector(
+  infix def wedge(v: Pga3dPlaneIdeal): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = s * v.x,
@@ -723,19 +723,19 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  inline infix def ^(v: PlaneIdeal): Multivector = wedge(v)
+  inline infix def ^(v: Pga3dPlaneIdeal): Pga3dMultivector = wedge(v)
 
-  infix def wedge(v: BivectorBulk): BivectorBulk =
-    BivectorBulk(
+  infix def wedge(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = s * v.xy,
       xz = s * v.xz,
       yz = s * v.yz,
     )
 
-  inline infix def ^(v: BivectorBulk): BivectorBulk = wedge(v)
+  inline infix def ^(v: Pga3dBivectorBulk): Pga3dBivectorBulk = wedge(v)
 
-  infix def wedge(v: BivectorWeight): Motor =
-    Motor(
+  infix def wedge(v: Pga3dBivectorWeight): Pga3dMotor =
+    Pga3dMotor(
       s = 0.0,
       wx = s * v.wx,
       wy = s * v.wy,
@@ -746,27 +746,27 @@ case class Quaternion(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy - v.wy * xz),
     )
 
-  inline infix def ^(v: BivectorWeight): Motor = wedge(v)
+  inline infix def ^(v: Pga3dBivectorWeight): Pga3dMotor = wedge(v)
 
-  infix def wedge(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
+  infix def wedge(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
       i = s * v.i,
     )
 
-  inline infix def ^(v: PseudoScalar): PseudoScalar = wedge(v)
+  inline infix def ^(v: Pga3dPseudoScalar): Pga3dPseudoScalar = wedge(v)
 
-  infix def wedge(v: PointCenter.type): Point =
-    Point(
+  infix def wedge(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       wxy = 0.0,
       wxz = 0.0,
       wyz = 0.0,
       xyz = s,
     )
 
-  inline infix def ^(v: PointCenter.type): Point = wedge(v)
+  inline infix def ^(v: Pga3dPointCenter.type): Pga3dPoint = wedge(v)
 
-  infix def antiGeometric(v: Multivector): Multivector =
-    Multivector(
+  infix def antiGeometric(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
       w = 0.0,
       x = (s * v.wyz + v.wxz * xy - v.w * yz - v.wxy * xz),
@@ -785,16 +785,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: Motor): Quaternion =
-    Quaternion(
+  infix def antiGeometric(v: Pga3dMotor): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
       xy = (v.i * xy - s * v.wz - v.wx * xz - v.wy * yz),
       xz = (s * v.wy + v.i * xz + v.wx * xy - v.wz * yz),
       yz = (v.i * yz + v.wy * xy + v.wz * xz - s * v.wx),
     )
 
-  infix def antiGeometric(v: Plane): Multivector =
-    Multivector(
+  infix def antiGeometric(v: Pga3dPlane): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = -v.w * yz,
@@ -813,16 +813,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: Bivector): Quaternion =
-    Quaternion(
+  infix def antiGeometric(v: Pga3dBivector): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (v.wx * yz + v.wz * xy - v.wy * xz),
       xy = (-s * v.wz - v.wx * xz - v.wy * yz),
       xz = (s * v.wy + v.wx * xy - v.wz * yz),
       yz = (v.wy * xy + v.wz * xz - s * v.wx),
     )
 
-  infix def antiGeometric(v: Point): Multivector =
-    Multivector(
+  infix def antiGeometric(v: Pga3dPoint): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = (s * v.wyz + v.wxz * xy - v.wxy * xz),
@@ -841,16 +841,16 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: Translator): Quaternion =
-    Quaternion(
+  infix def antiGeometric(v: Pga3dTranslator): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (v.wx * yz + v.wz * xy - v.wy * xz),
       xy = (-s * v.wz - v.wx * xz - v.wy * yz),
       xz = (s * v.wy + v.wx * xy - v.wz * yz),
       yz = (v.wy * xy + v.wz * xz - s * v.wx),
     )
 
-  infix def antiGeometric(v: Vector): Multivector =
-    Multivector(
+  infix def antiGeometric(v: Pga3dVector): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = (s * v.wyz + v.wxz * xy - v.wxy * xz),
@@ -869,8 +869,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: PointNormalized): Multivector =
-    Multivector(
+  infix def antiGeometric(v: Pga3dPointNormalized): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = (s * v.wyz + v.wxz * xy - v.wxy * xz),
@@ -889,24 +889,24 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: BivectorWeight): Quaternion =
-    Quaternion(
+  infix def antiGeometric(v: Pga3dBivectorWeight): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (v.wx * yz + v.wz * xy - v.wy * xz),
       xy = (-s * v.wz - v.wx * xz - v.wy * yz),
       xz = (s * v.wy + v.wx * xy - v.wz * yz),
       yz = (v.wy * xy + v.wz * xz - s * v.wx),
     )
 
-  infix def antiGeometric(v: PseudoScalar): Quaternion =
-    Quaternion(
+  infix def antiGeometric(v: Pga3dPseudoScalar): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.i,
       xy = v.i * xy,
       xz = v.i * xz,
       yz = v.i * yz,
     )
 
-  infix def antiDot(v: Multivector): Multivector =
-    Multivector(
+  infix def antiDot(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = s * v.i,
       w = 0.0,
       x = s * v.wyz,
@@ -925,31 +925,31 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiDot(v: Motor): Quaternion =
-    Quaternion(
+  infix def antiDot(v: Pga3dMotor): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.i,
       xy = (v.i * xy - s * v.wz),
       xz = (s * v.wy + v.i * xz),
       yz = (v.i * yz - s * v.wx),
     )
 
-  infix def antiDot(v: Plane): Point =
-    Point(
+  infix def antiDot(v: Pga3dPlane): Pga3dPoint =
+    Pga3dPoint(
       wxy = 0.0,
       wxz = 0.0,
       wyz = 0.0,
       xyz = -s * v.w,
     )
 
-  infix def antiDot(v: Bivector): BivectorBulk =
-    BivectorBulk(
+  infix def antiDot(v: Pga3dBivector): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = -s * v.wz,
       xz = s * v.wy,
       yz = -s * v.wx,
     )
 
-  infix def antiDot(v: Point): Multivector =
-    Multivector(
+  infix def antiDot(v: Pga3dPoint): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = s * v.wyz,
@@ -968,15 +968,15 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiDot(v: Translator): BivectorBulk =
-    BivectorBulk(
+  infix def antiDot(v: Pga3dTranslator): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = -s * v.wz,
       xz = s * v.wy,
       yz = -s * v.wx,
     )
 
-  infix def antiDot(v: Vector): Multivector =
-    Multivector(
+  infix def antiDot(v: Pga3dVector): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = s * v.wyz,
@@ -995,8 +995,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiDot(v: PointNormalized): Multivector =
-    Multivector(
+  infix def antiDot(v: Pga3dPointNormalized): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = s * v.wyz,
@@ -1015,23 +1015,23 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiDot(v: BivectorWeight): BivectorBulk =
-    BivectorBulk(
+  infix def antiDot(v: Pga3dBivectorWeight): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = -s * v.wz,
       xz = s * v.wy,
       yz = -s * v.wx,
     )
 
-  infix def antiDot(v: PseudoScalar): Quaternion =
-    Quaternion(
+  infix def antiDot(v: Pga3dPseudoScalar): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.i,
       xy = v.i * xy,
       xz = v.i * xz,
       yz = v.i * yz,
     )
 
-  infix def antiWedge(v: Multivector): Multivector =
-    Multivector(
+  infix def antiWedge(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
       w = 0.0,
       x = (v.wxz * xy - v.wxy * xz),
@@ -1050,71 +1050,71 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  inline infix def v(v: Multivector): Multivector = antiWedge(v)
+  inline infix def v(v: Pga3dMultivector): Pga3dMultivector = antiWedge(v)
 
-  infix def antiWedge(v: Motor): Quaternion =
-    Quaternion(
+  infix def antiWedge(v: Pga3dMotor): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = (s * v.i + v.wx * yz + v.wz * xy - v.wy * xz),
       xy = v.i * xy,
       xz = v.i * xz,
       yz = v.i * yz,
     )
 
-  inline infix def v(v: Motor): Quaternion = antiWedge(v)
+  inline infix def v(v: Pga3dMotor): Pga3dQuaternion = antiWedge(v)
 
-  infix def antiWedge(v: Bivector): Double =
+  infix def antiWedge(v: Pga3dBivector): Double =
     (v.wx * yz + v.wz * xy - v.wy * xz)
 
-  inline infix def v(v: Bivector): Double = antiWedge(v)
+  inline infix def v(v: Pga3dBivector): Double = antiWedge(v)
 
-  infix def antiWedge(v: Point): PlaneIdeal =
-    PlaneIdeal(
+  infix def antiWedge(v: Pga3dPoint): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (v.wxz * xy - v.wxy * xz),
       y = (v.wyz * xy - v.wxy * yz),
       z = (v.wyz * xz - v.wxz * yz),
     )
 
-  inline infix def v(v: Point): PlaneIdeal = antiWedge(v)
+  inline infix def v(v: Pga3dPoint): Pga3dPlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: Translator): Double =
+  infix def antiWedge(v: Pga3dTranslator): Double =
     (v.wx * yz + v.wz * xy - v.wy * xz)
 
-  inline infix def v(v: Translator): Double = antiWedge(v)
+  inline infix def v(v: Pga3dTranslator): Double = antiWedge(v)
 
-  infix def antiWedge(v: Vector): PlaneIdeal =
-    PlaneIdeal(
+  infix def antiWedge(v: Pga3dVector): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (v.wxz * xy - v.wxy * xz),
       y = (v.wyz * xy - v.wxy * yz),
       z = (v.wyz * xz - v.wxz * yz),
     )
 
-  inline infix def v(v: Vector): PlaneIdeal = antiWedge(v)
+  inline infix def v(v: Pga3dVector): Pga3dPlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: PointNormalized): PlaneIdeal =
-    PlaneIdeal(
+  infix def antiWedge(v: Pga3dPointNormalized): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (v.wxz * xy - v.wxy * xz),
       y = (v.wyz * xy - v.wxy * yz),
       z = (v.wyz * xz - v.wxz * yz),
     )
 
-  inline infix def v(v: PointNormalized): PlaneIdeal = antiWedge(v)
+  inline infix def v(v: Pga3dPointNormalized): Pga3dPlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: BivectorWeight): Double =
+  infix def antiWedge(v: Pga3dBivectorWeight): Double =
     (v.wx * yz + v.wz * xy - v.wy * xz)
 
-  inline infix def v(v: BivectorWeight): Double = antiWedge(v)
+  inline infix def v(v: Pga3dBivectorWeight): Double = antiWedge(v)
 
-  infix def antiWedge(v: PseudoScalar): Quaternion =
-    Quaternion(
+  infix def antiWedge(v: Pga3dPseudoScalar): Pga3dQuaternion =
+    Pga3dQuaternion(
       s = s * v.i,
       xy = v.i * xy,
       xz = v.i * xz,
       yz = v.i * yz,
     )
 
-  inline infix def v(v: PseudoScalar): Quaternion = antiWedge(v)
+  inline infix def v(v: Pga3dPseudoScalar): Pga3dQuaternion = antiWedge(v)
 
-  infix def sandwich(v: Multivector): Multivector =
+  infix def sandwich(v: Pga3dMultivector): Pga3dMultivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1125,7 +1125,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Multivector(
+    Pga3dMultivector(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
       x = (2.0 * (v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
@@ -1144,7 +1144,7 @@ case class Quaternion(s: Double = 0.0,
       i = v.i * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def sandwich(v: Motor): Motor =
+  infix def sandwich(v: Pga3dMotor): Pga3dMotor =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1155,7 +1155,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Motor(
+    Pga3dMotor(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       wx = (2.0 * (v.wy * (sMxy - xzMyz) + v.wz * (sMxz + xyMyz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (-sMxy - xzMyz) + v.wz * (sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
@@ -1166,7 +1166,7 @@ case class Quaternion(s: Double = 0.0,
       i = v.i * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def sandwich(v: Plane): Plane =
+  infix def sandwich(v: Pga3dPlane): Pga3dPlane =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1177,14 +1177,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Plane(
+    Pga3dPlane(
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
       x = (2.0 * (v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = (2.0 * (v.x * (xyMyz - sMxz) + v.y * (-sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def sandwich(v: Bivector): Bivector =
+  infix def sandwich(v: Pga3dBivector): Pga3dBivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1195,7 +1195,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Bivector(
+    Pga3dBivector(
       wx = (2.0 * (v.wy * (sMxy - xzMyz) + v.wz * (sMxz + xyMyz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (-sMxy - xzMyz) + v.wz * (sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
       wz = (2.0 * (v.wx * (xyMyz - sMxz) + v.wy * (-sMyz - xyMxz)) + v.wz * (sMs + xyMxy - xzMxz - yzMyz)),
@@ -1204,7 +1204,7 @@ case class Quaternion(s: Double = 0.0,
       yz = (2.0 * (v.xy * (sMxz + xyMyz) + v.xz * (xzMyz - sMxy)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def sandwich(v: Point): Point =
+  infix def sandwich(v: Pga3dPoint): Pga3dPoint =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1215,14 +1215,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Point(
+    Pga3dPoint(
       wxy = (2.0 * (v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def sandwich(v: Quaternion): Quaternion =
+  infix def sandwich(v: Pga3dQuaternion): Pga3dQuaternion =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1233,14 +1233,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Quaternion(
+    Pga3dQuaternion(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       xy = (2.0 * (v.xz * (sMyz + xyMxz) + v.yz * (xyMyz - sMxz)) + v.xy * (sMs + xyMxy - xzMxz - yzMyz)),
       xz = (2.0 * (v.xy * (xyMxz - sMyz) + v.yz * (sMxy + xzMyz)) + v.xz * (sMs + xzMxz - xyMxy - yzMyz)),
       yz = (2.0 * (v.xy * (sMxz + xyMyz) + v.xz * (xzMyz - sMxy)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def sandwich(v: Translator): Motor =
+  infix def sandwich(v: Pga3dTranslator): Pga3dMotor =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1251,7 +1251,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Motor(
+    Pga3dMotor(
       s = (sMs + xyMxy + xzMxz + yzMyz),
       wx = (2.0 * (v.wy * (sMxy - xzMyz) + v.wz * (sMxz + xyMyz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (-sMxy - xzMyz) + v.wz * (sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
@@ -1262,7 +1262,7 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def sandwich(v: Vector): Vector =
+  infix def sandwich(v: Pga3dVector): Pga3dVector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1273,13 +1273,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Vector(
+    Pga3dVector(
       wxy = (2.0 * (v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def sandwich(v: PointNormalized): Point =
+  infix def sandwich(v: Pga3dPointNormalized): Pga3dPoint =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1290,14 +1290,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Point(
+    Pga3dPoint(
       wxy = (2.0 * (v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
       xyz = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def sandwich(v: PlaneIdeal): PlaneIdeal =
+  infix def sandwich(v: Pga3dPlaneIdeal): Pga3dPlaneIdeal =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1308,13 +1308,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    PlaneIdeal(
+    Pga3dPlaneIdeal(
       x = (2.0 * (v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = (2.0 * (v.x * (xyMyz - sMxz) + v.y * (-sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def sandwich(v: BivectorBulk): BivectorBulk =
+  infix def sandwich(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1325,13 +1325,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    BivectorBulk(
+    Pga3dBivectorBulk(
       xy = (2.0 * (v.xz * (sMyz + xyMxz) + v.yz * (xyMyz - sMxz)) + v.xy * (sMs + xyMxy - xzMxz - yzMyz)),
       xz = (2.0 * (v.xy * (xyMxz - sMyz) + v.yz * (sMxy + xzMyz)) + v.xz * (sMs + xzMxz - xyMxy - yzMyz)),
       yz = (2.0 * (v.xy * (sMxz + xyMyz) + v.xz * (xzMyz - sMxy)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def sandwich(v: BivectorWeight): BivectorWeight =
+  infix def sandwich(v: Pga3dBivectorWeight): Pga3dBivectorWeight =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1342,26 +1342,26 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    BivectorWeight(
+    Pga3dBivectorWeight(
       wx = (2.0 * (v.wy * (sMxy - xzMyz) + v.wz * (sMxz + xyMyz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (-sMxy - xzMyz) + v.wz * (sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
       wz = (2.0 * (v.wx * (xyMyz - sMxz) + v.wy * (-sMyz - xyMxz)) + v.wz * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def sandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
+  infix def sandwich(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
       i = v.i * (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def sandwich(v: PointCenter.type): Point =
-    Point(
+  infix def sandwich(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       wxy = 0.0,
       wxz = 0.0,
       wyz = 0.0,
       xyz = (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def reverseSandwich(v: Multivector): Multivector =
+  infix def reverseSandwich(v: Pga3dMultivector): Pga3dMultivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1372,7 +1372,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Multivector(
+    Pga3dMultivector(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
       x = (2.0 * (v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
@@ -1391,7 +1391,7 @@ case class Quaternion(s: Double = 0.0,
       i = v.i * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def reverseSandwich(v: Motor): Motor =
+  infix def reverseSandwich(v: Pga3dMotor): Pga3dMotor =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1402,7 +1402,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Motor(
+    Pga3dMotor(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       wx = (2.0 * (v.wy * (-sMxy - xzMyz) + v.wz * (xyMyz - sMxz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (sMxy - xzMyz) + v.wz * (-sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
@@ -1413,7 +1413,7 @@ case class Quaternion(s: Double = 0.0,
       i = v.i * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def reverseSandwich(v: Plane): Plane =
+  infix def reverseSandwich(v: Pga3dPlane): Pga3dPlane =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1424,14 +1424,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Plane(
+    Pga3dPlane(
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
       x = (2.0 * (v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = (2.0 * (v.x * (sMxz + xyMyz) + v.y * (sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def reverseSandwich(v: Bivector): Bivector =
+  infix def reverseSandwich(v: Pga3dBivector): Pga3dBivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1442,7 +1442,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Bivector(
+    Pga3dBivector(
       wx = (2.0 * (v.wy * (-sMxy - xzMyz) + v.wz * (xyMyz - sMxz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (sMxy - xzMyz) + v.wz * (-sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
       wz = (2.0 * (v.wx * (sMxz + xyMyz) + v.wy * (sMyz - xyMxz)) + v.wz * (sMs + xyMxy - xzMxz - yzMyz)),
@@ -1451,7 +1451,7 @@ case class Quaternion(s: Double = 0.0,
       yz = (2.0 * (v.xy * (xyMyz - sMxz) + v.xz * (sMxy + xzMyz)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def reverseSandwich(v: Point): Point =
+  infix def reverseSandwich(v: Pga3dPoint): Pga3dPoint =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1462,14 +1462,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Point(
+    Pga3dPoint(
       wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
       xyz = v.xyz * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def reverseSandwich(v: Quaternion): Quaternion =
+  infix def reverseSandwich(v: Pga3dQuaternion): Pga3dQuaternion =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1480,14 +1480,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Quaternion(
+    Pga3dQuaternion(
       s = v.s * (sMs + xyMxy + xzMxz + yzMyz),
       xy = (2.0 * (v.xz * (xyMxz - sMyz) + v.yz * (sMxz + xyMyz)) + v.xy * (sMs + xyMxy - xzMxz - yzMyz)),
       xz = (2.0 * (v.xy * (sMyz + xyMxz) + v.yz * (xzMyz - sMxy)) + v.xz * (sMs + xzMxz - xyMxy - yzMyz)),
       yz = (2.0 * (v.xy * (xyMyz - sMxz) + v.xz * (sMxy + xzMyz)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def reverseSandwich(v: Translator): Motor =
+  infix def reverseSandwich(v: Pga3dTranslator): Pga3dMotor =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1498,7 +1498,7 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Motor(
+    Pga3dMotor(
       s = (sMs + xyMxy + xzMxz + yzMyz),
       wx = (2.0 * (v.wy * (-sMxy - xzMyz) + v.wz * (xyMyz - sMxz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (sMxy - xzMyz) + v.wz * (-sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
@@ -1509,7 +1509,7 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def reverseSandwich(v: Vector): Vector =
+  infix def reverseSandwich(v: Pga3dVector): Pga3dVector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1520,13 +1520,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Vector(
+    Pga3dVector(
       wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def reverseSandwich(v: PointNormalized): Point =
+  infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dPoint =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1537,14 +1537,14 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Point(
+    Pga3dPoint(
       wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
       wxz = (2.0 * (v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
       wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
       xyz = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
-  infix def reverseSandwich(v: PlaneIdeal): PlaneIdeal =
+  infix def reverseSandwich(v: Pga3dPlaneIdeal): Pga3dPlaneIdeal =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1555,13 +1555,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    PlaneIdeal(
+    Pga3dPlaneIdeal(
       x = (2.0 * (v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = (2.0 * (v.x * (sMxz + xyMyz) + v.y * (sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def reverseSandwich(v: BivectorBulk): BivectorBulk =
+  infix def reverseSandwich(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1572,13 +1572,13 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    BivectorBulk(
+    Pga3dBivectorBulk(
       xy = (2.0 * (v.xz * (xyMxz - sMyz) + v.yz * (sMxz + xyMyz)) + v.xy * (sMs + xyMxy - xzMxz - yzMyz)),
       xz = (2.0 * (v.xy * (sMyz + xyMxz) + v.yz * (xzMyz - sMxy)) + v.xz * (sMs + xzMxz - xyMxy - yzMyz)),
       yz = (2.0 * (v.xy * (xyMyz - sMxz) + v.xz * (sMxy + xzMyz)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def reverseSandwich(v: BivectorWeight): BivectorWeight =
+  infix def reverseSandwich(v: Pga3dBivectorWeight): Pga3dBivectorWeight =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1589,27 +1589,27 @@ case class Quaternion(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    BivectorWeight(
+    Pga3dBivectorWeight(
       wx = (2.0 * (v.wy * (-sMxy - xzMyz) + v.wz * (xyMyz - sMxz)) + v.wx * (sMs + yzMyz - xyMxy - xzMxz)),
       wy = (2.0 * (v.wx * (sMxy - xzMyz) + v.wz * (-sMyz - xyMxz)) + v.wy * (sMs + xzMxz - xyMxy - yzMyz)),
       wz = (2.0 * (v.wx * (sMxz + xyMyz) + v.wy * (sMyz - xyMxz)) + v.wz * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
-  infix def reverseSandwich(v: PseudoScalar): PseudoScalar =
-    PseudoScalar(
+  infix def reverseSandwich(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
       i = v.i * (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def reverseSandwich(v: PointCenter.type): Point =
-    Point(
+  infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       wxy = 0.0,
       wxz = 0.0,
       wyz = 0.0,
       xyz = (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def cross(v: Multivector): Multivector =
-    Multivector(
+  infix def cross(v: Pga3dMultivector): Pga3dMultivector =
+    Pga3dMultivector(
       s = 0.0,
       w = 0.0,
       x = (v.y * xy + v.z * xz),
@@ -1628,8 +1628,8 @@ case class Quaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def cross(v: Motor): Bivector =
-    Bivector(
+  infix def cross(v: Pga3dMotor): Pga3dBivector =
+    Pga3dBivector(
       wx = (v.wy * xy + v.wz * xz),
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
@@ -1638,15 +1638,15 @@ case class Quaternion(s: Double = 0.0,
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: Plane): PlaneIdeal =
-    PlaneIdeal(
+  infix def cross(v: Pga3dPlane): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (v.y * xy + v.z * xz),
       y = (v.z * yz - v.x * xy),
       z = (-v.x * xz - v.y * yz),
     )
 
-  infix def cross(v: Bivector): Bivector =
-    Bivector(
+  infix def cross(v: Pga3dBivector): Pga3dBivector =
+    Pga3dBivector(
       wx = (v.wy * xy + v.wz * xz),
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
@@ -1655,67 +1655,67 @@ case class Quaternion(s: Double = 0.0,
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: Point): Vector =
-    Vector(
+  infix def cross(v: Pga3dPoint): Pga3dVector =
+    Pga3dVector(
       wxy = (v.wxz * yz - v.wyz * xz),
       wxz = (v.wyz * xy - v.wxy * yz),
       wyz = (v.wxy * xz - v.wxz * xy),
     )
 
-  infix def cross(v: Quaternion): BivectorBulk =
-    BivectorBulk(
+  infix def cross(v: Pga3dQuaternion): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = (v.xz * yz - v.yz * xz),
       xz = (v.yz * xy - v.xy * yz),
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: Translator): BivectorWeight =
-    BivectorWeight(
+  infix def cross(v: Pga3dTranslator): Pga3dBivectorWeight =
+    Pga3dBivectorWeight(
       wx = (v.wy * xy + v.wz * xz),
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
     )
 
-  infix def cross(v: Vector): Vector =
-    Vector(
+  infix def cross(v: Pga3dVector): Pga3dVector =
+    Pga3dVector(
       wxy = (v.wxz * yz - v.wyz * xz),
       wxz = (v.wyz * xy - v.wxy * yz),
       wyz = (v.wxy * xz - v.wxz * xy),
     )
 
-  infix def cross(v: PointNormalized): Vector =
-    Vector(
+  infix def cross(v: Pga3dPointNormalized): Pga3dVector =
+    Pga3dVector(
       wxy = (v.wxz * yz - v.wyz * xz),
       wxz = (v.wyz * xy - v.wxy * yz),
       wyz = (v.wxy * xz - v.wxz * xy),
     )
 
-  infix def cross(v: PlaneIdeal): PlaneIdeal =
-    PlaneIdeal(
+  infix def cross(v: Pga3dPlaneIdeal): Pga3dPlaneIdeal =
+    Pga3dPlaneIdeal(
       x = (v.y * xy + v.z * xz),
       y = (v.z * yz - v.x * xy),
       z = (-v.x * xz - v.y * yz),
     )
 
-  infix def cross(v: BivectorBulk): BivectorBulk =
-    BivectorBulk(
+  infix def cross(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
+    Pga3dBivectorBulk(
       xy = (v.xz * yz - v.yz * xz),
       xz = (v.yz * xy - v.xy * yz),
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: BivectorWeight): BivectorWeight =
-    BivectorWeight(
+  infix def cross(v: Pga3dBivectorWeight): Pga3dBivectorWeight =
+    Pga3dBivectorWeight(
       wx = (v.wy * xy + v.wz * xz),
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
     )
 
 
-object Quaternion:
-  val id: Quaternion = Quaternion(1.0, 0.0, 0.0, 0.0)
+object Pga3dQuaternion:
+  val id: Pga3dQuaternion = Pga3dQuaternion(1.0, 0.0, 0.0, 0.0)
 
-  def rotation(from: PlaneIdeal, to: PlaneIdeal): Quaternion = {
+  def rotation(from: Pga3dPlaneIdeal, to: Pga3dPlaneIdeal): Pga3dQuaternion = {
     val norm = Math.sqrt(from.normSquare * to.normSquare)
     val q2a = to.geometric(from) / norm
     val dot = q2a.s
@@ -1723,7 +1723,7 @@ object Quaternion:
     if (dot > -1.0 + 1e-6) {
       val newCos = Math.sqrt((1.0 + dot) / 2)
       val newSinDivSin2 = 0.5 / newCos
-      return Quaternion(newCos, q2a.xy * newSinDivSin2, q2a.xz * newSinDivSin2, q2a.yz * newSinDivSin2)
+      return Pga3dQuaternion(newCos, q2a.xy * newSinDivSin2, q2a.xz * newSinDivSin2, q2a.yz * newSinDivSin2)
     }
 
     val sin2a = Math.sqrt(q2a.xy * q2a.xy + q2a.xz * q2a.xz + q2a.yz * q2a.yz)
@@ -1732,16 +1732,16 @@ object Quaternion:
       val angle2 = Math.atan2(sin2a, q2a.s)
       val propAngle = angle2 * 0.5
       val mult = Math.sin(propAngle) / sin2a
-      return Quaternion(Math.cos(propAngle), q2a.xy * mult, q2a.xz * mult, q2a.yz * mult).normalizedByNorm
+      return Pga3dQuaternion(Math.cos(propAngle), q2a.xy * mult, q2a.xz * mult, q2a.yz * mult).normalizedByNorm
     }
 
     // choose any axis
     val orthogonalPlane =
-      if (Math.abs(from.x) > Math.abs(from.z)) PlaneIdeal(-from.y, from.x, 0)
-      else PlaneIdeal(0, -from.z, from.y)
+      if (Math.abs(from.x) > Math.abs(from.z)) Pga3dPlaneIdeal(-from.y, from.x, 0)
+      else Pga3dPlaneIdeal(0, -from.z, from.y)
 
-    Quaternion(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
+    Pga3dQuaternion(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
   }
 
-  def rotation(from: Vector, to: Vector): Quaternion =
+  def rotation(from: Pga3dVector, to: Pga3dVector): Pga3dQuaternion =
     rotation(from.dual, to.dual)

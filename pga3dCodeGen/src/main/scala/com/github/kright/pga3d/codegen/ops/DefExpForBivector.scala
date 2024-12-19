@@ -15,7 +15,7 @@ object DefExpForBivector:
           val aIBettaDiv2 = self.geometric(IBdiv2)
           val result = MultiVector.scalar(Sym("cos")) + (self + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-          code("\ndef exp(): Motor =")
+          code(s"\ndef exp(): ${MultivectorSubClass.motor.name} =")
           code.block {
             code(
               s"""val len = bulkNorm
@@ -40,7 +40,7 @@ object DefExpForBivector:
           val aIBettaDiv2 = selfMulT.geometric(IBdiv2)
           val result = MultiVector.scalar(Sym("cos")) + (selfMulT + IBdiv2) * Sym("sinDivLen") + aIBettaDiv2 * Sym("sinMinusCosDivLen2")
 
-          code("\ndef exp(t: Double): Motor =")
+          code(s"\ndef exp(t: Double): ${MultivectorSubClass.motor.name} =")
           code.block {
             code(
               s"""val len = bulkNorm * Math.abs(t)

@@ -14,7 +14,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   test("calculate free rotation body precession for RK4") {
     val stepsCount = 1000
-    val forque = Bivector()
+    val forque = Pga3dBivector()
 
     val maxError = testOneBodySimple123(stepsCount, body => {
       body.doStepRK4(dt = 0.01, forque)
@@ -27,8 +27,8 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("getAcceleration test") {
     val body = PGA3OneBody.simple123()
 
-    val localB = Bivector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
-    val localForque = Bivector(0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+    val localB = Pga3dBivector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+    val localForque = Pga3dBivector(0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
 
     val acc = body.inertia.getAcceleration(localB, localForque)
     val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
@@ -57,7 +57,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val body = PGA3OneBody.simple123()
 
     assert(body.initialE == 3.0)
-    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
+    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
 
     for (_ <- 0 until stepsCount)
       yield doStep(body)
@@ -67,11 +67,11 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val dt = 0.01
     val stepsCount = 100
 
-    val forceDirection = PlaneIdeal(x = 1.0, y = 0, z = 0)
+    val forceDirection = Pga3dPlaneIdeal(x = 1.0, y = 0, z = 0)
     val body = PGA3OneBody.simple123()
 
     assert(body.initialE == 3.0)
-    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
+    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
 
     var accumulatedL = body.initialL
 
@@ -93,7 +93,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(maxError < PGA3OneBody.Error(2e-9, 4e-9))
 
     val endPoint = body.state.center
-    val expectedPoint = Plane(w = 1.0, x = 0.5).dual
+    val expectedPoint = Pga3dPlane(w = 1.0, x = 0.5).dual
 
     assert((endPoint - expectedPoint).norm < 2e-9)
   }
@@ -105,11 +105,11 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val mass = 10.0
 
     val body = new PGA3OneBody(
-      Inertia(mass, 1.0, 1.0, 1.0),
+      Pga3dInertia(mass, 1.0, 1.0, 1.0),
       PGA3State.zero,
     )
 
-    val springCenter = Plane(w = 1, 3.0, 4.0).dual // len 5
+    val springCenter = Pga3dPlane(w = 1, 3.0, 4.0).dual // len 5
     val springK = 20
 
     def getEnergy(): Double = (body.state.center - springCenter).normSquare * 0.5 * springK + body.getEnergy()
@@ -128,7 +128,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         }
         val localForque2 = {
           val localSpringPos = state.motor.reverse.sandwich(springCenter)
-          val localForque = (PointNormalized() v localSpringPos) * springK
+          val localForque = (Pga3dPointNormalized() v localSpringPos) * springK
           localForque
         }
         assert((localForque1 - localForque2).norm < 1e-10)

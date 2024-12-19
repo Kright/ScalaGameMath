@@ -4,9 +4,9 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 
 class TranslatorTest extends AnyFunSuiteLike:
   test("translator for vector") {
-    val v = Vector(1, 2, 3)
-    val tr = Translator.addVector(v)
-    val point = Point.fromDual(10, 20, 30, 1.0)
+    val v = Pga3dVector(1, 2, 3)
+    val tr = Pga3dTranslator.addVector(v)
+    val point = Pga3dPoint.fromDual(10, 20, 30, 1.0)
 
     val b1 = point + v
     val b2 = tr.sandwich(point)

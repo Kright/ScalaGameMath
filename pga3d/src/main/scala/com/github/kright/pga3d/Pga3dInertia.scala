@@ -1,13 +1,13 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Inertia(mass: Double,
+case class Pga3dInertia(mass: Double,
                    mryz: Double,
                    mrxz: Double,
                    mrxy: Double):
 
-  def apply(localB: Bivector): Bivector =
-    Bivector(
+  def apply(localB: Pga3dBivector): Pga3dBivector =
+    Pga3dBivector(
       wx = localB.yz * mryz,
       wy = -localB.xz * mrxz,
       wz = localB.xy * mrxy,
@@ -16,8 +16,8 @@ case class Inertia(mass: Double,
       yz = localB.wx * mass,
     )
 
-  def invert(localInertia: Bivector): Bivector =
-    Bivector(
+  def invert(localInertia: Pga3dBivector): Pga3dBivector =
+    Pga3dBivector(
       wx = localInertia.yz / mass,
       wy = -localInertia.xz / mass,
       wz = localInertia.xy / mass,
@@ -27,8 +27,8 @@ case class Inertia(mass: Double,
     )
 
   /** invert(localB.cross(apply(localB)) + localForque) */
-  def getAcceleration(localB: Bivector, localForque: Bivector): Bivector =
-    Bivector(
+  def getAcceleration(localB: Pga3dBivector, localForque: Pga3dBivector): Pga3dBivector =
+    Pga3dBivector(
       wx = localForque.yz / mass + localB.wy * localB.xy + localB.wz * localB.xz,
       wy = -localForque.xz / mass + localB.wz * localB.yz - localB.wx * localB.xy,
       wz = localForque.xy / mass - localB.wx * localB.xz - localB.wy * localB.yz,
@@ -38,13 +38,13 @@ case class Inertia(mass: Double,
     )
 
 
-object Inertia:
+object Pga3dInertia:
 
-  def cube(mass: Double, rx: Double, ry: Double, rz: Double): Inertia =
+  def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertia =
     val rx2 = rx * rx
     val ry2 = ry * ry
     val rz2 = rz * rz
-    Inertia(
+    Pga3dInertia(
       mass,
       mryz = (ry2 + rz2) * mass / 3,
       mrxz = (rx2 + rz2) * mass / 3,

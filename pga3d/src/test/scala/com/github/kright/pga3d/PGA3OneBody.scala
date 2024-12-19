@@ -2,7 +2,7 @@ package com.github.kright.pga3d
 
 import com.github.kright.math.DifferentialSolvers
 
-class PGA3OneBody(val inertia: Inertia,
+class PGA3OneBody(val inertia: Pga3dInertia,
                   val initialState: PGA3State) {
   var state: PGA3State = initialState
   val initialE = getEnergy()
@@ -11,7 +11,7 @@ class PGA3OneBody(val inertia: Inertia,
   def getEnergy(): Double =
     state.getEnergy(inertia)
 
-  def getL(): Bivector =
+  def getL(): Pga3dBivector =
     state.getL(inertia)
 
   def getErrorE(): Double =
@@ -22,14 +22,14 @@ class PGA3OneBody(val inertia: Inertia,
 
   def getError() = PGA3OneBody.Error(getErrorE(), getErrorL())
 
-  def doStepRK4(dt: Double, globalForque: Bivector): Unit = {
+  def doStepRK4(dt: Double, globalForque: Pga3dBivector): Unit = {
     doStepRK4F(dt, (state, time) => {
       val localForque = state.motor.reverseSandwich(globalForque)
       localForque
     })
   }
 
-  def doStepRK4F(dt: Double, getLocalForque: (state: PGA3State, time: Double) => Bivector): Unit = {
+  def doStepRK4F(dt: Double, getLocalForque: (state: PGA3State, time: Double) => Pga3dBivector): Unit = {
     val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
       getDerivative = (state, time) => {
         val localForque = getLocalForque(state, time)
@@ -49,7 +49,7 @@ class PGA3OneBody(val inertia: Inertia,
       .normalized
   }
 
-  private def getDerivative(globalForque: Bivector)(state: PGA3State, time: Double): PGA3State =
+  private def getDerivative(globalForque: Pga3dBivector)(state: PGA3State, time: Double): PGA3State =
     val localForque = state.motor.reverse.sandwich(globalForque)
     PGA3State(
       motor = state.motor.geometric(state.localB) * -0.5,
@@ -71,10 +71,10 @@ object PGA3OneBody:
       errorE <= other.errorE && errorL <= other.errorL
 
   def simple123() = new PGA3OneBody(
-    Inertia(1.0, 3.0, 2.0, 1.0),
+    Pga3dInertia(1.0, 3.0, 2.0, 1.0),
     PGA3State(
-      Motor(1, 0, 0, 0, 0, 0, 0, 0),
-      Bivector(
+      Pga3dMotor(1, 0, 0, 0, 0, 0, 0, 0),
+      Pga3dBivector(
         wx = 0.0,
         wy = 0.0,
         wz = 0.0,

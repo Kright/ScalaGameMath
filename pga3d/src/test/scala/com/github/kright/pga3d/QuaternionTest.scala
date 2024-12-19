@@ -7,9 +7,9 @@ import scala.util.Random
 
 class QuaternionTest extends AnyFunSuiteLike:
   test("rotation is same vectors") {
-    val from = Vector(1, 2, 3).normalizedByNorm
-    val to = Vector(3, 4, 5).normalizedByNorm
-    val q = Quaternion.rotation(from, to)
+    val from = Pga3dVector(1, 2, 3).normalizedByNorm
+    val to = Pga3dVector(3, 4, 5).normalizedByNorm
+    val q = Pga3dQuaternion.rotation(from, to)
     assert((q.sandwich(from) - to).norm < 1e-15)
   }
 
@@ -19,18 +19,18 @@ class QuaternionTest extends AnyFunSuiteLike:
     val rnd = new Random()
     rnd.setSeed(123)
 
-    def makeQ(): Quaternion =
-      val q = Quaternion(rnd.nextGaussian(), rnd.nextGaussian(), rnd.nextGaussian(), rnd.nextGaussian())
+    def makeQ(): Pga3dQuaternion =
+      val q = Pga3dQuaternion(rnd.nextGaussian(), rnd.nextGaussian(), rnd.nextGaussian(), rnd.nextGaussian())
       if (q.norm < 1e-3) makeQ() else q.normalizedByNorm
 
     for (isNormalizedInput <- Seq(false, true);
          isNearPi <- Seq(false, true);
          angle <- angles) {
-      val from = PlaneIdeal(1.0, 0.0, 0.0)
+      val from = Pga3dPlaneIdeal(1.0, 0.0, 0.0)
 
       val to =
-        if (isNearPi) PlaneIdeal(-Math.cos(angle), Math.sin(angle), 0.0)
-        else PlaneIdeal(Math.cos(angle), Math.sin(angle), 0.0)
+        if (isNearPi) Pga3dPlaneIdeal(-Math.cos(angle), Math.sin(angle), 0.0)
+        else Pga3dPlaneIdeal(Math.cos(angle), Math.sin(angle), 0.0)
 
       val errors = new ArrayBuffer[Double]()
       for (i <- 0 until 1000) {
@@ -41,7 +41,7 @@ class QuaternionTest extends AnyFunSuiteLike:
         val m1 = if (isNormalizedInput) 1.0 else rnd.nextDouble() * 2 + 0.001
         val m2 = if (isNormalizedInput) 1.0 else rnd.nextDouble() * 2 + 0.001
 
-        val real = Quaternion.rotation(qFrom * m1, qTo * m2).sandwich(qFrom)
+        val real = Pga3dQuaternion.rotation(qFrom * m1, qTo * m2).sandwich(qFrom)
         val err = (real - qTo).norm
         errors += err
       }
