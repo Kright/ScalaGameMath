@@ -286,7 +286,7 @@ object MultivectorSubClass:
   val motor = MultivectorSubClass("Pga3dMotor", orderedFields.filter(b => Seq(0, 2, 4).contains(b.basisBlade.grade)))
 
   val scalar = MultivectorSubClass("Double", orderedFields.take(1), shouldBeGenerated = false)
-  val plane = MultivectorSubClass("Pga3dPlane", orderedFields.filter(_.basisBlade.grade == 1))
+  val plane = MultivectorSubClass("Pga3dPlane", orderedFields.filter(_.basisBlade.grade == 1).tail :+ orderedFields.filter(_.basisBlade.grade == 1).head)
   val bivector = MultivectorSubClass("Pga3dBivector", orderedFields.filter(_.basisBlade.grade == 2))
   val point = MultivectorSubClass("Pga3dPoint", orderedFields.filter(_.basisBlade.grade == 3))
   val pseudoScalar = MultivectorSubClass("Pga3dPseudoScalar", orderedFields.takeRight(1))

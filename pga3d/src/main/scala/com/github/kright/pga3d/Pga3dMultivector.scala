@@ -282,10 +282,10 @@ case class Pga3dMultivector(s: Double = 0.0,
 
   def asPlaneUnsafe: Pga3dPlane =
     Pga3dPlane(
-      w = w,
       x = x,
       y = y,
       z = z,
+      w = w,
     )
 
   def asBivectorUnsafe: Pga3dBivector =

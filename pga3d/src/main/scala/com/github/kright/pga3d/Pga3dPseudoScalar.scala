@@ -126,10 +126,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def geometric(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
-      w = -i * v.xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i * v.xyz,
     )
 
   infix def geometric(v: Pga3dQuaternion): Pga3dMotor =
@@ -149,10 +149,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def geometric(v: Pga3dPointNormalized): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )
 
   infix def geometric(v: Pga3dPlaneIdeal): Pga3dVector =
@@ -171,10 +171,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def geometric(v: Pga3dPointCenter.type): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )
 
   infix def dot(v: Pga3dMotor): Pga3dMotor =
@@ -205,10 +205,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def dot(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
-      w = -i * v.xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i * v.xyz,
     )
 
   infix def dot(v: Pga3dQuaternion): Pga3dMotor =
@@ -228,10 +228,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def dot(v: Pga3dPointNormalized): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )
 
   infix def dot(v: Pga3dPlaneIdeal): Pga3dVector =
@@ -250,10 +250,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def dot(v: Pga3dPointCenter.type): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )
 
   infix def wedge(v: Pga3dMotor): Pga3dPseudoScalar =
@@ -289,10 +289,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def antiGeometric(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = i * v.w,
       x = i * v.x,
       y = i * v.y,
       z = i * v.z,
+      w = i * v.w,
     )
 
   infix def antiGeometric(v: Pga3dBivector): Pga3dBivector =
@@ -396,10 +396,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def antiDot(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = i * v.w,
       x = i * v.x,
       y = i * v.y,
       z = i * v.z,
+      w = i * v.w,
     )
 
   infix def antiDot(v: Pga3dBivector): Pga3dBivector =
@@ -505,10 +505,10 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def antiWedge(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = i * v.w,
       x = i * v.x,
       y = i * v.y,
       z = i * v.z,
+      w = i * v.w,
     )
 
   inline infix def v(v: Pga3dPlane): Pga3dPlane = antiWedge(v)
@@ -631,18 +631,18 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def cross(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
-      w = -i * v.xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i * v.xyz,
     )
 
   infix def cross(v: Pga3dPointNormalized): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )
 
   infix def cross(v: Pga3dPlaneIdeal): Pga3dVector =
@@ -654,8 +654,8 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   infix def cross(v: Pga3dPointCenter.type): Pga3dPlane =
     Pga3dPlane(
-      w = -i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = -i,
     )

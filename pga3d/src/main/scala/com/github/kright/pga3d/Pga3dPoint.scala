@@ -16,10 +16,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   def dual: Pga3dPlane =
     Pga3dPlane(
-      w = xyz,
       x = -wyz,
       y = wxz,
       z = -wxy,
+      w = xyz,
     )
 
   def weight: Pga3dVector =
@@ -402,10 +402,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def geometric(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i * xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i * xyz,
     )
 
   infix def geometric(v: Pga3dPointCenter.type): Pga3dMotor =
@@ -452,10 +452,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def dot(v: Pga3dBivector): Pga3dPlane =
     Pga3dPlane(
-      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
       x = -v.yz * xyz,
       y = v.xz * xyz,
       z = -v.xy * xyz,
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
     )
 
   infix def dot(v: Pga3dPoint): Double =
@@ -499,18 +499,18 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def dot(v: Pga3dBivectorBulk): Pga3dPlane =
     Pga3dPlane(
-      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
       x = -v.yz * xyz,
       y = v.xz * xyz,
       z = -v.xy * xyz,
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
     )
 
   infix def dot(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i * xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i * xyz,
     )
 
   infix def dot(v: Pga3dPointCenter.type): Double =
@@ -898,10 +898,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dBivector): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = (v.xy * wxz - v.wx * xyz - v.xz * wxy),
       y = (v.xy * wyz - v.wy * xyz - v.yz * wxy),
       z = (v.xz * wyz - v.wz * xyz - v.yz * wxz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dBivector): Pga3dPlane = antiWedge(v)
@@ -929,10 +929,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dTranslator): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = -v.wx * xyz,
       y = -v.wy * xyz,
       z = -v.wz * xyz,
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dTranslator): Pga3dPlane = antiWedge(v)
@@ -977,10 +977,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dBivectorWeight): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = -v.wx * xyz,
       y = -v.wy * xyz,
       z = -v.wz * xyz,
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dBivectorWeight): Pga3dPlane = antiWedge(v)
@@ -1023,10 +1023,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
   infix def sandwich(v: Pga3dPlane): Pga3dPlane =
     val xyzMxyz = xyz * xyz
     Pga3dPlane(
-      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
+      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
     )
 
   infix def sandwich(v: Pga3dBivector): Pga3dBivector =
@@ -1101,10 +1101,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
   infix def sandwich(v: Pga3dPlaneIdeal): Pga3dPlane =
     val xyzMxyz = xyz * xyz
     Pga3dPlane(
-      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
+      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
     )
 
   infix def sandwich(v: Pga3dBivectorBulk): Pga3dBivector =
@@ -1161,10 +1161,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
   infix def reverseSandwich(v: Pga3dPlane): Pga3dPlane =
     val xyzMxyz = xyz * xyz
     Pga3dPlane(
-      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
+      w = (-v.w * xyzMxyz + 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz)),
     )
 
   infix def reverseSandwich(v: Pga3dBivector): Pga3dBivector =
@@ -1239,10 +1239,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
   infix def reverseSandwich(v: Pga3dPlaneIdeal): Pga3dPlane =
     val xyzMxyz = xyz * xyz
     Pga3dPlane(
-      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
       x = v.x * xyzMxyz,
       y = v.y * xyzMxyz,
       z = v.z * xyzMxyz,
+      w = 2.0 * xyz * (v.x * wyz + v.z * wxy - v.y * wxz),
     )
 
   infix def reverseSandwich(v: Pga3dBivectorBulk): Pga3dBivector =
@@ -1368,10 +1368,10 @@ case class Pga3dPoint(wxy: Double = 0.0,
 
   infix def cross(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i * xyz,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i * xyz,
     )
 
   infix def cross(v: Pga3dPointCenter.type): Pga3dBivectorWeight =

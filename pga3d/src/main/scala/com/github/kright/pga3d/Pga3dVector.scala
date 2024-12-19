@@ -329,10 +329,10 @@ case class Pga3dVector(wxy: Double = 0.0,
 
   infix def dot(v: Pga3dBivector): Pga3dPlane =
     Pga3dPlane(
-      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
     )
 
   infix def dot(v: Pga3dQuaternion): Pga3dMultivector =
@@ -367,10 +367,10 @@ case class Pga3dVector(wxy: Double = 0.0,
 
   infix def dot(v: Pga3dBivectorBulk): Pga3dPlane =
     Pga3dPlane(
-      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (-v.xy * wxy - v.xz * wxz - v.yz * wyz),
     )
 
   infix def wedge(v: Pga3dMotor): Pga3dVector =
@@ -751,10 +751,10 @@ case class Pga3dVector(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dBivector): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = (v.xy * wxz - v.xz * wxy),
       y = (v.xy * wyz - v.yz * wxy),
       z = (v.xz * wyz - v.yz * wxz),
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dBivector): Pga3dPlane = antiWedge(v)
@@ -782,10 +782,10 @@ case class Pga3dVector(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dTranslator): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dTranslator): Pga3dPlane = antiWedge(v)
@@ -827,10 +827,10 @@ case class Pga3dVector(wxy: Double = 0.0,
 
   infix def antiWedge(v: Pga3dBivectorWeight): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.wy * wxz - v.wx * wyz - v.wz * wxy),
     )
 
   inline infix def v(v: Pga3dBivectorWeight): Pga3dPlane = antiWedge(v)

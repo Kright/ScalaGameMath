@@ -17,10 +17,10 @@ case object Pga3dPointCenter:
 
   def dual: Pga3dPlane =
     Pga3dPlane(
-      w = 1.0,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = 1.0,
     )
 
   def bulk: Pga3dPointCenter.type =
@@ -308,10 +308,10 @@ case object Pga3dPointCenter:
 
   infix def geometric(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i,
     )
 
   infix def geometric(v: Pga3dPointCenter.type): Double =
@@ -396,10 +396,10 @@ case object Pga3dPointCenter:
 
   infix def dot(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i,
     )
 
   infix def dot(v: Pga3dPointCenter.type): Double =
@@ -631,10 +631,10 @@ case object Pga3dPointCenter:
 
   infix def sandwich(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = -v.w,
       x = v.x,
       y = v.y,
       z = v.z,
+      w = -v.w,
     )
 
   infix def sandwich(v: Pga3dBivector): Pga3dBivector =
@@ -717,10 +717,10 @@ case object Pga3dPointCenter:
 
   infix def reverseSandwich(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = -v.w,
       x = v.x,
       y = v.y,
       z = v.z,
+      w = -v.w,
     )
 
   infix def reverseSandwich(v: Pga3dBivector): Pga3dBivector =
@@ -858,8 +858,8 @@ case object Pga3dPointCenter:
 
   infix def cross(v: Pga3dPseudoScalar): Pga3dPlane =
     Pga3dPlane(
-      w = v.i,
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = v.i,
     )

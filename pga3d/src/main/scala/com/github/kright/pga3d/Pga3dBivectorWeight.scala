@@ -328,10 +328,10 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def dot(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.x * wx + v.y * wy + v.z * wz),
     )
 
   infix def dot(v: Pga3dQuaternion): Pga3dBivectorWeight =
@@ -346,10 +346,10 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def dot(v: Pga3dPlaneIdeal): Pga3dPlane =
     Pga3dPlane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.x * wx + v.y * wy + v.z * wz),
     )
 
   infix def wedge(v: Pga3dMotor): Pga3dMotor =
@@ -701,10 +701,10 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def antiWedge(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
       x = -v.xyz * wx,
       y = -v.xyz * wy,
       z = -v.xyz * wz,
+      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
     )
 
   inline infix def v(v: Pga3dPoint): Pga3dPlane = antiWedge(v)
@@ -716,20 +716,20 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def antiWedge(v: Pga3dVector): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
     )
 
   inline infix def v(v: Pga3dVector): Pga3dPlane = antiWedge(v)
 
   infix def antiWedge(v: Pga3dPointNormalized): Pga3dPlane =
     Pga3dPlane(
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
       x = -wx,
       y = -wy,
       z = -wz,
+      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
     )
 
   inline infix def v(v: Pga3dPointNormalized): Pga3dPlane = antiWedge(v)
@@ -766,10 +766,10 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def cross(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.x * wx + v.y * wy + v.z * wz),
     )
 
   infix def cross(v: Pga3dBivector): Pga3dBivectorWeight =
@@ -802,10 +802,10 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   infix def cross(v: Pga3dPlaneIdeal): Pga3dPlane =
     Pga3dPlane(
-      w = (v.x * wx + v.y * wy + v.z * wz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
+      w = (v.x * wx + v.y * wy + v.z * wz),
     )
 
   infix def cross(v: Pga3dBivectorBulk): Pga3dBivectorWeight =
