@@ -98,26 +98,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       i = i,
     )
 
-  infix def geometric(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = 0.0,
-      w = -i * v.xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = -i * v.yz,
-      wy = i * v.xz,
-      wz = -i * v.xy,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-      xyz = 0.0,
-      i = i * v.s,
-    )
-
   infix def geometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = 0.0,
@@ -195,26 +175,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       x = 0.0,
       y = 0.0,
       z = 0.0,
-    )
-
-  infix def dot(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = 0.0,
-      w = -i * v.xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = -i * v.yz,
-      wy = i * v.xz,
-      wz = -i * v.xy,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-      xyz = 0.0,
-      i = i * v.s,
     )
 
   infix def dot(v: Pga3dMotor): Pga3dMotor =
@@ -296,13 +256,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       z = 0.0,
     )
 
-  infix def wedge(v: Pga3dMultivector): Pga3dPseudoScalar =
-    Pga3dPseudoScalar(
-      i = i * v.s,
-    )
-
-  inline infix def ^(v: Pga3dMultivector): Pga3dPseudoScalar = wedge(v)
-
   infix def wedge(v: Pga3dMotor): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = i * v.s,
@@ -321,26 +274,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
     this
 
   inline infix def ^(v: Pga3dTranslator): Pga3dPseudoScalar = wedge(v)
-
-  infix def antiGeometric(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = i * v.s,
-      w = i * v.w,
-      x = i * v.x,
-      y = i * v.y,
-      z = i * v.z,
-      wx = i * v.wx,
-      wy = i * v.wy,
-      wz = i * v.wz,
-      xy = i * v.xy,
-      xz = i * v.xz,
-      yz = i * v.yz,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
-      xyz = i * v.xyz,
-      i = i * v.i,
-    )
 
   infix def antiGeometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
@@ -449,26 +382,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       xyz = i,
     )
 
-  infix def antiDot(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = i * v.s,
-      w = i * v.w,
-      x = i * v.x,
-      y = i * v.y,
-      z = i * v.z,
-      wx = i * v.wx,
-      wy = i * v.wy,
-      wz = i * v.wz,
-      xy = i * v.xy,
-      xz = i * v.xz,
-      yz = i * v.yz,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
-      xyz = i * v.xyz,
-      i = i * v.i,
-    )
-
   infix def antiDot(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = i * v.s,
@@ -575,28 +488,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       wyz = 0.0,
       xyz = i,
     )
-
-  infix def antiWedge(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = i * v.s,
-      w = i * v.w,
-      x = i * v.x,
-      y = i * v.y,
-      z = i * v.z,
-      wx = i * v.wx,
-      wy = i * v.wy,
-      wz = i * v.wz,
-      xy = i * v.xy,
-      xz = i * v.xz,
-      yz = i * v.yz,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
-      xyz = i * v.xyz,
-      i = i * v.i,
-    )
-
-  inline infix def v(v: Pga3dMultivector): Pga3dMultivector = antiWedge(v)
 
   infix def antiWedge(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
@@ -730,26 +621,6 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
     )
 
   inline infix def v(v: Pga3dPointCenter.type): Pga3dPoint = antiWedge(v)
-
-  infix def cross(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = 0.0,
-      w = -i * v.xyz,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = i * v.z,
-      wxz = -i * v.y,
-      wyz = i * v.x,
-      xyz = 0.0,
-      i = 0.0,
-    )
 
   infix def cross(v: Pga3dPlane): Pga3dVector =
     Pga3dVector(

@@ -118,7 +118,10 @@ case class MultivectorSubClass(name: String,
       }
 
       for (binaryOp <- binaryOps) {
-        for (rightCls <- pgaClasses if (rightCls != zeroCls) && (rightCls != scalar)) {
+        for (rightCls <- pgaClasses
+             if (rightCls != zeroCls)
+               && (rightCls != scalar)
+               && ((this == MultivectorSubClass.multivector) == (rightCls == MultivectorSubClass.multivector))) {
           val v = rightCls.makeSymbolic("v")
           val result = binaryOp(self, v)
           val resultCls = findMatchingClass(result)

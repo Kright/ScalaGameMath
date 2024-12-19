@@ -175,26 +175,6 @@ case object Pga3dPointCenter:
       xyz = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
     )
 
-  infix def geometric(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = -v.xyz,
-      w = v.i,
-      x = -v.yz,
-      y = v.xz,
-      z = -v.xy,
-      wx = v.wyz,
-      wy = -v.wxz,
-      wz = v.wxy,
-      xy = v.z,
-      xz = -v.y,
-      yz = v.x,
-      wxy = -v.wz,
-      wxz = v.wy,
-      wyz = -v.wx,
-      xyz = v.s,
-      i = -v.w,
-    )
-
   infix def geometric(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -337,26 +317,6 @@ case object Pga3dPointCenter:
   infix def geometric(v: Pga3dPointCenter.type): Double =
     -1.0
 
-  infix def dot(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = -v.xyz,
-      w = v.i,
-      x = -v.yz,
-      y = v.xz,
-      z = -v.xy,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = v.z,
-      xz = -v.y,
-      yz = v.x,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.s,
-      i = 0.0,
-    )
-
   infix def dot(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -445,28 +405,6 @@ case object Pga3dPointCenter:
   infix def dot(v: Pga3dPointCenter.type): Double =
     -1.0
 
-  infix def wedge(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = 0.0,
-      w = 0.0,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.s,
-      i = -v.w,
-    )
-
-  inline infix def ^(v: Pga3dMultivector): Pga3dMultivector = wedge(v)
-
   infix def wedge(v: Pga3dMotor): Pga3dPoint =
     Pga3dPoint(
       wxy = 0.0,
@@ -498,26 +436,6 @@ case object Pga3dPointCenter:
     this
 
   inline infix def ^(v: Pga3dTranslator): Pga3dPointCenter.type = wedge(v)
-
-  infix def antiGeometric(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = v.w,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
 
   infix def antiGeometric(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
@@ -592,14 +510,6 @@ case object Pga3dPointCenter:
       xyz = v.i,
     )
 
-  infix def antiDot(v: Pga3dMultivector): Pga3dPoint =
-    Pga3dPoint(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-    )
-
   infix def antiDot(v: Pga3dMotor): Pga3dPoint =
     Pga3dPoint(
       wxy = 0.0,
@@ -615,28 +525,6 @@ case object Pga3dPointCenter:
       wyz = 0.0,
       xyz = v.i,
     )
-
-  infix def antiWedge(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = v.w,
-      w = 0.0,
-      x = -v.wx,
-      y = -v.wy,
-      z = -v.wz,
-      wx = 0.0,
-      wy = 0.0,
-      wz = 0.0,
-      xy = -v.wxy,
-      xz = -v.wxz,
-      yz = -v.wyz,
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = v.i,
-      i = 0.0,
-    )
-
-  inline infix def v(v: Pga3dMultivector): Pga3dMultivector = antiWedge(v)
 
   infix def antiWedge(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
@@ -729,26 +617,6 @@ case object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dPseudoScalar): Pga3dPoint = antiWedge(v)
 
-  infix def sandwich(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = v.s,
-      w = -v.w,
-      x = v.x,
-      y = v.y,
-      z = v.z,
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-      xyz = v.xyz,
-      i = -v.i,
-    )
-
   infix def sandwich(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = v.s,
@@ -835,26 +703,6 @@ case object Pga3dPointCenter:
   infix def sandwich(v: Pga3dPointCenter.type): Pga3dPointCenter.type =
     this
 
-  infix def reverseSandwich(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = v.s,
-      w = -v.w,
-      x = v.x,
-      y = v.y,
-      z = v.z,
-      wx = -v.wx,
-      wy = -v.wy,
-      wz = -v.wz,
-      xy = v.xy,
-      xz = v.xz,
-      yz = v.yz,
-      wxy = -v.wxy,
-      wxz = -v.wxz,
-      wyz = -v.wyz,
-      xyz = v.xyz,
-      i = -v.i,
-    )
-
   infix def reverseSandwich(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = v.s,
@@ -940,26 +788,6 @@ case object Pga3dPointCenter:
 
   infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPointCenter.type =
     this
-
-  infix def cross(v: Pga3dMultivector): Pga3dMultivector =
-    Pga3dMultivector(
-      s = 0.0,
-      w = v.i,
-      x = 0.0,
-      y = 0.0,
-      z = 0.0,
-      wx = v.wyz,
-      wy = -v.wxz,
-      wz = v.wxy,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      wxy = -v.wz,
-      wxz = v.wy,
-      wyz = -v.wx,
-      xyz = 0.0,
-      i = -v.w,
-    )
 
   infix def cross(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
