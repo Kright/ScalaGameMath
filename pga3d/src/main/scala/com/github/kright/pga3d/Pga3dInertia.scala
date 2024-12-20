@@ -2,9 +2,9 @@ package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case class Pga3dInertia(mass: Double,
-                   mryz: Double,
-                   mrxz: Double,
-                   mrxy: Double):
+                        mryz: Double,
+                        mrxz: Double,
+                        mrxy: Double):
 
   def apply(localB: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(

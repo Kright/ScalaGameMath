@@ -109,7 +109,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       PGA3State.zero,
     )
 
-    val springCenter = Pga3dPlane(w = 1, 3.0, 4.0).dual // len 5
+    val springCenter = Pga3dPlane(3.0, 4.0, w = 1).dual // len 5
     val springK = 20
 
     def getEnergy(): Double = (body.state.center - springCenter).normSquare * 0.5 * springK + body.getEnergy()

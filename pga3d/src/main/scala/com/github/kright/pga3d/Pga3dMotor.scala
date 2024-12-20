@@ -304,20 +304,20 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def geometric(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-i * v.xyz - v.wxy * xy - v.wxz * xz - v.wyz * yz),
-      x = -v.xyz * yz,
-      y = v.xyz * xz,
-      z = -v.xyz * xy,
+      w = (v.x * yz + v.z * xy - i * v.w - v.y * xz),
+      x = -v.w * yz,
+      y = v.w * xz,
+      z = -v.w * xy,
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (s * v.wxy + v.wxz * yz + v.xyz * wz - v.wyz * xz),
-      wxz = (s * v.wxz + v.wyz * xy - v.wxy * yz - v.xyz * wy),
-      wyz = (s * v.wyz + v.wxy * xz + v.xyz * wx - v.wxz * xy),
-      xyz = s * v.xyz,
+      wxy = (v.w * wz + v.x * xz + v.y * yz - s * v.z),
+      wxz = (s * v.y + v.z * yz - v.w * wy - v.x * xy),
+      wyz = (v.w * wx - s * v.x - v.y * xy - v.z * xz),
+      xyz = s * v.w,
       i = 0.0,
     )
 
@@ -348,7 +348,7 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def geometric(v: Pga3dVector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      w = (v.x * yz + v.z * xy - v.y * xz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -358,9 +358,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (s * v.wxy + v.wxz * yz - v.wyz * xz),
-      wxz = (s * v.wxz + v.wyz * xy - v.wxy * yz),
-      wyz = (s * v.wyz + v.wxy * xz - v.wxz * xy),
+      wxy = (v.x * xz + v.y * yz - s * v.z),
+      wxz = (s * v.y + v.z * yz - v.x * xy),
+      wyz = (-s * v.x - v.y * xy - v.z * xz),
       xyz = 0.0,
       i = 0.0,
     )
@@ -368,7 +368,7 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def geometric(v: Pga3dPointNormalized): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-i - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      w = (-i + v.x * yz + v.z * xy - v.y * xz),
       x = -yz,
       y = xz,
       z = -xy,
@@ -378,9 +378,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (wz + s * v.wxy + v.wxz * yz - v.wyz * xz),
-      wxz = (-wy + s * v.wxz + v.wyz * xy - v.wxy * yz),
-      wyz = (wx + s * v.wyz + v.wxy * xz - v.wxz * xy),
+      wxy = (wz + v.x * xz + v.y * yz - s * v.z),
+      wxz = (-wy + s * v.y + v.z * yz - v.x * xy),
+      wyz = (wx - s * v.x - v.y * xy - v.z * xz),
       xyz = s,
       i = 0.0,
     )
@@ -508,20 +508,20 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def dot(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-i * v.xyz - v.wxy * xy - v.wxz * xz - v.wyz * yz),
-      x = -v.xyz * yz,
-      y = v.xyz * xz,
-      z = -v.xyz * xy,
+      w = (v.x * yz + v.z * xy - i * v.w - v.y * xz),
+      x = -v.w * yz,
+      y = v.w * xz,
+      z = -v.w * xy,
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
-      xyz = s * v.xyz,
+      wxy = -s * v.z,
+      wxz = s * v.y,
+      wyz = -s * v.x,
+      xyz = s * v.w,
       i = 0.0,
     )
 
@@ -552,7 +552,7 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def dot(v: Pga3dVector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      w = (v.x * yz + v.z * xy - v.y * xz),
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -562,9 +562,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
+      wxy = -s * v.z,
+      wxz = s * v.y,
+      wyz = -s * v.x,
       xyz = 0.0,
       i = 0.0,
     )
@@ -572,7 +572,7 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def dot(v: Pga3dPointNormalized): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (-i - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      w = (-i + v.x * yz + v.z * xy - v.y * xz),
       x = -yz,
       y = xz,
       z = -xy,
@@ -582,9 +582,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
+      wxy = -s * v.z,
+      wxz = s * v.y,
+      wyz = -s * v.x,
       xyz = s,
       i = 0.0,
     )
@@ -712,10 +712,10 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def wedge(v: Pga3dPoint): Pga3dPoint =
     Pga3dPoint(
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
-      xyz = s * v.xyz,
+      x = s * v.x,
+      y = s * v.y,
+      z = s * v.z,
+      w = s * v.w,
     )
 
   inline infix def ^(v: Pga3dPoint): Pga3dPoint = wedge(v)
@@ -750,19 +750,19 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def wedge(v: Pga3dVector): Pga3dVector =
     Pga3dVector(
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
+      x = s * v.x,
+      y = s * v.y,
+      z = s * v.z,
     )
 
   inline infix def ^(v: Pga3dVector): Pga3dVector = wedge(v)
 
   infix def wedge(v: Pga3dPointNormalized): Pga3dPoint =
     Pga3dPoint(
-      wxy = s * v.wxy,
-      wxz = s * v.wxz,
-      wyz = s * v.wyz,
-      xyz = s,
+      x = s * v.x,
+      y = s * v.y,
+      z = s * v.z,
+      w = s,
     )
 
   inline infix def ^(v: Pga3dPointNormalized): Pga3dPoint = wedge(v)
@@ -826,10 +826,10 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def wedge(v: Pga3dPointCenter.type): Pga3dPoint =
     Pga3dPoint(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = s,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      w = s,
     )
 
   inline infix def ^(v: Pga3dPointCenter.type): Pga3dPoint = wedge(v)
@@ -881,20 +881,20 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def antiGeometric(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (s * v.wyz + v.wxz * xy - v.wxy * xz - v.xyz * wx),
-      y = (v.wyz * xy - s * v.wxz - v.wxy * yz - v.xyz * wy),
-      z = (s * v.wxy + v.wyz * xz - v.wxz * yz - v.xyz * wz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (v.y * xy + v.z * xz - s * v.x - v.w * wx),
+      y = (v.z * yz - s * v.y - v.w * wy - v.x * xy),
+      z = (-s * v.z - v.w * wz - v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (i * v.xyz - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (i * v.w + v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
@@ -921,40 +921,40 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def antiGeometric(v: Pga3dVector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (s * v.wyz + v.wxz * xy - v.wxy * xz),
-      y = (v.wyz * xy - s * v.wxz - v.wxy * yz),
-      z = (s * v.wxy + v.wyz * xz - v.wxz * yz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (v.y * xy + v.z * xz - s * v.x),
+      y = (v.z * yz - s * v.y - v.x * xy),
+      z = (-s * v.z - v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
   infix def antiGeometric(v: Pga3dPointNormalized): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (-wx + s * v.wyz + v.wxz * xy - v.wxy * xz),
-      y = (-wy + v.wyz * xy - s * v.wxz - v.wxy * yz),
-      z = (-wz + s * v.wxy + v.wyz * xz - v.wxz * yz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (-wx + v.y * xy + v.z * xz - s * v.x),
+      y = (-wy + v.z * yz - s * v.y - v.x * xy),
+      z = (-wz - s * v.z - v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (i - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (i + v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
@@ -1078,19 +1078,19 @@ case class Pga3dMotor(s: Double = 0.0,
     Pga3dMultivector(
       s = 0.0,
       w = 0.0,
-      x = s * v.wyz,
-      y = -s * v.wxz,
-      z = s * v.wxy,
+      x = -s * v.x,
+      y = -s * v.y,
+      z = -s * v.z,
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (i * v.xyz - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (i * v.w + v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
@@ -1118,19 +1118,19 @@ case class Pga3dMotor(s: Double = 0.0,
     Pga3dMultivector(
       s = 0.0,
       w = 0.0,
-      x = s * v.wyz,
-      y = -s * v.wxz,
-      z = s * v.wxy,
+      x = -s * v.x,
+      y = -s * v.y,
+      z = -s * v.z,
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (-v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
@@ -1138,19 +1138,19 @@ case class Pga3dMotor(s: Double = 0.0,
     Pga3dMultivector(
       s = 0.0,
       w = 0.0,
-      x = s * v.wyz,
-      y = -s * v.wxz,
-      z = s * v.wxy,
+      x = -s * v.x,
+      y = -s * v.y,
+      z = -s * v.z,
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (i * v.wxy + v.wxz * wx + v.wyz * wy),
-      wxz = (i * v.wxz + v.wyz * wz - v.wxy * wx),
-      wyz = (i * v.wyz - v.wxy * wy - v.wxz * wz),
-      xyz = (i - v.wxy * xy - v.wxz * xz - v.wyz * yz),
+      wxy = (v.y * wx - i * v.z - v.x * wy),
+      wxz = (i * v.y + v.z * wx - v.x * wz),
+      wyz = (v.z * wy - i * v.x - v.y * wz),
+      xyz = (i + v.x * yz + v.z * xy - v.y * xz),
       i = 0.0,
     )
 
@@ -1207,10 +1207,10 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def antiDot(v: Pga3dPointCenter.type): Pga3dPoint =
     Pga3dPoint(
-      wxy = 0.0,
-      wxz = 0.0,
-      wyz = 0.0,
-      xyz = i,
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      w = i,
     )
 
   infix def antiWedge(v: Pga3dMotor): Pga3dMotor =
@@ -1254,20 +1254,20 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def antiWedge(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (v.wxz * xy - v.wxy * xz - v.xyz * wx),
-      y = (v.wyz * xy - v.wxy * yz - v.xyz * wy),
-      z = (v.wyz * xz - v.wxz * yz - v.xyz * wz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (v.y * xy + v.z * xz - v.w * wx),
+      y = (v.z * yz - v.w * wy - v.x * xy),
+      z = (-v.w * wz - v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
-      xyz = i * v.xyz,
+      wxy = -i * v.z,
+      wxz = i * v.y,
+      wyz = -i * v.x,
+      xyz = i * v.w,
       i = 0.0,
     )
 
@@ -1300,19 +1300,19 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def antiWedge(v: Pga3dVector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (v.wxz * xy - v.wxy * xz),
-      y = (v.wyz * xy - v.wxy * yz),
-      z = (v.wyz * xz - v.wxz * yz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (v.y * xy + v.z * xz),
+      y = (v.z * yz - v.x * xy),
+      z = (-v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
+      wxy = -i * v.z,
+      wxz = i * v.y,
+      wyz = -i * v.x,
       xyz = 0.0,
       i = 0.0,
     )
@@ -1322,19 +1322,19 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def antiWedge(v: Pga3dPointNormalized): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = (v.wxz * wy - v.wxy * wz - v.wyz * wx),
-      x = (-wx + v.wxz * xy - v.wxy * xz),
-      y = (-wy + v.wyz * xy - v.wxy * yz),
-      z = (-wz + v.wyz * xz - v.wxz * yz),
+      w = (v.x * wx + v.y * wy + v.z * wz),
+      x = (-wx + v.y * xy + v.z * xz),
+      y = (-wy + v.z * yz - v.x * xy),
+      z = (-wz - v.x * xz - v.y * yz),
       wx = 0.0,
       wy = 0.0,
       wz = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = i * v.wxy,
-      wxz = i * v.wxz,
-      wyz = i * v.wyz,
+      wxy = -i * v.z,
+      wxz = i * v.y,
+      wyz = -i * v.x,
       xyz = i,
       i = 0.0,
     )
@@ -1514,10 +1514,10 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dPoint(
-      wxy = (2.0 * (v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz) + v.xyz * (i * xy + s * wz - wx * xz - wy * yz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz) + v.xyz * (i * xz + wx * xy - s * wy - wz * yz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy) + v.xyz * (i * yz + s * wx + wy * xy + wz * xz)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
-      xyz = v.xyz * (sMs + xyMxy + xzMxz + yzMyz),
+      x = -(2.0 * (v.w * (i * yz + s * wx + wy * xy + wz * xz) + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (v.w * (i * xz + wx * xy - s * wy - wz * yz) + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = -(2.0 * (v.w * (i * xy + s * wz - wx * xz - wy * yz) + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
   infix def sandwich(v: Pga3dQuaternion): Pga3dMotor =
@@ -1592,9 +1592,9 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      wxy = (2.0 * (v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
+      x = -(2.0 * (v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = -(2.0 * (v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
     )
 
   infix def sandwich(v: Pga3dPointNormalized): Pga3dPoint =
@@ -1609,10 +1609,10 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dPoint(
-      wxy = (2.0 * (i * xy + s * wz + v.wxz * (sMyz + xyMxz) + v.wyz * (xyMyz - sMxz) - wx * xz - wy * yz) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (i * xz + v.wxy * (xyMxz - sMyz) + v.wyz * (sMxy + xzMyz) + wx * xy - s * wy - wz * yz) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (i * yz + s * wx + v.wxy * (sMxz + xyMyz) + v.wxz * (xzMyz - sMxy) + wy * xy + wz * xz) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
-      xyz = (sMs + xyMxy + xzMxz + yzMyz),
+      x = -(2.0 * (i * yz + s * wx + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz) + wy * xy + wz * xz) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (i * xz + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz) + wx * xy - s * wy - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = -(2.0 * (i * xy + s * wz + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz) - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      w = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
   infix def sandwich(v: Pga3dPlaneIdeal): Pga3dPlane =
@@ -1693,10 +1693,10 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def sandwich(v: Pga3dPointCenter.type): Pga3dPoint =
     Pga3dPoint(
-      wxy = 2.0 * (i * xy + s * wz - wx * xz - wy * yz),
-      wxz = 2.0 * (i * xz + wx * xy - s * wy - wz * yz),
-      wyz = 2.0 * (i * yz + s * wx + wy * xy + wz * xz),
-      xyz = (s * s + xy * xy + xz * xz + yz * yz),
+      x = (-2.0 * i * yz - 2.0 * s * wx - 2.0 * wy * xy - 2.0 * wz * xz),
+      y = 2.0 * (i * xz + wx * xy - s * wy - wz * yz),
+      z = (-2.0 * i * xy - 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
+      w = (s * s + xy * xy + xz * xz + yz * yz),
     )
 
   infix def reverseSandwich(v: Pga3dMotor): Pga3dMotor =
@@ -1803,10 +1803,10 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dPoint(
-      wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz) + v.xyz * (-i * xy - s * wz - wx * xz - wy * yz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy) + v.xyz * (s * wy + wx * xy - i * xz - wz * yz)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz) + v.xyz * (wy * xy + wz * xz - i * yz - s * wx)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
-      xyz = v.xyz * (sMs + xyMxy + xzMxz + yzMyz),
+      x = -(2.0 * (v.w * (wy * xy + wz * xz - i * yz - s * wx) + v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (v.w * (s * wy + wx * xy - i * xz - wz * yz) + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = (sMs * v.z + v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * sMxz * v.x + 2.0 * sMyz * v.y + 2.0 * v.x * xyMyz + 2.0 * i * v.w * xy + 2.0 * s * v.w * wz + 2.0 * v.w * wx * xz + 2.0 * v.w * wy * yz),
+      w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
   infix def reverseSandwich(v: Pga3dQuaternion): Pga3dMotor =
@@ -1881,9 +1881,9 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz)) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy)) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz)) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
+      x = -(2.0 * (v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
     )
 
   infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dPoint =
@@ -1898,10 +1898,10 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dPoint(
-      wxy = (2.0 * (v.wxz * (xyMxz - sMyz) + v.wyz * (sMxz + xyMyz) - i * xy - s * wz - wx * xz - wy * yz) + v.wxy * (sMs + xyMxy - xzMxz - yzMyz)),
-      wxz = (2.0 * (s * wy + v.wxy * (sMyz + xyMxz) + v.wyz * (xzMyz - sMxy) + wx * xy - i * xz - wz * yz) + v.wxz * (sMs + xzMxz - xyMxy - yzMyz)),
-      wyz = (2.0 * (v.wxy * (xyMyz - sMxz) + v.wxz * (sMxy + xzMyz) + wy * xy + wz * xz - i * yz - s * wx) + v.wyz * (sMs + yzMyz - xyMxy - xzMxz)),
-      xyz = (sMs + xyMxy + xzMxz + yzMyz),
+      x = -(2.0 * (v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz) + wy * xy + wz * xz - i * yz - s * wx) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      y = (2.0 * (s * wy + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz) + wx * xy - i * xz - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
+      z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz) - i * xy - s * wz - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      w = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
   infix def reverseSandwich(v: Pga3dPlaneIdeal): Pga3dPlane =
@@ -1982,10 +1982,10 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPoint =
     Pga3dPoint(
-      wxy = 2.0 * (-i * xy - s * wz - wx * xz - wy * yz),
-      wxz = 2.0 * (s * wy + wx * xy - i * xz - wz * yz),
-      wyz = 2.0 * (wy * xy + wz * xz - i * yz - s * wx),
-      xyz = (s * s + xy * xy + xz * xz + yz * yz),
+      x = (-2.0 * wy * xy - 2.0 * wz * xz + 2.0 * i * yz + 2.0 * s * wx),
+      y = 2.0 * (s * wy + wx * xy - i * xz - wz * yz),
+      z = (2.0 * i * xy + 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
+      w = (s * s + xy * xy + xz * xz + yz * yz),
     )
 
   infix def cross(v: Pga3dMotor): Pga3dBivector =
@@ -2031,7 +2031,7 @@ case class Pga3dMotor(s: Double = 0.0,
   infix def cross(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
-      w = -i * v.xyz,
+      w = -i * v.w,
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -2041,9 +2041,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (v.wxz * yz + v.xyz * wz - v.wyz * xz),
-      wxz = (v.wyz * xy - v.wxy * yz - v.xyz * wy),
-      wyz = (v.wxy * xz + v.xyz * wx - v.wxz * xy),
+      wxy = (v.w * wz + v.x * xz + v.y * yz),
+      wxz = (v.z * yz - v.w * wy - v.x * xy),
+      wyz = (v.w * wx - v.y * xy - v.z * xz),
       xyz = 0.0,
       i = 0.0,
     )
@@ -2067,9 +2067,9 @@ case class Pga3dMotor(s: Double = 0.0,
 
   infix def cross(v: Pga3dVector): Pga3dVector =
     Pga3dVector(
-      wxy = (v.wxz * yz - v.wyz * xz),
-      wxz = (v.wyz * xy - v.wxy * yz),
-      wyz = (v.wxy * xz - v.wxz * xy),
+      x = (v.y * xy + v.z * xz),
+      y = (v.z * yz - v.x * xy),
+      z = (-v.x * xz - v.y * yz),
     )
 
   infix def cross(v: Pga3dPointNormalized): Pga3dMultivector =
@@ -2085,9 +2085,9 @@ case class Pga3dMotor(s: Double = 0.0,
       xy = 0.0,
       xz = 0.0,
       yz = 0.0,
-      wxy = (wz + v.wxz * yz - v.wyz * xz),
-      wxz = (-wy + v.wyz * xy - v.wxy * yz),
-      wyz = (wx + v.wxy * xz - v.wxz * xy),
+      wxy = (wz + v.x * xz + v.y * yz),
+      wxz = (-wy + v.z * yz - v.x * xy),
+      wyz = (wx - v.y * xy - v.z * xz),
       xyz = 0.0,
       i = 0.0,
     )

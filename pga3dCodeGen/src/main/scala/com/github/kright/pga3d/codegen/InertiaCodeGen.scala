@@ -14,11 +14,13 @@ class InertiaCodeGen extends CodeGenClass:
   override def generateCode(): String = {
     val code = CodeGen()
 
+    val pad = " ".repeat(name.length - 4 - 3)
+
     code(
       s"""case class ${name}(mass: Double,
-         |                   mryz: Double,
-         |                   mrxz: Double,
-         |                   mrxy: Double):""".stripMargin
+         |                   ${pad}mryz: Double,
+         |                   ${pad}mrxz: Double,
+         |                   ${pad}mrxy: Double):""".stripMargin
     )
 
     code.block {

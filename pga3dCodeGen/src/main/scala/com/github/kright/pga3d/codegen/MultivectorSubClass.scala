@@ -8,6 +8,8 @@ import com.github.kright.symbolic.Sym
 import com.github.kright.symbolic.transform.simplifiers.ReplaceSumOrProduct
 
 import scala.math.Numeric.Implicits.infixNumericOps
+import scala.util.chaining.scalaUtilChainingOps
+import scala.util.{Failure, Success, Try}
 
 case class MultivectorSubClass(name: String,
                                variableFields: Seq[MultivectorField],
@@ -29,8 +31,8 @@ case class MultivectorSubClass(name: String,
       MultiVector.scalar(Sym(instanceName))
     } else {
       MultiVector[Sym](
-        variableFields.map(f => f.basisBlade -> Sym(s"${instanceName}.${f.name}")).toMap ++
-          constantFields.map((f, v) => f.basisBlade -> Sym(v))
+        variableFields.map(f => f.basisBlade -> Sym(s"${instanceName}.${f.name}").pipe(e => if (f.sign == Sign.Positive) e else -e)).toMap ++
+          constantFields.map((f, v) => f.basisBlade -> Sym(v).pipe(e => if (f.sign == Sign.Positive) e else -e))
       )
     }
 
@@ -39,8 +41,8 @@ case class MultivectorSubClass(name: String,
       MultiVector.scalar(Sym("this"))
     } else {
       MultiVector[Sym](
-        variableFields.map(f => f.basisBlade -> Sym(f.name)).toMap ++
-          constantFields.map((f, v) => f.basisBlade -> Sym(v))
+        variableFields.map(f => f.basisBlade -> Sym(f.name).pipe(e => if (f.sign == Sign.Positive) e else -e)).toMap ++
+          constantFields.map((f, v) => f.basisBlade -> Sym(v).pipe(e => if (f.sign == Sign.Positive) e else -e))
       )
     }
 
@@ -68,8 +70,21 @@ case class MultivectorSubClass(name: String,
     code(name + "(")
     code.block {
       for (f <- variableFields) {
-        val expr = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
-        code(s"${f.name} = ${expr},")
+        val expr: Sym = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
+
+        var exprString: String =
+          if (f.sign == Sign.Positive) {
+            expr.toString
+          } else {
+            // todo fix exception
+            Try((-expr).toString).getOrElse(s"-$expr")
+          }
+
+        if (exprString.startsWith("--")) {
+          exprString = exprString.drop(2)
+        }
+
+        code(s"${f.name} = ${exprString},")
       }
     }
     code(")")
@@ -104,8 +119,8 @@ case class MultivectorSubClass(name: String,
       }
 
       if (name.contains("Point") || this == vector) {
-        self.dual.values.foreach { (b, sym) =>
-          val fName = s"dual${ga.representation(b).toUpperCase}"
+        self.values.foreach { (b, sym) =>
+          val fName = s"${ga.representation(b)}"
           code("")
           code(s"inline def $fName: Double = ${sym}")
         }
@@ -157,17 +172,17 @@ case class MultivectorSubClass(name: String,
       code(s"\n\nobject ${typeName}:")
       code.block {
         if (this == point) {
-          val v = MultiVector("x" -> Sym("x"), "y" -> Sym("y"), "z" -> Sym("z"), "w" -> Sym("w"))
-          code(s"def fromDual(x: Double, y: Double, z: Double, w: Double): ${typeName} =")
+          val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
+          code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
           code.block {
-            code(makeConstructor(v.dual))
+            code(makeConstructor(v))
           }
         }
         else {
-          val v = MultiVector("x" -> Sym("x"), "y" -> Sym("y"), "z" -> Sym("z"))
-          code(s"def fromDual(x: Double, y: Double, z: Double): ${typeName} =")
+          val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
+          code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
           code.block {
-            code(makeConstructor(v.dual))
+            code(makeConstructor(v))
           }
         }
       }
@@ -278,6 +293,10 @@ object MultivectorSubClass:
   private val genW = pga3.generators.find(_.squareSign == Sign.Zero).get
 
   private val orderedFields = pga3.blades.map(b => MultivectorField(pga3.representation(b), BasisBladeWithSign(b)))
+  private val orderedDualFields = orderedFields.zip(orderedFields.reverse).map { (n, r) =>
+    val sign: Sign = Sign(MultiVector[Int](n.basisBlade).dual(r.basisBlade))
+    MultivectorField(r.name, BasisBladeWithSign(n.basisBlade, sign))
+  }
 
   private val fields = orderedFields.map(f => f.name -> f).toMap
 
@@ -288,7 +307,7 @@ object MultivectorSubClass:
   val scalar = MultivectorSubClass("Double", orderedFields.take(1), shouldBeGenerated = false)
   val plane = MultivectorSubClass("Pga3dPlane", orderedFields.filter(_.basisBlade.grade == 1).tail :+ orderedFields.filter(_.basisBlade.grade == 1).head)
   val bivector = MultivectorSubClass("Pga3dBivector", orderedFields.filter(_.basisBlade.grade == 2))
-  val point = MultivectorSubClass("Pga3dPoint", orderedFields.filter(_.basisBlade.grade == 3))
+  val point = MultivectorSubClass("Pga3dPoint", orderedDualFields.filter(_.basisBlade.grade == 3).take(3).reverse ++ orderedDualFields.filter(_.basisBlade.grade == 3).drop(3))
   val pseudoScalar = MultivectorSubClass("Pga3dPseudoScalar", orderedFields.takeRight(1))
 
   val quaternion = MultivectorSubClass("Pga3dQuaternion", motor.variableFields.filter(f => !f.basisBlade.contains(genW)))

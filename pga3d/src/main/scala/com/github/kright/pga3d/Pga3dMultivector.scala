@@ -300,10 +300,10 @@ case class Pga3dMultivector(s: Double = 0.0,
 
   def asPointUnsafe: Pga3dPoint =
     Pga3dPoint(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
-      xyz = xyz,
+      x = -wyz,
+      y = wxz,
+      z = -wxy,
+      w = xyz,
     )
 
   def asQuaternionUnsafe: Pga3dQuaternion =
@@ -323,16 +323,16 @@ case class Pga3dMultivector(s: Double = 0.0,
 
   def asVectorUnsafe: Pga3dVector =
     Pga3dVector(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
+      x = -wyz,
+      y = wxz,
+      z = -wxy,
     )
 
   def asPointNormalizedUnsafe: Pga3dPointNormalized =
     Pga3dPointNormalized(
-      wxy = wxy,
-      wxz = wxz,
-      wyz = wyz,
+      x = -wyz,
+      y = wxz,
+      z = -wxy,
     )
 
   def asPlaneIdealUnsafe: Pga3dPlaneIdeal =
