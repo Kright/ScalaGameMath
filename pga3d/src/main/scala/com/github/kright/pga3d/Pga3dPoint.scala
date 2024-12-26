@@ -203,7 +203,7 @@ case class Pga3dPoint(x: Double = 0.0,
       z = z,
     )
 
-  def toPga3dPointNormalized: Pga3dPointNormalized =
+  def toPointNormalized: Pga3dPointNormalized =
     Pga3dPointNormalized(
       x = x / w,
       y = y / w,
