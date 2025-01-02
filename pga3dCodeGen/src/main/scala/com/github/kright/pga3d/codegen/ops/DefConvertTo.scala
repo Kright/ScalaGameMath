@@ -10,14 +10,14 @@ object DefConvertTo:
       GeneratedCode { code =>
         for (target <- MultivectorSubClass.pgaClasses if target != cls) {
           if (target.isMatching(cls.self)) {
-            code(s"\ndef to${removePrefix(target.typeName.capitalize)}: ${target.typeName} =")
+            code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
             code.block {
               code(target.makeConstructor(cls.self))
             }
           } else if (target != MultivectorSubClass.scalar && target != MultivectorSubClass.pseudoScalar) {
             val simplifiedSelf = cls.self.filter((blade, _) => target.variableFields.exists(_.basisBlade == blade))
             if (simplifiedSelf.values.nonEmpty) {
-              code(s"\ndef as${removePrefix(target.typeName.capitalize)}Unsafe: ${target.typeName} =")
+              code(s"\ndef as${target.typeNameWithoutPrefix}Unsafe: ${target.typeName} =")
               code.block {
                 code(target.makeConstructor(cls.self))
               }
@@ -30,13 +30,10 @@ object DefConvertTo:
           val xyzBlade = pga3.representation.basisBladeWithSign("xyz").basisBlade
           val xyz = cls.self("xyz")
           val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => Sym(s"${s} / ${xyz}"))
-          code(s"\ndef to${removePrefix(target.typeName.capitalize)}: ${target.typeName} =")
+          code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
           code.block {
             code(target.makeConstructor(r))
           }
         }
       }
     }
-
-  private def removePrefix(name: String): String =
-    if (name.startsWith("Pga3d")) name.drop(5) else name

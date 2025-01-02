@@ -40,6 +40,8 @@ case class Pga3dInertia(mass: Double,
 
 object Pga3dInertia:
 
+  inline val componentsCount = 4
+
   def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertia =
     val rx2 = rx * rx
     val ry2 = ry * ry

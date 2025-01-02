@@ -8,8 +8,8 @@ import com.github.kright.symbolic.Sym
 import com.github.kright.symbolic.transform.simplifiers.ReplaceSumOrProduct
 
 import scala.math.Numeric.Implicits.infixNumericOps
+import scala.util.Try
 import scala.util.chaining.scalaUtilChainingOps
-import scala.util.{Failure, Success, Try}
 
 case class MultivectorSubClass(name: String,
                                variableFields: Seq[MultivectorField],
@@ -94,6 +94,11 @@ case class MultivectorSubClass(name: String,
   override def generateCode(): String =
     generateCode(unaryOperations, binaryOperations)
 
+  private def addVariablesComponentsCountAsConst(code: CodeGen): Unit = {
+    code("")
+    code(s"inline val componentsCount = ${variableFields.size}")
+  }
+
   private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
                            binaryOps: Seq[MultivectorBinaryOp]): String = {
     val code = CodeGen()
@@ -114,6 +119,10 @@ case class MultivectorSubClass(name: String,
     }
 
     code.block {
+      if (isObject) {
+        addVariablesComponentsCountAsConst(code)
+      }
+
       for ((f, v) <- constantFields) {
         code(s"inline val ${f.name} = ${v}")
       }
@@ -167,90 +176,105 @@ case class MultivectorSubClass(name: String,
       }
     }
 
-    val points = Set(point, pointNormalized, vector)
-    if (points.contains(this)) {
+    if (!isObject) {
       code(s"\n\nobject ${typeName}:")
       code.block {
-        if (this == point) {
-          val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
-          code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
-          code.block {
-            code(makeConstructor(v))
-          }
-        }
-        else {
-          val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
-          code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
-          code.block {
-            code(makeConstructor(v))
-          }
-        }
-      }
-    }
+        addVariablesComponentsCountAsConst(code)
 
-    if (this == translator) {
-      code(s"\n\nobject ${typeName}:")
-      code.block {
-        code(s"def addVector(v: ${vector.typeName}): ${typeName} =")
-        code.block {
-          val v = vector.makeSymbolic("v")
-          val mult = MultiVector("w" -> Sym(-0.5))
-          code(makeConstructor(mult.geometric(v.dual)))
+        generateMethodsIfAnyPoint(code)
+
+        if (this == translator) {
+          generateObjectMethodsForTranslator(code)
         }
-      }
-    }
 
-    if (this == quaternion) {
-      code(s"\n\nobject ${typeName}:")
-      code.block {
-        code(s"val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0)")
-        code(
-          s"""
-             |def rotation(from: ${planeIdeal.name}, to: ${planeIdeal.name}): ${quaternion.name} = {
-             |  val norm = Math.sqrt(from.normSquare * to.normSquare)
-             |  val q2a = to.geometric(from) / norm
-             |  val dot = q2a.s
-             |
-             |  if (dot > -1.0 + 1e-6) {
-             |    val newCos = Math.sqrt((1.0 + dot) / 2)
-             |    val newSinDivSin2 = 0.5 / newCos
-             |    return ${quaternion.name}(newCos, q2a.xy * newSinDivSin2, q2a.xz * newSinDivSin2, q2a.yz * newSinDivSin2)
-             |  }
-             |
-             |  val sin2a = Math.sqrt(q2a.xy * q2a.xy + q2a.xz * q2a.xz + q2a.yz * q2a.yz)
-             |
-             |  if (sin2a > 1e-8) {
-             |    val angle2 = Math.atan2(sin2a, q2a.s)
-             |    val propAngle = angle2 * 0.5
-             |    val mult = Math.sin(propAngle) / sin2a
-             |    return ${quaternion.name}(Math.cos(propAngle), q2a.xy * mult, q2a.xz * mult, q2a.yz * mult).normalizedByNorm
-             |  }
-             |
-             |  // choose any axis
-             |  val orthogonalPlane =
-             |    if (Math.abs(from.x) > Math.abs(from.z)) ${planeIdeal.name}(-from.y, from.x, 0)
-             |    else ${planeIdeal.name}(0, -from.z, from.y)
-             |
-             |  ${quaternion.name}(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
-             |}
-             |
-             |def rotation(from: ${vector.name}, to: ${vector.name}): ${quaternion.name} =
-             |  rotation(from.dual, to.dual)
-             |""".stripMargin)
-      }
-    }
+        if (this == quaternion) {
+          generateObjectMethodsForQuaternion(code)
+        }
 
-    if (this == motor) {
-      code(s"\n\nobject ${typeName}:")
-      code.block {
-        code(
-          s"""val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-             |
-             |def addVector(v: ${vector.typeName}): ${typeName} = ${translator.name}.addVector(v).toMotor""".stripMargin)
+        if (this == motor) {
+          generateObjectMethodsForMotor(code)
+        }
       }
     }
 
     code.toString
+  }
+
+  private def generateObjectMethodsForTranslator(code: CodeGen): Unit = {
+    code("")
+    code(s"def addVector(v: ${vector.typeName}): ${typeName} =")
+    code.block {
+      val v = vector.makeSymbolic("v")
+      val mult = MultiVector("w" -> Sym(-0.5))
+      code(makeConstructor(mult.geometric(v.dual)))
+    }
+  }
+
+  private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
+    val points = Set(point, pointNormalized, vector)
+    if (points.contains(this)) {
+      code("")
+      if (this == point) {
+        val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
+        code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
+        code.block {
+          code(makeConstructor(v))
+        }
+      }
+      else {
+        val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
+        code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
+        code.block {
+          code(makeConstructor(v))
+        }
+      }
+    }
+  }
+
+  private def generateObjectMethodsForMotor(code: CodeGen): Unit = {
+    code(
+      s"""
+         |val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+         |
+         |def addVector(v: ${vector.typeName}): ${typeName} = ${translator.name}.addVector(v).toMotor""".stripMargin)
+  }
+
+  private def generateObjectMethodsForQuaternion(code: CodeGen): Unit = {
+    code(
+      s"""
+         |val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0)
+         |
+         |def rotation(from: ${planeIdeal.name}, to: ${planeIdeal.name}): ${quaternion.name} = {
+         |  val norm = Math.sqrt(from.normSquare * to.normSquare)
+         |  val q2a = to.geometric(from) / norm
+         |  val dot = q2a.s
+         |
+         |  if (dot > -1.0 + 1e-6) {
+         |    val newCos = Math.sqrt((1.0 + dot) / 2)
+         |    val newSinDivSin2 = 0.5 / newCos
+         |    return ${quaternion.name}(newCos, q2a.xy * newSinDivSin2, q2a.xz * newSinDivSin2, q2a.yz * newSinDivSin2)
+         |  }
+         |
+         |  val sin2a = Math.sqrt(q2a.xy * q2a.xy + q2a.xz * q2a.xz + q2a.yz * q2a.yz)
+         |
+         |  if (sin2a > 1e-8) {
+         |    val angle2 = Math.atan2(sin2a, q2a.s)
+         |    val propAngle = angle2 * 0.5
+         |    val mult = Math.sin(propAngle) / sin2a
+         |    return ${quaternion.name}(Math.cos(propAngle), q2a.xy * mult, q2a.xz * mult, q2a.yz * mult).normalizedByNorm
+         |  }
+         |
+         |  // choose any axis
+         |  val orthogonalPlane =
+         |    if (Math.abs(from.x) > Math.abs(from.z)) ${planeIdeal.name}(-from.y, from.x, 0)
+         |    else ${planeIdeal.name}(0, -from.z, from.y)
+         |
+         |  ${quaternion.name}(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm
+         |}
+         |
+         |def rotation(from: ${vector.name}, to: ${vector.name}): ${quaternion.name} =
+         |  rotation(from.dual, to.dual)
+         |""".stripMargin)
   }
 
   def makeConstructorOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {

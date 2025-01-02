@@ -2,6 +2,8 @@ package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case object Pga3dPointCenter:
+
+  inline val componentsCount = 0
   inline val x = 0.0
   inline val y = 0.0
   inline val z = 0.0

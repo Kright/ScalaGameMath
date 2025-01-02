@@ -11,6 +11,8 @@ class InertiaCodeGen extends CodeGenClass:
 
   override def isObject: Boolean = false
 
+  val fields: Seq[String] = Seq("mass", "mryz", "mrxz", "mrxy")
+
   override def generateCode(): String = {
     val code = CodeGen()
 
@@ -35,6 +37,8 @@ class InertiaCodeGen extends CodeGenClass:
          |object ${name}:
          |""".stripMargin)
     code.block {
+      code("")
+      code(s"inline val componentsCount = ${fields.length}")
       code("")
       code(generateCubeCode())
     }

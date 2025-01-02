@@ -914,6 +914,9 @@ case class Pga3dVector(x: Double = 0.0,
 
 
 object Pga3dVector:
+
+  inline val componentsCount = 3
+
   def blade3(wxy: Double, wxz: Double, wyz: Double): Pga3dVector =
     Pga3dVector(
       x = -wyz,

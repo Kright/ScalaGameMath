@@ -1197,6 +1197,9 @@ case class Pga3dTranslator(wx: Double = 0.0,
 
 
 object Pga3dTranslator:
+
+  inline val componentsCount = 3
+
   def addVector(v: Pga3dVector): Pga3dTranslator =
     Pga3dTranslator(
       wx = -0.5 * v.x,

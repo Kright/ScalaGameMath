@@ -739,3 +739,8 @@ case class Pga3dMultivector(s: Double = 0.0,
       xyz = 0.0,
       i = (v.wxz * y + v.x * wyz + v.xyz * w + v.z * wxy - v.w * xyz - v.wxy * z - v.wyz * x - v.y * wxz),
     )
+
+
+object Pga3dMultivector:
+
+  inline val componentsCount = 16

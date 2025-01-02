@@ -1209,3 +1209,8 @@ case class Pga3dPlaneIdeal(x: Double = 0.0,
       y = v.i * y,
       z = v.i * z,
     )
+
+
+object Pga3dPlaneIdeal:
+
+  inline val componentsCount = 3

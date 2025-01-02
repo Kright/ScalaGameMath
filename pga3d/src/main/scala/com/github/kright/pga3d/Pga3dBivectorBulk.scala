@@ -1187,3 +1187,8 @@ case class Pga3dBivectorBulk(xy: Double = 0.0,
       wy = (v.wz * yz - v.wx * xy),
       wz = (-v.wx * xz - v.wy * yz),
     )
+
+
+object Pga3dBivectorBulk:
+
+  inline val componentsCount = 3

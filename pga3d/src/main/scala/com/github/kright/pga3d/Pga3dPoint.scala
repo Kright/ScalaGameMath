@@ -1367,6 +1367,9 @@ case class Pga3dPoint(x: Double = 0.0,
 
 
 object Pga3dPoint:
+
+  inline val componentsCount = 4
+
   def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): Pga3dPoint =
     Pga3dPoint(
       x = -wyz,

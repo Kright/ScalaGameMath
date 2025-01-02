@@ -1390,3 +1390,8 @@ case class Pga3dPlane(x: Double = 0.0,
     Pga3dPseudoScalar(
       i = w,
     )
+
+
+object Pga3dPlane:
+
+  inline val componentsCount = 4

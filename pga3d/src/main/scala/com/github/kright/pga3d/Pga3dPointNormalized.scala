@@ -1291,6 +1291,9 @@ case class Pga3dPointNormalized(x: Double = 0.0,
 
 
 object Pga3dPointNormalized:
+
+  inline val componentsCount = 3
+
   def blade3(wxy: Double, wxz: Double, wyz: Double): Pga3dPointNormalized =
     Pga3dPointNormalized(
       x = -wyz,

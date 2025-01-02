@@ -821,3 +821,8 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
       y = -wy,
       z = -wz,
     )
+
+
+object Pga3dBivectorWeight:
+
+  inline val componentsCount = 3

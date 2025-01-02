@@ -1598,3 +1598,8 @@ case class Pga3dBivector(wx: Double = 0.0,
       y = -wy,
       z = -wz,
     )
+
+
+object Pga3dBivector:
+
+  inline val componentsCount = 6

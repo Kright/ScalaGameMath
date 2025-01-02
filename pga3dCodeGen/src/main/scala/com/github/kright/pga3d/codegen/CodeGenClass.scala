@@ -13,6 +13,10 @@ trait CodeGenClass:
     if (isObject) s"${name}.type"
     else name
 
+  def typeNameWithoutPrefix: String =
+    if (typeName.startsWith("Pga3d")) typeName.drop(5).capitalize
+    else typeName.capitalize
+
   def generateCode(): String
 
   def writeToFile(packageDir: File): Unit =

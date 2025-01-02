@@ -1509,6 +1509,9 @@ case class Pga3dQuaternion(s: Double = 0.0,
 
 
 object Pga3dQuaternion:
+
+  inline val componentsCount = 4
+
   val id: Pga3dQuaternion = Pga3dQuaternion(1.0, 0.0, 0.0, 0.0)
 
   def rotation(from: Pga3dPlaneIdeal, to: Pga3dPlaneIdeal): Pga3dQuaternion = {
