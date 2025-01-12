@@ -11,8 +11,8 @@ Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.5.0",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.5.0",
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.5.1",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.5.1",
 )
 ```
 
@@ -36,16 +36,15 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
   * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
   * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
   * BodySystem for handling system of bodies with joints between them
-* **swizzle**: swizzle operators for vectors
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
   See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
-* **pga3d**: experimental library for 3d PGA with generated code and some common cases (Pga3dPlane, Pga3dPoint,
-  Pga3dBivector, etc).
-  There is a huge amount of similars methods (for each pair of classes for each type of multiplication). Because of
+* **pga3d**: efficient library for 3d PGA with generated code and some common cases (Pga3dPlane, Pga3dPoint,
+  Pga3dQuaternion, Pga3dBivector, etc).
+  There is a huge amount of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
-  is a scalar.
+  is a scalar or geometric product of two planes is a motor.
 * **pga3dCodeGen**: hand-made code generator for library above. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for result.
 
@@ -69,21 +68,6 @@ q *= q2              // q := q * q2, inplace, no objects created
 q *> q2              // q2 := q * q2, inplace, no objects created
 ```
 
-Library had module with [swizzle operators](https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)):
-```scala
-import com.github.kright.math.{Vector3d, Vector4d}
-
-val v = Vector4d(1, 2, 3, 4)
-v.yx = v.xy
-// v == (2, 1, 3, 4)
-v.xy = v.yx
-// v == (1, 2, 3, 4)
-v = Vector3d(1, 2, 3).xyzz
-// v == (1, 2, 3, 3)
-```
-
-Library doesn't have any external dependencies.
-
 ### Physics
 
 This part is still under development.
@@ -97,7 +81,7 @@ Maybe for some specific case with a lot of objects you will need your own implem
 ### PGA
 
 I'm inspired by https://bivector.net/PGADYN.html
-I want to rewrite physics equations in PGA. Work in progress.
+I rewrote physics equations in PGA, looks like PGA is a better way for describing physics.
 
 ### Tests
 

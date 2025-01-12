@@ -18,11 +18,12 @@ object MathUtils:
     require(power >= 1)
     if (power == 1) return x
 
+    val xx = mult(x, x)
     if (power % 2 == 0) {
-      pow(mult(x, x), power / 2, mult)
+      pow(xx, power / 2, mult)
     }
     else {
-      mult(x, pow(mult(x, x), power / 2, mult))
+      mult(x, pow(xx, power / 2, mult))
     }
 
   extension (d: Double)

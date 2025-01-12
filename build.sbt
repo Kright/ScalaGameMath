@@ -1,4 +1,4 @@
-ThisBuild / version := "0.5.1-SNAPSHOT"
+ThisBuild / version := "0.5.1"
 
 ThisBuild / scalaVersion := "3.6.2"
 
@@ -24,7 +24,6 @@ lazy val root = (project in file("."))
     math,
     physics3d,
     solvers,
-    swizzle,
     symbolic,
     util,
     vector,
@@ -53,9 +52,6 @@ lazy val ga = (project in file("ga")).
     vector % "compile->compile;test->test",
     solvers % "test",
   )
-
-lazy val swizzle = (project in file("swizzle"))
-  .settings(scalatestSettings *).dependsOn(vector)
 
 lazy val solvers = (project in file("solvers"))
 
