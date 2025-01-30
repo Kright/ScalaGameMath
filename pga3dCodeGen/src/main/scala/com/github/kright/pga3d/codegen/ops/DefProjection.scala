@@ -7,7 +7,7 @@ import com.github.kright.symbolic.Sym
 object DefProjection:
   def apply()(using pga3: PGA3): MultivectorUnaryOp =
     val pointClasses = Set(
-      MultivectorSubClass.point,
+      MultivectorSubClass.trivector,
       MultivectorSubClass.pointNormalized,
       MultivectorSubClass.pointCenter
     )

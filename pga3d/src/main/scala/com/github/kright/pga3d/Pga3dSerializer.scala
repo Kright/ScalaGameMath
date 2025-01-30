@@ -95,15 +95,15 @@ case object Pga3dSerializer:
     arr(offset + 4) = v.xz
     arr(offset + 5) = v.yz
 
-  def loadPoint(arr: Array[Double], offset: Int): Pga3dPoint =
-    Pga3dPoint(
+  def loadTrivector(arr: Array[Double], offset: Int): Pga3dTrivector =
+    Pga3dTrivector(
       x = arr(offset + 0),
       y = arr(offset + 1),
       z = arr(offset + 2),
       w = arr(offset + 3),
     )
 
-  def store(v: Pga3dPoint, arr: Array[Double], offset: Int): Unit =
+  def store(v: Pga3dTrivector, arr: Array[Double], offset: Int): Unit =
     arr(offset + 0) = v.x
     arr(offset + 1) = v.y
     arr(offset + 2) = v.z

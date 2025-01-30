@@ -26,5 +26,5 @@ object PGA3State:
     def getL(bodyInertia: Pga3dInertia): Pga3dBivector =
       state.motor.sandwich(bodyInertia(state.localB))
 
-    def center: Pga3dPoint =
+    def center: Pga3dTrivector =
       state.motor.sandwich(Pga3dPointCenter)

@@ -298,8 +298,8 @@ case class Pga3dMultivector(s: Double = 0.0,
       yz = yz,
     )
 
-  def toPointUnsafe: Pga3dPoint =
-    Pga3dPoint(
+  def toTrivectorUnsafe: Pga3dTrivector =
+    Pga3dTrivector(
       x = -wyz,
       y = wxz,
       z = -wxy,

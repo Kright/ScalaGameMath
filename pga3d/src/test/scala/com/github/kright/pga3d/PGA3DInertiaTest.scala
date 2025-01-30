@@ -136,7 +136,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         localForque1
       })
 
-      val expectedPos = springCenter - (springCenter.weight * Math.cos(t * Math.sqrt(springK / mass))).toPoint
+      val expectedPos = springCenter - (springCenter.weight * Math.cos(t * Math.sqrt(springK / mass))).toTrivector
 
       val dE = math.abs(initialEnergy - getEnergy()) / initialEnergy
       val dPos = (expectedPos - body.state.center).norm

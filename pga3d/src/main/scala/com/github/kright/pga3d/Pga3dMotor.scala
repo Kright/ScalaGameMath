@@ -301,7 +301,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = (v.wx * yz + v.wz * xy + v.xy * wz + v.yz * wx - v.wy * xz - v.xz * wy),
     )
 
-  infix def geometric(v: Pga3dPoint): Pga3dMultivector =
+  infix def geometric(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = (v.x * yz + v.z * xy - i * v.w - v.y * xz),
@@ -505,7 +505,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = 0.0,
     )
 
-  infix def dot(v: Pga3dPoint): Pga3dMultivector =
+  infix def dot(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = (v.x * yz + v.z * xy - i * v.w - v.y * xz),
@@ -710,15 +710,15 @@ case class Pga3dMotor(s: Double = 0.0,
 
   inline infix def ^(v: Pga3dBivector): Pga3dMotor = wedge(v)
 
-  infix def wedge(v: Pga3dPoint): Pga3dPoint =
-    Pga3dPoint(
+  infix def wedge(v: Pga3dTrivector): Pga3dTrivector =
+    Pga3dTrivector(
       x = s * v.x,
       y = s * v.y,
       z = s * v.z,
       w = s * v.w,
     )
 
-  inline infix def ^(v: Pga3dPoint): Pga3dPoint = wedge(v)
+  inline infix def ^(v: Pga3dTrivector): Pga3dTrivector = wedge(v)
 
   infix def wedge(v: Pga3dQuaternion): Pga3dMotor =
     Pga3dMotor(
@@ -757,15 +757,15 @@ case class Pga3dMotor(s: Double = 0.0,
 
   inline infix def ^(v: Pga3dVector): Pga3dVector = wedge(v)
 
-  infix def wedge(v: Pga3dPointNormalized): Pga3dPoint =
-    Pga3dPoint(
+  infix def wedge(v: Pga3dPointNormalized): Pga3dTrivector =
+    Pga3dTrivector(
       x = s * v.x,
       y = s * v.y,
       z = s * v.z,
       w = s,
     )
 
-  inline infix def ^(v: Pga3dPointNormalized): Pga3dPoint = wedge(v)
+  inline infix def ^(v: Pga3dPointNormalized): Pga3dTrivector = wedge(v)
 
   infix def wedge(v: Pga3dPlaneIdeal): Pga3dMultivector =
     Pga3dMultivector(
@@ -824,15 +824,15 @@ case class Pga3dMotor(s: Double = 0.0,
 
   inline infix def ^(v: Pga3dPseudoScalar): Pga3dPseudoScalar = wedge(v)
 
-  infix def wedge(v: Pga3dPointCenter.type): Pga3dPoint =
-    Pga3dPoint(
+  infix def wedge(v: Pga3dPointCenter.type): Pga3dTrivector =
+    Pga3dTrivector(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = s,
     )
 
-  inline infix def ^(v: Pga3dPointCenter.type): Pga3dPoint = wedge(v)
+  inline infix def ^(v: Pga3dPointCenter.type): Pga3dTrivector = wedge(v)
 
   infix def antiGeometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
@@ -878,7 +878,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
-  infix def antiGeometric(v: Pga3dPoint): Pga3dMultivector =
+  infix def antiGeometric(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = (v.x * wx + v.y * wy + v.z * wz),
@@ -1074,7 +1074,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = (-v.wx * wx - v.wy * wy - v.wz * wz),
     )
 
-  infix def antiDot(v: Pga3dPoint): Pga3dMultivector =
+  infix def antiDot(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = 0.0,
@@ -1205,8 +1205,8 @@ case class Pga3dMotor(s: Double = 0.0,
       i = i * v.i,
     )
 
-  infix def antiDot(v: Pga3dPointCenter.type): Pga3dPoint =
-    Pga3dPoint(
+  infix def antiDot(v: Pga3dPointCenter.type): Pga3dTrivector =
+    Pga3dTrivector(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -1251,7 +1251,7 @@ case class Pga3dMotor(s: Double = 0.0,
 
   inline infix def v(v: Pga3dBivector): Pga3dMotor = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPoint): Pga3dMultivector =
+  infix def antiWedge(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = (v.x * wx + v.y * wy + v.z * wz),
@@ -1271,7 +1271,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = 0.0,
     )
 
-  inline infix def v(v: Pga3dPoint): Pga3dMultivector = antiWedge(v)
+  inline infix def v(v: Pga3dTrivector): Pga3dMultivector = antiWedge(v)
 
   infix def antiWedge(v: Pga3dQuaternion): Pga3dQuaternion =
     Pga3dQuaternion(
@@ -1502,7 +1502,7 @@ case class Pga3dMotor(s: Double = 0.0,
       yz = (2.0 * (v.xy * (sMxz + xyMyz) + v.xz * (xzMyz - sMxy)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def sandwich(v: Pga3dPoint): Pga3dPoint =
+  infix def sandwich(v: Pga3dTrivector): Pga3dTrivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1513,7 +1513,7 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Pga3dPoint(
+    Pga3dTrivector(
       x = -(2.0 * (v.w * (i * yz + s * wx + wy * xy + wz * xz) + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
       y = (2.0 * (v.w * (i * xz + wx * xy - s * wy - wz * yz) + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = -(2.0 * (v.w * (i * xy + s * wz - wx * xz - wy * yz) + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
@@ -1597,7 +1597,7 @@ case class Pga3dMotor(s: Double = 0.0,
       z = -(2.0 * (v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
     )
 
-  infix def sandwich(v: Pga3dPointNormalized): Pga3dPoint =
+  infix def sandwich(v: Pga3dPointNormalized): Pga3dTrivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1608,7 +1608,7 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Pga3dPoint(
+    Pga3dTrivector(
       x = -(2.0 * (i * yz + s * wx + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz) + wy * xy + wz * xz) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
       y = (2.0 * (i * xz + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz) + wx * xy - s * wy - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = -(2.0 * (i * xy + s * wz + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz) - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
@@ -1691,8 +1691,8 @@ case class Pga3dMotor(s: Double = 0.0,
       i = v.i * (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def sandwich(v: Pga3dPointCenter.type): Pga3dPoint =
-    Pga3dPoint(
+  infix def sandwich(v: Pga3dPointCenter.type): Pga3dTrivector =
+    Pga3dTrivector(
       x = (-2.0 * i * yz - 2.0 * s * wx - 2.0 * wy * xy - 2.0 * wz * xz),
       y = 2.0 * (i * xz + wx * xy - s * wy - wz * yz),
       z = (-2.0 * i * xy - 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
@@ -1791,7 +1791,7 @@ case class Pga3dMotor(s: Double = 0.0,
       yz = (2.0 * (v.xy * (xyMyz - sMxz) + v.xz * (sMxy + xzMyz)) + v.yz * (sMs + yzMyz - xyMxy - xzMxz)),
     )
 
-  infix def reverseSandwich(v: Pga3dPoint): Pga3dPoint =
+  infix def reverseSandwich(v: Pga3dTrivector): Pga3dTrivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1802,7 +1802,7 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Pga3dPoint(
+    Pga3dTrivector(
       x = -(2.0 * (v.w * (wy * xy + wz * xz - i * yz - s * wx) + v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
       y = (2.0 * (v.w * (s * wy + wx * xy - i * xz - wz * yz) + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = (sMs * v.z + v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * sMxz * v.x + 2.0 * sMyz * v.y + 2.0 * v.x * xyMyz + 2.0 * i * v.w * xy + 2.0 * s * v.w * wz + 2.0 * v.w * wx * xz + 2.0 * v.w * wy * yz),
@@ -1886,7 +1886,7 @@ case class Pga3dMotor(s: Double = 0.0,
       z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
     )
 
-  infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dPoint =
+  infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dTrivector =
     val sMs = s * s
     val sMxy = s * xy
     val sMxz = s * xz
@@ -1897,7 +1897,7 @@ case class Pga3dMotor(s: Double = 0.0,
     val xzMxz = xz * xz
     val xzMyz = xz * yz
     val yzMyz = yz * yz
-    Pga3dPoint(
+    Pga3dTrivector(
       x = -(2.0 * (v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz) + wy * xy + wz * xz - i * yz - s * wx) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
       y = (2.0 * (s * wy + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz) + wx * xy - i * xz - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
       z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz) - i * xy - s * wz - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
@@ -1980,8 +1980,8 @@ case class Pga3dMotor(s: Double = 0.0,
       i = v.i * (s * s + xy * xy + xz * xz + yz * yz),
     )
 
-  infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPoint =
-    Pga3dPoint(
+  infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dTrivector =
+    Pga3dTrivector(
       x = (-2.0 * wy * xy - 2.0 * wz * xz + 2.0 * i * yz + 2.0 * s * wx),
       y = 2.0 * (s * wy + wx * xy - i * xz - wz * yz),
       z = (2.0 * i * xy + 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
@@ -2028,7 +2028,7 @@ case class Pga3dMotor(s: Double = 0.0,
       yz = (v.xy * xz - v.xz * xy),
     )
 
-  infix def cross(v: Pga3dPoint): Pga3dMultivector =
+  infix def cross(v: Pga3dTrivector): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = -i * v.w,

@@ -211,10 +211,10 @@ case class MultivectorSubClass(name: String,
   }
 
   private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
-    val points = Set(point, pointNormalized, vector)
+    val points = Set(trivector, pointNormalized, vector)
     if (points.contains(this)) {
       code("")
-      if (this == point) {
+      if (this == trivector) {
         val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
         code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
         code.block {
@@ -331,24 +331,24 @@ object MultivectorSubClass:
   val scalar = MultivectorSubClass("Double", orderedFields.take(1), shouldBeGenerated = false)
   val plane = MultivectorSubClass("Pga3dPlane", orderedFields.filter(_.basisBlade.grade == 1).tail :+ orderedFields.filter(_.basisBlade.grade == 1).head)
   val bivector = MultivectorSubClass("Pga3dBivector", orderedFields.filter(_.basisBlade.grade == 2))
-  val point = MultivectorSubClass("Pga3dPoint", orderedDualFields.filter(_.basisBlade.grade == 3).take(3).reverse ++ orderedDualFields.filter(_.basisBlade.grade == 3).drop(3))
+  val trivector = MultivectorSubClass("Pga3dTrivector", orderedDualFields.filter(_.basisBlade.grade == 3).take(3).reverse ++ orderedDualFields.filter(_.basisBlade.grade == 3).drop(3))
   val pseudoScalar = MultivectorSubClass("Pga3dPseudoScalar", orderedFields.takeRight(1))
 
   val quaternion = MultivectorSubClass("Pga3dQuaternion", motor.variableFields.filter(f => !f.basisBlade.contains(genW)))
   //  val quaternionDual = MultivectorSubClass("QuaternionDual", motor.variableFields.filter(f => f.basisBlade.contains(genW)))
   val translator = MultivectorSubClass("Pga3dTranslator", motor.variableFields.filter(f => f.basisBlade.grade == 2 && f.basisBlade.contains(genW)), Seq(scalar.variableFields.head -> 1.0))
 
-  val vector = MultivectorSubClass("Pga3dVector", point.variableFields.filter(f => f.basisBlade.contains(genW)))
+  val vector = MultivectorSubClass("Pga3dVector", trivector.variableFields.filter(f => f.basisBlade.contains(genW)))
   val planeIdeal = MultivectorSubClass("Pga3dPlaneIdeal", plane.variableFields.filter(f => !f.basisBlade.contains(genW)))
   val pointNormalized = {
-    val (weight, bulk) = point.variableFields.partition(_.basisBlade.contains(genW))
+    val (weight, bulk) = trivector.variableFields.partition(_.basisBlade.contains(genW))
     MultivectorSubClass("Pga3dPointNormalized", weight, bulk.map(f => (f, 1.0)))
   }
 
   val bivectorWeight = MultivectorSubClass("Pga3dBivectorWeight", bivector.variableFields.filter(f => f.basisBlade.contains(genW)))
   val bivectorBulk = MultivectorSubClass("Pga3dBivectorBulk", bivector.variableFields.filter(f => !f.basisBlade.contains(genW)))
 
-  val pointCenter = MultivectorSubClass("Pga3dPointCenter", Seq(), point.variableFields.map(f => (f, (if (f.basisBlade.contains(genW)) 0.0 else 1.0))))
+  val pointCenter = MultivectorSubClass("Pga3dPointCenter", Seq(), trivector.variableFields.map(f => (f, (if (f.basisBlade.contains(genW)) 0.0 else 1.0))))
   val zeroCls = MultivectorSubClass("Pga3dZero", Seq(), shouldBeGenerated = false)
 
   val pgaClasses = Seq(
@@ -357,7 +357,7 @@ object MultivectorSubClass:
 
     plane, // blade 1
     bivector, // blade 2
-    point, // blade 3
+    trivector, // blade 3
 
     quaternion,
     //    quaternionDual,

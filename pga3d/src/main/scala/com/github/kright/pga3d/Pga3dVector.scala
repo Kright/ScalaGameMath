@@ -62,24 +62,24 @@ case class Pga3dVector(x: Double = 0.0,
   inline def /(v: Double): Pga3dVector =
     this * (1.0 / v)
 
-  def +(v: Pga3dPoint): Pga3dPoint =
-    Pga3dPoint(
+  def +(v: Pga3dTrivector): Pga3dTrivector =
+    Pga3dTrivector(
       x = (v.x + x),
       y = (v.y + y),
       z = (v.z + z),
       w = v.w,
     )
 
-  def -(v: Pga3dPoint): Pga3dPoint =
-    Pga3dPoint(
+  def -(v: Pga3dTrivector): Pga3dTrivector =
+    Pga3dTrivector(
       x = (x - v.x),
       y = (y - v.y),
       z = (z - v.z),
       w = -v.w,
     )
 
-  def madd(v: Pga3dPoint, mult: Double): Pga3dPoint =
-    Pga3dPoint(
+  def madd(v: Pga3dTrivector, mult: Double): Pga3dTrivector =
+    Pga3dTrivector(
       x = (x + mult * v.x),
       y = (y + mult * v.y),
       z = (z + mult * v.z),
@@ -93,16 +93,16 @@ case class Pga3dVector(x: Double = 0.0,
       z = (v.z + z),
     )
 
-  def -(v: Pga3dPointNormalized): Pga3dPoint =
-    Pga3dPoint(
+  def -(v: Pga3dPointNormalized): Pga3dTrivector =
+    Pga3dTrivector(
       x = (x - v.x),
       y = (y - v.y),
       z = (z - v.z),
       w = -1.0,
     )
 
-  def madd(v: Pga3dPointNormalized, mult: Double): Pga3dPoint =
-    Pga3dPoint(
+  def madd(v: Pga3dPointNormalized, mult: Double): Pga3dTrivector =
+    Pga3dTrivector(
       x = (x + mult * v.x),
       y = (y + mult * v.y),
       z = (z + mult * v.z),
@@ -157,8 +157,8 @@ case class Pga3dVector(x: Double = 0.0,
       i = 0.0,
     )
 
-  def toPoint: Pga3dPoint =
-    Pga3dPoint(
+  def toTrivector: Pga3dTrivector =
+    Pga3dTrivector(
       x = x,
       y = y,
       z = z,
@@ -224,7 +224,7 @@ case class Pga3dVector(x: Double = 0.0,
       i = 0.0,
     )
 
-  infix def geometric(v: Pga3dPoint): Pga3dBivectorWeight =
+  infix def geometric(v: Pga3dTrivector): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = v.w * x,
       wy = v.w * y,
@@ -462,7 +462,7 @@ case class Pga3dVector(x: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: Pga3dPoint): Pga3dMotor =
+  infix def antiGeometric(v: Pga3dTrivector): Pga3dMotor =
     Pga3dMotor(
       s = 0.0,
       wx = (v.z * y - v.y * z),
@@ -630,15 +630,15 @@ case class Pga3dVector(x: Double = 0.0,
       yz = (v.y * z - v.z * y),
     )
 
-  infix def antiDot(v: Pga3dBivector): Pga3dPoint =
-    Pga3dPoint(
+  infix def antiDot(v: Pga3dBivector): Pga3dTrivector =
+    Pga3dTrivector(
       x = (v.wy * z - v.wz * y),
       y = (v.wz * x - v.wx * z),
       z = (v.wx * y - v.wy * x),
       w = (v.xz * y - v.xy * z - v.yz * x),
     )
 
-  infix def antiDot(v: Pga3dPoint): Pga3dPseudoScalar =
+  infix def antiDot(v: Pga3dTrivector): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = (v.x * x + v.y * y + v.z * z),
     )
@@ -700,8 +700,8 @@ case class Pga3dVector(x: Double = 0.0,
       yz = (v.y * z - v.z * y),
     )
 
-  infix def antiDot(v: Pga3dBivectorBulk): Pga3dPoint =
-    Pga3dPoint(
+  infix def antiDot(v: Pga3dBivectorBulk): Pga3dTrivector =
+    Pga3dTrivector(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -759,7 +759,7 @@ case class Pga3dVector(x: Double = 0.0,
 
   inline infix def v(v: Pga3dBivector): Pga3dPlane = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPoint): Pga3dBivector =
+  infix def antiWedge(v: Pga3dTrivector): Pga3dBivector =
     Pga3dBivector(
       wx = (v.z * y - v.y * z),
       wy = (v.x * z - v.z * x),
@@ -769,7 +769,7 @@ case class Pga3dVector(x: Double = 0.0,
       yz = -v.w * x,
     )
 
-  inline infix def v(v: Pga3dPoint): Pga3dBivector = antiWedge(v)
+  inline infix def v(v: Pga3dTrivector): Pga3dBivector = antiWedge(v)
 
   infix def antiWedge(v: Pga3dQuaternion): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -872,7 +872,7 @@ case class Pga3dVector(x: Double = 0.0,
       z = (v.xz * x + v.yz * y),
     )
 
-  infix def cross(v: Pga3dPoint): Pga3dBivectorWeight =
+  infix def cross(v: Pga3dTrivector): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = v.w * x,
       wy = v.w * y,

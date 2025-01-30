@@ -25,7 +25,7 @@ object DefConvertTo:
           }
         }
 
-        if (cls == MultivectorSubClass.point) {
+        if (cls == MultivectorSubClass.trivector) {
           val target = MultivectorSubClass.pointNormalized
           val xyzBlade = pga3.representation.basisBladeWithSign("xyz").basisBlade
           val xyz = cls.self("xyz")
