@@ -4,7 +4,7 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.5.0"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.5.1"
 ```
 
 Or for separate modules
@@ -102,12 +102,12 @@ Change lib code, publish to local ivy repo:
 sbt publishLocal
 ```
 
-In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.3.0-SNAPSHOT"
+In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.6.0-SNAPSHOT"
 
 After that in other project add local library. In my case it was:
 
 ```scala
-libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.3.0-SNAPSHOT"
+libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.6.0-SNAPSHOT"
 ```
 
 May be you will need to remove cached lib of jitpack, it will be placed in path like "~
