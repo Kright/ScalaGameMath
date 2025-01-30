@@ -130,8 +130,8 @@ case object Pga3dPointCenter:
       z = 0.0,
     )
 
-  def toPointNormalized: Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  def toPoint: Pga3dPoint =
+    Pga3dPoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -261,8 +261,8 @@ case object Pga3dPointCenter:
       i = 0.0,
     )
 
-  infix def geometric(v: Pga3dTranslator): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def geometric(v: Pga3dTranslator): Pga3dPoint =
+    Pga3dPoint(
       x = v.wx,
       y = v.wy,
       z = v.wz,
@@ -275,7 +275,7 @@ case object Pga3dPointCenter:
       wz = -v.z,
     )
 
-  infix def geometric(v: Pga3dPointNormalized): Pga3dMotor =
+  infix def geometric(v: Pga3dPoint): Pga3dMotor =
     Pga3dMotor(
       s = -1.0,
       wx = -v.x,
@@ -379,7 +379,7 @@ case object Pga3dPointCenter:
   infix def dot(v: Pga3dTranslator): Pga3dPointCenter.type =
     this
 
-  infix def dot(v: Pga3dPointNormalized): Double =
+  infix def dot(v: Pga3dPoint): Double =
     -1.0
 
   infix def dot(v: Pga3dPlaneIdeal): Pga3dBivectorBulk =
@@ -490,7 +490,7 @@ case object Pga3dPointCenter:
       yz = v.x,
     )
 
-  infix def antiGeometric(v: Pga3dPointNormalized): Pga3dBivectorBulk =
+  infix def antiGeometric(v: Pga3dPoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
       xz = -v.y,
@@ -591,14 +591,14 @@ case object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dVector): Pga3dBivectorBulk = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPointNormalized): Pga3dBivectorBulk =
+  infix def antiWedge(v: Pga3dPoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
       xz = -v.y,
       yz = v.x,
     )
 
-  inline infix def v(v: Pga3dPointNormalized): Pga3dBivectorBulk = antiWedge(v)
+  inline infix def v(v: Pga3dPoint): Pga3dBivectorBulk = antiWedge(v)
 
   infix def antiWedge(v: Pga3dBivectorWeight): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -675,8 +675,8 @@ case object Pga3dPointCenter:
   infix def sandwich(v: Pga3dVector): Pga3dVector =
     -v
 
-  infix def sandwich(v: Pga3dPointNormalized): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def sandwich(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       x = -v.x,
       y = -v.y,
       z = -v.z,
@@ -761,8 +761,8 @@ case object Pga3dPointCenter:
   infix def reverseSandwich(v: Pga3dVector): Pga3dVector =
     -v
 
-  infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def reverseSandwich(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       x = -v.x,
       y = -v.y,
       z = -v.z,
@@ -844,7 +844,7 @@ case object Pga3dPointCenter:
       wz = -v.z,
     )
 
-  infix def cross(v: Pga3dPointNormalized): Pga3dBivectorWeight =
+  infix def cross(v: Pga3dPoint): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = -v.x,
       wy = -v.y,

@@ -147,7 +147,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
   infix def geometric(v: Pga3dTranslator): Pga3dPseudoScalar =
     this
 
-  infix def geometric(v: Pga3dPointNormalized): Pga3dPlane =
+  infix def geometric(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
       x = 0.0,
       y = 0.0,
@@ -226,7 +226,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
   infix def dot(v: Pga3dTranslator): Pga3dPseudoScalar =
     this
 
-  infix def dot(v: Pga3dPointNormalized): Pga3dPlane =
+  infix def dot(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
       x = 0.0,
       y = 0.0,
@@ -340,7 +340,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       z = i * v.z,
     )
 
-  infix def antiGeometric(v: Pga3dPointNormalized): Pga3dTrivector =
+  infix def antiGeometric(v: Pga3dPoint): Pga3dTrivector =
     Pga3dTrivector(
       x = i * v.x,
       y = i * v.y,
@@ -447,7 +447,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       z = i * v.z,
     )
 
-  infix def antiDot(v: Pga3dPointNormalized): Pga3dTrivector =
+  infix def antiDot(v: Pga3dPoint): Pga3dTrivector =
     Pga3dTrivector(
       x = i * v.x,
       y = i * v.y,
@@ -568,7 +568,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 
   inline infix def v(v: Pga3dVector): Pga3dVector = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPointNormalized): Pga3dTrivector =
+  infix def antiWedge(v: Pga3dPoint): Pga3dTrivector =
     Pga3dTrivector(
       x = i * v.x,
       y = i * v.y,
@@ -576,7 +576,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       w = i,
     )
 
-  inline infix def v(v: Pga3dPointNormalized): Pga3dTrivector = antiWedge(v)
+  inline infix def v(v: Pga3dPoint): Pga3dTrivector = antiWedge(v)
 
   infix def antiWedge(v: Pga3dPlaneIdeal): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -637,7 +637,7 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
       w = -i * v.w,
     )
 
-  infix def cross(v: Pga3dPointNormalized): Pga3dPlane =
+  infix def cross(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
       x = 0.0,
       y = 0.0,

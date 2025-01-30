@@ -128,7 +128,7 @@ class PGA3DInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         }
         val localForque2 = {
           val localSpringPos = state.motor.reverse.sandwich(springCenter)
-          val localForque = (Pga3dPointNormalized() v localSpringPos) * springK
+          val localForque = (Pga3dPoint() v localSpringPos) * springK
           localForque
         }
         assert((localForque1 - localForque2).norm < 1e-10)

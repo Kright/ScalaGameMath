@@ -272,8 +272,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def geometric(v: Pga3dVector): Pga3dVector =
     v
 
-  infix def geometric(v: Pga3dPointNormalized): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def geometric(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       x = (v.x - wx),
       y = (v.y - wy),
       z = (v.z - wz),
@@ -317,8 +317,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def geometric(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
     v
 
-  infix def geometric(v: Pga3dPointCenter.type): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def geometric(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       x = -wx,
       y = -wy,
       z = -wz,
@@ -372,7 +372,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def dot(v: Pga3dVector): Pga3dVector =
     v
 
-  infix def dot(v: Pga3dPointNormalized): Pga3dPointNormalized =
+  infix def dot(v: Pga3dPoint): Pga3dPoint =
     v
 
   infix def dot(v: Pga3dPlaneIdeal): Pga3dPlane =
@@ -478,10 +478,10 @@ case class Pga3dTranslator(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dVector): Pga3dVector = wedge(v)
 
-  infix def wedge(v: Pga3dPointNormalized): Pga3dPointNormalized =
+  infix def wedge(v: Pga3dPoint): Pga3dPoint =
     v
 
-  inline infix def ^(v: Pga3dPointNormalized): Pga3dPointNormalized = wedge(v)
+  inline infix def ^(v: Pga3dPoint): Pga3dPoint = wedge(v)
 
   infix def wedge(v: Pga3dPlaneIdeal): Pga3dMultivector =
     Pga3dMultivector(
@@ -638,7 +638,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiGeometric(v: Pga3dPointNormalized): Pga3dMultivector =
+  infix def antiGeometric(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = (v.x * wx + v.y * wy + v.z * wz),
@@ -808,7 +808,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       i = 0.0,
     )
 
-  infix def antiDot(v: Pga3dPointNormalized): Pga3dMultivector =
+  infix def antiDot(v: Pga3dPoint): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
       w = 0.0,
@@ -904,7 +904,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dVector): Pga3dPlane = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPointNormalized): Pga3dPlane =
+  infix def antiWedge(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
       x = -wx,
       y = -wy,
@@ -912,7 +912,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       w = (v.x * wx + v.y * wy + v.z * wz),
     )
 
-  inline infix def v(v: Pga3dPointNormalized): Pga3dPlane = antiWedge(v)
+  inline infix def v(v: Pga3dPoint): Pga3dPlane = antiWedge(v)
 
   infix def antiWedge(v: Pga3dBivectorBulk): Double =
     (v.xy * wz + v.yz * wx - v.xz * wy)
@@ -998,8 +998,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def sandwich(v: Pga3dVector): Pga3dVector =
     v
 
-  infix def sandwich(v: Pga3dPointNormalized): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def sandwich(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       x = (v.x - 2.0 * wx),
       y = (v.y - 2.0 * wy),
       z = (v.z - 2.0 * wz),
@@ -1029,8 +1029,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def sandwich(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
     v
 
-  infix def sandwich(v: Pga3dPointCenter.type): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def sandwich(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       x = -2.0 * wx,
       y = -2.0 * wy,
       z = -2.0 * wz,
@@ -1092,8 +1092,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def reverseSandwich(v: Pga3dVector): Pga3dVector =
     v
 
-  infix def reverseSandwich(v: Pga3dPointNormalized): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def reverseSandwich(v: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
       x = (v.x + 2.0 * wx),
       y = (v.y + 2.0 * wy),
       z = (v.z + 2.0 * wz),
@@ -1123,8 +1123,8 @@ case class Pga3dTranslator(wx: Double = 0.0,
   infix def reverseSandwich(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
     v
 
-  infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dPoint =
+    Pga3dPoint(
       x = 2.0 * wx,
       y = 2.0 * wy,
       z = 2.0 * wz,
@@ -1166,7 +1166,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       wz = (v.xz * wx + v.yz * wy),
     )
 
-  infix def cross(v: Pga3dPointNormalized): Pga3dVector =
+  infix def cross(v: Pga3dPoint): Pga3dVector =
     Pga3dVector(
       x = -wx,
       y = -wy,

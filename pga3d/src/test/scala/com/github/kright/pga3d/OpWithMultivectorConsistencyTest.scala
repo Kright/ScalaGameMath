@@ -17,14 +17,14 @@ class OpWithMultivectorConsistencyTest extends AnyFunSuiteLike with ScalaCheckPr
     classOf[Pga3dPlane],
     classOf[Pga3dPlaneIdeal],
     classOf[Pga3dTrivector],
-    classOf[Pga3dPointNormalized],
+    classOf[Pga3dPoint],
     classOf[Pga3dPseudoScalar],
     classOf[Pga3dQuaternion],
     classOf[Pga3dTranslator],
     classOf[Pga3dVector],
   )
 
-  def makeRandom(cls: Class[_]): AnyRef = {
+  def makeRandom(cls: Class[?]): AnyRef = {
     val constructor = cls.getConstructors.head
     val args = constructor.getParameterTypes.map(_ => scala.util.Random.nextDouble())
     constructor.newInstance(args *)

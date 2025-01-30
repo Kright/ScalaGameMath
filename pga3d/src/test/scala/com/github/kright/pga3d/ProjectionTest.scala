@@ -14,9 +14,9 @@ class ProjectionTest extends AnyFunSuiteLike:
     val py: Double = 2.0
     val pz: Double = 3.0
 
-    val p = Pga3dPointNormalized(px, py, pz).toTrivector
+    val p = Pga3dPoint(px, py, pz).toTrivector
 
-    val center = Pga3dPointNormalized(10.0, 20.0, 30.0).toTrivector
+    val center = Pga3dPoint(10.0, 20.0, 30.0).toTrivector
 
     val cx = center v x
     val cy = center v y
@@ -35,9 +35,9 @@ class ProjectionTest extends AnyFunSuiteLike:
     val py: Double = 2.0
     val pz: Double = 3.0
 
-    val p = Pga3dPointNormalized(px, py, pz).toTrivector
+    val p = Pga3dPoint(px, py, pz).toTrivector
 
-    val center = Pga3dPointNormalized(10.0, 20.0, 30.0).toTrivector
+    val center = Pga3dPoint(10.0, 20.0, 30.0).toTrivector
 
     val cxy = center v x v y
     val cxz = center v x v z
@@ -56,9 +56,9 @@ class ProjectionTest extends AnyFunSuiteLike:
     val py: Double = 2.0
     val pz: Double = 3.0
 
-    val p = Pga3dPointNormalized(px, py, pz).toTrivector
+    val p = Pga3dPoint(px, py, pz).toTrivector
 
-    val center = Pga3dPointNormalized(10.0, 20.0, 30.0).toTrivector
+    val center = Pga3dPoint(10.0, 20.0, 30.0).toTrivector
 
     val cxy = center v x v y
     val cxz = center v x v z

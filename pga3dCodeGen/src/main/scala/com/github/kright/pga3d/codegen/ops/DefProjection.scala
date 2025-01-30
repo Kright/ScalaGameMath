@@ -8,7 +8,7 @@ object DefProjection:
   def apply()(using pga3: PGA3): MultivectorUnaryOp =
     val pointClasses = Set(
       MultivectorSubClass.trivector,
-      MultivectorSubClass.pointNormalized,
+      MultivectorSubClass.point,
       MultivectorSubClass.pointCenter
     )
 

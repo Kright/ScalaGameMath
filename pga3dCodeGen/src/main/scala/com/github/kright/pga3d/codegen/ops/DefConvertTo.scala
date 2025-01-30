@@ -26,7 +26,7 @@ object DefConvertTo:
         }
 
         if (cls == MultivectorSubClass.trivector) {
-          val target = MultivectorSubClass.pointNormalized
+          val target = MultivectorSubClass.point
           val xyzBlade = pga3.representation.basisBladeWithSign("xyz").basisBlade
           val xyz = cls.self("xyz")
           val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => Sym(s"${s} / ${xyz}"))

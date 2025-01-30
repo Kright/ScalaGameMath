@@ -147,14 +147,14 @@ case object Pga3dSerializer:
     arr(offset + 1) = v.y
     arr(offset + 2) = v.z
 
-  def loadPointNormalized(arr: Array[Double], offset: Int): Pga3dPointNormalized =
-    Pga3dPointNormalized(
+  def loadPoint(arr: Array[Double], offset: Int): Pga3dPoint =
+    Pga3dPoint(
       x = arr(offset + 0),
       y = arr(offset + 1),
       z = arr(offset + 2),
     )
 
-  def store(v: Pga3dPointNormalized, arr: Array[Double], offset: Int): Unit =
+  def store(v: Pga3dPoint, arr: Array[Double], offset: Int): Unit =
     arr(offset + 0) = v.x
     arr(offset + 1) = v.y
     arr(offset + 2) = v.z

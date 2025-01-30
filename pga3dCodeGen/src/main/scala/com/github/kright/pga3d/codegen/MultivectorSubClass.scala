@@ -211,7 +211,7 @@ case class MultivectorSubClass(name: String,
   }
 
   private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
-    val points = Set(trivector, pointNormalized, vector)
+    val points = Set(trivector, point, vector)
     if (points.contains(this)) {
       code("")
       if (this == trivector) {
@@ -340,9 +340,9 @@ object MultivectorSubClass:
 
   val vector = MultivectorSubClass("Pga3dVector", trivector.variableFields.filter(f => f.basisBlade.contains(genW)))
   val planeIdeal = MultivectorSubClass("Pga3dPlaneIdeal", plane.variableFields.filter(f => !f.basisBlade.contains(genW)))
-  val pointNormalized = {
+  val point = {
     val (weight, bulk) = trivector.variableFields.partition(_.basisBlade.contains(genW))
-    MultivectorSubClass("Pga3dPointNormalized", weight, bulk.map(f => (f, 1.0)))
+    MultivectorSubClass("Pga3dPoint", weight, bulk.map(f => (f, 1.0)))
   }
 
   val bivectorWeight = MultivectorSubClass("Pga3dBivectorWeight", bivector.variableFields.filter(f => f.basisBlade.contains(genW)))
@@ -364,7 +364,7 @@ object MultivectorSubClass:
     translator,
 
     vector,
-    pointNormalized,
+    point,
     planeIdeal,
 
     bivectorBulk,
