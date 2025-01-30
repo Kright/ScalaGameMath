@@ -1,6 +1,6 @@
-ThisBuild / version := "0.5.1"
+ThisBuild / version := "0.6.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.6.2"
+ThisBuild / scalaVersion := "3.6.3"
 
 ThisBuild / licenses := List(License.MIT)
 ThisBuild / startYear := Some(2022)
@@ -40,6 +40,7 @@ lazy val vector = (project in file("vector"))
 lazy val math = (project in file("math"))
   .settings(scalatestSettings *)
   .dependsOn(vector % "compile->compile;test->test")
+  .dependsOn(util % "compile->compile;test->test")
 
 lazy val symbolic = (project in file("symbolic"))
   .settings(scalatestSettings *)
