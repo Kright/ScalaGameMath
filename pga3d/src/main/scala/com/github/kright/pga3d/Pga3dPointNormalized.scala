@@ -192,7 +192,7 @@ case class Pga3dPointNormalized(x: Double = 0.0,
       w = 1.0,
     )
 
-  def asVectorUnsafe: Pga3dVector =
+  def toVectorUnsafe: Pga3dVector =
     Pga3dVector(
       x = x,
       y = y,

@@ -218,7 +218,7 @@ case class Pga3dMotor(s: Double = 0.0,
       i = i,
     )
 
-  def asBivectorUnsafe: Pga3dBivector =
+  def toBivectorUnsafe: Pga3dBivector =
     Pga3dBivector(
       wx = wx,
       wy = wy,
@@ -228,7 +228,7 @@ case class Pga3dMotor(s: Double = 0.0,
       yz = yz,
     )
 
-  def asQuaternionUnsafe: Pga3dQuaternion =
+  def toQuaternionUnsafe: Pga3dQuaternion =
     Pga3dQuaternion(
       s = s,
       xy = xy,
@@ -236,21 +236,21 @@ case class Pga3dMotor(s: Double = 0.0,
       yz = yz,
     )
 
-  def asTranslatorUnsafe: Pga3dTranslator =
+  def toTranslatorUnsafe: Pga3dTranslator =
     Pga3dTranslator(
       wx = wx,
       wy = wy,
       wz = wz,
     )
 
-  def asBivectorBulkUnsafe: Pga3dBivectorBulk =
+  def toBivectorBulkUnsafe: Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = xy,
       xz = xz,
       yz = yz,
     )
 
-  def asBivectorWeightUnsafe: Pga3dBivectorWeight =
+  def toBivectorWeightUnsafe: Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = wx,
       wy = wy,

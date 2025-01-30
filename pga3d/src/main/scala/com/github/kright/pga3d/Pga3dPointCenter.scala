@@ -123,7 +123,7 @@ case object Pga3dPointCenter:
       w = 1.0,
     )
 
-  def asVectorUnsafe: Pga3dVector =
+  def toVectorUnsafe: Pga3dVector =
     Pga3dVector(
       x = 0.0,
       y = 0.0,

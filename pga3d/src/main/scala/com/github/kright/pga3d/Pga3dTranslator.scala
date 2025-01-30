@@ -173,7 +173,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       i = 0.0,
     )
 
-  def asBivectorUnsafe: Pga3dBivector =
+  def toBivectorUnsafe: Pga3dBivector =
     Pga3dBivector(
       wx = wx,
       wy = wy,
@@ -183,7 +183,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       yz = 0.0,
     )
 
-  def asQuaternionUnsafe: Pga3dQuaternion =
+  def toQuaternionUnsafe: Pga3dQuaternion =
     Pga3dQuaternion(
       s = 1.0,
       xy = 0.0,
@@ -191,7 +191,7 @@ case class Pga3dTranslator(wx: Double = 0.0,
       yz = 0.0,
     )
 
-  def asBivectorWeightUnsafe: Pga3dBivectorWeight =
+  def toBivectorWeightUnsafe: Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = wx,
       wy = wy,

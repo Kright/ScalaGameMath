@@ -133,7 +133,7 @@ case class Pga3dPlane(x: Double = 0.0,
       i = 0.0,
     )
 
-  def asPlaneIdealUnsafe: Pga3dPlaneIdeal =
+  def toPlaneIdealUnsafe: Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
       x = x,
       y = y,

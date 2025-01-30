@@ -200,7 +200,7 @@ case class Pga3dBivectorWeight(wx: Double = 0.0,
       yz = 0.0,
     )
 
-  def asTranslatorUnsafe: Pga3dTranslator =
+  def toTranslatorUnsafe: Pga3dTranslator =
     Pga3dTranslator(
       wx = wx,
       wy = wy,

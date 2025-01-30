@@ -17,7 +17,7 @@ object DefConvertTo:
           } else if (target != MultivectorSubClass.scalar && target != MultivectorSubClass.pseudoScalar) {
             val simplifiedSelf = cls.self.filter((blade, _) => target.variableFields.exists(_.basisBlade == blade))
             if (simplifiedSelf.values.nonEmpty) {
-              code(s"\ndef as${target.typeNameWithoutPrefix}Unsafe: ${target.typeName} =")
+              code(s"\ndef to${target.typeNameWithoutPrefix}Unsafe: ${target.typeName} =")
               code.block {
                 code(target.makeConstructor(cls.self))
               }

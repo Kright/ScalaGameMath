@@ -268,7 +268,7 @@ case class Pga3dMultivector(s: Double = 0.0,
       i = i * v.i,
     )
 
-  def asMotorUnsafe: Pga3dMotor =
+  def toMotorUnsafe: Pga3dMotor =
     Pga3dMotor(
       s = s,
       wx = wx,
@@ -280,7 +280,7 @@ case class Pga3dMultivector(s: Double = 0.0,
       i = i,
     )
 
-  def asPlaneUnsafe: Pga3dPlane =
+  def toPlaneUnsafe: Pga3dPlane =
     Pga3dPlane(
       x = x,
       y = y,
@@ -288,7 +288,7 @@ case class Pga3dMultivector(s: Double = 0.0,
       w = w,
     )
 
-  def asBivectorUnsafe: Pga3dBivector =
+  def toBivectorUnsafe: Pga3dBivector =
     Pga3dBivector(
       wx = wx,
       wy = wy,
@@ -298,7 +298,7 @@ case class Pga3dMultivector(s: Double = 0.0,
       yz = yz,
     )
 
-  def asPointUnsafe: Pga3dPoint =
+  def toPointUnsafe: Pga3dPoint =
     Pga3dPoint(
       x = -wyz,
       y = wxz,
@@ -306,7 +306,7 @@ case class Pga3dMultivector(s: Double = 0.0,
       w = xyz,
     )
 
-  def asQuaternionUnsafe: Pga3dQuaternion =
+  def toQuaternionUnsafe: Pga3dQuaternion =
     Pga3dQuaternion(
       s = s,
       xy = xy,
@@ -314,42 +314,42 @@ case class Pga3dMultivector(s: Double = 0.0,
       yz = yz,
     )
 
-  def asTranslatorUnsafe: Pga3dTranslator =
+  def toTranslatorUnsafe: Pga3dTranslator =
     Pga3dTranslator(
       wx = wx,
       wy = wy,
       wz = wz,
     )
 
-  def asVectorUnsafe: Pga3dVector =
+  def toVectorUnsafe: Pga3dVector =
     Pga3dVector(
       x = -wyz,
       y = wxz,
       z = -wxy,
     )
 
-  def asPointNormalizedUnsafe: Pga3dPointNormalized =
+  def toPointNormalizedUnsafe: Pga3dPointNormalized =
     Pga3dPointNormalized(
       x = -wyz,
       y = wxz,
       z = -wxy,
     )
 
-  def asPlaneIdealUnsafe: Pga3dPlaneIdeal =
+  def toPlaneIdealUnsafe: Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
       x = x,
       y = y,
       z = z,
     )
 
-  def asBivectorBulkUnsafe: Pga3dBivectorBulk =
+  def toBivectorBulkUnsafe: Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = xy,
       xz = xz,
       yz = yz,
     )
 
-  def asBivectorWeightUnsafe: Pga3dBivectorWeight =
+  def toBivectorWeightUnsafe: Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = wx,
       wy = wy,

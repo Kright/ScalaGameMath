@@ -159,7 +159,7 @@ case class Pga3dQuaternion(s: Double = 0.0,
       i = 0.0,
     )
 
-  def asBivectorUnsafe: Pga3dBivector =
+  def toBivectorUnsafe: Pga3dBivector =
     Pga3dBivector(
       wx = 0.0,
       wy = 0.0,
@@ -169,7 +169,7 @@ case class Pga3dQuaternion(s: Double = 0.0,
       yz = yz,
     )
 
-  def asBivectorBulkUnsafe: Pga3dBivectorBulk =
+  def toBivectorBulkUnsafe: Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = xy,
       xz = xz,
