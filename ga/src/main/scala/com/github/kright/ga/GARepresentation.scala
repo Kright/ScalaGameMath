@@ -63,7 +63,7 @@ class GARepresentation(params: GARepresentationConfig,
       }
 
     val maxLen = math.max(setMaxLen, strings.view.flatten.map(_.length).max)
-    val padded = strings.map(_.map(s => s" ".repeat(maxLen - s.length) + s))
+    val padded = strings.map(_.map(s => (s" " * (maxLen - s.length)) + s))
     padded.map(_.mkString("|")).mkString("\n")
 
 
