@@ -212,21 +212,31 @@ case class MultivectorSubClass(name: String,
 
   private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
     val points = Set(trivector, point, vector)
-    if (points.contains(this)) {
-      code("")
-      if (this == trivector) {
-        val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
-        code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
-        code.block {
-          code(makeConstructor(v))
-        }
+    if (!points.contains(this)) return
+
+    code("")
+    if (this == trivector) {
+      val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
+      code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
+      code.block {
+        code(makeConstructor(v))
       }
-      else {
-        val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
-        code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
-        code.block {
-          code(makeConstructor(v))
-        }
+    }
+    else {
+      val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
+      code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
+      code.block {
+        code(makeConstructor(v))
+      }
+    }
+
+    code("")
+    code(s"def interpolate(a: ${this.typeName}, b: ${this.typeName}, t: Double): ${this.typeName} =")
+    code.block {
+      if (this == trivector || this == vector) {
+        code("a * (1.0 - t) + b * t")
+      } else {
+        code("(a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe")
       }
     }
   }

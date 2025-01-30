@@ -1300,3 +1300,6 @@ object Pga3dPoint:
       y = wxz,
       z = -wxy,
     )
+
+  def interpolate(a: Pga3dPoint, b: Pga3dPoint, t: Double): Pga3dPoint =
+    (a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe

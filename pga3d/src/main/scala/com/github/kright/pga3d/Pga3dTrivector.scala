@@ -1369,3 +1369,6 @@ object Pga3dTrivector:
       z = -wxy,
       w = xyz,
     )
+
+  def interpolate(a: Pga3dTrivector, b: Pga3dTrivector, t: Double): Pga3dTrivector =
+    a * (1.0 - t) + b * t

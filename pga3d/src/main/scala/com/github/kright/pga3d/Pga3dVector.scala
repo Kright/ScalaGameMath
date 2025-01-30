@@ -923,3 +923,6 @@ object Pga3dVector:
       y = wxz,
       z = -wxy,
     )
+
+  def interpolate(a: Pga3dVector, b: Pga3dVector, t: Double): Pga3dVector =
+    a * (1.0 - t) + b * t
