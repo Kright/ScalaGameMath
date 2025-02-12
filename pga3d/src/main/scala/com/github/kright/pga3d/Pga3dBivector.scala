@@ -1603,3 +1603,5 @@ case class Pga3dBivector(wx: Double = 0.0,
 object Pga3dBivector:
 
   inline val componentsCount = 6
+
+  val zero: Pga3dBivector = Pga3dBivector(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

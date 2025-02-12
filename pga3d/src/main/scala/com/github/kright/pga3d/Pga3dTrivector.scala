@@ -1370,6 +1370,8 @@ object Pga3dTrivector:
 
   inline val componentsCount = 4
 
+  val zero: Pga3dTrivector = Pga3dTrivector(0.0, 0.0, 0.0, 0.0)
+
   def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): Pga3dTrivector =
     Pga3dTrivector(
       x = -wyz,

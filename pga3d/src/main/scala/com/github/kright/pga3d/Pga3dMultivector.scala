@@ -744,3 +744,5 @@ case class Pga3dMultivector(s: Double = 0.0,
 object Pga3dMultivector:
 
   inline val componentsCount = 16
+
+  val zero: Pga3dMultivector = Pga3dMultivector(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

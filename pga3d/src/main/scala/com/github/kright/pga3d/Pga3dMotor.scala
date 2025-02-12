@@ -2154,6 +2154,8 @@ object Pga3dMotor:
 
   inline val componentsCount = 8
 
+  val zero: Pga3dMotor = Pga3dMotor(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
   val id: Pga3dMotor = Pga3dMotor(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
   def addVector(v: Pga3dVector): Pga3dMotor = Pga3dTranslator.addVector(v).toMotor

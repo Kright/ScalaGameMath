@@ -1192,3 +1192,5 @@ case class Pga3dBivectorBulk(xy: Double = 0.0,
 object Pga3dBivectorBulk:
 
   inline val componentsCount = 3
+
+  val zero: Pga3dBivectorBulk = Pga3dBivectorBulk(0.0, 0.0, 0.0)

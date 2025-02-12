@@ -1395,3 +1395,5 @@ case class Pga3dPlane(x: Double = 0.0,
 object Pga3dPlane:
 
   inline val componentsCount = 4
+
+  val zero: Pga3dPlane = Pga3dPlane(0.0, 0.0, 0.0, 0.0)

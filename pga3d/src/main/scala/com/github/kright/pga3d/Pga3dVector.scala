@@ -917,6 +917,8 @@ object Pga3dVector:
 
   inline val componentsCount = 3
 
+  val zero: Pga3dVector = Pga3dVector(0.0, 0.0, 0.0)
+
   def blade3(wxy: Double, wxz: Double, wyz: Double): Pga3dVector =
     Pga3dVector(
       x = -wyz,

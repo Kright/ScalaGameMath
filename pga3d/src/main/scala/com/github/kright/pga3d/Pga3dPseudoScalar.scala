@@ -664,3 +664,5 @@ case class Pga3dPseudoScalar(i: Double = 0.0):
 object Pga3dPseudoScalar:
 
   inline val componentsCount = 1
+
+  val zero: Pga3dPseudoScalar = Pga3dPseudoScalar(0.0)
