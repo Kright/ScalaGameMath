@@ -2,7 +2,6 @@ package com.github.kright.math
 
 import com.github.kright.math.MathUtils.{loop, swap}
 
-import scala.annotation.static
 
 /**
  * indices in array:
@@ -224,7 +223,7 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
 
   override def id: Matrix3d = new Matrix3d().setIdentity()
 
-  @static def multiply(left: Matrix3d, right: Matrix3d, result: Matrix3d): Matrix3d =
+  def multiply(left: Matrix3d, right: Matrix3d, result: Matrix3d): Matrix3d =
     inline def f(y: Int, x: Int) = left(y, 0) * right(0, x) + left(y, 1) * right(1, x) + left(y, 2) * right(2, x)
 
     result := (
@@ -233,13 +232,13 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
       f(2, 0), f(2, 1), f(2, 2),
     )
 
-  @static def multiply(a: Matrix3d, m: Double, result: Matrix3d): Matrix3d =
+  def multiply(a: Matrix3d, m: Double, result: Matrix3d): Matrix3d =
     loop(9) { i =>
       result.elements(i) = a.elements(i) * m
     }
     result
 
-  @static def multiply(a: Matrix3d, v: IVector3d, result: Vector3d): Vector3d =
+  def multiply(a: Matrix3d, v: IVector3d, result: Vector3d): Vector3d =
     val e = a.elements
     result := (
       e(0) * v.x + e(1) * v.y + e(2) * v.z,
@@ -247,14 +246,14 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
       e(6) * v.x + e(7) * v.y + e(8) * v.z,
     )
 
-  @static def multiply(a: Matrix3d, v: IVector2d, z: Double, result: Vector2d): Vector2d =
+  def multiply(a: Matrix3d, v: IVector2d, z: Double, result: Vector2d): Vector2d =
     val e = a.elements
     val rx = e(0) * v.x + e(1) * v.y + e(2) * z
     val ry = e(3) * v.x + e(4) * v.y + e(5) * z
     val rz = e(6) * v.x + e(7) * v.y + e(8) * z
     result := (rx / rz, ry / rz)
 
-  @static def rotate2d(a: Matrix3d, v: IVector2d, result: Vector2d): Vector2d =
+  def rotate2d(a: Matrix3d, v: IVector2d, result: Vector2d): Vector2d =
     val e = a.elements
     val rx = e(0) * v.x + e(1) * v.y
     val ry = e(3) * v.x + e(4) * v.y
@@ -266,13 +265,13 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
     }
     result
 
-  @static def add(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
+  def add(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
     elementWiseOperation(a, b, result)(_ + _)
 
-  @static def sub(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
+  def sub(a: Matrix3d, b: Matrix3d, result: Matrix3d): Matrix3d =
     elementWiseOperation(a, b, result)(_ + _)
 
-  @static def multiplyAdd(a: Matrix3d, b: Matrix3d, v: Double, result: Matrix3d): Matrix3d =
+  def multiplyAdd(a: Matrix3d, b: Matrix3d, v: Double, result: Matrix3d): Matrix3d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }
 
   inline def determinant(a00: Double, a01: Double, a02: Double,
@@ -282,10 +281,10 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
       a01 * (a12 * a20 - a10 * a22) +
       a02 * (a10 * a21 - a11 * a20)
 
-  @static def determinant(x: IVector3d, y: IVector3d, z: IVector3d): Double =
+  def determinant(x: IVector3d, y: IVector3d, z: IVector3d): Double =
     determinant(x.x, x.y, x.z, y.x, y.y, y.z, z.x, z.y, z.z)
 
-  @static def invertMatrix(a: Matrix3d, result: Matrix3d): Matrix3d =
+  def invertMatrix(a: Matrix3d, result: Matrix3d): Matrix3d =
     val det = a.det() // this may be 0.0, check if necessary
     val d = 1.0 / det
     val arr = a.elements

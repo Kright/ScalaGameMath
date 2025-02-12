@@ -2,8 +2,6 @@ package com.github.kright.math
 
 import com.github.kright.math.MathUtils.{loop, swap}
 
-import scala.annotation.static
-
 
 /**
  * indices in array:
@@ -344,13 +342,13 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
 
   override def id: Matrix4d = new Matrix4d().setIdentity()
 
-  @static def multiply(a: Matrix4d, m: Double, result: Matrix4d): Matrix4d =
+  def multiply(a: Matrix4d, m: Double, result: Matrix4d): Matrix4d =
     loop(16) { i =>
       result.elements(i) = a.elements(i) * m
     }
     result
 
-  @static def multiply(left: Matrix4d, right: Matrix4d, result: Matrix4d): Matrix4d =
+  def multiply(left: Matrix4d, right: Matrix4d, result: Matrix4d): Matrix4d =
     inline def f(y: Int, x: Int) =
       left(y, 0) * right(0, x) + left(y, 1) * right(1, x) + left(y, 2) * right(2, x) + left(y, 3) * right(3, x)
 
@@ -361,14 +359,14 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
       f(3, 0), f(3, 1), f(3, 2), f(3, 3),
     )
 
-  @static def multiply(matrix: Matrix4d, v: IVector4d, result: Vector4d): Vector4d =
+  def multiply(matrix: Matrix4d, v: IVector4d, result: Vector4d): Vector4d =
     val e = matrix.elements
 
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z + e(shift + 3) * v.w
 
     result := (f(0), f(4), f(8), f(12))
 
-  @static def multiply(matrix: Matrix4d, v: IVector3d, vw: Double, result: Vector3d): Vector3d =
+  def multiply(matrix: Matrix4d, v: IVector3d, vw: Double, result: Vector3d): Vector3d =
     val e = matrix.elements
 
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z + e(shift + 3) * vw
@@ -380,7 +378,7 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
     val m = 1.0 / rw
     result := (rx * m, ry * m, rz * m)
 
-  @static def rotate3d(matrix: Matrix4d, v: IVector3d, result: Vector3d): Vector3d =
+  def rotate3d(matrix: Matrix4d, v: IVector3d, result: Vector3d): Vector3d =
     val e = matrix.elements
 
     inline def f(shift: Int): Double = e(shift) * v.x + e(shift + 1) * v.y + e(shift + 2) * v.z
@@ -393,11 +391,11 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
     }
     result
 
-  @static def add(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
+  def add(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result)(_ + _)
 
-  @static def sub(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
+  def sub(a: Matrix4d, b: Matrix4d, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result)(_ + _)
 
-  @static def multiplyAdd(a: Matrix4d, b: Matrix4d, v: Double, result: Matrix4d): Matrix4d =
+  def multiplyAdd(a: Matrix4d, b: Matrix4d, v: Double, result: Matrix4d): Matrix4d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }

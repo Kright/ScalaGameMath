@@ -3,8 +3,6 @@ package com.github.kright.symbolic.transform.simplifiers
 import com.github.kright.symbolic.transform.PartialTransform
 import com.github.kright.symbolic.{Symbolic, SymbolicStr}
 
-import scala.annotation.static
-
 class SymbolicStrTransformDepthFirst(patternTransform: SymbolicStr => Option[SymbolicStr]) extends PartialTransform[SymbolicStr]:
 
   override def apply(value: SymbolicStr): Option[SymbolicStr] =
@@ -12,7 +10,6 @@ class SymbolicStrTransformDepthFirst(patternTransform: SymbolicStr => Option[Sym
 
 
 object SymbolicStrTransformDepthFirst:
-  @static
   def depthFirstTransform[F, S](symbolic: Symbolic[F, S], patternTransform: Symbolic[F, S] => Option[Symbolic[F, S]]): Option[Symbolic[F, S]] =
     symbolic match
       case s@Symbolic.Symbol(_) => patternTransform(s)

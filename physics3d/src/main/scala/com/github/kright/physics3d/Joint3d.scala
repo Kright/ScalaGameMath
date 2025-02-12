@@ -2,7 +2,6 @@ package com.github.kright.physics3d
 
 import com.github.kright.math.{IVector3d, Vector3d}
 
-import scala.annotation.static
 
 /**
  * abstract class for joint between two bodies
@@ -30,9 +29,9 @@ object Joint3d:
   /**
    * when
    */
-  @static def addMomentAndForces(r12: IVector3d, moment1p: IVector3d,
-                                 dr1global: IVector3d, dr2global: IVector3d,
-                                 force1: Force3d, force2: Force3d): Unit =
+  def addMomentAndForces(r12: IVector3d, moment1p: IVector3d,
+                         dr1global: IVector3d, dr2global: IVector3d,
+                         force1: Force3d, force2: Force3d): Unit =
     val force = r12.cross(moment1p) / r12.squareMag
     // M = R x F, so F = M x R / R^2
 
@@ -43,5 +42,5 @@ object Joint3d:
   /**
    * part of angular velocity perpendicular to r12.
    */
-  @static def getWJointP(r12: IVector3d, v12: IVector3d): Vector3d =
+  def getWJointP(r12: IVector3d, v12: IVector3d): Vector3d =
     r12.cross(v12) / r12.squareMag

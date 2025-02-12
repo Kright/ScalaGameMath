@@ -1,6 +1,5 @@
 package com.github.kright.math
 
-import scala.annotation.static
 
 /**
  * I used the book:
@@ -284,7 +283,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
   override def id: Quaternion = new Quaternion(1.0, 0.0, 0.0, 0.0)
 
   // 16 multiplications, 12 additions
-  @static def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion): Quaternion =
+  def multiply(first: IQuaternion, second: IQuaternion, result: Quaternion): Quaternion =
     result := (
       first.w * second.w - first.x * second.x - first.y * second.y - first.z * second.z,
       first.w * second.x + first.x * second.w + first.y * second.z - first.z * second.y,
@@ -292,7 +291,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
       first.w * second.z + first.z * second.w + first.x * second.y - first.y * second.x
     )
 
-  @static def mix(q1: IQuaternion, k1: Double, q2: IQuaternion, k2: Double, result: Quaternion = new Quaternion()): Quaternion =
+  def mix(q1: IQuaternion, k1: Double, q2: IQuaternion, k2: Double, result: Quaternion = new Quaternion()): Quaternion =
     result := (
       q1.w * k1 + q2.w * k2,
       q1.x * k1 + q2.x * k2,
@@ -304,7 +303,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
    * spherical linear interpolation.
    * works only for normalized quaternions
    */
-  @static def slerp(q1: IQuaternion, q2: Quaternion, t: Double, result: Quaternion = new Quaternion()): Quaternion =
+  def slerp(q1: IQuaternion, q2: Quaternion, t: Double, result: Quaternion = new Quaternion()): Quaternion =
     if (t < 0) {
       result := q1
       return result
@@ -335,7 +334,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
   /**
    * linear interpolation. Really faster then spherical
    */
-  @static def lerp(q1: Quaternion, q2: Quaternion, t: Float, result: Quaternion = new Quaternion()): Quaternion =
+  def lerp(q1: Quaternion, q2: Quaternion, t: Float, result: Quaternion = new Quaternion()): Quaternion =
     if (q1.dot(q2) >= 0) {
       mix(q1, 1 - t, q2, t, result)
     } else {
@@ -343,7 +342,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
     }
     result
 
-  @static def multiply(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
+  def multiply(q: IQuaternion, v: IVector3d, result: Vector3d): Vector3d =
     // val r = q * Quaternion(0.0, v.x, v.y, v.z) * q.conjugated()
     // result := (r.x, r.y, r.z)
 
@@ -353,7 +352,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
       v.x * q.rotM20 + v.y * q.rotM21 + v.z * q.rotM22,
     )
 
-  @static def restoreFromRotation(m: Matrix3d, result: Quaternion): Quaternion =
+  def restoreFromRotation(m: Matrix3d, result: Quaternion): Quaternion =
     val m00 = m(0, 0)
     val m11 = m(1, 1)
     val m22 = m(2, 2)
@@ -397,7 +396,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
       )
     }
 
-  @static def restoreFromRotation(m: Matrix4d, result: Quaternion): Quaternion =
+  def restoreFromRotation(m: Matrix4d, result: Quaternion): Quaternion =
     val m00 = m(0, 0)
     val m11 = m(1, 1)
     val m22 = m(2, 2)
@@ -447,7 +446,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
    * @param result     Quaternion for which q * sourceAxis == targetAxis
    * @return result
    */
-  @static def fromAxisToAxis(sourceAxis: IVector3d, targetAxis: IVector3d, result: Quaternion = Quaternion()): Quaternion =
+  def fromAxisToAxis(sourceAxis: IVector3d, targetAxis: IVector3d, result: Quaternion = Quaternion()): Quaternion =
     val mid = sourceAxis + targetAxis
     if (mid.mag < 1e-12) {
       // choose any vector perpendicular to sourceAxis
@@ -467,7 +466,7 @@ object Quaternion extends ZeroFactory[Quaternion] with IdentityFactory[Quaternio
    * @param result     Quaternion for which q * sourceAxis == targetAxis
    * @return result
    */
-  @static def fromAxisOverBisection(sourceAxis: IVector3d, bisection: IVector3d, result: Quaternion = Quaternion()): Quaternion =
+  def fromAxisOverBisection(sourceAxis: IVector3d, bisection: IVector3d, result: Quaternion = Quaternion()): Quaternion =
     val w = sourceAxis.dot(bisection)
     val xyz = sourceAxis.cross(bisection)
     result := (w, xyz.x, xyz.y, xyz.z)

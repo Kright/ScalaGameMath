@@ -4,15 +4,15 @@
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.5.1"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.6.0"
 ```
 
 Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.5.1",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.5.1",
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.6.0",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.6.0",
 )
 ```
 

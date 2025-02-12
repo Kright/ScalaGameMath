@@ -1,6 +1,5 @@
 package com.github.kright.math
 
-import scala.annotation.static
 
 /**
  * m00 m01
@@ -127,19 +126,19 @@ object Matrix2d extends MatrixNdFactory[Matrix2d]:
 
   override def id: Matrix2d = new Matrix2d(1.0, 0.0, 0.0, 1.0)
 
-  @static def multiply(l: Matrix2d, r: Matrix2d, result: Matrix2d): Matrix2d =
+  def multiply(l: Matrix2d, r: Matrix2d, result: Matrix2d): Matrix2d =
     result := (
       l.m00 * r.m00 + l.m01 * r.m10, l.m00 * r.m01 + l.m01 * r.m11,
       l.m10 * r.m00 + l.m11 * r.m10, l.m10 * r.m01 + l.m11 * r.m11,
     )
 
-  @static def multiply(a: Matrix2d, m: Double, result: Matrix2d): Matrix2d =
+  def multiply(a: Matrix2d, m: Double, result: Matrix2d): Matrix2d =
     result := (
       a.m00 * m, a.m01 * m,
       a.m10 * m, a.m11 * m
     )
 
-  @static def multiply(a: Matrix2d, v: IVector2d, result: Vector2d): Vector2d =
+  def multiply(a: Matrix2d, v: IVector2d, result: Vector2d): Vector2d =
     result := (
       a.m00 * v.x + a.m01 * v.y,
       a.m10 * v.x + a.m11 * v.y,
@@ -151,16 +150,16 @@ object Matrix2d extends MatrixNdFactory[Matrix2d]:
       op(left.m10, right.m10), op(left.m11, right.m11),
     )
 
-  @static def add(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
+  def add(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
     elementWiseOperation(a, b, result)(_ + _)
 
-  @static def sub(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
+  def sub(a: Matrix2d, b: Matrix2d, result: Matrix2d): Matrix2d =
     elementWiseOperation(a, b, result)(_ - _)
 
-  @static def multiplyAdd(a: Matrix2d, b: Matrix2d, v: Double, result: Matrix2d): Matrix2d =
+  def multiplyAdd(a: Matrix2d, b: Matrix2d, v: Double, result: Matrix2d): Matrix2d =
     elementWiseOperation(a, b, result) { (left, right) => left + right * v }
 
-  @static def invertMatrix(a: Matrix2d, result: Matrix2d): Matrix2d =
+  def invertMatrix(a: Matrix2d, result: Matrix2d): Matrix2d =
     val det = a.det() // this may be 0.0, check if necessary
     val d = 1.0 / det
 

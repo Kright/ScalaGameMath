@@ -1,6 +1,5 @@
 package com.github.kright.math
 
-import scala.annotation.static
 
 /**
  * @param yaw   - angle in radians around axis Y (up)
@@ -47,13 +46,13 @@ object EulerAngles:
       Math.toRadians(roll),
     )
 
-  @static def restoreFromRotation(m: Matrix3d, result: EulerAngles): EulerAngles =
+  def restoreFromRotation(m: Matrix3d, result: EulerAngles): EulerAngles =
     restoreFromRotation(m(0, 0), m(0, 2), m(1, 0), m(1, 1), m(1, 2), m(2, 0), m(2, 2), result)
 
-  @static def restoreFromRotation(m: Matrix4d, result: EulerAngles): EulerAngles =
+  def restoreFromRotation(m: Matrix4d, result: EulerAngles): EulerAngles =
     restoreFromRotation(m(0, 0), m(0, 2), m(1, 0), m(1, 1), m(1, 2), m(2, 0), m(2, 2), result)
 
-  @static def restoreFromRotation(q: Quaternion, result: EulerAngles): EulerAngles =
+  def restoreFromRotation(q: Quaternion, result: EulerAngles): EulerAngles =
     restoreFromRotation(q.rotM00, q.rotM02, q.rotM10, q.rotM11, q.rotM12, q.rotM20, q.rotM22, result)
 
   private inline def restoreFromRotation(inline m00: => Double,
