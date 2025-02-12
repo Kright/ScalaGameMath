@@ -151,22 +151,22 @@ case object Pga3dPointCenter:
    * not applicable for Bivector, input should be a line
    * example of result for Bivector:
    * Pga3dMultivector(
-   * s = 0.0,
-   * w = (line.wy * line.xz - line.wx * line.yz - line.wz * line.xy),
-   * x = 0.0,
-   * y = 0.0,
-   * z = 0.0,
-   * wx = 0.0,
-   * wy = 0.0,
-   * wz = 0.0,
-   * xy = 0.0,
-   * xz = 0.0,
-   * yz = 0.0,
-   * wxy = (-line.wx * line.xz - line.wy * line.yz),
-   * wxz = (line.wx * line.xy - line.wz * line.yz),
-   * wyz = (line.wy * line.xy + line.wz * line.xz),
-   * xyz = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
-   * i = 0.0,
+   *   s = 0.0,
+   *   w = (line.wy * line.xz - line.wx * line.yz - line.wz * line.xy),
+   *   x = 0.0,
+   *   y = 0.0,
+   *   z = 0.0,
+   *   wx = 0.0,
+   *   wy = 0.0,
+   *   wz = 0.0,
+   *   xy = 0.0,
+   *   xz = 0.0,
+   *   yz = 0.0,
+   *   wxy = (-line.wx * line.xz - line.wy * line.yz),
+   *   wxz = (line.wx * line.xy - line.wz * line.yz),
+   *   wyz = (line.wy * line.xy + line.wz * line.xz),
+   *   xyz = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
+   *   i = 0.0,
    * )
    */
   def projectOntoLine(line: Pga3dBivector): Pga3dTrivector =

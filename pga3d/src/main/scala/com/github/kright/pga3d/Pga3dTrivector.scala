@@ -6,6 +6,14 @@ case class Pga3dTrivector(x: Double = 0.0,
                           z: Double = 0.0,
                           w: Double = 0.0):
 
+  inline def wyz: Double = -x
+
+  inline def wxz: Double = y
+
+  inline def wxy: Double = -z
+
+  inline def xyz: Double = w
+
   def dual: Pga3dPlane =
     Pga3dPlane(
       x = x,
@@ -216,22 +224,22 @@ case class Pga3dTrivector(x: Double = 0.0,
    * not applicable for Bivector, input should be a line
    * example of result for Bivector:
    * Pga3dMultivector(
-   * s = 0.0,
-   * w = w * (line.wy * line.xz - line.wx * line.yz - line.wz * line.xy),
-   * x = 0.0,
-   * y = 0.0,
-   * z = 0.0,
-   * wx = 0.0,
-   * wy = 0.0,
-   * wz = 0.0,
-   * xy = 0.0,
-   * xz = 0.0,
-   * yz = 0.0,
-   * wxy = (line.xy * (line.xz * y - line.xy * z - line.yz * x) + w * (-line.wx * line.xz - line.wy * line.yz)),
-   * wxz = (line.xz * (line.xz * y - line.xy * z - line.yz * x) + w * (line.wx * line.xy - line.wz * line.yz)),
-   * wyz = (line.yz * (line.xz * y - line.xy * z - line.yz * x) + w * (line.wy * line.xy + line.wz * line.xz)),
-   * xyz = w * (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
-   * i = 0.0,
+   *   s = 0.0,
+   *   w = w * (line.wy * line.xz - line.wx * line.yz - line.wz * line.xy),
+   *   x = 0.0,
+   *   y = 0.0,
+   *   z = 0.0,
+   *   wx = 0.0,
+   *   wy = 0.0,
+   *   wz = 0.0,
+   *   xy = 0.0,
+   *   xz = 0.0,
+   *   yz = 0.0,
+   *   wxy = (line.xy * (line.xz * y - line.xy * z - line.yz * x) + w * (-line.wx * line.xz - line.wy * line.yz)),
+   *   wxz = (line.xz * (line.xz * y - line.xy * z - line.yz * x) + w * (line.wx * line.xy - line.wz * line.yz)),
+   *   wyz = (line.yz * (line.xz * y - line.xy * z - line.yz * x) + w * (line.wy * line.xy + line.wz * line.xz)),
+   *   xyz = w * (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
+   *   i = 0.0,
    * )
    */
   def projectOntoLine(line: Pga3dBivector): Pga3dTrivector =

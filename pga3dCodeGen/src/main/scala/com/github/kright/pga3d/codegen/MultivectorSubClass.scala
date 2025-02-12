@@ -127,7 +127,7 @@ case class MultivectorSubClass(name: String,
         code(s"inline val ${f.name} = ${v}")
       }
 
-      if (name.contains("Point") || this == vector) {
+      if (Seq(vector, trivector, point, pointCenter).contains(this)) {
         self.values.foreach { (b, sym) =>
           val fName = s"${ga.representation(b)}"
           code("")
