@@ -2,9 +2,9 @@ package com.github.kright.pga3d
 
 import com.github.kright.math.DifferentialSolvers
 
-class PGA3OneBody(val inertia: Pga3dInertia,
-                  val initialState: PGA3State) {
-  var state: PGA3State = initialState
+class Pga3dOneBody(val inertia: Pga3dInertia,
+                   val initialState: Pga3dState) {
+  var state: Pga3dState = initialState
   val initialE = getEnergy()
   val initialL = getL()
 
@@ -20,7 +20,7 @@ class PGA3OneBody(val inertia: Pga3dInertia,
   def getErrorL(): Double =
     (getL() - initialL).norm / initialL.norm
 
-  def getError() = PGA3OneBody.Error(getErrorE(), getErrorL())
+  def getError() = Pga3dOneBody.Error(getErrorE(), getErrorL())
 
   def doStepRK4(dt: Double, globalForque: Pga3dBivector): Unit = {
     doStepRK4F(dt, (state, time) => {
@@ -29,11 +29,11 @@ class PGA3OneBody(val inertia: Pga3dInertia,
     })
   }
 
-  def doStepRK4F(dt: Double, getLocalForque: (state: PGA3State, time: Double) => Pga3dBivector): Unit = {
+  def doStepRK4F(dt: Double, getLocalForque: (state: Pga3dState, time: Double) => Pga3dBivector): Unit = {
     val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
       getDerivative = (state, time) => {
         val localForque = getLocalForque(state, time)
-        PGA3State(
+        Pga3dState(
           motor = state.motor.geometric(state.localB) * -0.5,
           localB = inertia.getAcceleration(state.localB, localForque)
         )
@@ -49,18 +49,18 @@ class PGA3OneBody(val inertia: Pga3dInertia,
       .normalized
   }
 
-  private def getDerivative(globalForque: Pga3dBivector)(state: PGA3State, time: Double): PGA3State =
+  private def getDerivative(globalForque: Pga3dBivector)(state: Pga3dState, time: Double): Pga3dState =
     val localForque = state.motor.reverse.sandwich(globalForque)
-    PGA3State(
+    Pga3dState(
       motor = state.motor.geometric(state.localB) * -0.5,
       localB = inertia.invert(state.localB.cross(inertia(state.localB)) + localForque)
     )
 
-  private def getNextState(state: PGA3State, derivative: PGA3State, dt: Double): PGA3State =
+  private def getNextState(state: Pga3dState, derivative: Pga3dState, dt: Double): Pga3dState =
     state.madd(derivative, dt).normalized
 }
 
-object PGA3OneBody:
+object Pga3dOneBody:
   case class Error(errorE: Double, errorL: Double):
     def this() = this(0.0, 0.0)
 
@@ -70,9 +70,9 @@ object PGA3OneBody:
     def <(other: Error): Boolean =
       errorE <= other.errorE && errorL <= other.errorL
 
-  def simple123() = new PGA3OneBody(
+  def simple123() = new Pga3dOneBody(
     Pga3dInertia(1.0, 3.0, 2.0, 1.0),
-    PGA3State(
+    Pga3dState(
       Pga3dMotor(1, 0, 0, 0, 0, 0, 0, 0),
       Pga3dBivector(
         wx = 0.0,

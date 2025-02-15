@@ -3,7 +3,7 @@ package com.github.kright.pga3d
 import com.github.kright.math.VectorMathGenerators
 import org.scalacheck.Gen
 
-object GeneratorsPGA3d:
+object GeneratorsPga3d:
   val bivectors: Gen[Pga3dBivector] =
     Gen.containerOfN[Seq, Double](6, VectorMathGenerators.double1)
       .map(lst => Pga3dBivector(lst(0), lst(1), lst(2), lst(3), lst(4), lst(5)))

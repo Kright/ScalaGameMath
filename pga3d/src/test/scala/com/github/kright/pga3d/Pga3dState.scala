@@ -1,23 +1,23 @@
 package com.github.kright.pga3d
 
-case class PGA3State(motor: Pga3dMotor,
-                     localB: Pga3dBivector):
+case class Pga3dState(motor: Pga3dMotor,
+                      localB: Pga3dBivector):
 
-  def madd(derivative: PGA3State, dt: Double): PGA3State =
-    PGA3State(
+  def madd(derivative: Pga3dState, dt: Double): Pga3dState =
+    Pga3dState(
       motor = motor + derivative.motor * dt,
       localB = localB + derivative.localB * dt
     )
 
-object PGA3State:
-  def zero: PGA3State =
-    PGA3State(
+object Pga3dState:
+  def zero: Pga3dState =
+    Pga3dState(
       Pga3dMotor(1.0, 0, 0, 0, 0, 0, 0, 0),
       Pga3dBivector(0, 0, 0, 0, 0, 0),
     )
 
-  extension (state: PGA3State)
-    def normalized: PGA3State =
+  extension (state: Pga3dState)
+    def normalized: Pga3dState =
       state.copy(motor = state.motor.normalizedByBulk)
 
     def getEnergy(bodyInertia: Pga3dInertia): Double =
