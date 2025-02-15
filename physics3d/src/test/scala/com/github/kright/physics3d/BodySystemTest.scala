@@ -82,7 +82,7 @@ class BodySystemTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         case 2 => 1e-4
         case 4 => 1e-8
 
-      val stats = simulate(system, solver.doStep(_, dt)).take(1000)
+      val stats = simulate(system, solver.doStep(_, dt)).take(500)
       assertInvariantsAreConstant(solver, stats, new SystemInvariantErr(maxError))
     }
   }

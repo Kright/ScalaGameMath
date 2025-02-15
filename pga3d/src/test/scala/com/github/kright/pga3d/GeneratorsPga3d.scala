@@ -4,14 +4,22 @@ import com.github.kright.math.VectorMathGenerators
 import org.scalacheck.Gen
 
 object GeneratorsPga3d:
+  private def makeGenT[T](elemsCount: Int, factory: (Array[Double], Int) => T): Gen[T] = {
+    Gen.containerOfN[Array, Double](elemsCount, VectorMathGenerators.double1)
+      .map(arr => factory(arr, 0))
+  }
+
   val bivectors: Gen[Pga3dBivector] =
-    Gen.containerOfN[Seq, Double](6, VectorMathGenerators.double1)
-      .map(lst => Pga3dBivector(lst(0), lst(1), lst(2), lst(3), lst(4), lst(5)))
+    makeGenT(6, Pga3dSerializer.loadBivector)
 
   val bivectorBulks: Gen[Pga3dBivectorBulk] =
-    Gen.containerOfN[Seq, Double](3, VectorMathGenerators.double1)
-      .map(lst => Pga3dBivectorBulk(lst(0), lst(1), lst(2)))
+    makeGenT(3, Pga3dSerializer.loadBivectorBulk)
 
   val bivectorWeight: Gen[Pga3dBivectorWeight] =
-    Gen.containerOfN[Seq, Double](3, VectorMathGenerators.double1)
-      .map(lst => Pga3dBivectorWeight(lst(0), lst(1), lst(2)))
+    makeGenT(3, Pga3dSerializer.loadBivectorWeight)
+
+  val quaternions: Gen[Pga3dQuaternion] =
+    makeGenT(4, Pga3dSerializer.loadQuaternion)
+
+  val normalizedQuaternions: Gen[Pga3dQuaternion] =
+    quaternions.filter(_.norm > 1e-40).map(_.normalizedByNorm)
