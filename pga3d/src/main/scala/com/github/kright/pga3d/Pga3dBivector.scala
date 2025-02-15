@@ -18,6 +18,10 @@ case class Pga3dBivector(wx: Double = 0.0,
       yz = wx,
     )
 
+  def strMatrix: String =
+    "%5.2f %5.2f %5.2f %5.2f %5.2f %5.2f"
+      .format(wx, wy, wz, xy, xz, yz)
+
   def weight: Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = wx,

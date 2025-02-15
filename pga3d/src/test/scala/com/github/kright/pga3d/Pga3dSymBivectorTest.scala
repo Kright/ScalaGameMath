@@ -77,17 +77,20 @@ class Pga3dSymBivectorTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks
   }
 
   test("apply bivector") {
-    val p1 = Pga3dPoint(-2.0, 0.0, 0.0)
-    val p2 = Pga3dPoint(2.0, 0.0, 0.0)
-//    val sum = new Pga3dSymBivector(p1, m = 1) + new Pga3dSymBivector(p2, m = 3)
-    val sum = new Pga3dSymBivector(p1, m = 1) + new Pga3dSymBivector(p2, m = 7)
+    val p1 = Pga3dPoint(-4.0, 0.0, 0.0)
+    val p2 = Pga3dPoint(4.0, 0.0, 0.0)
+    val sum = new Pga3dSymBivector(p1, m = 0.25) + new Pga3dSymBivector(p2, m = 0.75)
     // (3^2 * 1 + 1^2 * 3)
-    val b = Pga3dBivector(0.0, 1.0, 0.0)
+    val b = Pga3dBivector(5.0, 7.0, 11.0)
 
     val shifted = Pga3dTranslator.addVector(-sum.centerOfMass.toPoint.toVectorUnsafe).sandwich(sum)
 
+    println(sum.strMatrix)
+    println()
     println(shifted.strMatrix)
+    println()
 
-    println(sum.actOnBivectorAsInertia(b))
-    println(sum.actOnBivectorAsInertia2(b))
+    println(b.strMatrix)
+    println(sum.actOnBivectorAsInertia(b).strMatrix)
+    println(sum.actOnBivectorAsInertia2(b).strMatrix)
   }

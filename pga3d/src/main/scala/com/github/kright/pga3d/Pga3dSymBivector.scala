@@ -101,17 +101,14 @@ case class Pga3dSymBivector(ww: Double,
    * @return
    */
   def actOnBivectorAsInertia(a: Pga3dBivector): Pga3dBivector = {
-    val b = Pga3dBivector(
-      wx = -xz * a.wz + (yy + zz) * a.wx - xy * a.wy + wz * a.xz + wy * a.xy,
-      wy = +yz * a.wz - xy * a.wx + (xx + zz - wx * wx / ww) * a.wy - wx * a.xy + wz * a.yz,
-      wz = (xx + yy) * a.wz + xz * a.wx + yz * a.wy - wx * a.xz - wy * a.yz,
+    Pga3dBivector(
+      wx = + (yy + zz - wy * wy / ww - wz * wz / ww) * a.wx - xy * a.wy - xz * a.wz + wz * a.xz + wy * a.xy,
+      wy = - xy * a.wx + (xx + zz - wx * wx / ww - wz * wz / ww) * a.wy + yz * a.wz - wx * a.xy + wz * a.yz,
+      wz = + xz * a.wx + yz * a.wy + (xx + yy - wx * wx / ww - wy * wy / ww) * a.wz - wx * a.xz - wy * a.yz,
       xy = ww * a.xy,
       xz = ww * a.xz,
       yz = ww * a.yz,
     )
-    val c = this
-    val d = 1
-    b
   }
 
   def actOnBivectorAsInertia2(b: Pga3dBivector): Pga3dBivector = {
