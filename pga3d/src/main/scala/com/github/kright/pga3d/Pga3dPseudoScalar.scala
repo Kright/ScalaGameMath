@@ -3,6 +3,9 @@ package com.github.kright.pga3d
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 case class Pga3dPseudoScalar(i: Double = 0.0):
 
+  override def toString: String =
+    s"Pga3dPseudoScalar(i = $i)"
+
   def dual: Double =
     i
 

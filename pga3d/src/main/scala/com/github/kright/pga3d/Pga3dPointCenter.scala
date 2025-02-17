@@ -1,7 +1,7 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case object Pga3dPointCenter:
+object Pga3dPointCenter:
 
   inline val componentsCount = 0
   inline val x = 0.0
@@ -16,6 +16,9 @@ case object Pga3dPointCenter:
   inline def wxy: Double = 0.0
 
   inline def xyz: Double = 1.0
+
+  override def toString: String =
+    "Pga3dPointCenter"
 
   def dual: Pga3dPlane =
     Pga3dPlane(

@@ -6,6 +6,9 @@ case class Pga3dTranslator(wx: Double = 0.0,
                            wz: Double = 0.0):
   inline val s = 1.0
 
+  override def toString: String =
+    s"Pga3dTranslator(wx = $wx, wy = $wy, wz = $wz)"
+
   def dual: Pga3dMotor =
     Pga3dMotor(
       s = 0.0,

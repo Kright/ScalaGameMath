@@ -26,6 +26,7 @@ class InertiaCodeGen extends CodeGenClass:
     )
 
     code.block {
+      generateToStringMethod(code)
       generateApplyMethod(code)
       generateInvertMethod(code)
       generateGetAcceleration(code)
@@ -54,6 +55,13 @@ class InertiaCodeGen extends CodeGenClass:
     "xz" -> Sym("mrxz"),
     "xy" -> Sym("mrxy"),
   )
+
+  private def generateToStringMethod(code: CodeGen): Unit = {
+    code(
+      s"""
+         |override def toString: String =
+         |  s"${typeName}(${fields.map(f => s"${f} = ${"$" + f}").mkString(", ")})"""".stripMargin)
+  }
 
   private def generateApplyMethod(code: CodeGen): Unit = {
     val localB = bivector.makeSymbolic("localB")

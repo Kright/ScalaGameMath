@@ -5,6 +5,9 @@ case class Pga3dBivectorBulk(xy: Double = 0.0,
                              xz: Double = 0.0,
                              yz: Double = 0.0):
 
+  override def toString: String =
+    s"Pga3dBivectorBulk(xy = $xy, xz = $xz, yz = $yz)"
+
   def dual: Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = yz,

@@ -104,7 +104,7 @@ case class MultivectorSubClass(name: String,
     val code = CodeGen()
 
     if (isObject) {
-      code(s"case object ${name}:")
+      code(s"object ${name}:")
     } else {
       require(variableFields.nonEmpty)
 
@@ -134,6 +134,8 @@ case class MultivectorSubClass(name: String,
           code(s"inline def $fName: Double = ${sym}")
         }
       }
+
+      generateToStringMethod(code)
 
       for (unaryOp <- unaryOps) {
         unaryOp(this, self).foreach { lines =>
@@ -180,11 +182,11 @@ case class MultivectorSubClass(name: String,
       code(s"\n\nobject ${typeName}:")
       code.block {
         addVariablesComponentsCountAsConst(code)
-        
+
         if (this != point && this != quaternion && this != translator) {
           generateZeroObjectMethods(code)
         }
-        
+
         generateMethodsIfAnyPoint(code)
 
         if (this == translator) {
@@ -212,6 +214,26 @@ case class MultivectorSubClass(name: String,
       val mult = MultiVector("w" -> Sym(-0.5))
       code(makeConstructor(mult.geometric(v.dual)))
     }
+  }
+
+  private def generateToStringMethod(code: CodeGen): Unit = {
+    if (variableFields.nonEmpty) {
+      code(
+        s"""
+           |override def toString: String =
+           |  s"${name}(${variableFields.map(f => s"${f.name} = ${"$" + f.name}").mkString(", ")})"""".stripMargin)
+      return
+    }
+
+    if (this == pointCenter) {
+      code(
+        s"""
+           |override def toString: String =
+           |  "${name}"""".stripMargin)
+      return
+    }
+
+    assert(false, "unknown class")
   }
 
   private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {

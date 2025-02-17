@@ -18,6 +18,9 @@ case class Pga3dMultivector(s: Double = 0.0,
                             xyz: Double = 0.0,
                             i: Double = 0.0):
 
+  override def toString: String =
+    s"Pga3dMultivector(s = $s, w = $w, x = $x, y = $y, z = $z, wx = $wx, wy = $wy, wz = $wz, xy = $xy, xz = $xz, yz = $yz, wxy = $wxy, wxz = $wxz, wyz = $wyz, xyz = $xyz, i = $i)"
+
   def dual: Pga3dMultivector =
     Pga3dMultivector(
       s = i,

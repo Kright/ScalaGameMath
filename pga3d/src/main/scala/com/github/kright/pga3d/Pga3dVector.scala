@@ -11,6 +11,9 @@ case class Pga3dVector(x: Double = 0.0,
 
   inline def wxy: Double = -z
 
+  override def toString: String =
+    s"Pga3dVector(x = $x, y = $y, z = $z)"
+
   def dual: Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
       x = x,

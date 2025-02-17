@@ -14,6 +14,9 @@ case class Pga3dPoint(x: Double = 0.0,
 
   inline def xyz: Double = 1.0
 
+  override def toString: String =
+    s"Pga3dPoint(x = $x, y = $y, z = $z)"
+
   def dual: Pga3dPlane =
     Pga3dPlane(
       x = x,

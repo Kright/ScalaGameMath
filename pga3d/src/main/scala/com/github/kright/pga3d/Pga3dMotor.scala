@@ -10,6 +10,9 @@ case class Pga3dMotor(s: Double = 0.0,
                       yz: Double = 0.0,
                       i: Double = 0.0):
 
+  override def toString: String =
+    s"Pga3dMotor(s = $s, wx = $wx, wy = $wy, wz = $wz, xy = $xy, xz = $xz, yz = $yz, i = $i)"
+
   def dual: Pga3dMotor =
     Pga3dMotor(
       s = i,

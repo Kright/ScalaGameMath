@@ -6,6 +6,9 @@ case class Pga3dInertia(mass: Double,
                         mrxz: Double,
                         mrxy: Double):
 
+  override def toString: String =
+    s"Pga3dInertia(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
+
   def apply(localB: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = localB.yz * mryz,

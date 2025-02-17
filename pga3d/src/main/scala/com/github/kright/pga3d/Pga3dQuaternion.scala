@@ -6,6 +6,9 @@ case class Pga3dQuaternion(s: Double = 0.0,
                            xz: Double = 0.0,
                            yz: Double = 0.0):
 
+  override def toString: String =
+    s"Pga3dQuaternion(s = $s, xy = $xy, xz = $xz, yz = $yz)"
+
   def dual: Pga3dMotor =
     Pga3dMotor(
       s = 0.0,

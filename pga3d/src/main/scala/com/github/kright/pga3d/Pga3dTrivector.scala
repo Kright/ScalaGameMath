@@ -14,6 +14,9 @@ case class Pga3dTrivector(x: Double = 0.0,
 
   inline def xyz: Double = w
 
+  override def toString: String =
+    s"Pga3dTrivector(x = $x, y = $y, z = $z, w = $w)"
+
   def dual: Pga3dPlane =
     Pga3dPlane(
       x = x,
