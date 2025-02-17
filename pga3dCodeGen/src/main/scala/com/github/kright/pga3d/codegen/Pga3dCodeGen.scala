@@ -16,4 +16,5 @@ def main(): Unit = {
 
   InertiaCodeGen().writeToFile(packageDir)
   SerializerCodeGen().writeToFile(packageDir)
+  ForqueCodeGen().writeToFile(packageDir)
 }
