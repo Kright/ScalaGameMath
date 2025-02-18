@@ -43,7 +43,7 @@ class ForqueCodeGen extends CodeGenClass:
            |  val v = getLinearForce(forque)
            |  val vNormSquare = v.normSquare
            |  if (vNormSquare > 1e-100) {
-           |    val inv = 1.0 / v.normSquare
+           |    val inv = 1.0 / Math.sqrt(vNormSquare)
            |    ${vector.typeName}(forque.wx * v.x * inv, forque.wy * v.y * inv, forque.wz * v.z * inv)
            |  } else {
            |    ${vector.typeName}(forque.wx, forque.wy, forque.wz)
