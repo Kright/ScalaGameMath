@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 object Pga3dSerializer:
 
@@ -216,3 +217,29 @@ object Pga3dSerializer:
     arr(offset + 1) = v.mryz
     arr(offset + 2) = v.mrxz
     arr(offset + 3) = v.mrxy
+
+  def loadInertiaSummable(arr: Array[Double], offset: Int): Pga3dInertiaSummable =
+    Pga3dInertiaSummable(
+      ww = arr(offset + 0),
+      wx = arr(offset + 1),
+      wy = arr(offset + 2),
+      wz = arr(offset + 3),
+      xx = arr(offset + 4),
+      yy = arr(offset + 5),
+      zz = arr(offset + 6),
+      xy = arr(offset + 7),
+      yz = arr(offset + 8),
+      xz = arr(offset + 9),
+    )
+
+  def store(v: Pga3dInertiaSummable, arr: Array[Double], offset: Int): Unit =
+    arr(offset + 0) = v.ww
+    arr(offset + 1) = v.wx
+    arr(offset + 2) = v.wy
+    arr(offset + 3) = v.wz
+    arr(offset + 4) = v.xx
+    arr(offset + 5) = v.yy
+    arr(offset + 6) = v.zz
+    arr(offset + 7) = v.xy
+    arr(offset + 8) = v.yz
+    arr(offset + 9) = v.xz

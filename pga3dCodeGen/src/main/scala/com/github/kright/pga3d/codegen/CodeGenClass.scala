@@ -17,6 +17,8 @@ trait CodeGenClass:
     if (typeName.startsWith("Pga3d")) typeName.drop(5).capitalize
     else typeName.capitalize
 
+  def generateImports(): String = ""
+
   def generateCode(): String
 
   def writeToFile(packageDir: File): Unit =
@@ -27,6 +29,7 @@ trait CodeGenClass:
     val code =
       s"""package com.github.kright.pga3d
          |
+         |${generateImports()}
          |/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
          |${generateCode()}""".stripMargin
 

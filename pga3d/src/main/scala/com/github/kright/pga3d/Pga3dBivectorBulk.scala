@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dBivectorBulk(xy: Double = 0.0,
                                    xz: Double = 0.0,

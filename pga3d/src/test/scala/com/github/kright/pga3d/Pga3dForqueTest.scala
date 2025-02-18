@@ -3,7 +3,7 @@ package com.github.kright.pga3d
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
+class Pga3dForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("force and torque") {
     val torque = (Pga3dPoint(0, 1, 0) v Pga3dVector(1, 0, 0)) + (Pga3dPoint(0, -1, 0) v Pga3dVector(-1, 0, 0))
     val force = (Pga3dPoint(0, 1, 0) v Pga3dVector(1, 0, 0)) + (Pga3dPoint(0, -1, 0) v Pga3dVector(1, 0, 0))
@@ -19,7 +19,7 @@ class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("make force and extract linear part back") {
-    forAll(GeneratorsPga3d.points, GeneratorsPga3d.points, GeneratorsPga3d.vectors, GeneratorsPga3d.vectors) { (p1, p2, v1, v2) =>
+    forAll(Pga3dGenerators.points, Pga3dGenerators.points, Pga3dGenerators.vectors, Pga3dGenerators.vectors) { (p1, p2, v1, v2) =>
       val forque1 = Pga3dForque.force(p1, v1)
       val forque2 = Pga3dForque.force(p2, v2)
       val forqueSum = forque1 + forque2
@@ -37,7 +37,7 @@ class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("pure torque translation affect nothing") {
-    forAll(GeneratorsPga3d.vectors, GeneratorsPga3d.vectors) { (shift, t) =>
+    forAll(Pga3dGenerators.vectors, Pga3dGenerators.vectors) { (shift, t) =>
       val torque = Pga3dForque.torque(t)
       val shifted = Pga3dTranslator.addVector(shift).sandwich(torque)
       assert(shifted == torque)
@@ -45,7 +45,7 @@ class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("force translation") {
-    forAll(GeneratorsPga3d.points, GeneratorsPga3d.vectors, GeneratorsPga3d.vectors) { (point, f, shift) =>
+    forAll(Pga3dGenerators.points, Pga3dGenerators.vectors, Pga3dGenerators.vectors) { (point, f, shift) =>
       val shifted = Pga3dTranslator.addVector(shift).sandwich(Pga3dForque.force(point, f))
       val shifted2 = Pga3dForque.force(point + shift, f)
       assert((shifted - shifted2).norm < 1e-15)
@@ -53,7 +53,7 @@ class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("force center") {
-    forAll(GeneratorsPga3d.points, GeneratorsPga3d.vectors) { (point, f) =>
+    forAll(Pga3dGenerators.points, Pga3dGenerators.vectors) { (point, f) =>
       val force = Pga3dForque.force(point, f)
       val linearForce = Pga3dForque.getLinearForce(force)
       val p = Pga3dForque.getCenter(force)

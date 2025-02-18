@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dQuaternion(s: Double = 0.0,
                                  xy: Double = 0.0,

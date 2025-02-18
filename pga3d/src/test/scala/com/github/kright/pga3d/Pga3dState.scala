@@ -20,10 +20,10 @@ object Pga3dState:
     def normalized: Pga3dState =
       state.copy(motor = state.motor.normalizedByBulk)
 
-    def getEnergy(bodyInertia: Pga3dInertiaLocal): Double =
-      (state.localB v bodyInertia(state.localB)) * 0.5
-
     def getL(bodyInertia: Pga3dInertiaLocal): Pga3dBivector =
+      state.motor.sandwich(bodyInertia(state.localB))
+
+    def getL(bodyInertia: Pga3dInertia): Pga3dBivector =
       state.motor.sandwich(bodyInertia(state.localB))
 
     def center: Pga3dTrivector =

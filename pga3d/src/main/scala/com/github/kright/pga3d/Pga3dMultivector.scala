@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dMultivector(s: Double = 0.0,
                                   w: Double = 0.0,

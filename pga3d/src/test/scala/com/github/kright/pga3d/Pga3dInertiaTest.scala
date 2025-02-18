@@ -1,147 +1,195 @@
 package com.github.kright.pga3d
 
-import com.github.kright.math.EqualityEps
-import org.scalactic.{Equality, TolerantNumerics}
+import com.github.kright.matrix.{Matrix, MatrixPrinter}
+import com.github.kright.pga3d.Pga3dGenerators.{inertiaGen, normalizedQuaternions, vectors}
+import org.scalacheck.Gen
+import org.scalacheck.rng.Seed
+import org.scalactic.anyvals.PosInt
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
-  private val eps = 1e-12
+  extension (p: Pga3dInertiaSummable)
+    def str: String =
+      s"""Pga3dSymBivector(ww = ${p.ww},
+         |                 wx = ${p.wx}, wy = ${p.wy}, wz = ${p.wz},
+         |                 xx = ${p.xx}, yy = ${p.yy}, zz = ${p.zz},
+         |                 xy = ${p.xy}, xz = ${p.xz}, yz = ${p.yz})""".stripMargin
 
-  private given doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(eps)
 
-  private given equalityEps: EqualityEps = EqualityEps(eps)
+  private val shifts: Seq[Pga3dVector] = Seq(
+    Pga3dVector(0.0, 0.0, 0.0),
+    Pga3dVector(1.0, 0.0, 0.0),
+    Pga3dVector(0.0, 1.0, 0.0),
+    Pga3dVector(0.0, 0.0, 1.0),
+    Pga3dVector(1.0, 1.0, 1.0),
+  )
 
-  test("calculate free rotation body precession for RK4") {
-    val stepsCount = 1000
-    val forque = Pga3dBivector()
+  def p(p: Pga3dInertiaSummable): Unit =
+    println(p.str)
+    println(p)
+    println()
 
-    val maxError = testOneBodySimple123(stepsCount, body => {
-      body.doStepRK4(dt = 0.01, forque)
-      body.getError()
-    }).reduce(_ max _)
-
-    assert(maxError < Pga3dOneBody.Error(errorE = 6e-11, errorL = 1e-9))
+  def assertEq(a: Pga3dInertiaSummable, b: Pga3dInertiaSummable, eps: Double = 1e-9): Unit = {
+    val n = (a - b).norm
+    assert(n < eps)
   }
 
-  test("getAcceleration test") {
-    val body = Pga3dOneBody.simple123()
-
-    val localB = Pga3dBivector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
-    val localForque = Pga3dBivector(0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
-
-    val acc = body.inertia.getAcceleration(localB, localForque)
-    val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
-
-    assert((acc - accNaive).norm < 2e-16)
+  test("shift") {
+    val p1 = Pga3dPoint(-1.0, 0.0, 0.0)
+    val p2 = Pga3dPoint(1.0, 0.0, 0.0)
+    val sum = Pga3dInertiaSummable.point(p1, mass = 1.0) + Pga3dInertiaSummable.point(p2, mass = 3.0)
+    shifts.foreach { shift =>
+      val shiftedSum = Pga3dInertiaSummable.point(p1 + shift, mass = 1.0) + Pga3dInertiaSummable.point(p2 + shift, mass = 3.0)
+      assertEq(Pga3dTranslator.addVector(shift).sandwich(sum), shiftedSum)
+      assertEq(Pga3dTranslator.addVector(shift).toMotor.sandwich(sum), shiftedSum)
+    }
   }
 
-  //  test("calculate performance") {
-  //    val stepsCount = 10_000_000
-  //    val forque = Bivector()
-  //
-  //    val body = PGA3OneBody.simple123()
-  //
-  //    assert(body.initialE == 3.0)
-  //    assert(body.initialL == Bivector(wx = 3.0, wy = 2.0, wz = 1.0))
-  //
-  //    val start = System.nanoTime()
-  //    for (_ <- 0 until stepsCount) {
-  //      body.doStepRK4(dt = 0.001, forque)
-  //    }
-  //    val end = System.nanoTime()
-  //    println(s"dt = ${(end - start) / stepsCount}ns")
-  //  }
-
-  private def testOneBodySimple123[T](stepsCount: Int, doStep: Pga3dOneBody => T): Iterable[T] = {
-    val body = Pga3dOneBody.simple123()
-
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
-
-    for (_ <- 0 until stepsCount)
-      yield doStep(body)
+  test("rotate") {
+    val p1 = Pga3dPoint(-1.0, 0.0, 0.0)
+    val p2 = Pga3dPoint(1.0, 0.0, 0.0)
+    val sum = Pga3dInertiaSummable.point(p1, mass = 1.0) + Pga3dInertiaSummable.point(p2, mass = 3.0)
+    forAll(normalizedQuaternions) { q =>
+      val rotatedSum = Pga3dInertiaSummable.point(q.sandwich(p1).toPoint, mass = 1.0) + Pga3dInertiaSummable.point(q.sandwich(p2).toPoint, mass = 3.0)
+      assertEq(q.sandwich(sum), rotatedSum)
+      assertEq(q.toMotor.sandwich(sum), rotatedSum)
+    }
   }
 
-  test("calculate energy accumulation for linear force during rotation") {
-    val dt = 0.01
-    val stepsCount = 100
+  test("apply motor") {
+    val p1 = Pga3dPoint(-1.0, 0.0, 0.0)
+    val p2 = Pga3dPoint(1.0, 0.0, 0.0)
+    val sum = Pga3dInertiaSummable.point(p1, mass = 1.0) + Pga3dInertiaSummable.point(p2, mass = 3.0)
+    forAll(normalizedQuaternions(Gen.Parameters.default, Seed(12345L)).get, vectors) { (q, shift) =>
+      val motor = q.geometric(Pga3dTranslator.addVector(shift))
+      val movedSum = motor.sandwich(sum)
+      assertEq(motor.sandwich(sum), movedSum)
+    }
+  }
 
-    val forceDirection = Pga3dPlaneIdeal(x = 1.0, y = 0, z = 0)
-    val body = Pga3dOneBody.simple123()
+  test("apply bivector") {
+    val p1 = Pga3dPoint(-2.0, 0.0, 0.0)
+    val p2 = Pga3dPoint(2.0, 0.0, 0.0)
+    //    val sum = new Pga3dInertia(p1, mass = 1) + new Pga3dInertia(p2, mass = 3)
+    val sum = Pga3dInertiaSummable.point(p1, mass = 1) + Pga3dInertiaSummable.point(p2, mass = 7)
+    // (3^2 * 1 + 1^2 * 3)
+    val b = Pga3dBivector(0.0, 1.0, 0.0)
+    val shifted = Pga3dTranslator.addVector(-sum.centerOfMass.toVectorUnsafe).sandwich(sum)
+    //    println(shifted.toMatrixString)
+    //    println(sum.actOnBivectorAsInertia(b))
+    //    println(sum.actOnBivectorAsInertia2(b))
+  }
 
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+  test("inertia of eight points in cube") {
+    val localInertia = Pga3dInertiaLocal(mass = 1.0, mryz = 1 + 1, mrxz = 1 + 1, mrxy = 1 + 1)
 
-    var accumulatedL = body.initialL
-
-    val errors = for (step <- 1 to stepsCount) yield {
-      val t = step * dt
-
-      val bodyCenter = body.state.center
-      val globalForque = bodyCenter.dot(forceDirection)
-      body.doStepRK4(dt, globalForque)
-
-      val expectedEnergy = body.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.mass
-      accumulatedL += globalForque * dt
-
-      val err = Pga3dOneBody.Error(errorE = math.abs(expectedEnergy - body.getEnergy()), errorL = (accumulatedL - body.getL()).norm)
-      err
+    var sumOfPoints = Pga3dInertiaSummable.zero
+    for (z <- Seq(-1, 1); y <- Seq(-1, 1); x <- Seq(-1, 1)) {
+      sumOfPoints += Pga3dInertiaSummable.point(Pga3dPoint(x, y, z), mass = 1.0 / 8.0)
     }
 
-    val maxError = errors.reduce(_ max _)
-    assert(maxError < Pga3dOneBody.Error(2e-9, 4e-9))
+    assertEq(sumOfPoints, localInertia.toSummable)
 
-    val endPoint = body.state.center
-    val expectedPoint = Pga3dPlane(w = 1.0, x = 0.5).dual
-
-    assert((endPoint - expectedPoint).norm < 2e-9)
+    assert(sumOfPoints.toString ==
+      "Pga3dInertiaSummable(ww=1.0, wx=0.0, wy=0.0, wz=0.0, xx=1.0, yy=1.0, zz=1.0, xy=0.0, yz=0.0, xz=0.0)")
   }
 
-  test("calculate energy accumulation for linear spring") {
-    val dt = 0.01
-    val stepsCount = 1000
+  test(s"inertia of eight points in cube for non-even mass and size") {
+    val mass = 7.0
+    val rx = 3.0
+    val ry = 4.0
+    val rz = 5.0
 
-    val mass = 10.0
+    val rx2 = rx * rx
+    val ry2 = ry * ry
+    val rz2 = rz * rz
 
-    val body = new Pga3dOneBody(
-      Pga3dInertiaLocal(mass, 1.0, 1.0, 1.0),
-      Pga3dState.zero,
+    val localInertia = Pga3dInertiaLocal(
+      mass,
+      mryz = mass * (ry2 + rz2),
+      mrxz = mass * (rx2 + rz2),
+      mrxy = mass * (rx2 + ry2),
     )
 
-    val springCenter = Pga3dPlane(3.0, 4.0, w = 1).dual // len 5
-    val springK = 20
+    var sumOfPoints = Pga3dInertiaSummable.zero
+    for (z <- Seq(-rz, rz); y <- Seq(-ry, ry); x <- Seq(-rx, rx)) {
+      sumOfPoints += Pga3dInertiaSummable.point(Pga3dPoint(x, y, z), mass = mass / 8.0)
+    }
 
-    def getEnergy(): Double = (body.state.center - springCenter).normSquare * 0.5 * springK + body.getEnergy()
+    assertEq(sumOfPoints, localInertia.toSummable)
+  }
 
-    val initialEnergy = getEnergy()
+  private def getMainAxesSorted(inertia: Pga3dInertia): Seq[Double] =
+    val local = inertia.localInertia
+    Seq(local.mryz, local.mrxz, local.mrxy).sorted
 
-    for (step <- 1 to stepsCount) {
-      val t = step * dt
+  private def maxDiff(lstA: Seq[Double], lstB: Seq[Double]): Double =
+    lstA.zip(lstB).map((a, b) => Math.abs(a - b)).max
 
-      body.doStepRK4F(dt, getLocalForque = (state, time) => {
-        val localForque1 = {
-          val bodyCenter = state.center
-          val globalForque = (bodyCenter v springCenter) * springK
-          val localForque = state.motor.reverse.sandwich(globalForque)
-          localForque
-        }
-        val localForque2 = {
-          val localSpringPos = state.motor.reverse.sandwich(springCenter)
-          val localForque = (Pga3dPoint() v localSpringPos) * springK
-          localForque
-        }
-        assert((localForque1 - localForque2).norm < 1e-10)
+  test("inertia diagonalization preservers summableInertia") {
+    val toStr = MatrixPrinter.squarePrinter5f.copy(elemToStr = _.toString)
 
-        localForque1
-      })
+    forAll(inertiaGen, MinSuccessful(100)) { inertiaInitial =>
+      val summableInertia = inertiaInitial.toSummable
+      val inertiaRestored = summableInertia.toInertia
+      val summableRestored = inertiaRestored.toSummable
 
-      val expectedPos = springCenter - (springCenter.weight * Math.cos(t * Math.sqrt(springK / mass))).toTrivector
+      val diff = (summableInertia - summableRestored).norm
+      assert(diff < 1e-9,
+        s"""diff = ${diff}
+           |summableInertia = ${toStr(summableInertia.toMatrixXYZW)}
+           |summableRestored = ${toStr(summableInertia.toMatrixXYZW)}
+           |""".stripMargin)
+    }
+  }
 
-      val dE = math.abs(initialEnergy - getEnergy()) / initialEnergy
-      val dPos = (expectedPos - body.state.center).norm
+  test("inertia diagonalization preservers main axes") {
+    forAll(inertiaGen, MinSuccessful(100)) { inertiaInitial =>
+      val summableInertia = inertiaInitial.toSummable
+      val inertiaRestored = summableInertia.toInertia
+      val summableRestored = inertiaRestored.toSummable
 
-      assert(dE <= 1.2e-10)
-      assert(dPos <= 2.4e-8)
+      val sortedAxesInitial = getMainAxesSorted(inertiaInitial)
+      val sortedAxesRestored = getMainAxesSorted(inertiaRestored)
+
+      assert(maxDiff(sortedAxesInitial, sortedAxesRestored) < 1e-13 * inertiaInitial.mass,
+        s"""diff = ${sortedAxesInitial.zip(sortedAxesRestored).map((a, b) => Math.abs(a - b)).mkString(", ")}
+           |sortedAxesInitial = ${sortedAxesInitial}
+           |sortedAxesRestored = ${sortedAxesRestored}""".stripMargin)
+    }
+  }
+
+  test("inertia .toSummable.toInertia preserves mass") {
+    forAll(inertiaGen, MinSuccessful(1000)) { inertiaInitial =>
+      val inertiaRestored = inertiaInitial.toSummable.toInertia
+
+      assert(Math.abs(inertiaInitial.mass - inertiaRestored.mass) < 1e-13,
+        s"""diff = ${Math.abs(inertiaInitial.mass - inertiaRestored.mass)}
+           |initialMass = ${inertiaRestored.mass}
+           |restoredMass = ${inertiaRestored.mass}""".stripMargin)
+    }
+  }
+
+  test("inertia toSummable.toInertia and back applied in the same way") {
+    forAll(inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+      val inertia2 = inertia.toSummable.toInertia
+
+      val applied1 = inertia(bivector)
+      val applied2 = inertia2(bivector)
+
+      assert((applied1 - applied2).norm < 1e-9)
+    }
+  }
+
+  test("inertia sum") {
+    forAll(inertiaGen, inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia1, inertia2, bivector) =>
+
+      val inertiaSum = (inertia1.toSummable + inertia2.toSummable).toInertia
+
+      val applied1 = inertia1(bivector) + inertia2(bivector)
+      val applied2 = inertiaSum(bivector)
+
+      assert((applied1 - applied2).norm < 1e-9)
     }
   }

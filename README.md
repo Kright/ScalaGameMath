@@ -102,12 +102,24 @@ Change lib code, publish to local ivy repo:
 sbt publishLocal
 ```
 
-In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.6.0-SNAPSHOT"
+Or to local maven:
+```bash
+sbt publishM2
+```
 
-After that in other project add local library. In my case it was:
+In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" and 
+"~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
+
+
+After that in other project add local library. In my case it was for sbt:
 
 ```scala
 libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.6.0-SNAPSHOT"
+```
+
+And for gradle:
+```groovy
+implementation "pga3d:pga3d_3:0.7.0-SNAPSHOT"
 ```
 
 May be you will need to remove cached lib of jitpack, it will be placed in path like "~

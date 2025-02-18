@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 object Pga3dForque:
   def force(point: Pga3dPoint, force: Pga3dVector): Pga3dBivector =

@@ -1,7 +1,8 @@
-package com.github.kright.pga3d.codegen
+package com.github.kright.pga3d.codegen.inertia
 
 import com.github.kright.ga.{MultiVector, PGA3}
 import com.github.kright.pga3d.codegen.MultivectorSubClass.bivector
+import com.github.kright.pga3d.codegen.{CodeGen, CodeGenClass, MultivectorSubClass}
 import com.github.kright.symbolic.Sym
 
 class InertiaLocalCodeGen extends CodeGenClass:
@@ -22,14 +23,27 @@ class InertiaLocalCodeGen extends CodeGenClass:
       s"""final case class ${name}(mass: Double,
          |                         ${pad}mryz: Double,
          |                         ${pad}mrxz: Double,
-         |                         ${pad}mrxy: Double):""".stripMargin
+         |                         ${pad}mrxy: Double) extends Pga3dInertiaAbstract:""".stripMargin
     )
 
     code.block {
       generateToStringMethod(code)
+
+      code(
+        """  
+          |override def centerOfMass: Pga3dPoint =
+          |  Pga3dPoint(0.0, 0.0, 0.0)
+          |
+          |override def centerOfMassTrivector: Pga3dTrivector =
+          |  Pga3dTrivector(x = 0.0, y = 0.0, z = 0.0, w = mass)
+          |
+          |""".stripMargin)
+      
       generateApplyMethod(code)
       generateInvertMethod(code)
       generateGetAcceleration(code)
+      generateToSummable(code)
+      generateToInertia(code)
     }
 
     code(
@@ -67,7 +81,7 @@ class InertiaLocalCodeGen extends CodeGenClass:
     val localB = bivector.makeSymbolic("localB")
     val result = localB.multiplyElementwise(massMult).dual
 
-    code(s"\ndef apply(localB: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =")
+    code(s"\noverride def apply(localB: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =")
     code.block {
       code(bivector.makeConstructor(result))
     }
@@ -77,7 +91,7 @@ class InertiaLocalCodeGen extends CodeGenClass:
     val localInertia = bivector.makeSymbolic("localInertia")
     val result = localInertia.dual.map((b, s) => Sym(s"$s / ${massMult(b)}"))
 
-    code(s"\ndef invert(localInertia: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =")
+    code(s"\noverride def invert(localInertia: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =")
     code.block {
       code(bivector.makeConstructor(result))
     }
@@ -107,7 +121,7 @@ class InertiaLocalCodeGen extends CodeGenClass:
     code(
       s"""
          |/** invert(localB.cross(apply(localB)) + localForque) */
-         |def getAcceleration(localB: ${MultivectorSubClass.bivector.name}, localForque: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =
+         |override def getAcceleration(localB: ${MultivectorSubClass.bivector.name}, localForque: ${MultivectorSubClass.bivector.name}): ${MultivectorSubClass.bivector.name} =
          |""".stripMargin
     )
     code.block {
@@ -136,3 +150,34 @@ class InertiaLocalCodeGen extends CodeGenClass:
        |    mrxy = (rx2 + ry2) * mass / 3,
        |  )
        |""".stripMargin
+
+  private def generateToSummable(code: CodeGen): Unit =
+    code(
+      s"""
+         |def toSummable: Pga3dInertiaSummable =
+         |  val mrxyz2 = (mrxy + mrxz + mryz) * 0.5
+         |
+         |  val mrx2 = mrxyz2 - mryz
+         |  val mry2 = mrxyz2 - mrxz
+         |  val mrz2 = mrxyz2 - mrxy
+         |
+         |  Pga3dInertiaSummable(
+         |    ww = mass,
+         |    wx = 0.0,
+         |    wy = 0.0,
+         |    wz = 0.0,
+         |    xx = mrx2,
+         |    yy = mry2,
+         |    zz = mrz2,
+         |    xy = 0.0,
+         |    xz = 0.0,
+         |    yz = 0.0,
+         |  )
+         |""".stripMargin)
+
+  private def generateToInertia(code: CodeGen): Unit =
+    code(
+      s"""
+         |def toInertia: Pga3dInertia =
+         |  Pga3dInertia(${MultivectorSubClass.motor.typeName}.id, this)
+         |""".stripMargin)

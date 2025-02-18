@@ -1,6 +1,7 @@
 package com.github.kright.pga3d.codegen
 
 import com.github.kright.ga.PGA3
+import com.github.kright.pga3d.codegen.inertia.{InertiaLocalCodeGen, InertiaSummableCodeGen}
 
 class SerializerCodeGen extends CodeGenClass:
   private given ga: PGA3 = MultivectorSubClass.pga3
@@ -47,14 +48,16 @@ class SerializerCodeGen extends CodeGenClass:
     code.toString
   }
 
-  def generateMethodsForInertia(code: CodeGen): Unit = {
-    val inertia = InertiaLocalCodeGen()
+  private def generateMethodsForClass(code: CodeGen,
+                                      typeNameWithoutPrefix: String,
+                                      typeName: String,
+                                      fields: Seq[String]): Unit = {
     code("")
-    code(s"def load${inertia.typeNameWithoutPrefix}(arr: Array[Double], offset: Int): ${inertia.typeName} =")
+    code(s"def load${typeNameWithoutPrefix}(arr: Array[Double], offset: Int): ${typeName} =")
     code.block {
-      code(s"${inertia.typeName}(")
+      code(s"${typeName}(")
       code.block {
-        inertia.fields.zipWithIndex.foreach { (field, i) =>
+        fields.zipWithIndex.foreach { (field, i) =>
           code(s"${field} = arr(offset + ${i}),")
         }
       }
@@ -62,10 +65,17 @@ class SerializerCodeGen extends CodeGenClass:
     }
 
     code("")
-    code(s"def store(v: ${inertia.typeName}, arr: Array[Double], offset: Int): Unit =")
+    code(s"def store(v: ${typeName}, arr: Array[Double], offset: Int): Unit =")
     code.block {
-      for ((field, i) <- inertia.fields.zipWithIndex) {
+      for ((field, i) <- fields.zipWithIndex) {
         code(s"arr(offset + ${i}) = v.${field}")
       }
     }
+  }
+
+  def generateMethodsForInertia(code: CodeGen): Unit = {
+    val inertia = InertiaLocalCodeGen()
+    generateMethodsForClass(code, inertia.typeNameWithoutPrefix, inertia.typeName, inertia.fields)
+    val inertiaSummable = InertiaSummableCodeGen()
+    generateMethodsForClass(code, inertiaSummable.typeNameWithoutPrefix, inertiaSummable.typeName, inertiaSummable.fields)
   }

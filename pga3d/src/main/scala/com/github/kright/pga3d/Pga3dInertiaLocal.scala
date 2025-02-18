@@ -1,15 +1,22 @@
 package com.github.kright.pga3d
 
+
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dInertiaLocal(mass: Double,
                                    mryz: Double,
                                    mrxz: Double,
-                                   mrxy: Double):
+                                   mrxy: Double) extends Pga3dInertiaAbstract:
 
   override def toString: String =
     s"Pga3dInertiaLocal(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
 
-  def apply(localB: Pga3dBivector): Pga3dBivector =
+  override def centerOfMass: Pga3dPoint =
+    Pga3dPoint(0.0, 0.0, 0.0)
+
+  override def centerOfMassTrivector: Pga3dTrivector =
+    Pga3dTrivector(x = 0.0, y = 0.0, z = 0.0, w = mass)
+
+  override def apply(localB: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = localB.yz * mryz,
       wy = -localB.xz * mrxz,
@@ -19,7 +26,7 @@ final case class Pga3dInertiaLocal(mass: Double,
       yz = localB.wx * mass,
     )
 
-  def invert(localInertia: Pga3dBivector): Pga3dBivector =
+  override def invert(localInertia: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = localInertia.yz / mass,
       wy = -localInertia.xz / mass,
@@ -30,7 +37,7 @@ final case class Pga3dInertiaLocal(mass: Double,
     )
 
   /** invert(localB.cross(apply(localB)) + localForque) */
-  def getAcceleration(localB: Pga3dBivector, localForque: Pga3dBivector): Pga3dBivector =
+  override def getAcceleration(localB: Pga3dBivector, localForque: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = localForque.yz / mass + localB.wy * localB.xy + localB.wz * localB.xz,
       wy = -localForque.xz / mass + localB.wz * localB.yz - localB.wx * localB.xy,
@@ -39,6 +46,29 @@ final case class Pga3dInertiaLocal(mass: Double,
       xz = (-localForque.wy + localB.xy * localB.yz * mryz - localB.xy * localB.yz * mrxy) / mrxz,
       yz = (localForque.wx + localB.xy * localB.xz * mrxy - localB.xy * localB.xz * mrxz) / mryz,
     )
+
+  def toSummable: Pga3dInertiaSummable =
+    val mrxyz2 = (mrxy + mrxz + mryz) * 0.5
+
+    val mrx2 = mrxyz2 - mryz
+    val mry2 = mrxyz2 - mrxz
+    val mrz2 = mrxyz2 - mrxy
+
+    Pga3dInertiaSummable(
+      ww = mass,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xx = mrx2,
+      yy = mry2,
+      zz = mrz2,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+    )
+
+  def toInertia: Pga3dInertia =
+    Pga3dInertia(Pga3dMotor.id, this)
 
 
 object Pga3dInertiaLocal:

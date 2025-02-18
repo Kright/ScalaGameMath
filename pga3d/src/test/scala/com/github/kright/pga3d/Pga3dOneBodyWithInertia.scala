@@ -2,14 +2,13 @@ package com.github.kright.pga3d
 
 import com.github.kright.math.DifferentialSolvers
 
-class Pga3dOneBody(val inertia: Pga3dInertiaLocal,
-                   val initialState: Pga3dState) {
+class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3dState):
   var state: Pga3dState = initialState
   val initialE = getEnergy()
   val initialL = getL()
 
   def getEnergy(): Double =
-    state.getEnergy(inertia)
+    inertia.getEnergy(state.localB)
 
   def getL(): Pga3dBivector =
     state.getL(inertia)
@@ -20,7 +19,7 @@ class Pga3dOneBody(val inertia: Pga3dInertiaLocal,
   def getErrorL(): Double =
     (getL() - initialL).norm / initialL.norm
 
-  def getError() = Pga3dOneBody.Error(getErrorE(), getErrorL())
+  def getError() = Pga3dOneBodyWithInertiaLocal.Error(getErrorE(), getErrorL())
 
   def doStepRK4(dt: Double, globalForque: Pga3dBivector): Unit = {
     doStepRK4F(dt, (state, time) => {
@@ -58,29 +57,19 @@ class Pga3dOneBody(val inertia: Pga3dInertiaLocal,
 
   private def getNextState(state: Pga3dState, derivative: Pga3dState, dt: Double): Pga3dState =
     state.madd(derivative, dt).normalized
-}
 
-object Pga3dOneBody:
-  case class Error(errorE: Double, errorL: Double):
-    def this() = this(0.0, 0.0)
-
-    infix def max(other: Error): Error =
-      Error(Math.max(errorE, other.errorE), Math.max(errorL, other.errorL))
-
-    def <(other: Error): Boolean =
-      errorE <= other.errorE && errorL <= other.errorL
-
-  def simple123() = new Pga3dOneBody(
-    Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0),
+object Pga3dOneBodyWithInertia:
+  def simple123(motor: Pga3dMotor) = new Pga3dOneBodyWithInertia(
+    Pga3dInertia(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)),
     Pga3dState(
-      Pga3dMotor(1, 0, 0, 0, 0, 0, 0, 0),
-      Pga3dBivector(
+      motor,
+      motor.reverseSandwich(Pga3dBivector(
         wx = 0.0,
         wy = 0.0,
         wz = 0.0,
         xy = 1.0,
         yz = 1.0,
         xz = -1.0,
-      )
+      ))
     )
-  )
+  )    
