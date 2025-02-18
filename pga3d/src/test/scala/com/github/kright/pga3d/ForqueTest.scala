@@ -63,7 +63,7 @@ class ForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("force and torque extraction for parallel case") {
-    val f = Pga3dVector(1, 0, 0)
+    val f = Pga3dVector(3.1, 0, 0)
     val t = Pga3dVector(12, 0, 0)
     val center = Pga3dPoint(0, 1, 2)
 

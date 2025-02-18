@@ -29,7 +29,7 @@ object Pga3dForque:
     val v = getLinearForce(forque)
     val vNormSquare = v.normSquare
     if (vNormSquare > 1e-100) {
-      val inv = 1.0 / v.normSquare
+      val inv = 1.0 / Math.sqrt(vNormSquare)
       Pga3dVector(forque.wx * v.x * inv, forque.wy * v.y * inv, forque.wz * v.z * inv)
     } else {
       Pga3dVector(forque.wx, forque.wy, forque.wz)
