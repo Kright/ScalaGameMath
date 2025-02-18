@@ -4,10 +4,10 @@ import com.github.kright.ga.{MultiVector, PGA3}
 import com.github.kright.pga3d.codegen.MultivectorSubClass.bivector
 import com.github.kright.symbolic.Sym
 
-class InertiaCodeGen extends CodeGenClass:
+class InertiaLocalCodeGen extends CodeGenClass:
   private given ga: PGA3 = MultivectorSubClass.pga3
 
-  override def name: String = "Pga3dInertia"
+  override def name: String = "Pga3dInertiaLocal"
 
   override def isObject: Boolean = false
 

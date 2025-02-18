@@ -2,7 +2,7 @@ package com.github.kright.pga3d
 
 import com.github.kright.math.DifferentialSolvers
 
-class Pga3dOneBody(val inertia: Pga3dInertia,
+class Pga3dOneBody(val inertia: Pga3dInertiaLocal,
                    val initialState: Pga3dState) {
   var state: Pga3dState = initialState
   val initialE = getEnergy()
@@ -71,7 +71,7 @@ object Pga3dOneBody:
       errorE <= other.errorE && errorL <= other.errorL
 
   def simple123() = new Pga3dOneBody(
-    Pga3dInertia(1.0, 3.0, 2.0, 1.0),
+    Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0),
     Pga3dState(
       Pga3dMotor(1, 0, 0, 0, 0, 0, 0, 0),
       Pga3dBivector(

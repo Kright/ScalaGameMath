@@ -105,7 +105,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val mass = 10.0
 
     val body = new Pga3dOneBody(
-      Pga3dInertia(mass, 1.0, 1.0, 1.0),
+      Pga3dInertiaLocal(mass, 1.0, 1.0, 1.0),
       Pga3dState.zero,
     )
 

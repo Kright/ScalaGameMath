@@ -203,15 +203,15 @@ case object Pga3dSerializer:
   def store(v: Pga3dPseudoScalar, arr: Array[Double], offset: Int): Unit =
     arr(offset + 0) = v.i
 
-  def loadInertia(arr: Array[Double], offset: Int): Pga3dInertia =
-    Pga3dInertia(
+  def loadInertiaLocal(arr: Array[Double], offset: Int): Pga3dInertiaLocal =
+    Pga3dInertiaLocal(
       mass = arr(offset + 0),
       mryz = arr(offset + 1),
       mrxz = arr(offset + 2),
       mrxy = arr(offset + 3),
     )
 
-  def store(v: Pga3dInertia, arr: Array[Double], offset: Int): Unit =
+  def store(v: Pga3dInertiaLocal, arr: Array[Double], offset: Int): Unit =
     arr(offset + 0) = v.mass
     arr(offset + 1) = v.mryz
     arr(offset + 2) = v.mrxz

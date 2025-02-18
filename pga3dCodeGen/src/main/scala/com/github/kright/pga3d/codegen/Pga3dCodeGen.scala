@@ -14,7 +14,7 @@ def main(): Unit = {
     cls.writeToFile(packageDir)
   }
 
-  InertiaCodeGen().writeToFile(packageDir)
+  InertiaLocalCodeGen().writeToFile(packageDir)
   SerializerCodeGen().writeToFile(packageDir)
   ForqueCodeGen().writeToFile(packageDir)
 }

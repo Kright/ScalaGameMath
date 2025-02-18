@@ -1,13 +1,13 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dInertia(mass: Double,
-                        mryz: Double,
-                        mrxz: Double,
-                        mrxy: Double):
+case class Pga3dInertiaLocal(mass: Double,
+                             mryz: Double,
+                             mrxz: Double,
+                             mrxy: Double):
 
   override def toString: String =
-    s"Pga3dInertia(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
+    s"Pga3dInertiaLocal(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
 
   def apply(localB: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
@@ -41,15 +41,15 @@ case class Pga3dInertia(mass: Double,
     )
 
 
-object Pga3dInertia:
+object Pga3dInertiaLocal:
 
   inline val componentsCount = 4
 
-  def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertia =
+  def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
     val rx2 = rx * rx
     val ry2 = ry * ry
     val rz2 = rz * rz
-    Pga3dInertia(
+    Pga3dInertiaLocal(
       mass,
       mryz = (ry2 + rz2) * mass / 3,
       mrxz = (rx2 + rz2) * mass / 3,

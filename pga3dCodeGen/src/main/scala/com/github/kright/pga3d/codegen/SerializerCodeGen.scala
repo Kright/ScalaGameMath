@@ -48,7 +48,7 @@ class SerializerCodeGen extends CodeGenClass:
   }
 
   def generateMethodsForInertia(code: CodeGen): Unit = {
-    val inertia = InertiaCodeGen()
+    val inertia = InertiaLocalCodeGen()
     code("")
     code(s"def load${inertia.typeNameWithoutPrefix}(arr: Array[Double], offset: Int): ${inertia.typeName} =")
     code.block {
