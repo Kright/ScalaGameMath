@@ -1,10 +1,10 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dInertiaLocal(mass: Double,
-                             mryz: Double,
-                             mrxz: Double,
-                             mrxy: Double):
+final case class Pga3dInertiaLocal(mass: Double,
+                                   mryz: Double,
+                                   mrxz: Double,
+                                   mrxy: Double):
 
   override def toString: String =
     s"Pga3dInertiaLocal(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"

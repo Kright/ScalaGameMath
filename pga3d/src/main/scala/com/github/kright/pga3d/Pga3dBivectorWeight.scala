@@ -1,9 +1,9 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dBivectorWeight(wx: Double = 0.0,
-                               wy: Double = 0.0,
-                               wz: Double = 0.0):
+final case class Pga3dBivectorWeight(wx: Double = 0.0,
+                                     wy: Double = 0.0,
+                                     wz: Double = 0.0):
 
   override def toString: String =
     s"Pga3dBivectorWeight(wx = $wx, wy = $wy, wz = $wz)"

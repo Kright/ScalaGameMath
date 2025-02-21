@@ -1,14 +1,14 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dMotor(s: Double = 0.0,
-                      wx: Double = 0.0,
-                      wy: Double = 0.0,
-                      wz: Double = 0.0,
-                      xy: Double = 0.0,
-                      xz: Double = 0.0,
-                      yz: Double = 0.0,
-                      i: Double = 0.0):
+final case class Pga3dMotor(s: Double = 0.0,
+                            wx: Double = 0.0,
+                            wy: Double = 0.0,
+                            wz: Double = 0.0,
+                            xy: Double = 0.0,
+                            xz: Double = 0.0,
+                            yz: Double = 0.0,
+                            i: Double = 0.0):
 
   override def toString: String =
     s"Pga3dMotor(s = $s, wx = $wx, wy = $wy, wz = $wz, xy = $xy, xz = $xz, yz = $yz, i = $i)"

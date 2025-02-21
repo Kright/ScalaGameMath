@@ -12,7 +12,7 @@ class SerializerCodeGen extends CodeGenClass:
   override def generateCode(): String = {
     val code = CodeGen()
 
-    code(s"case object ${name}:".stripMargin)
+    code(s"object ${name}:".stripMargin)
 
     code.block {
       for (pgaClass <- MultivectorSubClass.pgaClasses) {

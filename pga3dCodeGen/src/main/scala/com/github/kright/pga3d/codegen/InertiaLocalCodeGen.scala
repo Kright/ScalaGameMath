@@ -19,10 +19,10 @@ class InertiaLocalCodeGen extends CodeGenClass:
     val pad = " ".repeat(name.length - 4 - 3)
 
     code(
-      s"""case class ${name}(mass: Double,
-         |                   ${pad}mryz: Double,
-         |                   ${pad}mrxz: Double,
-         |                   ${pad}mrxy: Double):""".stripMargin
+      s"""final case class ${name}(mass: Double,
+         |                         ${pad}mryz: Double,
+         |                         ${pad}mrxz: Double,
+         |                         ${pad}mrxy: Double):""".stripMargin
     )
 
     code.block {

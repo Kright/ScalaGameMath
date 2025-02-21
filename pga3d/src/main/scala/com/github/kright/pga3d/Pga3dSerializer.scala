@@ -1,7 +1,7 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case object Pga3dSerializer:
+object Pga3dSerializer:
 
   def loadMultivector(arr: Array[Double], offset: Int): Pga3dMultivector =
     Pga3dMultivector(

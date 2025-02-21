@@ -1,22 +1,22 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dMultivector(s: Double = 0.0,
-                            w: Double = 0.0,
-                            x: Double = 0.0,
-                            y: Double = 0.0,
-                            z: Double = 0.0,
-                            wx: Double = 0.0,
-                            wy: Double = 0.0,
-                            wz: Double = 0.0,
-                            xy: Double = 0.0,
-                            xz: Double = 0.0,
-                            yz: Double = 0.0,
-                            wxy: Double = 0.0,
-                            wxz: Double = 0.0,
-                            wyz: Double = 0.0,
-                            xyz: Double = 0.0,
-                            i: Double = 0.0):
+final case class Pga3dMultivector(s: Double = 0.0,
+                                  w: Double = 0.0,
+                                  x: Double = 0.0,
+                                  y: Double = 0.0,
+                                  z: Double = 0.0,
+                                  wx: Double = 0.0,
+                                  wy: Double = 0.0,
+                                  wz: Double = 0.0,
+                                  xy: Double = 0.0,
+                                  xz: Double = 0.0,
+                                  yz: Double = 0.0,
+                                  wxy: Double = 0.0,
+                                  wxz: Double = 0.0,
+                                  wyz: Double = 0.0,
+                                  xyz: Double = 0.0,
+                                  i: Double = 0.0):
 
   override def toString: String =
     s"Pga3dMultivector(s = $s, w = $w, x = $x, y = $y, z = $z, wx = $wx, wy = $wy, wz = $wz, xy = $xy, xz = $xz, yz = $yz, wxy = $wxy, wxz = $wxz, wyz = $wyz, xyz = $xyz, i = $i)"

@@ -108,7 +108,7 @@ case class MultivectorSubClass(name: String,
     } else {
       require(variableFields.nonEmpty)
 
-      val start = s"case class ${name}("
+      val start = s"final case class ${name}("
       val pad = " ".repeat(start.length)
 
       code(variableFields

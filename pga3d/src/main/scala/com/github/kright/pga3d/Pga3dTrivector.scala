@@ -1,10 +1,10 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dTrivector(x: Double = 0.0,
-                          y: Double = 0.0,
-                          z: Double = 0.0,
-                          w: Double = 0.0):
+final case class Pga3dTrivector(x: Double = 0.0,
+                                y: Double = 0.0,
+                                z: Double = 0.0,
+                                w: Double = 0.0):
 
   inline def wyz: Double = -x
 

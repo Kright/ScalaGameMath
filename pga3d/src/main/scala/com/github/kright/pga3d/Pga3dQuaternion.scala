@@ -1,10 +1,10 @@
 package com.github.kright.pga3d
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-case class Pga3dQuaternion(s: Double = 0.0,
-                           xy: Double = 0.0,
-                           xz: Double = 0.0,
-                           yz: Double = 0.0):
+final case class Pga3dQuaternion(s: Double = 0.0,
+                                 xy: Double = 0.0,
+                                 xz: Double = 0.0,
+                                 yz: Double = 0.0):
 
   override def toString: String =
     s"Pga3dQuaternion(s = $s, xy = $xy, xz = $xz, yz = $yz)"
