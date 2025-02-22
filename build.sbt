@@ -28,6 +28,7 @@ lazy val root = (project in file("."))
     util,
     vector,
     ga,
+    matrix,
     pga3d,
   )
 
@@ -41,6 +42,9 @@ lazy val math = (project in file("math"))
   .settings(scalatestSettings *)
   .dependsOn(vector % "compile->compile;test->test")
   .dependsOn(util % "compile->compile;test->test")
+
+lazy val matrix = (project in file("matrix"))
+  .settings(scalatestSettings *)
 
 lazy val symbolic = (project in file("symbolic"))
   .settings(scalatestSettings *)
@@ -73,6 +77,7 @@ lazy val pga3dCodeGen = (project in file("pga3dCodeGen"))
 lazy val pga3d = (project in file("pga3d"))
   .settings(scalatestSettings *)
   .dependsOn(
+    matrix,
     solvers % "test",
     util % "test",
     vector % "test->test",
