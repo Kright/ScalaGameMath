@@ -3,8 +3,8 @@ package com.github.kright.pga3d
 import com.github.kright.math.VectorMathGenerators
 import org.scalacheck.Gen
 
-object GeneratorsPga3d:
-  private def makeGenT[T](elemsCount: Int, factory: (Array[Double], Int) => T): Gen[T] = 
+object Pga3dGenerators:
+  private def makeGenT[T](elemsCount: Int, factory: (Array[Double], Int) => T): Gen[T] =
     Gen.containerOfN[Array, Double](elemsCount, VectorMathGenerators.double1)
       .map(arr => factory(arr, 0))
 
@@ -28,3 +28,11 @@ object GeneratorsPga3d:
 
   val vectors: Gen[Pga3dVector] =
     makeGenT(3, Pga3dSerializer.loadVector)
+
+  def inertiaLocal(minMass: Double, maxMass: Double, minR: Double, maxR: Double): Gen[Pga3dInertiaLocal] =
+    for {
+      mass <- VectorMathGenerators.doubleInRange(minMass, maxMass)
+      rx <- VectorMathGenerators.doubleInRange(minR, maxR)
+      ry <- VectorMathGenerators.doubleInRange(minR, maxR)
+      rz <- VectorMathGenerators.doubleInRange(minR, maxR)
+    } yield Pga3dInertiaLocal.cube(mass, rx, ry, rz)

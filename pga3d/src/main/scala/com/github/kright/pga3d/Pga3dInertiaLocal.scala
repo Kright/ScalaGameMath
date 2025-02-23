@@ -40,14 +40,14 @@ final case class Pga3dInertiaLocal(mass: Double,
       yz = (localForque.wx + localB.xy * localB.xz * mrxy - localB.xy * localB.xz * mrxz) / mryz,
     )
 
-  def toInertia: Pga3dInertia =
+  def toSummable: Pga3dInertiaSummable =
     val mrxyz2 = (mrxy + mrxz + mryz) * 0.5
 
     val mrx2 = mrxyz2 - mryz
     val mry2 = mrxyz2 - mrxz
     val mrz2 = mrxyz2 - mrxy
 
-    Pga3dInertia(
+    Pga3dInertiaSummable(
       ww = mass,
       wx = 0.0,
       wy = 0.0,
@@ -59,6 +59,9 @@ final case class Pga3dInertiaLocal(mass: Double,
       xz = 0.0,
       yz = 0.0,
     )
+
+  def toInertia: Pga3dInertia =
+    Pga3dInertia(Pga3dMotor.id, this)
 
 
 object Pga3dInertiaLocal:
