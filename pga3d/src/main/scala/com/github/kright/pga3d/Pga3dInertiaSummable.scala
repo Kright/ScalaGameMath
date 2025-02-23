@@ -128,8 +128,8 @@ final case class Pga3dInertiaSummable(ww: Double,
     val izz = i(2, 2)
 
     Pga3dInertia(
-      motor = Pga3dTranslator.addVector(shift).geometric(quaternion),
-      local = Pga3dInertiaLocal(mass, iyy + izz, ixx + izz, ixx + iyy)
+      localToGlobal = Pga3dTranslator.addVector(shift).geometric(quaternion),
+      localInertia = Pga3dInertiaLocal(mass, iyy + izz, ixx + izz, ixx + iyy)
     )
 
   // todo rename and dualize

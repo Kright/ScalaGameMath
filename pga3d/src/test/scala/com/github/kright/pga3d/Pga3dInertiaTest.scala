@@ -146,7 +146,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   private def getMainAxesSorted(inertia: Pga3dInertia): Seq[Double] =
-    val local = inertia.local
+    val local = inertia.localInertia
     Seq(local.mryz, local.mrxz, local.mrxy).sorted
 
   private def maxDiff(lstA: Seq[Double], lstB: Seq[Double]): Double =
