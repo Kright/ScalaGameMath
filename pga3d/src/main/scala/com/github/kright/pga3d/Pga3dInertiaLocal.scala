@@ -63,6 +63,9 @@ final case class Pga3dInertiaLocal(mass: Double,
   def toInertia: Pga3dInertia =
     Pga3dInertia(Pga3dMotor.id, this)
 
+  def toInertia(motor: Pga3dMotor): Pga3dInertia =
+    Pga3dInertia(motor, this)
+
 
 object Pga3dInertiaLocal:
 
