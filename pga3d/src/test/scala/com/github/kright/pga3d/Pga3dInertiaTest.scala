@@ -193,3 +193,46 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert((applied1 - applied2).norm < 1e-9)
     }
   }
+
+  test("inertia toSummable applied in the same way") {
+    forAll(inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+      val applied1 = inertia(bivector)
+      val applied2 = inertia.toSummable(bivector)
+
+      assert((applied1 - applied2).norm < 1e-9)
+    }
+  }
+
+  test("inertia .toInertia() acts the same way") {
+    val probes = Seq(
+      Pga3dBivector(1, 0, 0, 0, 0, 0),
+      Pga3dBivector(0, 1, 0, 0, 0, 0),
+      Pga3dBivector(0, 0, 1, 0, 0, 0),
+      Pga3dBivector(0, 0, 0, 1, 0, 0),
+      Pga3dBivector(0, 0, 0, 0, 1, 0),
+      Pga3dBivector(0, 0, 0, 0, 0, 1),
+    )
+
+    val inertiaProbes = Seq(
+      Pga3dInertiaSummable(1, 1, 0, 0, 0, 0, 0, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 1, 0, 0, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 0, 1, 0, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 1, 0, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 0, 1, 0, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+      Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
+    )
+
+    for (summable <- inertiaProbes) {
+      for (probe <- probes) {
+//        println(s"probe = $probe")
+//        println(s"inertia = ${summable}")
+//        println(s"inertiaLocal(probe) = ${summable.toInertia.apply(probe)}")
+//        println(s"inertiaGlobl(probe) = ${summable.apply(probe)}")
+        assert((summable.toInertia.apply(probe) - summable.apply(probe)).norm < 1e-9)
+      }
+    }
+  }
+
