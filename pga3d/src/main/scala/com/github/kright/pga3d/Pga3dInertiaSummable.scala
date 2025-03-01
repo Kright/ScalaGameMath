@@ -97,6 +97,19 @@ final case class Pga3dInertiaSummable(ww: Double,
       localInertia = Pga3dInertiaLocal(mass, iyy + izz, ixx + izz, ixx + iyy)
     )
 
+  def apply(localB: Pga3dBivector): Pga3dBivector = {
+    val b = localB
+
+    Pga3dBivector(
+      wx = +(yy + zz) * b.yz + xy * b.xz - xz * b.xy - wz * b.wy + wy * b.wz,
+      wy = -xy * b.yz - (xx + zz) * b.xz - yz * b.xy - wx * b.wz + wz * b.wx,
+      wz = -xz * b.yz + yz * b.xz + (xx + yy) * b.xy + wx * b.wy - wy * b.wx,
+      xy = ww * b.wz + wx * b.xz + wy * b.yz,
+      xz = -ww * b.wy - wx * b.xy + wz * b.yz,
+      yz = ww * b.wx - wy * b.xy - wz * b.xz,
+    )
+  }
+
   def toMatrixXYZ: Matrix =
     Matrix.fromValues(3, 3)(
       xx, xy, xz,
