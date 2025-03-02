@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-import com.github.kright.math.MathUtils.{loop, swap}
+import com.github.kright.math.MathUtils.swap
 
 
 /**
@@ -233,7 +233,7 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
     )
 
   def multiply(a: Matrix3d, m: Double, result: Matrix3d): Matrix3d =
-    loop(9) { i =>
+    for (i <- FastRange(9)) {
       result.elements(i) = a.elements(i) * m
     }
     result
@@ -260,7 +260,7 @@ object Matrix3d extends MatrixNdFactory[Matrix3d]:
     result := (rx, ry)
 
   private inline def elementWiseOperation(left: Matrix3d, right: Matrix3d, result: Matrix3d)(inline op: (Double, Double) => Double): Matrix3d =
-    loop(9) { i =>
+    for (i <- FastRange(9)) {
       result.elements(i) = op(left.elements(i), right.elements(i))
     }
     result

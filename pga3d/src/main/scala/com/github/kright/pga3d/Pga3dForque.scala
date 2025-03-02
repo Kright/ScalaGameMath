@@ -35,4 +35,4 @@ object Pga3dForque:
     } else {
       Pga3dVector(forque.wx, forque.wy, forque.wz)
     }
-  }  
+  }

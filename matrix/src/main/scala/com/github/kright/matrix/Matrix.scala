@@ -1,5 +1,7 @@
 package com.github.kright.matrix
 
+import com.github.kright.math.FastRange
+
 class Matrix(val h: Int, val w: Int):
 
   val elements: Array[Double] = new Array[Double](h * w)
@@ -32,15 +34,18 @@ class Matrix(val h: Int, val w: Int):
   def *=(s: Double): Unit =
     mapElements(_ * s)
 
+  private inline def elementsIndices =
+    FastRange(elements.length)
+
   def +=(m: Matrix): Unit =
     require(hasSameSize(m))
-    for (i <- elements.indices) {
+    for (i <- elementsIndices) {
       elements(i) += m.elements(i)
     }
 
   def -=(m: Matrix): Unit =
     require(hasSameSize(m))
-    for (i <- elements.indices) {
+    for (i <- elementsIndices) {
       elements(i) -= m.elements(i)
     }
 
@@ -59,46 +64,44 @@ class Matrix(val h: Int, val w: Int):
 
     val result = new Matrix(this.h, right.w)
 
-    for (y <- 0 until result.h) {
-      for (x <- 0 until result.w) {
-        var sum = 0.0
-        for (k <- 0 until this.w) {
-          sum += this (y, k) * right(k, x)
-        }
-        result(y, x) = sum
+    for (y <- FastRange(result.h); 
+         x <- FastRange(result.w)) {
+      var sum = 0.0
+      for (k <- FastRange(this.w)) {
+        sum += this (y, k) * right(k, x)
       }
+      result(y, x) = sum
     }
 
     result
 
   def transposed(): Matrix =
     val result = new Matrix(w, h)
-    for (y <- 0 until result.h) {
-      for (x <- 0 until result.w) {
-        result(y, x) = this (x, y)
-      }
+    for (y <- FastRange(result.h);
+         x <- FastRange(result.w)) {
+      result(y, x) = this (x, y)
     }
     result
 
   def transposeInplace(): Unit =
     require(isSquare)
-    for (i <- 1 until h) {
-      for (j <- 0 until i) {
-        val t = this (i, j)
-        val t2 = this (j, i)
-        this (i, j) = t2
-        this (j, i) = t
-      }
+
+    for (i <- FastRange(1, h);
+         j <- FastRange(0, i)) {
+      val t = this (i, j)
+      val t2 = this (j, i)
+      this (i, j) = t2
+      this (j, i) = t
     }
 
   def mapElements(f: Double => Double): Unit = {
-    for (i <- elements.indices) {
+    for (i <- elementsIndices) {
       elements(i) = f(elements(i))
     }
   }
 
   def setZero(): Unit =
-    for (i <- elements.indices) {
+    for (i <- elementsIndices) {
       elements(i) = 0.0
     }
 

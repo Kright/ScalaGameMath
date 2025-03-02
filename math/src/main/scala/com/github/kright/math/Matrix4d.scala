@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-import com.github.kright.math.MathUtils.{loop, swap}
+import com.github.kright.math.MathUtils.swap
 
 
 /**
@@ -343,7 +343,7 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
   override def id: Matrix4d = new Matrix4d().setIdentity()
 
   def multiply(a: Matrix4d, m: Double, result: Matrix4d): Matrix4d =
-    loop(16) { i =>
+    for (i <- FastRange(16)) {
       result.elements(i) = a.elements(i) * m
     }
     result
@@ -386,7 +386,7 @@ object Matrix4d extends MatrixNdFactory[Matrix4d]:
     result := (f(0), f(4), f(8))
 
   private inline def elementWiseOperation(left: Matrix4d, right: Matrix4d, result: Matrix4d)(inline op: (Double, Double) => Double): Matrix4d =
-    loop(16) { i =>
+    for (i <- FastRange(16)) {
       result.elements(i) = op(left.elements(i), right.elements(i))
     }
     result

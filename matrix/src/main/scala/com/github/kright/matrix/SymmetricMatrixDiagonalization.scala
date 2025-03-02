@@ -1,5 +1,7 @@
 package com.github.kright.matrix
 
+import com.github.kright.math.FastRange
+
 
 /**
  * helper methods for matrix diagonalization
@@ -23,15 +25,14 @@ object SymmetricMatrixDiagonalization:
     var maxX: Int = 1
     var maxY: Int = 0
 
-    for (y <- 1 until m.h) {
-      for (x <- 0 until y) {
-        val v = m(y, x)
-        val abs = Math.abs(v)
-        if (abs > maxAbs) {
-          maxAbs = abs
-          maxX = x
-          maxY = y
-        }
+    for (y <- FastRange(1, m.h);
+         x <- FastRange(0, y)) {
+      val v = m(y, x)
+      val abs = Math.abs(v)
+      if (abs > maxAbs) {
+        maxAbs = abs
+        maxX = x
+        maxY = y
       }
     }
 
@@ -86,7 +87,7 @@ object SymmetricMatrixDiagonalization:
     i(p, q) = 0.0
     i(q, p) = 0.0
 
-    for (j <- 0 until i.w) {
+    for (j <- FastRange(i.w)) {
       if (j != p && j != q) {
         val iJp = i(j, p)
         val iJq = i(j, q)

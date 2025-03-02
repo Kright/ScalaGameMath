@@ -45,6 +45,7 @@ lazy val math = (project in file("math"))
 
 lazy val matrix = (project in file("matrix"))
   .settings(scalatestSettings *)
+  .dependsOn(util)
 
 lazy val symbolic = (project in file("symbolic"))
   .settings(scalatestSettings *)

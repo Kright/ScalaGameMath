@@ -5,7 +5,6 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class Pga3dMatrixTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
-
   test("matrix linear mapping is correct") {
     forAll(Pga3dGenerators.matrices(6, 6)) { matrix =>
       val mapping = Pga3dMatrix.linearMapping(b => matrixToBivector(matrix * bivectorToMatrix(b)))
