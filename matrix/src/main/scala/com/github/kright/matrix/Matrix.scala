@@ -50,25 +50,31 @@ class Matrix(val h: Int, val w: Int):
     }
 
   def +(m: Matrix): Matrix =
-    val r = this.copy()
-    r += m
-    r
+    require(hasSameSize(m))
+    val result = Matrix(h, w)
+    for (i <- elementsIndices) {
+      result.elements(i) = elements(i) + m.elements(i)
+    }
+    result
 
   def -(m: Matrix): Matrix =
-    val r = this.copy()
-    r -= m
-    r
+    require(hasSameSize(m))
+    val result = Matrix(h, w)
+    for (i <- elementsIndices) {
+      result.elements(i) = elements(i) - m.elements(i)
+    }
+    result
 
   def *(right: Matrix): Matrix =
     require(this.w == right.h)
 
     val result = new Matrix(this.h, right.w)
 
-    for (y <- FastRange(result.h); 
+    for (y <- FastRange(result.h);
          x <- FastRange(result.w)) {
       var sum = 0.0
       for (k <- FastRange(this.w)) {
-        sum += this (y, k) * right(k, x)
+        sum = Math.fma(this (y, k), right(k, x), sum)
       }
       result(y, x) = sum
     }
@@ -109,6 +115,16 @@ class Matrix(val h: Int, val w: Int):
     val r = Matrix(h, w)
     elements.copyToArray(r.elements)
     r
+
+  def frobeniusNormSquare: Double =
+    var sum = 0.0
+    for (elem <- elements) {
+      sum = Math.fma(elem, elem, sum)
+    }
+    sum
+
+  def frobeniusNorm: Double =
+    Math.sqrt(frobeniusNormSquare)
 
   override def toString: String =
     MatrixPrinter.oneLinePrinter(this)
