@@ -21,7 +21,6 @@ def main(): Unit = {
   InertiaSummableCodeGen().writeToFile(packageDir)
   InertiaPrecomputedCodeGen().writeToFile(packageDir)
   MatrixCodeGen().writeToFile(packageDir)
-
-  SerializerCodeGen().writeToFile(packageDir)
+  
   ForqueCodeGen().writeToFile(packageDir)
 }

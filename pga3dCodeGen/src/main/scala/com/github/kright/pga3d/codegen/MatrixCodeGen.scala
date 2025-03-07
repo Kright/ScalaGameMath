@@ -10,6 +10,7 @@ class MatrixCodeGen extends CodeGenClass:
 
   override def generateImports(): String =
     s"""import com.github.kright.matrix.Matrix
+       |import com.github.kright.math.FlatSerializer
        |""".stripMargin
 
   override def generateCode(): String =
@@ -47,7 +48,7 @@ class MatrixCodeGen extends CodeGenClass:
        |    val matrix = Matrix(6, 6)
        |    for ((b, i) <- bivectors.zipWithIndex) {
        |      val mappedB = map(b)
-       |      Pga3dSerializer.store(mappedB, matrix.elements, i * 6)
+       |      FlatSerializer.write(mappedB, matrix.elements, i * 6)
        |    }
        |    matrix.transposeInplace()
        |    matrix

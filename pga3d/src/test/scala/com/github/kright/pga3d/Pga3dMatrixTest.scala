@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import com.github.kright.math.FlatSerializer
 import com.github.kright.matrix.Matrix
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -22,11 +23,10 @@ class Pga3dMatrixTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private def bivectorToMatrix(b: Pga3dBivector): Matrix =
     val m = new Matrix(6, 1)
-    Pga3dSerializer.store(b, m.elements, 0)
+    FlatSerializer.write(b, m.elements, 0)
     m
 
   private def matrixToBivector(m: Matrix): Pga3dBivector =
     require(m.h == 6, m.w == 1)
-    Pga3dSerializer.loadBivector(m.elements, 0)
-
+    FlatSerializer.read[Pga3dBivector](m.elements, 0)
 

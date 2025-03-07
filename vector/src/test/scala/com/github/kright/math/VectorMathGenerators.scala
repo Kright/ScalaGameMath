@@ -26,7 +26,7 @@ object VectorMathGenerators:
     yield Vector2d(x, y)
 
   val zeroVector3: Gen[Vector3d] =
-    Gen.const(Vector3d())
+    Gen.const(Vector3d(0.0, 0.0, 0.0))
 
   val axisVector3: Gen[Vector3d] =
     Gen.oneOf(
