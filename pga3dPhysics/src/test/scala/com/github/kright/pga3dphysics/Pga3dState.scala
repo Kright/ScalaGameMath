@@ -1,4 +1,6 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
+
+import com.github.kright.pga3d.*
 
 case class Pga3dState(motor: Pga3dMotor,
                       localB: Pga3dBivector):

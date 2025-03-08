@@ -1,8 +1,10 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
 import com.github.kright.math.DifferentialSolvers
+import com.github.kright.pga3d.{Pga3dBivector, Pga3dMotor}
 
-class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3dState):
+class Pga3dOneBodyWithInertiaLocal(val inertia: Pga3dInertiaLocal,
+                                   val initialState: Pga3dState) {
   var state: Pga3dState = initialState
   val initialE = getEnergy()
   val initialL = getL()
@@ -57,19 +59,29 @@ class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3d
 
   private def getNextState(state: Pga3dState, derivative: Pga3dState, dt: Double): Pga3dState =
     state.madd(derivative, dt).normalized
+}
 
-object Pga3dOneBodyWithInertia:
-  def simple123(motor: Pga3dMotor) = new Pga3dOneBodyWithInertia(
-    Pga3dInertia(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)),
+object Pga3dOneBodyWithInertiaLocal:
+  case class Error(errorE: Double, errorL: Double):
+    def this() = this(0.0, 0.0)
+
+    infix def max(other: Error): Error =
+      Error(Math.max(errorE, other.errorE), Math.max(errorL, other.errorL))
+
+    def <(other: Error): Boolean =
+      errorE <= other.errorE && errorL <= other.errorL
+
+  def simple123() = new Pga3dOneBodyWithInertiaLocal(
+    Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0),
     Pga3dState(
-      motor,
-      motor.reverseSandwich(Pga3dBivector(
+      Pga3dMotor(1, 0, 0, 0, 0, 0, 0, 0),
+      Pga3dBivector(
         wx = 0.0,
         wy = 0.0,
         wz = 0.0,
         xy = 1.0,
         yz = 1.0,
         xz = -1.0,
-      ))
+      )
     )
-  )    
+  )

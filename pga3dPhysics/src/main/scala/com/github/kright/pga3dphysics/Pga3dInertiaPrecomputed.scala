@@ -1,8 +1,8 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
 import com.github.kright.matrix.Matrix
+import com.github.kright.pga3d.*
 
-/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
                               val localInertia: Pga3dInertiaLocal) extends Pga3dInertiaAbstract:
   override val mass: Double =

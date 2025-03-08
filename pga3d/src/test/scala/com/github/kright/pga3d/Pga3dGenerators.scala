@@ -39,33 +39,5 @@ object Pga3dGenerators:
   val vectors: Gen[Pga3dVector] =
     makeGenT(3, FlatSerializer.read[Pga3dVector])
 
-  def inertiaLocal(minMass: Double, maxMass: Double, minR: Double, maxR: Double): Gen[Pga3dInertiaLocal] =
-    for {
-      mass <- VectorMathGenerators.doubleInRange(minMass, maxMass)
-      rx <- VectorMathGenerators.doubleInRange(minR, maxR)
-      ry <- VectorMathGenerators.doubleInRange(minR, maxR)
-      rz <- VectorMathGenerators.doubleInRange(minR, maxR)
-    } yield Pga3dInertiaLocal.cube(mass, rx, ry, rz)
-
-  val summableInertiaProbes = Seq(
-    Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 1, 0, 0, 0, 0, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 1, 0, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 0, 1, 0, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 0, 0, 1, 0, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 0, 0, 0, 1, 0, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    Pga3dInertiaSummable(0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-  )
-
-  val inertiaGen: Gen[Pga3dInertia] = for {
-    inertiaLocal <- Pga3dGenerators.inertiaLocal(0.1, 10.0, 0.1, 10.0)
-    q <- Pga3dGenerators.normalizedQuaternions
-    shift <- Pga3dGenerators.vectors
-    motor = Pga3dTranslator.addVector(shift).geometric(q)
-  } yield Pga3dInertia(motor, inertiaLocal)
-
   def matrices(h: Int, w: Int): Gen[Matrix] =
     Gen.containerOfN[Array, Double](h * w, VectorMathGenerators.double1).map(arr => Matrix.fromValues(h, w)(arr *))

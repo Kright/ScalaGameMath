@@ -1,7 +1,7 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
+import com.github.kright.pga3d.*
 
-/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dInertiaLocal(mass: Double,
                                    mryz: Double,
                                    mrxz: Double,

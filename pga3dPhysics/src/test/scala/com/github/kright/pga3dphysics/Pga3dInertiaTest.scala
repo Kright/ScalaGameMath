@@ -1,7 +1,9 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
 import com.github.kright.matrix.{Matrix, MatrixPrinter}
-import com.github.kright.pga3d.Pga3dGenerators.{inertiaGen, normalizedQuaternions, vectors}
+import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
+import com.github.kright.pga3d.*
+import com.github.kright.pga3dphysics.Pga3dPhysicsGenerators.inertiaGen
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
 import org.scalactic.anyvals.PosInt

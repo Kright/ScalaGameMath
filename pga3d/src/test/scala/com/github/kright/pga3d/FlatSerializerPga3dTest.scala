@@ -1,11 +1,13 @@
 package com.github.kright.pga3d
 
 import com.github.kright.math.FlatSerializer
+import com.github.kright.pga3d.FlatSerializerPga3dTest.myCheck
 import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 
-class FlatSerializerTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
+class FlatSerializerPga3dTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   test("check sizes") {
     assert(FlatSerializer.getSize[Pga3dBivector] == Pga3dBivector.componentsCount)
@@ -17,11 +19,18 @@ class FlatSerializerTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(FlatSerializer.getSize[Pga3dTranslator] == Pga3dTranslator.componentsCount)
     assert(FlatSerializer.getSize[Pga3dBivectorWeight] == Pga3dBivectorWeight.componentsCount)
     assert(FlatSerializer.getSize[Pga3dBivectorBulk] == Pga3dBivectorBulk.componentsCount)
-    assert(FlatSerializer.getSize[Pga3dInertiaLocal] == Pga3dInertiaLocal.componentsCount)
-    assert(FlatSerializer.getSize[Pga3dInertiaSummable] == Pga3dInertiaSummable.componentsCount)
     assert(FlatSerializer.getSize[Pga3dPoint] == Pga3dPoint.componentsCount)
   }
 
+  test("check serialization and deserialization") {
+    myCheck(Pga3dGenerators.points)
+    myCheck(Pga3dGenerators.bivectors)
+    myCheck(Pga3dGenerators.vectors)
+    myCheck(Pga3dGenerators.quaternions)
+    myCheck(Pga3dGenerators.normalizedQuaternions)
+  }
+
+object FlatSerializerPga3dTest:
   inline def myCheck[T](gen: Gen[T]): Unit = {
     forAll(gen, gen) { (a, b) =>
       val size = FlatSerializer.getSize[T]
@@ -33,14 +42,4 @@ class FlatSerializerTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert(a == ar)
       assert(b == br)
     }
-  }
-
-  test("check serialization and deserialization") {
-    myCheck(Pga3dGenerators.points)
-    myCheck(Pga3dGenerators.bivectors)
-    myCheck(Pga3dGenerators.vectors)
-    myCheck(Pga3dGenerators.quaternions)
-    myCheck(Pga3dGenerators.normalizedQuaternions)
-    myCheck(Pga3dGenerators.inertiaGen.map(_.localInertia))
-    myCheck(Pga3dGenerators.inertiaGen.map(_.toSummable))
   }

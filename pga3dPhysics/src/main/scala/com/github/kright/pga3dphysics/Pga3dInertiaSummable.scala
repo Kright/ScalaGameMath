@@ -1,8 +1,8 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
 import com.github.kright.matrix.{Matrix, SymmetricMatrixDiagonalization}
+import com.github.kright.pga3d.*
 
-/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 
 final case class Pga3dInertiaSummable(ww: Double,
                                       wx: Double,
@@ -97,7 +97,7 @@ final case class Pga3dInertiaSummable(ww: Double,
       localInertia = Pga3dInertiaLocal(mass, iyy + izz, ixx + izz, ixx + iyy)
     )
 
-  def apply(b: Pga3dBivector): Pga3dBivector = 
+  def apply(b: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = +(yy + zz) * b.yz + xy * b.xz - xz * b.xy - wz * b.wy + wy * b.wz,
       wy = -xy * b.yz - (xx + zz) * b.xz - yz * b.xy - wx * b.wz + wz * b.wx,

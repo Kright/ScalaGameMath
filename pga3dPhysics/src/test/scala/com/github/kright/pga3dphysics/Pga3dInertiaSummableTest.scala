@@ -1,5 +1,6 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
+import com.github.kright.pga3d.Pga3dGenerators
 import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -23,7 +24,7 @@ class Pga3dInertiaSummableTest extends AnyFunSuiteLike with ScalaCheckPropertyCh
   }
 
   test("summable apply() method same as inertia") {
-    forAll(Pga3dGenerators.inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+    forAll(Pga3dPhysicsGenerators.inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
       val applied1 = inertia.apply(bivector)
       val applied2 = inertia.toSummable.apply(bivector)
       assert((applied1 - applied2).norm < 1e-12)

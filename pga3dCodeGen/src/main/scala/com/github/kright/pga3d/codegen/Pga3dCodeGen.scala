@@ -1,7 +1,6 @@
 package com.github.kright.pga3d.codegen
 
 import com.github.kright.pga3d.codegen.MultivectorSubClass.pgaClasses
-import com.github.kright.pga3d.codegen.inertia.*
 
 import java.io.File
 
@@ -15,10 +14,5 @@ def main(): Unit = {
     cls.writeToFile(packageDir)
   }
 
-  InertiaAbstractCodeGen().writeToFile(packageDir)
-  InertiaLocalCodeGen().writeToFile(packageDir)
-  InertiaCodeGen().writeToFile(packageDir)
-  InertiaSummableCodeGen().writeToFile(packageDir)
-  InertiaPrecomputedCodeGen().writeToFile(packageDir)
   MatrixCodeGen().writeToFile(packageDir)
 }

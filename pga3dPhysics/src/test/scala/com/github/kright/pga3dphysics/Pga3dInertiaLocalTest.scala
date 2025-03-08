@@ -1,6 +1,7 @@
-package com.github.kright.pga3d
+package com.github.kright.pga3dphysics
 
 import com.github.kright.math.EqualityEps
+import com.github.kright.pga3d.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
