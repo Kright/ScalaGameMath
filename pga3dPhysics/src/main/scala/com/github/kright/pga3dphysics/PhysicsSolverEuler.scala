@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 /** First order of precision. Very imprecise */
 object PhysicsSolverEuler extends PhysicsSolver[PhysicsBody]:
-  override def step(dynamicBodies: ArrayBuffer[PhysicsBody],
+  override def step(dynamicBodies: Array[PhysicsBody],
                     dt: Double,
                     addForquesToBodies: (Double) => Unit): Unit = {
 

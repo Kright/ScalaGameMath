@@ -2,13 +2,11 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3dphysics.PhysicsSolverUtil.*
 
-import scala.collection.mutable.ArrayBuffer
-
 /**
  * Runge-Kutta solver with 4th order of precision
  */
 object PhysicsSolverRK4 extends PhysicsSolver[PhysicsBody]:
-  override def step(dynamicBodies: ArrayBuffer[PhysicsBody],
+  override def step(dynamicBodies: Array[PhysicsBody],
                     dt: Double,
                     addForquesToBodies: (Double) => Unit): Unit = {
 

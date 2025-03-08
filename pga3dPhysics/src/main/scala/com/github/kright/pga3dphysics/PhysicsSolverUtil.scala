@@ -1,9 +1,9 @@
 package com.github.kright.pga3dphysics
 
-import scala.collection.mutable.ArrayBuffer
+import com.github.kright.math.FastRange
 
 object PhysicsSolverUtil:
-  def getDerivative(dynamicBodies: ArrayBuffer[PhysicsBody], currentDt: Double, addForquesToBodies: Double => Unit): ArrayBuffer[State] = {
+  def getDerivative(dynamicBodies: Array[PhysicsBody], currentDt: Double, addForquesToBodies: Double => Unit): Array[State] = {
     for (body <- dynamicBodies) {
       body.resetForqueAccum()
     }
@@ -12,8 +12,8 @@ object PhysicsSolverUtil:
     dynamicBodies.map(b => State.derivative(b))
   }
 
-  def setNewState(result: ArrayBuffer[PhysicsBody], initial: ArrayBuffer[State], dt: Double, derivative: ArrayBuffer[State]): Unit =
-    for (pos <- result.indices) {
+  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double, derivative: Array[State]): Unit =
+    for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
       val d = derivative(pos)
@@ -22,10 +22,10 @@ object PhysicsSolverUtil:
       r.localB = i.localB + d.localB * dt
     }
 
-  def setNewState(result: ArrayBuffer[PhysicsBody], initial: ArrayBuffer[State], dt: Double,
-                  derivative0: ArrayBuffer[State], k0: Double,
-                  derivative1: ArrayBuffer[State], k1: Double): Unit =
-    for (pos <- result.indices) {
+  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double,
+                  derivative0: Array[State], k0: Double,
+                  derivative1: Array[State], k1: Double): Unit =
+    for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
       val d0 = derivative0(pos)
@@ -42,12 +42,12 @@ object PhysicsSolverUtil:
         + d1.localB * (dt * k1)
     }
 
-  def setNewState(result: ArrayBuffer[PhysicsBody], initial: ArrayBuffer[State], dt: Double,
-                  derivative0: ArrayBuffer[State], k0: Double,
-                  derivative1: ArrayBuffer[State], k1: Double,
-                  derivative2: ArrayBuffer[State], k2: Double,
-                  derivative3: ArrayBuffer[State], k3: Double): Unit =
-    for (pos <- result.indices) {
+  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double,
+                  derivative0: Array[State], k0: Double,
+                  derivative1: Array[State], k1: Double,
+                  derivative2: Array[State], k2: Double,
+                  derivative3: Array[State], k3: Double): Unit =
+    for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
       val d0 = derivative0(pos)

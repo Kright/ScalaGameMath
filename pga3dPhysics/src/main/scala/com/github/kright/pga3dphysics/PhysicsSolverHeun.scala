@@ -2,11 +2,9 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3dphysics.PhysicsSolverUtil.*
 
-import scala.collection.mutable.ArrayBuffer
-
 /** Second order of precision */
 object PhysicsSolverHeun extends PhysicsSolver[PhysicsBody]:
-  override def step(dynamicBodies: ArrayBuffer[PhysicsBody],
+  override def step(dynamicBodies: Array[PhysicsBody],
                     dt: Double,
                     addForquesToBodies: (Double) => Unit): Unit = {
 
