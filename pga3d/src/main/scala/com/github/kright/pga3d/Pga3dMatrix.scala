@@ -42,4 +42,3 @@ object Pga3dMatrix:
     }
     matrix.transposeInplace()
     matrix
-

@@ -1,6 +1,7 @@
 # Scala game math
 
 ## How to add in sbt:
+
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
@@ -17,6 +18,7 @@ libraryDependencies += Seq(
 ```
 
 for latest version:
+
 ```
 libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "master-SNAPSHOT"
 ```
@@ -25,30 +27,41 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 
 ## Modules
 
+Initially, it was repo for simple math with matrices and vectors. I implemented physics for 3d on top of that math. During my development, I figured out that plane-based geometric algebra is a fantastic way to describe physics
+equations. So there a lot of quite experimental, but very promising code with geometric algebra, which includes math and physics
+too.
+
+Simple modules:
+
 * **vector**: Vector2d, Vector3d, Vector4d
 * **math**:
-  * Quaternion
-  * Matrix: 2x2, 3x3, 4x4
-  * Euler angles: yaw Z, pitch Y, roll X
+    * Quaternion
+    * Matrix: 2x2, 3x3, 4x4
+    * Euler angles: yaw Z, pitch Y, roll X
 * **physics3d**: Rigid body physics
-  * Transform3d (position and orientation)
-  * Inertia3d (mass and tensor of angular mass)
-  * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
-  * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
-  * BodySystem for handling system of bodies with joints between them
+    * Transform3d (position and orientation)
+    * Inertia3d (mass and tensor of angular mass)
+    * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
+    * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
+    * BodySystem for handling system of bodies with joints between them
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
+
+Advanced modules with geometric algebra:
+
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
   See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
 * **pga3d**: efficient library for 3d PGA with generated code and some common cases (Pga3dPlane, Pga3dPoint,
   Pga3dQuaternion, Pga3dBivector, etc).
-  There is a huge amount of similar methods (for each pair of classes for each type of multiplication). Because of
+  There is a huge number of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
-* **pga3dCodeGen**: hand-made code generator for library above. It does operations in symbolic form, and searches the
-  most narrow subclass of multivector for result.
+* **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
+  most narrow subclass of multivector for the result.
+* **pga3dPhysics**: some helper classes for implementing physics engine. Under active development now.
 
 Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
+
 ```scala
 (matrixA * matrixB) * vec === matrixA * (matrixB * vec)
 (quaternionA * quaternionB) * vec === quaternionA * (quaternionB * vec)
@@ -56,7 +69,7 @@ Vectors treated as columns. For quaternions and matrices, multiplication order i
 
 Support conversions between rotation matrix, quaternions and Euler angles.
 
-Unfortunately JVM doesn't support lightweight structs, so there are a bunch of helper operators:
+Unfortunately, JVM doesn't support lightweight structs, so there are a bunch of helper operators:
 
 ```scala 
 import com.github.kright.math.Quaternion
@@ -69,8 +82,6 @@ q *> q2              // q2 := q * q2, inplace, no objects created
 ```
 
 ### Physics
-
-This part is still under development.
 
 I prefer code correctness and simplicity over computational efficiency.
 
@@ -103,24 +114,25 @@ sbt publishLocal
 ```
 
 Or to local maven:
+
 ```bash
 sbt publishM2
 ```
 
-In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" and 
+In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" and
 "~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
 
-
-After that in other project add local library. In my case it was for sbt:
+After that add local library to another project. In my case, it was for sbt:
 
 ```scala
 libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.6.0-SNAPSHOT"
 ```
 
 And for gradle:
+
 ```groovy
 implementation "pga3d:pga3d_3:0.7.0-SNAPSHOT"
 ```
 
-May be you will need to remove cached lib of jitpack, it will be placed in path like "~
+Maybe you will need to remove cached lib of jitpack, it will be placed in path like "~
 /.cache/coursier/v1/https/jitpack.io/com/github/Kright/ScalaGameMath/master-SNAPSHOT".

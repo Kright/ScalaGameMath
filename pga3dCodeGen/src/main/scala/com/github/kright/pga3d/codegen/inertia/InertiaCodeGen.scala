@@ -43,9 +43,9 @@ class InertiaCodeGen extends CodeGenClass:
        |    val localA = getLocalAcceleration(globalB, globalForque)
        |    localToGlobal.sandwich(localA)
        |
-       |  override def getEnergy(globalB: Pga3dBivector): Double =
+       |  override def getKineticEnergy(globalB: Pga3dBivector): Double =
        |    val localB = localToGlobal.reverseSandwich(globalB)
-       |    localInertia.getEnergy(localB)
+       |    localInertia.getKineticEnergy(localB)
        |
        |  def toSummable: Pga3dInertiaSummable =
        |    localToGlobal.sandwich(localInertia.toSummable)

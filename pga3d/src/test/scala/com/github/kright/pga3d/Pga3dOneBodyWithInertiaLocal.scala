@@ -9,7 +9,7 @@ class Pga3dOneBodyWithInertiaLocal(val inertia: Pga3dInertiaLocal,
   val initialL = getL()
 
   def getEnergy(): Double =
-    inertia.getEnergy(state.localB)
+    inertia.getKineticEnergy(state.localB)
 
   def getL(): Pga3dBivector =
     state.getL(inertia)

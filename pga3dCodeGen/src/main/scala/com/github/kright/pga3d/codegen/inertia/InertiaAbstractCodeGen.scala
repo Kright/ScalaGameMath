@@ -22,6 +22,6 @@ class InertiaAbstractCodeGen extends CodeGenClass:
        |  def getAcceleration(velocity: Pga3dBivector, forque: Pga3dBivector): Pga3dBivector =
        |    invert(velocity.cross(apply(velocity)) + forque)
        |
-       |  def getEnergy(velocity: Pga3dBivector): Double =
+       |  def getKineticEnergy(velocity: Pga3dBivector): Double =
        |    (velocity v apply(velocity)) * 0.5
        |""".stripMargin
