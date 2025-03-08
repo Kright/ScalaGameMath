@@ -14,6 +14,13 @@ object FastRange:
 
   inline def apply(start: Int, endExclusive: Int) = new FastRangeWithStart(start, endExclusive)
 
+  inline def cfor(start: Int, shouldContinue: Int => Boolean, inc: Double => Double)(inline body: Int => Unit): Unit =
+    var i = start
+    while (shouldContinue(i)) {
+      body(i)
+      i += 1
+    }
+
 
 final class FastRange(val endExclusive: Int):
   inline def foreach(inline body: Int => Unit): Unit = {
