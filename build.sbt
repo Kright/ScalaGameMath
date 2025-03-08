@@ -90,4 +90,5 @@ lazy val pga3dPhysics = (project in file("pga3dPhysics"))
   .dependsOn(
     pga3d,
     matrix,
+    vector % "test->test",
   )
