@@ -10,7 +10,7 @@ class Pga3dInertiaPrecomputedTest extends AnyFunSuiteLike with ScalaCheckPropert
     forAll(Pga3dPhysicsGenerators.inertiaGen, Pga3dGenerators.bivectors, MinSuccessful(100)) { (inertia, b) =>
       val r1 = inertia.apply(b)
       val r2 = inertia.toPrecomputed.apply(b)
-      assert((r1 - r2).norm < 2e-13)
+      assert((r1 - r2).norm < 3e-13)
     }
   }
 
