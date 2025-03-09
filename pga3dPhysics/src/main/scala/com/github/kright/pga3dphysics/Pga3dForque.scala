@@ -3,6 +3,10 @@ package com.github.kright.pga3dphysics
 import com.github.kright.pga3d.{Pga3dBivector, Pga3dPoint, Pga3dVector}
 
 
+/**
+ * Some methods are trivial, but it is easy to forget them
+ * `Pga3dForque.force(point, f)` is more understandable than `point v f`
+ */
 object Pga3dForque:
   def force(point: Pga3dPoint, force: Pga3dVector): Pga3dBivector =
     point v force

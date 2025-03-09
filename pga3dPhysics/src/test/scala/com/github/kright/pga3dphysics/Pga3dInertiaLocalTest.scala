@@ -99,7 +99,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     val dt = 0.01
     val stepsCount = 100
 
-    val forceDirection = Pga3dPlaneIdeal(x = 1.0, y = 0, z = 0)
+    val forceDirection = Pga3dVector(1, 0, 0)
     val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
     val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
@@ -112,7 +112,8 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
       val t = step * dt
 
       val bodyCenter = system.state.head.globalCenter
-      val globalForque = bodyCenter.dot(forceDirection)
+      val globalForque = Pga3dForque.force(bodyCenter, forceDirection)
+
       system.doStep(dt, _ => system.state.head.addGlobalForque(globalForque))
 
       val expectedEnergy = system.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.mass
@@ -143,7 +144,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
     val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
-    val springCenter = Pga3dPlane(3.0, 4.0, w = 1).dual // len 5
+    val springCenter = Pga3dPoint(3.0, 4.0, 0.0) // len 5
     val springK = 20
 
     def getEnergy(): Double =
