@@ -3,8 +3,8 @@ package com.github.kright.pga3dphysics
 import com.github.kright.math.DifferentialSolvers
 import com.github.kright.pga3d.*
 
-class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3dState):
-  var state: Pga3dState = initialState
+class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3dBodyState):
+  var state: Pga3dBodyState = initialState
   val initialE = getEnergy()
   val initialL = getL()
 
@@ -29,11 +29,11 @@ class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3d
     })
   }
 
-  def doStepRK4F(dt: Double, getLocalForque: (state: Pga3dState, time: Double) => Pga3dBivector): Unit = {
+  def doStepRK4F(dt: Double, getLocalForque: (state: Pga3dBodyState, time: Double) => Pga3dBivector): Unit = {
     val (k1, k2, k3, k4) = DifferentialSolvers.rungeKutta4K(state, time = 0.0, dt,
       getDerivative = (state, time) => {
         val localForque = getLocalForque(state, time)
-        Pga3dState(
+        Pga3dBodyState(
           motor = state.motor.geometric(state.localB) * -0.5,
           localB = inertia.getAcceleration(state.localB, localForque)
         )
@@ -49,20 +49,20 @@ class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3d
       .normalized
   }
 
-  private def getDerivative(globalForque: Pga3dBivector)(state: Pga3dState, time: Double): Pga3dState =
+  private def getDerivative(globalForque: Pga3dBivector)(state: Pga3dBodyState, time: Double): Pga3dBodyState =
     val localForque = state.motor.reverse.sandwich(globalForque)
-    Pga3dState(
+    Pga3dBodyState(
       motor = state.motor.geometric(state.localB) * -0.5,
       localB = inertia.invert(state.localB.cross(inertia(state.localB)) + localForque)
     )
 
-  private def getNextState(state: Pga3dState, derivative: Pga3dState, dt: Double): Pga3dState =
+  private def getNextState(state: Pga3dBodyState, derivative: Pga3dBodyState, dt: Double): Pga3dBodyState =
     state.madd(derivative, dt).normalized
 
 object Pga3dOneBodyWithInertia:
   def simple123(motor: Pga3dMotor) = new Pga3dOneBodyWithInertia(
     Pga3dInertia(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)),
-    Pga3dState(
+    Pga3dBodyState(
       motor,
       motor.reverseSandwich(Pga3dBivector(
         wx = 0.0,

@@ -3,16 +3,16 @@ package com.github.kright.pga3dphysics
 import com.github.kright.math.FastRange
 
 object PhysicsSolverUtil:
-  def getDerivative(dynamicBodies: Array[PhysicsBody], currentDt: Double, addForquesToBodies: Double => Unit): Array[State] = {
+  def getDerivative(dynamicBodies: Array[Pga3dPhysicsBody], currentDt: Double, addForquesToBodies: Double => Unit): Array[Pga3dBodyState] = {
     for (body <- dynamicBodies) {
       body.resetForqueAccum()
     }
 
     addForquesToBodies(currentDt)
-    dynamicBodies.map(b => State.derivative(b))
+    dynamicBodies.map(b => Pga3dBodyState.derivative(b))
   }
 
-  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double, derivative: Array[State]): Unit =
+  def setNewState(result: Array[Pga3dPhysicsBody], initial: Array[Pga3dBodyState], dt: Double, derivative: Array[Pga3dBodyState]): Unit =
     for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
@@ -22,19 +22,18 @@ object PhysicsSolverUtil:
       r.localB = i.localB + d.localB * dt
     }
 
-  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double,
-                  derivative0: Array[State], k0: Double,
-                  derivative1: Array[State], k1: Double): Unit =
+  def setNewState(result: Array[Pga3dPhysicsBody], initial: Array[Pga3dBodyState], dt: Double,
+                  derivative0: Array[Pga3dBodyState], k0: Double,
+                  derivative1: Array[Pga3dBodyState], k1: Double): Unit =
     for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
       val d0 = derivative0(pos)
       val d1 = derivative1(pos)
 
-      r.motor = (
-        i.motor
-          + d0.motor * (dt * k0)
-          + d1.motor * (dt * k1)
+      r.motor = (i.motor
+        + d0.motor * (dt * k0)
+        + d1.motor * (dt * k1)
         ).normalizedByBulk
 
       r.localB = i.localB
@@ -42,11 +41,11 @@ object PhysicsSolverUtil:
         + d1.localB * (dt * k1)
     }
 
-  def setNewState(result: Array[PhysicsBody], initial: Array[State], dt: Double,
-                  derivative0: Array[State], k0: Double,
-                  derivative1: Array[State], k1: Double,
-                  derivative2: Array[State], k2: Double,
-                  derivative3: Array[State], k3: Double): Unit =
+  def setNewState(result: Array[Pga3dPhysicsBody], initial: Array[Pga3dBodyState], dt: Double,
+                  derivative0: Array[Pga3dBodyState], k0: Double,
+                  derivative1: Array[Pga3dBodyState], k1: Double,
+                  derivative2: Array[Pga3dBodyState], k2: Double,
+                  derivative3: Array[Pga3dBodyState], k3: Double): Unit =
     for (pos <- FastRange(result.length)) {
       val r = result(pos)
       val i = initial(pos)
@@ -55,17 +54,19 @@ object PhysicsSolverUtil:
       val d2 = derivative2(pos)
       val d3 = derivative3(pos)
 
-      r.motor = (
-        i.motor
-          + d0.motor * (dt * k0)
+      val dMotor =
+        d0.motor * (dt * k0)
           + d1.motor * (dt * k1)
           + d2.motor * (dt * k2)
           + d3.motor * (dt * k3)
-        ).normalizedByBulk
 
-      r.localB = i.localB
-        + d0.localB * (dt * k0)
-        + d1.localB * (dt * k1)
-        + d2.localB * (dt * k2)
-        + d3.localB * (dt * k3)
+      r.motor = (i.motor + dMotor).normalizedByBulk
+
+      val dB =
+        d0.localB * (dt * k0)
+          + d1.localB * (dt * k1)
+          + d2.localB * (dt * k2)
+          + d3.localB * (dt * k3)
+
+      r.localB = i.localB + dB
     }

@@ -5,12 +5,12 @@ import com.github.kright.pga3dphysics.PhysicsSolverUtil.*
 /**
  * Runge-Kutta solver with 4th order of precision
  */
-object PhysicsSolverRK4 extends PhysicsSolver[PhysicsBody]:
-  override def step(dynamicBodies: Array[PhysicsBody],
+object PhysicsSolverRK4 extends PhysicsSolver[Pga3dPhysicsBody]:
+  override def step(dynamicBodies: Array[Pga3dPhysicsBody],
                     dt: Double,
                     addForquesToBodies: (Double) => Unit): Unit = {
 
-    val initial = dynamicBodies.map(State(_))
+    val initial = dynamicBodies.map(Pga3dBodyState(_))
 
     val k1 = getDerivative(dynamicBodies, 0.0, addForquesToBodies)
 

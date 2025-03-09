@@ -2,7 +2,7 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.{Pga3dMotor, Pga3dPoint, Pga3dVector}
 
-class Body(private var _motor: Pga3dMotor):
+class Pga3dMotorWithMatrix(private var _motor: Pga3dMotor):
 
   /** multiplication to matrix is faster than sandwich product with Pga3dMotor */
   private val motorAsMatrix = Pga3dMatrixForPoints(_motor)
@@ -18,9 +18,6 @@ class Body(private var _motor: Pga3dMotor):
 
   def motorSandwich(vector: Pga3dVector): Pga3dVector =
     motorAsMatrix * vector
-
-  def deepCopy(): Body =
-    new Body(motor)
 
   def globalCenter: Pga3dPoint =
     motorAsMatrix.getCenter  

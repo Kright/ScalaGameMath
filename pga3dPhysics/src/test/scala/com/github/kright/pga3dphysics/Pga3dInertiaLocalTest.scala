@@ -13,18 +13,38 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
   private given equalityEps: EqualityEps = EqualityEps(eps)
 
-  test("calculate free rotation body precession for RK4") {
+  test("calculate free rotation body precession for RK4 v3") {
     val stepsCount = 1000
+    val dt = 0.01
     val forque = Pga3dBivector()
 
-    val maxError = testOneBodySimple123(stepsCount, body => {
-      body.doStepRK4(dt = 0.01, forque)
-      body.getError()
-    }).reduce(_ max _)
+    val system = Pga3dPhysicsSystem(Array(Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)), PhysicsSolverRK4)
 
-//    println(maxError)
+    assert(system.initialE == 3.0)
+    assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+
+    val errors = for (_ <- 0 until stepsCount)
+      yield {
+        system.doStep(dt, _ => ())
+        system.getError()
+      }
+
+    val body = Pga3dOneBodyWithInertiaLocal.simple123()
+
+    assert(body.initialE == 3.0)
+    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+
+    val errors2 = for (_ <- 0 until stepsCount)
+      yield {
+        body.doStepRK4(dt = 0.01, forque)
+        body.getError()
+      }
+
+    val maxError = errors.reduce(_ max _)
+    val maxError2 = errors2.reduce(_ max _)
 
     assert(maxError < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
+    assert(maxError2 < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
   }
 
   test("calculate free rotation body precession for RK4 v2") {
@@ -48,7 +68,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
         body.getError()
       }).reduce(_ max _)
 
-//      println(s"maxError = $maxError, motor = $motor")
+      //      println(s"maxError = $maxError, motor = $motor")
       assert(maxError < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
     }
   }
@@ -159,7 +179,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
     val body = new Pga3dOneBodyWithInertiaLocal(
       Pga3dInertiaLocal(mass, 1.0, 1.0, 1.0),
-      Pga3dState.zero,
+      Pga3dBodyState.zero,
     )
 
     val springCenter = Pga3dPlane(3.0, 4.0, w = 1).dual // len 5
