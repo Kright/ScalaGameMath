@@ -2,7 +2,7 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.{Pga3dBivector, Pga3dMotor}
 
-class Pga3dPhysicsSystem(val initialState: Array[Pga3dPhysicsBody], val solver: PhysicsSolver[Pga3dPhysicsBody]):
+class Pga3dPhysicsSystem(val initialState: Array[Pga3dPhysicsBody], val solver: Pga3dPhysicsSolver[Pga3dPhysicsBody]):
   var state: Array[Pga3dPhysicsBody] = initialState.map(_.deepCopy())
 
   val initialE = getKineticEnergy()

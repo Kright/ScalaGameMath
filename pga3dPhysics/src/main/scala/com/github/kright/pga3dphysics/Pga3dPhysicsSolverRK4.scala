@@ -1,11 +1,11 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.pga3dphysics.PhysicsSolverUtil.*
+import com.github.kright.pga3dphysics.Pga3dPhysicsSolverUtil.*
 
 /**
  * Runge-Kutta solver with 4th order of precision
  */
-object PhysicsSolverRK4 extends PhysicsSolver[Pga3dPhysicsBody]:
+object Pga3dPhysicsSolverRK4 extends Pga3dPhysicsSolver[Pga3dPhysicsBody]:
   override def step(dynamicBodies: Array[Pga3dPhysicsBody],
                     dt: Double,
                     addForquesToBodies: (Double) => Unit): Unit = {

@@ -18,7 +18,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     val dt = 0.01
     val forque = Pga3dBivector()
 
-    val system = Pga3dPhysicsSystem(Array(Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)), PhysicsSolverRK4)
+    val system = Pga3dPhysicsSystem(Array(Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)), Pga3dPhysicsSolverRK4)
 
     assert(system.initialE == 3.0)
     assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
@@ -65,7 +65,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
     for (motor <- motors) {
       val body = Pga3dPhysicsSystem.simpleBody(motor)
-      val system = Pga3dPhysicsSystem(Array(body), PhysicsSolverRK4)
+      val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
       val maxError = (for (_ <- 0 until stepsCount) yield {
         system.doStep(dt, _ => ())
@@ -101,7 +101,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
     val err2 = {
       val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
-      val system = Pga3dPhysicsSystem(Array(body), PhysicsSolverRK4)
+      val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
       val acc = body.inertia.getAcceleration(localB, localForque)
       val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
       val err = (acc - accNaive).norm
@@ -188,7 +188,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
       Pga3dMotor.id,
     )
 
-    val system = Pga3dPhysicsSystem(Array(body), PhysicsSolverRK4)
+    val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
     val springCenter = Pga3dPlane(3.0, 4.0, w = 1).dual // len 5
     val springK = 20
