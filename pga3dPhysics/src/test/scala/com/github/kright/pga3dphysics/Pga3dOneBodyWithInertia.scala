@@ -20,7 +20,7 @@ class Pga3dOneBodyWithInertia(val inertia: Pga3dInertia, val initialState: Pga3d
   def getErrorL(): Double =
     (getL() - initialL).norm / initialL.norm
 
-  def getError() = Pga3dOneBodyWithInertiaLocal.Error(getErrorE(), getErrorL())
+  def getError() = ErrorOfEnergyAndMomentum(getErrorE(), getErrorL())
 
   def doStepRK4(dt: Double, globalForque: Pga3dBivector): Unit = {
     doStepRK4F(dt, (state, time) => {
@@ -73,4 +73,4 @@ object Pga3dOneBodyWithInertia:
         xz = -1.0,
       ))
     )
-  )    
+  )

@@ -20,7 +20,7 @@ class Pga3dPhysicsSystem(val initialState: Array[Pga3dPhysicsBody], val solver: 
   def getErrorL(): Double =
     (getL() - initialL).norm / initialL.norm
 
-  def getError() = Pga3dOneBodyWithInertiaLocal.Error(getErrorE(), getErrorL())
+  def getError() = ErrorOfEnergyAndMomentum(getErrorE(), getErrorL())
 
   def doStep(dt: Double, addForquesToBodies: Double => Unit): Unit =
     solver.step(state, dt, addForquesToBodies)
@@ -39,4 +39,3 @@ object Pga3dPhysicsSystem:
         xz = -1.0,
       ))
     )
-  

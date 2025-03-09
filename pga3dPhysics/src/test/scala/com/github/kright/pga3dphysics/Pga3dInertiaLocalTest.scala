@@ -29,22 +29,9 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
         system.getError()
       }
 
-    val body = Pga3dOneBodyWithInertiaLocal.simple123()
-
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
-
-    val errors2 = for (_ <- 0 until stepsCount)
-      yield {
-        body.doStepRK4(dt = 0.01, forque)
-        body.getError()
-      }
-
     val maxError = errors.reduce(_ max _)
-    val maxError2 = errors2.reduce(_ max _)
 
-    assert(maxError < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
-    assert(maxError2 < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
+    assert(maxError < ErrorOfEnergyAndMomentum(errorE = 6e-11, errorL = 1e-9))
   }
 
   test("calculate free rotation body precession for RK4 for different orientation") {
@@ -72,75 +59,40 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
         system.getError()
       }).reduce(_ max _)
 
-      assert(maxError < Pga3dOneBodyWithInertiaLocal.Error(errorE = 6e-11, errorL = 1e-9))
+      assert(maxError < ErrorOfEnergyAndMomentum(errorE = 6e-11, errorL = 1e-9))
     }
   }
-
 
   test("getAcceleration test") {
     val localB = Pga3dBivector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
     val localForque = Pga3dBivector(0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
-
-    val err0 = {
-      val body = Pga3dOneBodyWithInertiaLocal.simple123()
-      val acc = body.inertia.getAcceleration(localB, localForque)
-      val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
-      val err = (acc - accNaive).norm
-      assert(err < 2e-16)
-      err
-    }
-
-    val err1 = {
-      val body = Pga3dOneBodyWithInertia.simple123(Pga3dMotor.id)
-      val acc = body.inertia.getAcceleration(localB, localForque)
-      val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
-      val err = (acc - accNaive).norm
-      assert(err < 2e-16)
-      err
-    }
-
-    val err2 = {
-      val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
-      val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
-      val acc = body.inertia.getAcceleration(localB, localForque)
-      val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
-      val err = (acc - accNaive).norm
-      assert(err < 2e-16)
-      err
-    }
-
-    assert(err0 == err1)
-    assert(err2 == 0.0) // It could be higher, but test fixes current behavior
+    val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
+    val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
+    val acc = body.inertia.getAcceleration(localB, localForque)
+    val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
+    val err = (acc - accNaive).norm
+    assert(err < 2e-16)
+    assert(err == 0.0) // It could be higher, but test fixes current behavior
   }
 
   test("calculate performance") {
     if (false) {
       val stepsCount = 10_000_000
-      val forque = Pga3dBivector()
 
-      val body = Pga3dOneBodyWithInertiaLocal.simple123()
+      val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
+      val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
-      assert(body.initialE == 3.0)
-      assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+      assert(system.initialE == 3.0)
+      assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
 
       val start = System.nanoTime()
       for (_ <- 0 until stepsCount) {
-        body.doStepRK4(dt = 0.001, forque)
+        system.doStep(dt = 0.001, _ => ())
       }
       val end = System.nanoTime()
       println(s"dt = ${(end - start) / stepsCount}ns")
-      println(body.state)
+      println(system.state.head)
     }
-  }
-
-  private def testOneBodySimple123[T](stepsCount: Int, doStep: Pga3dOneBodyWithInertiaLocal => T): Iterable[T] = {
-    val body = Pga3dOneBodyWithInertiaLocal.simple123()
-
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
-
-    for (_ <- 0 until stepsCount)
-      yield doStep(body)
   }
 
   test("calculate energy accumulation for linear force during rotation") {
@@ -148,31 +100,32 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     val stepsCount = 100
 
     val forceDirection = Pga3dPlaneIdeal(x = 1.0, y = 0, z = 0)
-    val body = Pga3dOneBodyWithInertiaLocal.simple123()
+    val body = Pga3dPhysicsSystem.simpleBody(Pga3dMotor.id)
+    val system = Pga3dPhysicsSystem(Array(body), Pga3dPhysicsSolverRK4)
 
-    assert(body.initialE == 3.0)
-    assert(body.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+    assert(system.initialE == 3.0)
+    assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
 
-    var accumulatedL = body.initialL
+    var accumulatedL = system.initialL
 
     val errors = for (step <- 1 to stepsCount) yield {
       val t = step * dt
 
-      val bodyCenter = body.state.center
+      val bodyCenter = system.state.head.globalCenter
       val globalForque = bodyCenter.dot(forceDirection)
-      body.doStepRK4(dt, globalForque)
+      system.doStep(dt, _ => system.state.head.addGlobalForque(globalForque))
 
-      val expectedEnergy = body.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.mass
+      val expectedEnergy = system.initialE + 0.5 * forceDirection.normSquare * t * t / body.inertia.mass
       accumulatedL += globalForque * dt
 
-      val err = Pga3dOneBodyWithInertiaLocal.Error(errorE = math.abs(expectedEnergy - body.getEnergy()), errorL = (accumulatedL - body.getL()).norm)
+      val err = ErrorOfEnergyAndMomentum(errorE = math.abs(expectedEnergy - system.getKineticEnergy()), errorL = (accumulatedL - system.getL()).norm)
       err
     }
 
     val maxError = errors.reduce(_ max _)
-    assert(maxError < Pga3dOneBodyWithInertiaLocal.Error(2e-9, 4e-9))
+    assert(maxError < ErrorOfEnergyAndMomentum(2e-9, 4e-9))
 
-    val endPoint = body.state.center
+    val endPoint = system.state.head.globalCenter
     val expectedPoint = Pga3dPlane(w = 1.0, x = 0.5).dual
 
     assert((endPoint - expectedPoint).norm < 2e-9)
