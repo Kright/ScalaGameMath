@@ -25,7 +25,7 @@ case class Pga3dBodyState(motor: Pga3dMotor,
 
 
 object Pga3dBodyState:
-  def zero: Pga3dBodyState =
+  def id: Pga3dBodyState =
     Pga3dBodyState(
       Pga3dMotor.id,
       Pga3dBivector.zero,
