@@ -25,3 +25,6 @@ object Pga3dPhysicsSolverRK4 extends Pga3dPhysicsSolver[Pga3dPhysicsBody]:
 
     setNewState(dynamicBodies, initial, dt, k1, 1.0 / 6.0, k2, 2.0 / 6.0, k3, 2.0 / 6.0, k4, 1.0 / 6.0)
   }
+
+  override def toString: String =
+    "Pga3dPhysicsSolverRK4"

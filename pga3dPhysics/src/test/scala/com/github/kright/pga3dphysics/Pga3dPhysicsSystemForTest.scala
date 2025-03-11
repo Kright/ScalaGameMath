@@ -2,17 +2,12 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.{Pga3dBivector, Pga3dMotor}
 
-class Pga3dPhysicsSystem(val initialState: Array[Pga3dPhysicsBody], val solver: Pga3dPhysicsSolver[Pga3dPhysicsBody]):
-  var state: Array[Pga3dPhysicsBody] = initialState.map(_.deepCopy())
+class Pga3dPhysicsSystemForTest(state: Array[Pga3dPhysicsBody],
+                                solver: Pga3dPhysicsSolver[Pga3dPhysicsBody]) extends Pga3dPhysicsSystem(state, solver):
 
+  val initialState: Array[Pga3dBodyState] = state.map(Pga3dBodyState(_))
   val initialE = getKineticEnergy()
   val initialL = getL()
-
-  def getL(): Pga3dBivector =
-    Pga3dPhysicsBody.getL(state)
-
-  def getKineticEnergy(): Double =
-    Pga3dPhysicsBody.getKineticEnergy(state)
 
   def getErrorE(): Double =
     math.abs(getKineticEnergy() - initialE) / initialE
@@ -20,12 +15,11 @@ class Pga3dPhysicsSystem(val initialState: Array[Pga3dPhysicsBody], val solver: 
   def getErrorL(): Double =
     (getL() - initialL).norm / initialL.norm
 
-  def getError() = ErrorOfEnergyAndMomentum(getErrorE(), getErrorL())
+  def getError(): ErrorOfEnergyAndMomentum =
+    ErrorOfEnergyAndMomentum(getErrorE(), getErrorL())
 
-  def doStep(dt: Double, addForquesToBodies: Double => Unit): Unit =
-    solver.step(state, dt, addForquesToBodies)
 
-object Pga3dPhysicsSystem:
+object Pga3dPhysicsSystemForTest:
   def simpleBody(motor: Pga3dMotor): Pga3dPhysicsBody =
     Pga3dPhysicsBody(
       Pga3dInertia(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)).toPrecomputed,
