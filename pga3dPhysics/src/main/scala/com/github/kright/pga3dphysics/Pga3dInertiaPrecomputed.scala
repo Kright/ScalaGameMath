@@ -30,9 +30,11 @@ class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
   override def invert(globalInertia: Pga3dBivector): Pga3dBivector =
     Pga3dMatrix.multiply(matrixInv, globalInertia)
     
-  def toInertia: Pga3dInertia =
+  override def toInertia: Pga3dInertia =
     Pga3dInertia(localToGlobal, localInertia)
     
-  def toSummable: Pga3dInertiaSummable =
+  override def toSummable: Pga3dInertiaSummable =
     toInertia.toSummable
-    
+
+  override def toPrecomputed: Pga3dInertiaPrecomputed = 
+    this

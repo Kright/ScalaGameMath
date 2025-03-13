@@ -47,7 +47,7 @@ final case class Pga3dInertiaLocal(mass: Double,
       yz = (localForque.wx + localB.xy * localB.xz * mrxy - localB.xy * localB.xz * mrxz) / mryz,
     )
 
-  def toSummable: Pga3dInertiaSummable =
+  override def toSummable: Pga3dInertiaSummable =
     val mrxyz2 = (mrxy + mrxz + mryz) * 0.5
 
     val mrx2 = mrxyz2 - mryz
@@ -67,8 +67,11 @@ final case class Pga3dInertiaLocal(mass: Double,
       yz = 0.0,
     )
 
-  def toInertia: Pga3dInertia =
+  override def toInertia: Pga3dInertia =
     Pga3dInertia(Pga3dMotor.id, this)
+
+  override def toPrecomputed: Pga3dInertiaPrecomputed =
+    Pga3dInertiaPrecomputed(Pga3dMotor.id, this)  
 
 
 object Pga3dInertiaLocal:

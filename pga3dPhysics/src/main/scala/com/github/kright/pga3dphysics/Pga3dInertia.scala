@@ -41,11 +41,14 @@ class Pga3dInertia(val localToGlobal: Pga3dMotor,
     val localB = localToGlobal.reverseSandwich(globalB)
     localInertia.getKineticEnergy(localB)
 
-  def toSummable: Pga3dInertiaSummable =
+  override def toSummable: Pga3dInertiaSummable =
     localToGlobal.sandwich(localInertia.toSummable)
-    
-  def toPrecomputed: Pga3dInertiaPrecomputed =
+
+  override def toPrecomputed: Pga3dInertiaPrecomputed =
     Pga3dInertiaPrecomputed(localToGlobal, localInertia)
+
+  override def toInertia: Pga3dInertia =
+    this  
 
   override def toString: String =
     s"Pga3dInertia(motor = $localToGlobal, inertia = $localInertia)"
