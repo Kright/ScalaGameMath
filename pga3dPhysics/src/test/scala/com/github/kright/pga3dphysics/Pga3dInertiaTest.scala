@@ -3,7 +3,7 @@ package com.github.kright.pga3dphysics
 import com.github.kright.matrix.MatrixPrinter
 import com.github.kright.pga3d.*
 import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
-import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.{inertiaMovedLocal, inertiaSimple}
+import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.inertiaMovedLocal
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
 import org.scalactic.anyvals.PosInt
@@ -244,4 +244,43 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     val m = Pga3dMotor.id
     val r: Pga3dInertiaMovedSimple = m.sandwich(a)
     // Code just compiles and that it.
+  }
+
+  test("any inertia is equal to summable") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, MinSuccessful(10000)) { (inertia, b) =>
+      val summable = inertia.toSummable
+
+      val L1 = inertia(b)
+      val L2 = summable(b)
+
+      assert((L1 - L2).norm < 1e-12)
+    }
+  }
+
+  test("any inertia reverse is equal to apply") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, MinSuccessful(10000)) { (inertia, b) =>
+
+      val a = inertia(b)
+      val b2 = inertia.invert(a)
+
+      assert((b - b2).norm < 2e-12)
+    }
+  }
+
+  test("any inertia acceleration") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, Pga3dGenerators.bivectors, MinSuccessful(10000)) { (inertia, b, forque) =>
+
+      val a = inertia.getAcceleration(b, forque)
+      val a2 = inertia.invert(b.cross(inertia(b)) + forque)
+
+      assert((a - a2).norm < 2e-12)
+    }
+  }
+
+  test("any inertia representations are equal") {
+    forAll(Pga3dInertiaGenerators.anyInertia, MinSuccessful(10000)) { inertia =>
+      assert((inertia.toSummable - inertia.toInertiaMovedLocal.toSummable).norm < 1e-13)
+      assert((inertia.toSummable - inertia.toPrecomputed.toSummable).norm < 1e-13)
+      assert((inertia.toSummable - inertia.toFastestRepresentation.toSummable).norm < 1e-13)
+    }
   }

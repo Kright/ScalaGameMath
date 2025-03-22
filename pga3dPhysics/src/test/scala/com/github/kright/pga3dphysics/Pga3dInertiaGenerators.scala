@@ -38,3 +38,24 @@ object Pga3dInertiaGenerators:
     shift <- Pga3dGenerators.vectors
     motor = Pga3dTranslator.addVector(shift).geometric(q)
   } yield Pga3dInertia.moved(motor, inertiaLocal)
+
+  val inertiaMovedSimple: Gen[Pga3dInertiaMovedSimple] = for {
+    inertiaLocal <- inertiaSimple(0.1, 10.0, 0.1, 10.0)
+    shift <- Pga3dGenerators.vectors
+    translator = Pga3dTranslator.addVector(shift)
+  } yield Pga3dInertia.movedSimple(translator, inertiaLocal)
+
+  val anyInertia: Gen[Pga3dInertia] =
+    Gen.oneOf(
+      inertiaSimple(0.1, 10.0, 0.1, 10.0).flatMap(i => Gen.oneOf(i, i.toMovedSimple)),
+      inertiaLocal(0.1, 10.0, 0.1, 10.0),
+      inertiaMovedSimple,
+      inertiaMovedLocal,
+    ).flatMap { inertia =>
+      Gen.oneOf(
+        inertia,
+        inertia.toPrecomputed,
+        inertia.toInertiaMovedLocal,
+        inertia.toFastestRepresentation
+      )
+    }

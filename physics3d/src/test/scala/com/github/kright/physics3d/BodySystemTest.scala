@@ -88,7 +88,7 @@ class BodySystemTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("two bodies with angle spring 1 to 2") {
-    val dt = 0.001
+    val dt = 0.0005
 
     forAll(solvers, bodySystems(bodiesCount = 2), transforms, transforms, Gen.double.map(_ + 0.1)) { (solver, systemFactory, t1, t2, k1) =>
       val spring = AngularSpring3d(t1, t2, k1, 0.0)

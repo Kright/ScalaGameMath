@@ -19,6 +19,9 @@ object MathUtils:
       mult(x, pow(xx, power / 2, mult))
     }
 
+  def interpolate(a: Double, b: Double, t: Double): Double =
+    a * (1.0 - t) + b * t   
+
   extension (d: Double)
     def clamp(lower: Double, upper: Double): Double =
       if (d < lower) lower
