@@ -1204,6 +1204,8 @@ object Pga3dTranslator:
 
   inline val componentsCount = 3
 
+  val id: Pga3dTranslator = Pga3dTranslator(0.0, 0.0, 0.0)
+
   def addVector(v: Pga3dVector): Pga3dTranslator =
     Pga3dTranslator(
       wx = -0.5 * v.x,

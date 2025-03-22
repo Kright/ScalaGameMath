@@ -207,6 +207,9 @@ case class MultivectorSubClass(name: String,
   }
 
   private def generateObjectMethodsForTranslator(code: CodeGen): Unit = {
+    code(
+      s"""
+         |val id: ${typeName} = ${typeName}(0.0, 0.0, 0.0)""".stripMargin)
     code("")
     code(s"def addVector(v: ${vector.typeName}): ${typeName} =")
     code.block {
