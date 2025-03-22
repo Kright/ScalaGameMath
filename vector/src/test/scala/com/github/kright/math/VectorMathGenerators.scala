@@ -14,6 +14,8 @@ object VectorMathGenerators:
         min,
         max,
         0.5 * (min + max),
+        min * 1e-10 + max * (1.0 - 1e-10),
+        min * (1.0 - 1e-10) + max * 1e-10,
       )),
       Gen.double.map { d =>
         d * (max - min) + min

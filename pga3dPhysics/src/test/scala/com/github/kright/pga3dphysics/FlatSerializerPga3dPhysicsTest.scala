@@ -29,8 +29,8 @@ class FlatSerializerPga3dPhysicsTest extends AnyFunSuiteLike with ScalaCheckProp
   }
 
   test("check serialization and deserialization") {
-    myCheck(Pga3dPhysicsGenerators.inertiaGen.map(_.localInertia))
-    myCheck(Pga3dPhysicsGenerators.inertiaGen.map(_.toSummable))
+    myCheck(Pga3dInertiaGenerators.inertiaGen.map(_.localInertia))
+    myCheck(Pga3dInertiaGenerators.inertiaGen.map(_.toSummable))
   }
 
 object FlatSerializerPga3dPhysicsTest:

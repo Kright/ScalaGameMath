@@ -4,7 +4,7 @@ import com.github.kright.math.VectorMathGenerators
 import com.github.kright.pga3d.{Pga3dGenerators, Pga3dTranslator}
 import org.scalacheck.Gen
 
-object Pga3dPhysicsGenerators:
+object Pga3dInertiaGenerators:
   def inertiaLocal(minMass: Double, maxMass: Double, minR: Double, maxR: Double): Gen[Pga3dInertiaLocal] =
     for {
       mass <- VectorMathGenerators.doubleInRange(minMass, maxMass)

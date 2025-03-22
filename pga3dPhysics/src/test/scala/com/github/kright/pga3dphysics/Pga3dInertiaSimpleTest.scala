@@ -26,7 +26,7 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
   test("Pga3dInertiaSimple and toInertiaLocal are the same") {
     given doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-13)
 
-    forAll(Pga3dPhysicsGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0), MinSuccessful(1000)) { simpleInertia =>
+    forAll(Pga3dInertiaGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0), MinSuccessful(1000)) { simpleInertia =>
       val localInertia = simpleInertia.toInertiaLocal
 
       assert(localInertia.mryz === simpleInertia.mr2, s"diff = ${localInertia.mryz - simpleInertia.mr2}")
@@ -36,7 +36,7 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
   }
 
   test("Pga3dInertiaSimple toSummable and others consistency") {
-    forAll(Pga3dPhysicsGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0), MinSuccessful(1000)) { simpleInertia =>
+    forAll(Pga3dInertiaGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0), MinSuccessful(1000)) { simpleInertia =>
       val summable = simpleInertia.toSummable
       val summable2 = simpleInertia.toInertiaLocal.toSummable
 
@@ -46,7 +46,7 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
 
   test("Pga3dInertiaSimple and Pga3dInertiaLocal apply the same") {
     forAll(
-      Pga3dPhysicsGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0),
+      Pga3dInertiaGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0),
       Pga3dGenerators.bivectors,
       Pga3dGenerators.bivectors, MinSuccessful(1000)) { (simpleInertia, forque, b) =>
 
@@ -63,7 +63,7 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
 
   test("Pga3dInertiaSimple and Pga3dInertiaLocal invert the same") {
     forAll(
-      Pga3dPhysicsGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0),
+      Pga3dInertiaGenerators.inertiaSimple(0.1, 1.0, 0.1, 10.0),
       Pga3dGenerators.bivectors, MinSuccessful(1000)) { (simpleInertia, b) =>
 
       val localInertia = simpleInertia.toInertiaLocal

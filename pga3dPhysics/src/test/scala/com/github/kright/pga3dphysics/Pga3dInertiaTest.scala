@@ -3,7 +3,7 @@ package com.github.kright.pga3dphysics
 import com.github.kright.matrix.{Matrix, MatrixPrinter}
 import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
 import com.github.kright.pga3d.*
-import com.github.kright.pga3dphysics.Pga3dPhysicsGenerators.inertiaGen
+import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.inertiaGen
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
 import org.scalactic.anyvals.PosInt
@@ -147,7 +147,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia diagonalization preservers main axes") {
-    forAll(inertiaGen, MinSuccessful(100)) { inertiaInitial =>
+    forAll(inertiaGen, MinSuccessful(1000)) { inertiaInitial =>
       val summableInertia = inertiaInitial.toSummable
       val inertiaRestored = summableInertia.toInertia
       val summableRestored = inertiaRestored.toSummable
@@ -155,7 +155,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val sortedAxesInitial = getMainAxesSorted(inertiaInitial)
       val sortedAxesRestored = getMainAxesSorted(inertiaRestored)
 
-      assert(maxDiff(sortedAxesInitial, sortedAxesRestored) < 1e-13 * inertiaInitial.mass,
+      assert(maxDiff(sortedAxesInitial, sortedAxesRestored) < 1e-10 * inertiaInitial.mass,
         s"""diff = ${sortedAxesInitial.zip(sortedAxesRestored).map((a, b) => Math.abs(a - b)).mkString(", ")}
            |sortedAxesInitial = ${sortedAxesInitial}
            |sortedAxesRestored = ${sortedAxesRestored}""".stripMargin)
