@@ -82,7 +82,7 @@ final case class Pga3dInertiaSummable(ww: Double,
   def norm: Double =
     Math.sqrt(normSquare)
 
-  def toInertia: Pga3dInertiaMoved =
+  def toInertia: Pga3dInertiaMovedLocal =
     val shift = centerOfMass.toVectorUnsafe
 
     val shifted = Pga3dTranslator.addVector(-shift).sandwich(this)
@@ -92,7 +92,7 @@ final case class Pga3dInertiaSummable(ww: Double,
     val iyy = i(1, 1)
     val izz = i(2, 2)
 
-    Pga3dInertiaMoved(
+    Pga3dInertiaMovedLocal(
       localToGlobal = Pga3dTranslator.addVector(shift).geometric(quaternion),
       localInertia = Pga3dInertiaLocal(mass, iyy + izz, ixx + izz, ixx + iyy)
     )

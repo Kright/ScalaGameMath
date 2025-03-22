@@ -32,7 +32,7 @@ object Pga3dInertiaGenerators:
     Pga3dInertiaSummable(0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
   )
 
-  val inertiaMoved: Gen[Pga3dInertiaMoved] = for {
+  val inertiaMoved: Gen[Pga3dInertiaMovedLocal] = for {
     inertiaLocal <- inertiaLocal(0.1, 10.0, 0.1, 10.0)
     q <- Pga3dGenerators.normalizedQuaternions
     shift <- Pga3dGenerators.vectors

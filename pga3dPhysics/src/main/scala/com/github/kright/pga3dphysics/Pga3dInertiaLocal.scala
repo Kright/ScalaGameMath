@@ -5,7 +5,7 @@ import com.github.kright.pga3d.*
 final case class Pga3dInertiaLocal(mass: Double,
                                    mryz: Double,
                                    mrxz: Double,
-                                   mrxy: Double) extends Pga3dInertiaAbstract:
+                                   mrxy: Double) extends Pga3dInertia:
 
   override def toString: String =
     s"Pga3dInertiaLocal(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
@@ -67,8 +67,8 @@ final case class Pga3dInertiaLocal(mass: Double,
       yz = 0.0,
     )
 
-  override def toInertiaMoved: Pga3dInertiaMoved =
-    Pga3dInertiaMoved(Pga3dMotor.id, this)
+  override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
+    Pga3dInertiaMovedLocal(Pga3dMotor.id, this)
 
   override def toPrecomputed: Pga3dInertiaPrecomputed =
     Pga3dInertiaPrecomputed(Pga3dMotor.id, this)  

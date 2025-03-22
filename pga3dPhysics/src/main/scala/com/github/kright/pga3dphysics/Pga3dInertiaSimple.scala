@@ -1,6 +1,6 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.pga3d.{Pga3dBivector, Pga3dPoint, Pga3dTrivector}
+import com.github.kright.pga3d.*
 
 /**
  * Fully symmetrical tensor of inertia (for example, for cube or sphere).
@@ -10,7 +10,7 @@ import com.github.kright.pga3d.{Pga3dBivector, Pga3dPoint, Pga3dTrivector}
  * @param mr2  - square of effective radius multiplied by mass
  */
 final case class Pga3dInertiaSimple(mass: Double,
-                                    mr2: Double) extends Pga3dInertiaAbstract:
+                                    mr2: Double) extends Pga3dInertia:
 
   private val massInv = 1.0 / mass
   private val mr2Inv = 1.0 / mr2
@@ -73,14 +73,17 @@ final case class Pga3dInertiaSimple(mass: Double,
   def toInertiaLocal: Pga3dInertiaLocal =
     Pga3dInertiaLocal(mass, mr2, mr2, mr2)
 
-  override def toInertiaMoved: Pga3dInertiaMoved =
-    toInertiaLocal.toInertiaMoved
+  override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
+    toInertiaLocal.toInertiaMovedLocal
 
   /**
    * Pga3dInertiaSimple is much faster than Pga3dInertiaPrecomputed, so no much need in this conversion 
    */
   override def toPrecomputed: Pga3dInertiaPrecomputed =
     toInertiaLocal.toPrecomputed
+
+  def toMovedSimple: Pga3dInertiaMovedSimple =
+    Pga3dInertiaMovedSimple(Pga3dTranslator.id, this)
 
 object Pga3dInertiaSimple:
 

@@ -122,7 +122,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assertEq(sumOfPoints, localInertia.toSummable)
   }
 
-  private def getMainAxesSorted(inertia: Pga3dInertiaMoved): Seq[Double] =
+  private def getMainAxesSorted(inertia: Pga3dInertiaMovedLocal): Seq[Double] =
     val local = inertia.localInertia
     Seq(local.mryz, local.mrxz, local.mrxy).sorted
 

@@ -5,7 +5,7 @@ import com.github.kright.pga3d.*
 import scala.util.chaining.scalaUtilChainingOps
 
 
-class Pga3dPhysicsBody(var inertia: Pga3dInertiaAbstract,
+class Pga3dPhysicsBody(var inertia: Pga3dInertia,
                        _motor: Pga3dMotor,
                        var localB: Pga3dBivector) extends Pga3dMotorWithMatrix(_motor):
 
@@ -49,7 +49,7 @@ class Pga3dPhysicsBody(var inertia: Pga3dInertiaAbstract,
 
 
 object Pga3dPhysicsBody:
-  def motionless(inertia: Pga3dInertiaAbstract, motor: Pga3dMotor): Pga3dPhysicsBody =
+  def motionless(inertia: Pga3dInertia, motor: Pga3dMotor): Pga3dPhysicsBody =
     Pga3dPhysicsBody(inertia, motor, Pga3dBivector())
 
   def getL(bodies: Iterable[Pga3dPhysicsBody]): Pga3dBivector =

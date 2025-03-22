@@ -2,6 +2,30 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.*
 
+trait Pga3dInertia:
+  def mass: Double
+
+  def centerOfMass: Pga3dPoint
+
+  def centerOfMassTrivector: Pga3dTrivector
+
+  def apply(velocity: Pga3dBivector): Pga3dBivector
+
+  def invert(localInertia: Pga3dBivector): Pga3dBivector
+
+  def getAcceleration(velocity: Pga3dBivector, forque: Pga3dBivector): Pga3dBivector =
+    invert(velocity.cross(apply(velocity)) + forque)
+
+  def getKineticEnergy(velocity: Pga3dBivector): Double =
+    (velocity v apply(velocity)) * 0.5
+
+  def toInertiaMovedLocal: Pga3dInertiaMovedLocal
+
+  def toSummable: Pga3dInertiaSummable
+
+  def toPrecomputed: Pga3dInertiaPrecomputed
+
+
 /**
  * class with useful constructor methods for base classes
  */
@@ -14,4 +38,6 @@ object Pga3dInertia:
 
   def cube(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.cube(mass, rx, ry, rz)
 
-  def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal) = Pga3dInertiaMoved(motor, inertia)
+  def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal) = Pga3dInertiaMovedLocal(motor, inertia)
+
+  def movedSimple(translator: Pga3dTranslator, inertia: Pga3dInertiaSimple) = Pga3dInertiaMovedSimple(translator, inertia)

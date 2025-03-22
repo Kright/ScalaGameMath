@@ -14,7 +14,7 @@ case class Pga3dBodyState(motor: Pga3dMotor,
   def normalized: Pga3dBodyState =
     copy(motor = motor.normalizedByBulk)
 
-  def getL(bodyInertia: Pga3dInertiaAbstract): Pga3dBivector =
+  def getL(bodyInertia: Pga3dInertia): Pga3dBivector =
     motor.sandwich(bodyInertia(localB))
 
   def center: Pga3dTrivector =
