@@ -1298,6 +1298,9 @@ object Pga3dPoint:
 
   inline val componentsCount = 3
 
+  val center: Pga3dPoint =
+    Pga3dPoint(0.0, 0.0, 0.0)
+
   def blade3(wxy: Double, wxz: Double, wyz: Double): Pga3dPoint =
     Pga3dPoint(
       x = -wyz,

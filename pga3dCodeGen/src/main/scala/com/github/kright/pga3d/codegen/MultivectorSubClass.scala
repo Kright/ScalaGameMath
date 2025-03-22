@@ -240,6 +240,13 @@ case class MultivectorSubClass(name: String,
     val points = Set(trivector, point, vector)
     if (!points.contains(this)) return
 
+    if (this == point) {
+      code(
+        s"""
+           |val center: ${point.typeName} =
+           |  ${point.typeName}(0.0, 0.0, 0.0)""".stripMargin)
+    }
+
     code("")
     if (this == trivector) {
       val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
