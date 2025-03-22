@@ -13,6 +13,12 @@ object Pga3dPhysicsGenerators:
       rz <- VectorMathGenerators.doubleInRange(minR, maxR)
     } yield Pga3dInertiaLocal.cube(mass, rx, ry, rz)
 
+  def inertiaSimple(minMass: Double, maxMass: Double, minR: Double, maxR: Double): Gen[Pga3dInertiaSimple] =
+    for {
+      mass <- VectorMathGenerators.doubleInRange(minMass, maxMass)
+      r <- VectorMathGenerators.doubleInRange(minR, maxR)
+    } yield Pga3dInertiaSimple.cube(mass, r)
+
   val summableInertiaProbes = Seq(
     Pga3dInertiaSummable(1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     Pga3dInertiaSummable(0, 1, 0, 0, 0, 0, 0, 0, 0, 0),

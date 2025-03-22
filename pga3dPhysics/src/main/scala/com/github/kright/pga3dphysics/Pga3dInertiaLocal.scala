@@ -11,7 +11,7 @@ final case class Pga3dInertiaLocal(mass: Double,
     s"Pga3dInertiaLocal(mass = $mass, mryz = $mryz, mrxz = $mrxz, mrxy = $mrxy)"
 
   override def centerOfMass: Pga3dPoint =
-    Pga3dPoint(0.0, 0.0, 0.0)
+    Pga3dPoint.center
 
   override def centerOfMassTrivector: Pga3dTrivector =
     Pga3dTrivector(x = 0.0, y = 0.0, z = 0.0, w = mass)
