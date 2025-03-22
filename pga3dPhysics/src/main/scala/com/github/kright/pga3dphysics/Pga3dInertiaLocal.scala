@@ -76,7 +76,7 @@ final case class Pga3dInertiaLocal(mass: Double,
   override def toFastestRepresentation: Pga3dInertiaLocal =
     this
 
-  override def movedBy(motor: Pga3dMotor): Pga3dInertiaMovedLocal  =
+  override def movedBy(motor: Pga3dMotor): Pga3dInertiaMovedLocal =
     Pga3dInertiaMovedLocal(motor, this)
 
   override def movedBy(quaternion: Pga3dQuaternion): Pga3dInertiaMovedLocal =
@@ -96,7 +96,18 @@ object Pga3dInertiaLocal:
     val rz2 = rz * rz
     Pga3dInertiaLocal(
       mass,
-      mryz = (ry2 + rz2) * mass / 3,
-      mrxz = (rx2 + rz2) * mass / 3,
-      mrxy = (rx2 + ry2) * mass / 3,
+      mryz = (ry2 + rz2) * mass * (1.0 / 3.0),
+      mrxz = (rx2 + rz2) * mass * (1.0 / 3.0),
+      mrxy = (rx2 + ry2) * mass * (1.0 / 3.0),
     )
+
+  def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
+    val rx2 = rx * rx
+    val ry2 = ry * ry
+    val rz2 = rz * rz
+    Pga3dInertiaLocal(
+      mass,
+      mryz = (ry2 + rz2) * mass * (1.0 / 5.0),
+      mrxz = (rx2 + rz2) * mass * (1.0 / 5.0),
+      mrxy = (rx2 + ry2) * mass * (1.0 / 5.0),
+    )  

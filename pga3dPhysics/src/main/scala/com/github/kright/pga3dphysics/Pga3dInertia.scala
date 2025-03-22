@@ -50,6 +50,8 @@ object Pga3dInertia:
 
   def cube(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.cube(mass, rx, ry, rz)
 
+  def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.solidEllipsoid(mass, rx, ry, rz)
+
   def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal) = Pga3dInertiaMovedLocal(motor, inertia)
 
   def movedSimple(translator: Pga3dTranslator, inertia: Pga3dInertiaSimple) = Pga3dInertiaMovedSimple(translator, inertia)
