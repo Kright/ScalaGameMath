@@ -13,7 +13,7 @@ class Pga3dInertia(val localToGlobal: Pga3dMotor,
     localToGlobal.sandwich(Pga3dPointCenter).toPointUnsafe
 
   override def centerOfMassTrivector: Pga3dTrivector =
-    centerOfMass * localInertia.mass  
+    centerOfMass * localInertia.mass
 
   /**
    * @return L - combination of linear impulse and angular momentum
@@ -48,13 +48,22 @@ class Pga3dInertia(val localToGlobal: Pga3dMotor,
     Pga3dInertiaPrecomputed(localToGlobal, localInertia)
 
   override def toInertia: Pga3dInertia =
-    this  
+    this
 
   override def toString: String =
     s"Pga3dInertia(motor = $localToGlobal, inertia = $localInertia)"
 
 
 object Pga3dInertia:
+  def cube(mass: Double, r: Double) = Pga3dInertiaSimple.cube(mass, r)
+
+  def sphere(mass: Double, r: Double) = Pga3dInertiaSimple.sphere(mass, r)
+
+  def solidSphere(mass: Double, r: Double) = Pga3dInertiaSimple.solidSphere(mass, r)
+
+  def cube(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.cube(mass, rx, ry, rz)
+
+
   extension (m: Pga3dMotor)
     def sandwich(inertia: Pga3dInertia): Pga3dInertia =
       Pga3dInertia(m.geometric(inertia.localToGlobal), inertia.localInertia)
