@@ -32,6 +32,8 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
       assert(localInertia.mryz === simpleInertia.mr2, s"diff = ${localInertia.mryz - simpleInertia.mr2}")
       assert(localInertia.mrxz === simpleInertia.mr2, s"diff = ${localInertia.mrxz - simpleInertia.mr2}")
       assert(localInertia.mrxy === simpleInertia.mr2, s"diff = ${localInertia.mrxy - simpleInertia.mr2}")
+
+      assert((simpleInertia.toSummable - localInertia.toSummable).norm < 1e-13)
     }
   }
 
@@ -82,6 +84,22 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
       val a1 = inertia.invert(b.cross(inertia(b)) + forque)
 
       assert((a0 - a1).norm < 1e-15, s"a0 = $a0, a1 = $a1")
+    }
+  }
+
+  test("representations of simple are the same") {
+    forAll(Pga3dInertiaGenerators.inertiaSimple(0.1, 10.0, 0.1, 10.0), MinSuccessful(1000)) { inertia =>
+      val representations = Seq[Pga3dInertia](
+        inertia.toInertiaLocal,
+        inertia.toInertiaMovedLocal,
+        inertia.toPrecomputed,
+        inertia.toMovedSimple,
+        inertia.toFastestRepresentation
+      )
+
+      for (repr <- representations) {
+        assert((inertia.toSummable - repr.toSummable).norm < 1e-13)
+      }
     }
   }
 

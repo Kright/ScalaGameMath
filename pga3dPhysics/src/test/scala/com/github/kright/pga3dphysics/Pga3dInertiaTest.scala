@@ -3,7 +3,7 @@ package com.github.kright.pga3dphysics
 import com.github.kright.matrix.MatrixPrinter
 import com.github.kright.pga3d.*
 import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
-import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.inertiaMoved
+import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.{inertiaMovedLocal, inertiaSimple}
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
 import org.scalactic.anyvals.PosInt
@@ -132,7 +132,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("inertia diagonalization preservers summableInertia") {
     val toStr = MatrixPrinter.squarePrinter5f.copy(elemToStr = _.toString)
 
-    forAll(inertiaMoved, MinSuccessful(100)) { inertiaInitial =>
+    forAll(inertiaMovedLocal, MinSuccessful(100)) { inertiaInitial =>
       val summableInertia = inertiaInitial.toSummable
       val inertiaRestored = summableInertia.toInertia
       val summableRestored = inertiaRestored.toSummable
@@ -147,7 +147,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia diagonalization preservers main axes") {
-    forAll(inertiaMoved, MinSuccessful(1000)) { inertiaInitial =>
+    forAll(inertiaMovedLocal, MinSuccessful(1000)) { inertiaInitial =>
       val summableInertia = inertiaInitial.toSummable
       val inertiaRestored = summableInertia.toInertia
       val summableRestored = inertiaRestored.toSummable
@@ -163,7 +163,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia .toSummable.toInertia preserves mass") {
-    forAll(inertiaMoved, MinSuccessful(1000)) { inertiaInitial =>
+    forAll(inertiaMovedLocal, MinSuccessful(1000)) { inertiaInitial =>
       val inertiaRestored = inertiaInitial.toSummable.toInertia
 
       assert(Math.abs(inertiaInitial.mass - inertiaRestored.mass) < 1e-13,
@@ -174,7 +174,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia toSummable.toInertia and back applied in the same way") {
-    forAll(inertiaMoved, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+    forAll(inertiaMovedLocal, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
       val inertia2 = inertia.toSummable.toInertia
 
       val applied1 = inertia(bivector)
@@ -185,7 +185,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia sum") {
-    forAll(inertiaMoved, inertiaMoved, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia1, inertia2, bivector) =>
+    forAll(inertiaMovedLocal, inertiaMovedLocal, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia1, inertia2, bivector) =>
 
       val inertiaSum = (inertia1.toSummable + inertia2.toSummable).toInertia
 
@@ -197,7 +197,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("inertia toSummable applied in the same way") {
-    forAll(inertiaMoved, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+    forAll(inertiaMovedLocal, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
       val applied1 = inertia(bivector)
       val applied2 = inertia.toSummable(bivector)
 
@@ -243,4 +243,5 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val m = Pga3dMotor.id
     val r: Pga3dInertiaMovedSimple = m.sandwich(a)
+    // Code just compiles and that it.
   }
