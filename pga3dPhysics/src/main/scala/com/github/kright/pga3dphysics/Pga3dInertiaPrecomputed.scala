@@ -15,12 +15,12 @@ class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
     centerOfMass * localInertia.mass
 
   private val matrixFwd: Matrix = {
-    val tmpInertia = Pga3dInertia(localToGlobal, localInertia)
+    val tmpInertia = Pga3dInertiaMoved(localToGlobal, localInertia)
     Pga3dMatrix.linearMapping(tmpInertia.apply)
   }
 
   private val matrixInv: Matrix = {
-    val tmpInertia = Pga3dInertia(localToGlobal, localInertia)
+    val tmpInertia = Pga3dInertiaMoved(localToGlobal, localInertia)
     Pga3dMatrix.linearMapping(tmpInertia.invert)
   }
 
@@ -30,11 +30,11 @@ class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
   override def invert(globalInertia: Pga3dBivector): Pga3dBivector =
     Pga3dMatrix.multiply(matrixInv, globalInertia)
     
-  override def toInertia: Pga3dInertia =
-    Pga3dInertia(localToGlobal, localInertia)
-    
-  override def toSummable: Pga3dInertiaSummable =
-    toInertia.toSummable
+  override def toInertiaMoved: Pga3dInertiaMoved =
+    Pga3dInertiaMoved(localToGlobal, localInertia)
 
-  override def toPrecomputed: Pga3dInertiaPrecomputed = 
+  override def toSummable: Pga3dInertiaSummable =
+    toInertiaMoved.toSummable
+
+  override def toPrecomputed: Pga3dInertiaPrecomputed =
     this

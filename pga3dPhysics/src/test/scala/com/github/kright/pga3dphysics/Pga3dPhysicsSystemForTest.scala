@@ -22,7 +22,7 @@ class Pga3dPhysicsSystemForTest(state: Array[Pga3dPhysicsBody],
 object Pga3dPhysicsSystemForTest:
   def simpleBody(motor: Pga3dMotor): Pga3dPhysicsBody =
     Pga3dPhysicsBody(
-      Pga3dInertia(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)).toPrecomputed,
+      Pga3dInertia.moved(motor.reverse, Pga3dInertiaLocal(1.0, 3.0, 2.0, 1.0)).toPrecomputed,
       motor,
       motor.reverseSandwich(Pga3dBivector(
         wx = 0.0,
