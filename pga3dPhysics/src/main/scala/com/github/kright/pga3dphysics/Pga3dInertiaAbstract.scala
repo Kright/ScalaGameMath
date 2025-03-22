@@ -18,9 +18,9 @@ trait Pga3dInertiaAbstract:
 
   def getKineticEnergy(velocity: Pga3dBivector): Double =
     (velocity v apply(velocity)) * 0.5
-    
-  def toInertia: Pga3dInertia  
-    
+
+  def toInertia: Pga3dInertia
+
   def toSummable: Pga3dInertiaSummable
-  
+
   def toPrecomputed: Pga3dInertiaPrecomputed

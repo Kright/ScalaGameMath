@@ -42,9 +42,9 @@ final case class Pga3dInertiaLocal(mass: Double,
       wx = localForque.yz / mass + localB.wy * localB.xy + localB.wz * localB.xz,
       wy = -localForque.xz / mass + localB.wz * localB.yz - localB.wx * localB.xy,
       wz = localForque.xy / mass - localB.wx * localB.xz - localB.wy * localB.yz,
-      xy = (localForque.wz + localB.xz * localB.yz * mrxz - localB.xz * localB.yz * mryz) / mrxy,
-      xz = (-localForque.wy + localB.xy * localB.yz * mryz - localB.xy * localB.yz * mrxy) / mrxz,
-      yz = (localForque.wx + localB.xy * localB.xz * mrxy - localB.xy * localB.xz * mrxz) / mryz,
+      xy = (localForque.wz + localB.xz * localB.yz * (mrxz - mryz)) / mrxy,
+      xz = (-localForque.wy + localB.xy * localB.yz * (mryz - mrxy)) / mrxz,
+      yz = (localForque.wx + localB.xy * localB.xz * (mrxy - mrxz)) / mryz,
     )
 
   override def toSummable: Pga3dInertiaSummable =
