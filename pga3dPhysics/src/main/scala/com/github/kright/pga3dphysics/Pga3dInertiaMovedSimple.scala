@@ -7,6 +7,10 @@ import com.github.kright.pga3d.*
  */
 class Pga3dInertiaMovedSimple(val localToGlobal: Pga3dTranslator, val localInertia: Pga3dInertiaSimple) extends Pga3dInertia:
 
+  override def toString: String =
+    s"Pga3dInertiaMovedSimple(localToGlobal = $localToGlobal, localInertia = $localInertia)"
+    
+
   override def mass: Double =
     localInertia.mass
 
@@ -51,22 +55,15 @@ class Pga3dInertiaMovedSimple(val localToGlobal: Pga3dTranslator, val localInert
   override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
     Pga3dInertiaMovedLocal(localToGlobal.toMotor, localInertia.toInertiaLocal)
 
-  override def toString: String =
-    s"Pga3dInertiaMovedSimple(motor = $localToGlobal, inertia = $localInertia)"
 
+  override def movedBy(motor: Pga3dMotor): Pga3dInertiaMovedSimple =
+    val translator = Pga3dTranslator.addVector(motor.geometric(localToGlobal).sandwich(Pga3dPointCenter).toVectorUnsafe)
+    Pga3dInertiaMovedSimple(translator, localInertia)
 
-object Pga3dInertiaMovedSimple:
-  extension (m: Pga3dMotor)
-    def sandwich(inertia: Pga3dInertiaMovedSimple): Pga3dInertiaMovedSimple =
-      val translator = Pga3dTranslator.addVector(m.geometric(inertia.localToGlobal).sandwich(Pga3dPointCenter).toVectorUnsafe)
-      Pga3dInertiaMovedSimple(translator.geometric(inertia.localToGlobal), inertia.localInertia)
+  override def movedBy(quaternion: Pga3dQuaternion): Pga3dInertiaMovedSimple =
+    val translator = Pga3dTranslator.addVector(quaternion.geometric(localToGlobal).sandwich(Pga3dPointCenter).toVectorUnsafe)
+    Pga3dInertiaMovedSimple(translator, localInertia)
 
-  extension (m: Pga3dTranslator)
-    def sandwich(inertia: Pga3dInertiaMovedSimple): Pga3dInertiaMovedSimple =
-      Pga3dInertiaMovedSimple(m.geometric(inertia.localToGlobal), inertia.localInertia)
-
-  extension (m: Pga3dQuaternion)
-    def sandwich(inertia: Pga3dInertiaMovedSimple): Pga3dInertiaMovedSimple =
-      val translator = Pga3dTranslator.addVector(m.geometric(inertia.localToGlobal).sandwich(Pga3dPointCenter).toVectorUnsafe)
-      Pga3dInertiaMovedSimple(translator, inertia.localInertia)
+  override def movedBy(translator: Pga3dTranslator): Pga3dInertiaMovedSimple =
+    Pga3dInertiaMovedSimple(translator.geometric(localToGlobal), localInertia)
   

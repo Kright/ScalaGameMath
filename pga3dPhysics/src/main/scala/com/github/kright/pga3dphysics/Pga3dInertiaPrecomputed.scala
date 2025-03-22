@@ -3,26 +3,24 @@ package com.github.kright.pga3dphysics
 import com.github.kright.matrix.Matrix
 import com.github.kright.pga3d.*
 
-class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
-                              val localInertia: Pga3dInertiaLocal) extends Pga3dInertia:
+class Pga3dInertiaPrecomputed(val inertia: Pga3dInertia) extends Pga3dInertia:
+
+  override def toString: String = s"Pga3dInertiaPrecomputed(inertia = $inertia)"
+
   override val mass: Double =
-    localInertia.mass
+    inertia.mass
 
   override val centerOfMass: Pga3dPoint =
-    localToGlobal.sandwich(Pga3dPointCenter).toPointUnsafe
+    inertia.centerOfMass
 
   override val centerOfMassTrivector: Pga3dTrivector =
-    centerOfMass * localInertia.mass
+    centerOfMass * mass
 
-  private val matrixFwd: Matrix = {
-    val tmpInertia = Pga3dInertiaMovedLocal(localToGlobal, localInertia)
-    Pga3dMatrix.linearMapping(tmpInertia.apply)
-  }
+  private val matrixFwd: Matrix =
+    Pga3dMatrix.linearMapping(inertia.apply)
 
-  private val matrixInv: Matrix = {
-    val tmpInertia = Pga3dInertiaMovedLocal(localToGlobal, localInertia)
-    Pga3dMatrix.linearMapping(tmpInertia.invert)
-  }
+  private val matrixInv: Matrix =
+    Pga3dMatrix.linearMapping(inertia.invert)
 
   override def apply(globalB: Pga3dBivector): Pga3dBivector =
     Pga3dMatrix.multiply(matrixFwd, globalB)
@@ -31,10 +29,23 @@ class Pga3dInertiaPrecomputed(val localToGlobal: Pga3dMotor,
     Pga3dMatrix.multiply(matrixInv, globalInertia)
 
   override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
-    Pga3dInertiaMovedLocal(localToGlobal, localInertia)
+    inertia.toInertiaMovedLocal
 
   override def toSummable: Pga3dInertiaSummable =
     toInertiaMovedLocal.toSummable
 
   override def toPrecomputed: Pga3dInertiaPrecomputed =
     this
+
+  override def toFastestRepresentation: Pga3dInertiaPrecomputed =
+    this
+
+
+  override def movedBy(quaternion: Pga3dQuaternion): Pga3dInertia =
+    inertia.movedBy(quaternion)
+
+  override def movedBy(motor: Pga3dMotor): Pga3dInertia =
+    inertia.movedBy(motor)
+
+  override def movedBy(translator: Pga3dTranslator): Pga3dInertia =
+    inertia.movedBy(translator)

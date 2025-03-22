@@ -1,8 +1,8 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.matrix.{Matrix, MatrixPrinter}
-import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
+import com.github.kright.matrix.MatrixPrinter
 import com.github.kright.pga3d.*
+import com.github.kright.pga3d.Pga3dGenerators.{normalizedQuaternions, vectors}
 import com.github.kright.pga3dphysics.Pga3dInertiaGenerators.inertiaMoved
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
@@ -229,12 +229,18 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     for (summable <- inertiaProbes) {
       for (probe <- probes) {
-//        println(s"probe = $probe")
-//        println(s"inertia = ${summable}")
-//        println(s"inertiaLocal(probe) = ${summable.toInertia.apply(probe)}")
-//        println(s"inertiaGlobl(probe) = ${summable.apply(probe)}")
+        //        println(s"probe = $probe")
+        //        println(s"inertia = ${summable}")
+        //        println(s"inertiaLocal(probe) = ${summable.toInertia.apply(probe)}")
+        //        println(s"inertiaGlobl(probe) = ${summable.apply(probe)}")
         assert((summable.toInertia.apply(probe) - summable.apply(probe)).norm < 1e-9)
       }
     }
   }
 
+  test("sandwich may return narrower type") {
+    val a = Pga3dInertiaSimple(1, 2)
+
+    val m = Pga3dMotor.id
+    val r: Pga3dInertiaMovedSimple = m.sandwich(a)
+  }

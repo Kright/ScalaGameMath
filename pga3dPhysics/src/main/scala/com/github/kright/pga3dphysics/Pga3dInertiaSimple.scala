@@ -85,6 +85,18 @@ final case class Pga3dInertiaSimple(mass: Double,
   def toMovedSimple: Pga3dInertiaMovedSimple =
     Pga3dInertiaMovedSimple(Pga3dTranslator.id, this)
 
+  override def toFastestRepresentation: Pga3dInertiaSimple =
+    this
+
+  override def movedBy(translator: Pga3dTranslator): Pga3dInertiaMovedSimple =
+    Pga3dInertiaMovedSimple(translator, this)
+
+  override def movedBy(quaternion: Pga3dQuaternion): Pga3dInertiaSimple =
+    this
+
+  override def movedBy(motor: Pga3dMotor): Pga3dInertiaMovedSimple =
+    movedBy(Pga3dTranslator.addVector(motor.geometric(Pga3dPointCenter).toVectorUnsafe))
+
 object Pga3dInertiaSimple:
 
   inline val componentsCount = 2

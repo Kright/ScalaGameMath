@@ -3,11 +3,13 @@ package com.github.kright.pga3dphysics
 import com.github.kright.pga3d.*
 
 trait Pga3dInertia:
+
   def mass: Double
 
   def centerOfMass: Pga3dPoint
 
   def centerOfMassTrivector: Pga3dTrivector
+
 
   def apply(velocity: Pga3dBivector): Pga3dBivector
 
@@ -19,11 +21,21 @@ trait Pga3dInertia:
   def getKineticEnergy(velocity: Pga3dBivector): Double =
     (velocity v apply(velocity)) * 0.5
 
+
   def toInertiaMovedLocal: Pga3dInertiaMovedLocal
 
   def toSummable: Pga3dInertiaSummable
 
   def toPrecomputed: Pga3dInertiaPrecomputed
+
+  def toFastestRepresentation: Pga3dInertia = toPrecomputed
+
+
+  def movedBy(motor: Pga3dMotor): Pga3dInertia
+
+  def movedBy(translator: Pga3dTranslator): Pga3dInertia
+
+  def movedBy(quaternion: Pga3dQuaternion): Pga3dInertia
 
 
 /**
@@ -41,3 +53,16 @@ object Pga3dInertia:
   def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal) = Pga3dInertiaMovedLocal(motor, inertia)
 
   def movedSimple(translator: Pga3dTranslator, inertia: Pga3dInertiaSimple) = Pga3dInertiaMovedSimple(translator, inertia)
+
+  /** transparent inline allows narrower return types */
+  extension (motor: Pga3dMotor)
+    transparent inline def sandwich(inertia: Pga3dInertia) =
+      inertia.movedBy(motor)
+
+  extension (translator: Pga3dTranslator)
+    transparent inline def sandwich(inertia: Pga3dInertia) =
+      inertia.movedBy(translator)
+
+  extension (quaternion: Pga3dQuaternion)
+    transparent inline def sandwich(inertia: Pga3dInertia) =
+      inertia.movedBy(quaternion)

@@ -6,6 +6,9 @@ import com.github.kright.pga3d.*
 class Pga3dInertiaMovedLocal(val localToGlobal: Pga3dMotor,
                              val localInertia: Pga3dInertiaLocal) extends Pga3dInertia:
 
+  override def toString: String =
+    s"Pga3dInertiaMovedLocal(localToGlobal = $localToGlobal, localInertia = $localInertia)"
+  
   override def mass: Double =
     localInertia.mass
 
@@ -45,25 +48,16 @@ class Pga3dInertiaMovedLocal(val localToGlobal: Pga3dMotor,
     localToGlobal.sandwich(localInertia.toSummable)
 
   override def toPrecomputed: Pga3dInertiaPrecomputed =
-    Pga3dInertiaPrecomputed(localToGlobal, localInertia)
+    Pga3dInertiaPrecomputed(this)
 
   override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
     this
 
-  override def toString: String =
-    s"Pga3dInertiaMoved(motor = $localToGlobal, inertia = $localInertia)"
+  override def movedBy(quaternion: Pga3dQuaternion) =
+    Pga3dInertiaMovedLocal(quaternion.geometric(localToGlobal), localInertia)
 
+  override def movedBy(motor: Pga3dMotor) =
+    Pga3dInertiaMovedLocal(motor.geometric(localToGlobal), localInertia)
 
-object Pga3dInertiaMovedLocal:
-
-  extension (m: Pga3dMotor)
-    def sandwich(inertia: Pga3dInertiaMovedLocal): Pga3dInertiaMovedLocal =
-      Pga3dInertiaMovedLocal(m.geometric(inertia.localToGlobal), inertia.localInertia)
-
-  extension (m: Pga3dTranslator)
-    def sandwich(inertia: Pga3dInertiaMovedLocal): Pga3dInertiaMovedLocal =
-      Pga3dInertiaMovedLocal(m.geometric(inertia.localToGlobal), inertia.localInertia)
-
-  extension (m: Pga3dQuaternion)
-    def sandwich(inertia: Pga3dInertiaMovedLocal): Pga3dInertiaMovedLocal =
-      Pga3dInertiaMovedLocal(m.geometric(inertia.localToGlobal), inertia.localInertia)
+  override def movedBy(translator: Pga3dTranslator) =
+    Pga3dInertiaMovedLocal(translator.geometric(localToGlobal), localInertia)
