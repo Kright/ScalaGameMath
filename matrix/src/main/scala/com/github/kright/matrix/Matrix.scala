@@ -139,4 +139,11 @@ object Matrix:
     val m = Matrix(h, w)
     elems.copyToArray(m.elements)
     m
-  }  
+  }
+
+  def idt(size: Int): Matrix =
+    val result = new Matrix(size, size)
+    for (i <- FastRange(size)) {
+      result(i, i) = 1.0
+    }
+    result

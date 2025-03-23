@@ -14,7 +14,18 @@ final case class Pga3dInertiaSummable(ww: Double,
                                       zz: Double,
                                       xy: Double,
                                       yz: Double,
-                                      xz: Double):
+                                      xz: Double) extends Pga3dInertia:
+
+  /** lazy cache for computing inversion */
+  private var inertiaMovedLocalOrNull: Pga3dInertiaMovedLocal | Null = null
+
+  override def toInertiaMovedLocal: Pga3dInertiaMovedLocal =
+    val inertiaOrNull = inertiaMovedLocalOrNull
+    if (inertiaOrNull != null) return inertiaOrNull
+
+    val newInertia = toInertiaMovedLocalImpl
+    inertiaMovedLocalOrNull = newInertia
+    newInertia
 
   def mass: Double =
     ww
@@ -83,7 +94,10 @@ final case class Pga3dInertiaSummable(ww: Double,
   def norm: Double =
     Math.sqrt(normSquare)
 
-  def toInertia: Pga3dInertiaMovedLocal =
+  /**
+   * It looks like there is a problem with precision, it's quite low, about 1e-8
+   */
+  private def toInertiaMovedLocalImpl: Pga3dInertiaMovedLocal =
     val shift = centerOfMass.toVectorUnsafe
 
     val shifted = Pga3dTranslator.addVector(-shift).sandwich(this)
@@ -107,6 +121,9 @@ final case class Pga3dInertiaSummable(ww: Double,
       xz = -ww * b.wy - wx * b.xy + wz * b.yz,
       yz = ww * b.wx - wy * b.xy - wz * b.xz,
     )
+
+  override def invert(localInertia: Pga3dBivector): Pga3dBivector =
+    toInertiaMovedLocal.invert(localInertia)
 
   def toMatrixXYZ: Matrix =
     Matrix.fromValues(3, 3)(
@@ -153,6 +170,12 @@ final case class Pga3dInertiaSummable(ww: Double,
 
   override def toString: String =
     s"Pga3dInertiaSummable(ww=$ww, wx=$wx, wy=$wy, wz=$wz, xx=$xx, yy=$yy, zz=$zz, xy=$xy, yz=$yz, xz=$xz)"
+
+  override def toSummable: Pga3dInertiaSummable =
+    this
+
+  override def toPrecomputed: Pga3dInertiaPrecomputed =
+    Pga3dInertiaPrecomputed(this)
 
 
 object Pga3dInertiaSummable:

@@ -30,3 +30,11 @@ class Pga3dInertiaSummableTest extends AnyFunSuiteLike with ScalaCheckPropertyCh
       assert((applied1 - applied2).norm < 1e-12)
     }
   }
+
+  test("summable invert() method inversion of apply()") {
+    forAll(Pga3dInertiaGenerators.inertiaSummable, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, bivector) =>
+      val L = inertia.apply(bivector)
+      val inv = inertia.invert(L)
+      assert((bivector - inv).norm < 1e-7, s"\n${bivector}\n${inv})")
+    }
+  }

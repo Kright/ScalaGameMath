@@ -45,6 +45,9 @@ object Pga3dInertiaGenerators:
     translator = Pga3dTranslator.addVector(shift)
   } yield Pga3dInertia.movedSimple(translator, inertiaLocal)
 
+  val inertiaSummable: Gen[Pga3dInertiaSummable] =
+    inertiaMovedLocal.map(_.toSummable)
+  
   val anyInertia: Gen[Pga3dInertia] =
     Gen.oneOf(
       inertiaSimple(0.1, 10.0, 0.1, 10.0).flatMap(i => Gen.oneOf(i, i.toMovedSimple)),
@@ -56,6 +59,7 @@ object Pga3dInertiaGenerators:
         inertia,
         inertia.toPrecomputed,
         inertia.toInertiaMovedLocal,
-        inertia.toFastestRepresentation
+        inertia.toFastestRepresentation,
+        inertia.toSummable,
       )
     }
