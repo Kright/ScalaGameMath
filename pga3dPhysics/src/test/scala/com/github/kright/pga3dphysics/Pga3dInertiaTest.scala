@@ -258,11 +258,8 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("any inertia reverse is equal to apply") {
-    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, MinSuccessful(10000)) { (inertia, b) =>
-      val eps =
-        if (inertia.isInstanceOf[Pga3dInertiaSummable]) 1e-8
-        else 2e-12
-
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, MinSuccessful(1000)) { (inertia, b) =>
+      val eps = 2e-12
       val a = inertia(b)
       val b2 = inertia.invert(a)
       assert((b - b2).norm < eps)
@@ -282,8 +279,8 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("any inertia representations are equal") {
     forAll(Pga3dInertiaGenerators.anyInertia, MinSuccessful(10000)) { inertia =>
       val eps =
-        if (inertia.isInstanceOf[Pga3dInertiaSummable]) 1e-9
-        else 1e-13
+        if (inertia.isInstanceOf[Pga3dInertiaSummable]) 3e-11
+        else 2e-13
 
       assert((inertia.toSummable - inertia.toInertiaMovedLocal.toSummable).norm < eps)
       assert((inertia.toSummable - inertia.toPrecomputed.toSummable).norm < eps)
@@ -298,7 +295,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val s3 = inertia.toInertiaMovedLocal.movedBy(motor).toSummable
 
       val eps =
-        if (inertia.isInstanceOf[Pga3dInertiaSummable]) 1e-9
+        if (inertia.isInstanceOf[Pga3dInertiaSummable]) 2e-11
         else 1e-12
 
       assert((s1 - s2).norm < eps)

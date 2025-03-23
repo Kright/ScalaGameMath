@@ -249,7 +249,8 @@ object Pga3dInertiaSummable:
 
     while (true) {
       val (p, q) = SymmetricMatrixDiagonalization.findBiggestOffDiagonalElementByAbs(i)
-      if (Math.abs(i(p, q)) < 1e-10) {
+
+      if (Math.abs(i(p, q)) < 1e-100) {
         return quaternion
       }
       val (sin, cos) = SymmetricMatrixDiagonalization.findSinCosAtan(i(p, p), i(p, q), i(q, q))
