@@ -95,7 +95,7 @@ final case class Pga3dInertiaSimple(mass: Double,
     this
 
   override def movedBy(motor: Pga3dMotor): Pga3dInertiaMovedSimple =
-    movedBy(Pga3dTranslator.addVector(motor.geometric(Pga3dPointCenter).toVectorUnsafe))
+    movedBy(Pga3dTranslator.addVector(motor.sandwich(Pga3dPointCenter).toVectorUnsafe))
 
 object Pga3dInertiaSimple:
 

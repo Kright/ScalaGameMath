@@ -2,6 +2,7 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.matrix.{Matrix, SymmetricMatrixDiagonalization}
 import com.github.kright.pga3d.*
+import com.github.kright.pga3dphysics.Pga3dInertiaSummable.sandwich
 
 
 final case class Pga3dInertiaSummable(ww: Double,
@@ -140,6 +141,15 @@ final case class Pga3dInertiaSummable(ww: Double,
       zz = m(2, 2),
     )
   }
+
+  def movedBy(translator: Pga3dTranslator): Pga3dInertiaSummable =
+    translator.sandwich(this)
+
+  def movedBy(motor: Pga3dMotor): Pga3dInertiaSummable =
+    motor.sandwich(this)
+
+  def movedBy(quaternion: Pga3dQuaternion): Pga3dInertiaSummable =
+    quaternion.sandwich(this)
 
   override def toString: String =
     s"Pga3dInertiaSummable(ww=$ww, wx=$wx, wy=$wy, wz=$wz, xx=$xx, yy=$yy, zz=$zz, xy=$xy, yz=$yz, xz=$xz)"

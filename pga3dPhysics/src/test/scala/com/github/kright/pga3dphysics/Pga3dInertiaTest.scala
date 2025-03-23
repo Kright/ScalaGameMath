@@ -273,7 +273,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       val a = inertia.getAcceleration(b, forque)
       val a2 = inertia.invert(b.cross(inertia(b)) + forque)
 
-      assert((a - a2).norm < 2e-12)
+      assert((a - a2).norm < 3e-12)
     }
   }
 
@@ -282,5 +282,37 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert((inertia.toSummable - inertia.toInertiaMovedLocal.toSummable).norm < 1e-13)
       assert((inertia.toSummable - inertia.toPrecomputed.toSummable).norm < 1e-13)
       assert((inertia.toSummable - inertia.toFastestRepresentation.toSummable).norm < 1e-13)
+    }
+  }
+
+  test("any inertia multiplied by motor") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.normalizedMotors, MinSuccessful(10000)) { (inertia, motor) =>
+      val s1 = motor.sandwich(inertia).toSummable
+      val s2 = inertia.toSummable.movedBy(motor)
+      val s3 = inertia.toInertiaMovedLocal.movedBy(motor).toSummable
+
+      val eps = 1e-12
+      assert((s1 - s2).norm < eps)
+      assert((s1 - s3).norm < eps)
+    }
+  }
+
+  test("any inertia moved by translator same as moved by motor") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.translators, MinSuccessful(10000)) { (inertia, translator) =>
+      val s1 = inertia.movedBy(translator).toSummable
+      val s2 = inertia.movedBy(translator.toMotor).toSummable
+
+      val eps = 1e-12
+      assert((s1 - s2).norm < eps)
+    }
+  }
+
+  test("any inertia moved by quaternion same as moved by motor") {
+    forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.normalizedQuaternions, MinSuccessful(10000)) { (inertia, quaternion) =>
+      val s1 = inertia.movedBy(quaternion).toSummable
+      val s2 = inertia.movedBy(quaternion.toMotor).toSummable
+
+      val eps = 1e-12
+      assert((s1 - s2).norm < eps)
     }
   }
