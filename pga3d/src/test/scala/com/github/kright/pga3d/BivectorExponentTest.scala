@@ -23,12 +23,26 @@ class BivectorExponentTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks
 
   test("log is inverse of exp") {
     forAll(Pga3dGenerators.bivectors) { bivector =>
-      val restored =
-        assert((bivector - bivector.exp().log()).norm < 1e-14)
+      assert((bivector - bivector.exp().log()).norm < 1e-14)
       assert((bivector.bulk - bivector.bulk.exp().log()).norm < 1e-14)
       assert((bivector.weight - bivector.weight.exp().log()).norm < 1e-14)
     }
   }
+
+//  test("log is inverse of exp failed") {
+//    val b = Pga3dBivector(-0.26426518006043076, -0.8856240901960408, -0.17870331716302612, 0.9917926945307447, 0.936262951274583, 0.8114467770348108)
+//
+//    println(b)
+//    println(b.exp().log())
+//    println(b.bulk.exp().log())
+//    println(b.weight.exp().log())
+//
+//    println(s"b.exp")
+//    println(b.exp())
+//    println(b.exp().log().exp())
+//    println(b.bulk.exp().log().exp())
+//    println(b.weight.exp().log().exp())
+//  }
 
   test("bivector split") {
     forAll(Pga3dGenerators.bivectors.filter(_.bulkNorm > 1e-6)) { bivector =>
