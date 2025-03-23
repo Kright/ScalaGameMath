@@ -4,7 +4,7 @@ Reference implementation, I prefer simple and correct code. But I profiled the c
 
 Classes Pga3dMatrixForPoints and Pga3dBivectorMutable are made for performance reasons.
 
-example of usage:
+Example of usage:
 
 ```
 val dynamicBodies: ArrayBuffer[PhysicsBody] = 

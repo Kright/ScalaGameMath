@@ -46,7 +46,7 @@ Initially, it was repo for simple math with matrices and vectors. I implemented 
 equations. So there a lot of quite experimental, but very promising code with geometric algebra, which includes math and physics
 too.
 
-Simple modules:
+### Simple modules:
 
 * **vector**: Vector2d, Vector3d, Vector4d
 * **math**:
@@ -58,22 +58,22 @@ Simple modules:
     * Inertia3d (mass and tensor of angular mass)
     * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
     * Joint3d with Spring3d, AngularSpring3d, Friction, AngularFriction3d, OrientationSpring3d
-    * BodySystem for handling system of bodies with joints between them
+    * BodySystem for handling a system of bodies with joints between them
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 
-Advanced modules with geometric algebra:
+### Advanced modules with geometric algebra:
 
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
   See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
-* **pga3d**: efficient library for 3d PGA with generated code and some common cases (Pga3dPlane, Pga3dPoint,
-  Pga3dQuaternion, Pga3dBivector, etc).
+* **pga3d**: efficient library for 3d PGA with generated code and some common cases—Pga3dPlane, Pga3dPoint,
+  Pga3dQuaternion, Pga3dBivector, etc.
   There is a huge number of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
 * **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for the result.
-* **pga3dPhysics**: some helper classes for implementing physics engine. Under active development now.
+* [**pga3dPhysics**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
 
 Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 
@@ -102,12 +102,12 @@ I prefer code correctness and simplicity over computational efficiency.
 
 For example, BodySystem allocates a lot of temporary objects.
 So this class could be used as example or as reference implementation for bug-fixing.
-Maybe for some specific case with a lot of objects you will need your own implementation.
+Maybe for some specific case with a lot of objects, you will need your own implementation.
 
 ### PGA
 
 I'm inspired by https://bivector.net/PGADYN.html
-I rewrote physics equations in PGA, looks like PGA is a better way for describing physics.
+I rewrote physics equations in PGA, it looks like PGA is a better way of describing physics.
 
 ### Tests
 
@@ -115,7 +115,7 @@ I rewrote physics equations in PGA, looks like PGA is a better way for describin
 sbt test
 ```
 
-I use scalaCheck and property based approach. It goes well with checking math properties such as addition or
+I use scalaCheck and property-based approach. It goes well with checking math properties such as addition or
 multiplication associativity, zero and id elements, morphisms between quaternions and corresponding matrices or euler
 angles.
 For physics, it's ok to check that total energy and impulse are constant in body systems without friction.
@@ -137,13 +137,13 @@ sbt publishM2
 In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" and
 "~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
 
-After that add local library to another project. In my case, it was for sbt:
+After that, add the local library to another project. In my case, it was for sbt:
 
 ```scala
 libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.7.1-SNAPSHOT"
 ```
 
-And for gradle:
+And for Gradle:
 
 ```groovy
 implementation "pga3d:pga3d_3:0.7.1-SNAPSHOT"
