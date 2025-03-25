@@ -135,15 +135,6 @@ val bivector = motor.log()
 * [**Pga3dMatrix**](src/main/scala/com/github/kright/pga3d/Pga3dMatrix.scala): object with some utility code
 
 ```scala
-// Creating a general multivector
-val multivector = Pga3dMultivector(
-  s = 1.0,  // scalar
-  e1 = 2.0, e2 = 3.0, e3 = 4.0, e0 = 5.0,  // 1-vectors
-  e12 = 6.0, e13 = 7.0, e23 = 8.0, e01 = 9.0, e02 = 10.0, e03 = 11.0,  // bivectors
-  e123 = 12.0, e012 = 13.0, e013 = 14.0, e023 = 15.0,  // trivectors
-  e0123 = 16.0  // pseudoscalar
-)
-
 // Converting specialized classes to multivector
 val multivectorFromPoint = point.toMultivector
 val multivectorFromQuaternion = quaternion.toMultivector
