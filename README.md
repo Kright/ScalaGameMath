@@ -66,14 +66,14 @@ too.
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
   See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
-* [**pga3d**](pga3d/README.md): efficient library for 3d PGA with generated code and some common cases—Pga3dPlane, Pga3dPoint,
+* [**pga3d README**](pga3d/README.md): efficient library for 3d PGA with generated code and some common cases—Pga3dPlane, Pga3dPoint,
   Pga3dQuaternion, Pga3dBivector, etc.
   There is a huge number of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
 * **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for the result.
-* [**pga3dPhysics**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
+* [**pga3dPhysics README**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
 
 Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 
