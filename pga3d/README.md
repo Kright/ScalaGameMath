@@ -67,7 +67,7 @@ val weightComponent = bivector.weight
 // creating line as intersection of two planes
 val line0 = plane1 ^ plane2
 
-// Creating a line from two points or from point and vector
+// Creating a line from two points
 val line1 = point1 v point2
 
 // Creating a line from a point and a vector
@@ -98,6 +98,13 @@ val quaternion2 = plane1 geometric plane2
 
 // Applying rotation to anything using the sandwich product (could rotate point, line, plane, quatenrion, etc.)
 val rotatedPoint = quaternion.sandwich(point)
+
+// Inverse of rotation
+val inverseRotation = quaterion.reverse
+
+// Apply inverse of rotation in quaternion
+val restoredPoint = quaternion.reverseSandwich(point)
+val restoredPoint2 = quaternion.reverse.sandwich(point)
 
 // Creating a translator to add a vector
 val vector = Pga3dVector(1, 2, 3)
