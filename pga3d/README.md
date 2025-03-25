@@ -10,7 +10,7 @@ efficient as usual code in math libraries.
 ### Plane:
 
 * [**Pga3dPlane**](src/main/scala/com/github/kright/pga3d/Pga3dBivector.scala): plane, 4 fields.
-* Pga3dPlaneIdeal: plane passing through the center of coordinates, 3 fields. Dual to Pga3dVector
+* [**Pga3dPlaneIdeal**](src/main/scala/com/github/kright/pga3d/Pga3dPlaneIdeal.scala): plane passing through the center of coordinates, 3 fields. Dual to Pga3dVector
 
 ```scala
 val plane = Pga3dPlane(a, b, c, d)  // ax + by + cz + d = 0
@@ -26,11 +26,11 @@ val mirroredPoint = plane.sandwich(point)
 
 ### Point:
 
-* Pga3dPoint: Point in space. Stored as dual representation with human-friendly fields x, y, z and fixed w=1.
-* Pga3dPointCenter: singleton object, center of coordinates.
-* Pga3dVector: difference between points. Consist of x, y, z and fixed w=0. Pga3dTranslator moved points, but not
+* [**Pga3dPoint**](src/main/scala/com/github/kright/pga3d/Pga3dPoint.scala): Point in space. Stored as dual representation with human-friendly fields x, y, z and fixed w=1.
+* [**Pga3dPointCenter**](src/main/scala/com/github/kright/pga3d/Pga3dPointCenter.scala): singleton object, center of coordinates.
+* [**Pga3dVector**](src/main/scala/com/github/kright/pga3d/Pga3dVector.scala): difference between points. Consist of x, y, z and fixed w=0. Pga3dTranslator moved points, but not
   vectors.
-* Pga3dTrivector: general case with four fields (x, y, z, w).
+* [**Pga3dTrivector**](src/main/scala/com/github/kright/pga3d/Pga3dTrivector.scala): general case with four fields (x, y, z, w).
 
 There is name collision, Pga3dVector is a 3-vector (and a Pga3dTrivector), but I decided to give it a human-friendly
 name. In plane-based algebra 1-vector is a plane. Usually Pga3dTrivector is rarely needed, Pga3dPoint and Pga3dVector
@@ -52,9 +52,9 @@ val point3 = vector * 2 + point1
 
 In addition, it represents velocity and force.
 
-* Pga3dBivector: 6 fields (xy, xz, yz, xw, yw, zw)
-* Pga3dBivectorBulk - bivector with only 3 fields (xy, xz, yz).
-* Pga3dBivectorWeight - bivector with only 3 fields (xw, yw, zw).
+* [**Pga3dBivector**](src/main/scala/com/github/kright/pga3d/Pga3dBivector.scala): 6 fields (xy, xz, yz, xw, yw, zw)
+* [**Pga3dBivectorBulk**](src/main/scala/com/github/kright/pga3d/Pga3dBivectorBulk.scala) - bivector with only 3 fields (xy, xz, yz).
+* [**Pga3dBivectorWeight**](src/main/scala/com/github/kright/pga3d/Pga3dBivectorWeight.scala) - bivector with only 3 fields (xw, yw, zw).
 
 ```scala
 // Creating a bivector
@@ -79,9 +79,9 @@ val (line, shift) = bivector.split()
 
 ### Movement
 
-* Pga3dQuaternion: represents rotation, 4 fields (scalar, xy, xz, yz). It is the exponent of Pga3dBivectorBulk
-* Pga3dTranslator: represents linear movement, 3 fields (wx, wy, wz). It is the exponent of Pga3dBivectorWeight
-* Pga3dMotor: combination of rotation and linear movement. Has 8 fields (scalar, all bivector fields and pseudoscalar),
+* [**Pga3dQuaternion**](src/main/scala/com/github/kright/pga3d/Pga3dQuaternion.scala): represents rotation, 4 fields (scalar, xy, xz, yz). It is the exponent of Pga3dBivectorBulk
+* [**Pga3dTranslator**](src/main/scala/com/github/kright/pga3d/Pga3dTranslator.scala): represents linear movement, 3 fields (wx, wy, wz). It is the exponent of Pga3dBivectorWeight
+* [**Pga3dMotor**](src/main/scala/com/github/kright/pga3d/Pga3dMotor.scala): combination of rotation and linear movement. Has 8 fields (scalar, all bivector fields and pseudoscalar),
   exponent of Pga3dBivector
 
 To move everything with this classes, you need to call `motor.sandwich(obj)`
@@ -123,9 +123,9 @@ val bivector = motor.log()
 
 ### Other classes:
 
-* Pga3dMultivector: class with all 16 fields for a general case
-* Pga3dPseudoScalar: class with one field. Library has no scalar class and uses just Double instead.
-* Pga3dMatrix: object with some utility code
+* [**Pga3dMultivector**](src/main/scala/com/github/kright/pga3d/Pga3dMultivector.scala): class with all 16 fields for a general case
+* [**Pga3dPseudoScalar**](src/main/scala/com/github/kright/pga3d/Pga3dPseudoScalar.scala): class with one field. Library has no scalar class and uses just Double instead.
+* [**Pga3dMatrix**](src/main/scala/com/github/kright/pga3d/Pga3dMatrix.scala): object with some utility code
 
 ```scala
 // Creating a general multivector
