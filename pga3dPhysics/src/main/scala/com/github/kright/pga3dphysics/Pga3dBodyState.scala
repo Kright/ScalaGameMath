@@ -12,7 +12,7 @@ case class Pga3dBodyState(motor: Pga3dMotor,
     )
 
   def normalized: Pga3dBodyState =
-    copy(motor = motor.normalizedByBulk)
+    copy(motor = motor.renormalized)
 
   def getL(bodyInertia: Pga3dInertia): Pga3dBivector =
     motor.sandwich(bodyInertia(localB))

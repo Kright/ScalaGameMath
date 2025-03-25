@@ -56,8 +56,8 @@ class CholeskyDecompositionTest extends AnyFunSuiteLike with ScalaCheckPropertyC
 
       val end = System.nanoTime()
 
-      println(s"${(end - start) / repeats} ns")
-      println(s"max = ${result.map(_.frobeniusNorm).max}")
+//      println(s"${(end - start) / repeats} ns")
+//      println(s"max = ${result.map(_.frobeniusNorm).max}")
     }
   }
 

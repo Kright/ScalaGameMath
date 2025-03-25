@@ -27,7 +27,7 @@ object Pga3dPhysicsSolverUtil:
       val i = initial(pos)
       val d = derivative(pos)
 
-      r.motor = (i.motor + d.motor * dt).normalizedByBulk
+      r.motor = (i.motor + d.motor * dt).renormalized
       r.localB = i.localB + d.localB * dt
     }
 
@@ -43,7 +43,7 @@ object Pga3dPhysicsSolverUtil:
       r.motor = (i.motor
         + d0.motor * (dt * k0)
         + d1.motor * (dt * k1)
-        ).normalizedByBulk
+        ).renormalized
 
       r.localB = i.localB
         + d0.localB * (dt * k0)
@@ -69,7 +69,7 @@ object Pga3dPhysicsSolverUtil:
           + d2.motor * (dt * k2)
           + d3.motor * (dt * k3)
 
-      r.motor = (i.motor + dMotor).normalizedByBulk
+      r.motor = (i.motor + dMotor).renormalized
 
       val dB =
         d0.localB * (dt * k0)
@@ -88,7 +88,7 @@ object Pga3dPhysicsSolverUtil:
       val d0 = derivative0(pos)
 
       result(pos) = Pga3dBodyState(
-        (i.motor + d0.motor * dt).normalizedByBulk,
+        (i.motor + d0.motor * dt).renormalized,
         i.localB + d0.localB * dt
       )
     }
@@ -107,7 +107,7 @@ object Pga3dPhysicsSolverUtil:
         (i.motor
           + d0.motor * (dt * k0)
           + d1.motor * (dt * k1)
-          ).normalizedByBulk,
+          ).renormalized,
         i.localB
           + d0.localB * (dt * k0)
           + d1.localB * (dt * k1)

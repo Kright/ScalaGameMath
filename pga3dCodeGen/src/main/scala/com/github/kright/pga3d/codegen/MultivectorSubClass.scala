@@ -438,6 +438,7 @@ object MultivectorSubClass:
     MultivectorUnaryOp((cls, s) => GeneratedValue(cls, "unary_- ", -s)),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "reverse", pga3.operations.reverse(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "antiReverse", pga3.operations.antiReverse(v))),
+    DefRenormalizedForMotor(),
     DefNorm("bulkNormSquare", "bulkNorm", "normalizedByBulk", s => s.geometric(s.reverse).grade(0)),
     DefNorm("weightNormSquare", "weightNorm", "normalizedByWeight", s => s.dual.geometric(s.dual.reverse).grade(0)),
     DefNorm("normSquare", "norm", "normalizedByNorm", s => s.geometric(s.reverse).grade(0) + s.dual.geometric(s.dual.reverse).grade(0)),

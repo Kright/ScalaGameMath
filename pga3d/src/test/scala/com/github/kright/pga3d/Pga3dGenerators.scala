@@ -90,5 +90,8 @@ object Pga3dGenerators:
       q <- normalizedQuaternions
     ) yield Pga3dTranslator.addVector(v).geometric(q)
 
+  val anyMotors: Gen[Pga3dMotor] =
+    makeGenT(8, FlatSerializer.read[Pga3dMotor])
+
   def matrices(h: Int, w: Int): Gen[Matrix] =
     Gen.containerOfN[Array, Double](h * w, VectorMathGenerators.double1).map(arr => Matrix.fromValues(h, w)(arr *))

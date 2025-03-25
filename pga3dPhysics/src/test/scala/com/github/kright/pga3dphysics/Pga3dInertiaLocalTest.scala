@@ -23,23 +23,38 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     }
   }
 
-  test("calculate free rotation body precession for RK4") {
-    val stepsCount = 1000
-    val dt = 0.01
-    val system = Pga3dPhysicsSystemForTest(Array(Pga3dPhysicsSystemForTest.simpleBody(Pga3dMotor.id)), Pga3dPhysicsSolverRK4)
+  test("calculate free rotation body precession for RK4 for different centers") {
+    // Up to 1'000 everything is ok, but for higher distance precision is decreasing
 
-    assert(system.initialE == 3.0)
-    assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
+    val centersAndErrors = Seq[(Pga3dPoint, ErrorOfEnergyAndMomentum)](
+      (Pga3dPoint(0, 0, 0), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
+      (Pga3dPoint(1, 1, 1), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
+      (Pga3dPoint(1e1, 1e1, 1e1), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
+      (Pga3dPoint(1e2, 1e2, 1e2), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
+      (Pga3dPoint(1e3, 1e3, 1e3), ErrorOfEnergyAndMomentum(4e-10, 2e-9)),
+      (Pga3dPoint(1e4, 1e4, 1e4), ErrorOfEnergyAndMomentum(3e-8, 4e-8)),
+      (Pga3dPoint(1e5, 1e5, 1e5), ErrorOfEnergyAndMomentum(4e-6, 4e-6)),
+      (Pga3dPoint(1e6, 1e6, 1e6), ErrorOfEnergyAndMomentum(4e-4, 4e-4)),
+    )
 
-    val errors = for (_ <- 0 until stepsCount)
-      yield {
-        system.doStep(dt, _ => ())
-        system.getError()
-      }
+    for ((center, expectedMaxError) <- centersAndErrors) {
+      val stepsCount = 1000
+      val dt = 0.01
+      val system = Pga3dPhysicsSystemForTest(Array(Pga3dPhysicsSystemForTest.simpleBody(Pga3dTranslator.addVector(center.toVectorUnsafe).toMotor)), Pga3dPhysicsSolverRK4)
 
-    val maxError = errors.reduce(_ max _)
+      assert(system.initialE == 3.0)
+      assert(system.initialL == Pga3dBivector(wx = 3.0, wy = 2.0, wz = 1.0))
 
-    assert(maxError < ErrorOfEnergyAndMomentum(errorE = 6e-11, errorL = 1e-9))
+      val errors = for (step <- 0 until stepsCount)
+        yield {
+          system.doStep(dt, _ => ())
+          system.getError()
+        }
+
+      val maxError = errors.reduce(_ max _)
+
+      assert(maxError < expectedMaxError, s"center = $center, maxError = $maxError, but expected $expectedMaxError")
+    }
   }
 
   test("calculate free rotation body precession for RK4 for different orientation") {
