@@ -9,7 +9,7 @@ efficient as usual code in math libraries.
 
 ### Plane:
 
-* [**Pga3dPlane**](src/main/scala/com/github/kright/pga3d/Pga3dBivector.scala): plane, 4 fields.
+* [**Pga3dPlane**](src/main/scala/com/github/kright/pga3d/Pga3dPlane.scala): plane, 4 fields.
 * [**Pga3dPlaneIdeal**](src/main/scala/com/github/kright/pga3d/Pga3dPlaneIdeal.scala): plane passing through the center of coordinates, 3 fields. Dual to Pga3dVector
 
 ```scala
