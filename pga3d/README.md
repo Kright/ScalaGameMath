@@ -121,11 +121,12 @@ val motor = translator.geometric(quaternion)
 // Applying a motor to a point (combined rotation and translation)
 val transformedPoint = motor.sandwich(point)
 
-// Computing the exponential of a bivector (results in a motor)
-val motor = bivector.exp()
-
-// Computing the logarithm of a motor (results back in a bivector)
+// Computing the logarithm of a motor 
 val bivector = motor.log()
+
+// Computing the exponential of a bivector (results back in a motor)
+val motor2 = bivector.exp()
+
 ```
 
 ### Other classes:
