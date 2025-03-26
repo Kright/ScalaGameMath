@@ -134,8 +134,8 @@ Or to local maven:
 sbt publishM2
 ```
 
-In my case "~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" 
-and "~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
+In my case "\~/.ivy2/local/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT" 
+and "\~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
 
 After that, add the local library to another project. In my case, it was for sbt:
 
