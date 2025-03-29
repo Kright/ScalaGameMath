@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dBivectorBulk(xy: Double = 0.0,
@@ -19,6 +20,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
   def bulk: Pga3dBivectorBulk =
     this
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = -xy,
@@ -50,6 +52,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v * xy,
@@ -57,9 +60,11 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = v * yz,
     )
 
-  inline def /(v: Double): Pga3dBivectorBulk =
+  @targetName("div")
+  def /(v: Double): Pga3dBivectorBulk =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = v.wx,
@@ -70,6 +75,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = (v.yz + yz),
     )
 
+  @targetName("minus")
   def -(v: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(
       wx = -v.wx,
@@ -90,6 +96,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = (yz + mult * v.yz),
     )
 
+  @targetName("plus")
   def +(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = (v.xy + xy),
@@ -97,6 +104,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = (v.yz + yz),
     )
 
+  @targetName("minus")
   def -(v: Pga3dBivectorBulk): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = (xy - v.xy),
@@ -111,6 +119,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = (yz + mult * v.yz),
     )
 
+  @targetName("plus")
   def +(v: Pga3dBivectorWeight): Pga3dBivector =
     Pga3dBivector(
       wx = v.wx,
@@ -121,6 +130,7 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
       yz = yz,
     )
 
+  @targetName("minus")
   def -(v: Pga3dBivectorWeight): Pga3dBivector =
     Pga3dBivector(
       wx = -v.wx,

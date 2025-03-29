@@ -11,13 +11,17 @@ object GeneratedCode:
   }
 
 object GeneratedValue:
-  def apply(cls: MultivectorSubClass, name: String, result: MultiVector[Sym]): Option[String] = {
+  def apply(cls: MultivectorSubClass, name: String, result: MultiVector[Sym], targetName: String | Null = null): Option[String] = {
     val resultCls = MultivectorSubClass.findMatchingClass(result)
     if (resultCls == MultivectorSubClass.zeroCls) {
       None
     } else {
       GeneratedCode { code =>
-        code(s"\ndef $name: ${resultCls.typeName} =")
+        code("")
+        if (targetName != null) {
+          code(s"@targetName(\"$targetName\")")
+        }
+        code(s"def $name: ${resultCls.typeName} =")
         code.block {
           if (result == cls.self && resultCls == cls) {
             code("this")

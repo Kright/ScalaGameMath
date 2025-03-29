@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dMultivector(s: Double = 0.0,
@@ -82,6 +83,7 @@ final case class Pga3dMultivector(s: Double = 0.0,
       i = 0.0,
     )
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dMultivector =
     Pga3dMultivector(
       s = -s,
@@ -169,6 +171,7 @@ final case class Pga3dMultivector(s: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dMultivector =
     Pga3dMultivector(
       s = s * v,
@@ -189,9 +192,11 @@ final case class Pga3dMultivector(s: Double = 0.0,
       i = i * v,
     )
 
-  inline def /(v: Double): Pga3dMultivector =
+  @targetName("div")
+  def /(v: Double): Pga3dMultivector =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dMultivector): Pga3dMultivector =
     Pga3dMultivector(
       s = (s + v.s),
@@ -212,6 +217,7 @@ final case class Pga3dMultivector(s: Double = 0.0,
       i = (i + v.i),
     )
 
+  @targetName("minus")
   def -(v: Pga3dMultivector): Pga3dMultivector =
     Pga3dMultivector(
       s = (s - v.s),

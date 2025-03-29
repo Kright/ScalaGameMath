@@ -10,7 +10,10 @@ object DefDivideByScalar:
       val v = Sym("v")
       val result = cls.self * v
       val resultCls = MultivectorSubClass.findMatchingClass(result)
-      code(s"\ninline def /(v: Double): ${resultCls.typeName} =")
+      code(
+        s"""
+           |@targetName("div")
+           |def /(v: Double): ${resultCls.typeName} =""".stripMargin)
       code.block {
         code("this * (1.0 / v)")
       }

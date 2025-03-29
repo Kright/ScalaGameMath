@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dPseudoScalar(i: Double = 0.0):
@@ -13,6 +14,7 @@ final case class Pga3dPseudoScalar(i: Double = 0.0):
   def weight: Pga3dPseudoScalar =
     this
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = -i,
@@ -42,19 +44,23 @@ final case class Pga3dPseudoScalar(i: Double = 0.0):
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = i * v,
     )
 
-  inline def /(v: Double): Pga3dPseudoScalar =
+  @targetName("div")
+  def /(v: Double): Pga3dPseudoScalar =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = (i + v.i),
     )
 
+  @targetName("minus")
   def -(v: Pga3dPseudoScalar): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = (i - v.i),

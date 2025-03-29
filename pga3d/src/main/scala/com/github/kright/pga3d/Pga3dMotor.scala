@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dMotor(s: Double = 0.0,
@@ -46,6 +47,7 @@ final case class Pga3dMotor(s: Double = 0.0,
       yz = yz,
     )
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dMotor =
     Pga3dMotor(
       s = -s,
@@ -90,7 +92,6 @@ final case class Pga3dMotor(s: Double = 0.0,
     val a2 = 1.0 / (s * s + xy * xy + xz * xz + yz * yz)
     val a = Math.sqrt(a2)
     val b = (s * i - wx * yz + wy * xz - wz * xy) * a * a2
-
     Pga3dMotor(
       s = a * s,
       wx = a * wx + b * yz,
@@ -129,6 +130,7 @@ final case class Pga3dMotor(s: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dMotor =
     Pga3dMotor(
       s = s * v,
@@ -141,9 +143,11 @@ final case class Pga3dMotor(s: Double = 0.0,
       i = i * v,
     )
 
-  inline def /(v: Double): Pga3dMotor =
+  @targetName("div")
+  def /(v: Double): Pga3dMotor =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = (s + v.s),
@@ -156,6 +160,7 @@ final case class Pga3dMotor(s: Double = 0.0,
       i = (i + v.i),
     )
 
+  @targetName("minus")
   def -(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = (s - v.s),

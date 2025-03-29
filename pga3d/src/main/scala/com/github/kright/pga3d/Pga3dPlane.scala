@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dPlane(x: Double = 0.0,
@@ -33,6 +34,7 @@ final case class Pga3dPlane(x: Double = 0.0,
       z = z,
     )
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dPlane =
     Pga3dPlane(
       x = -x,
@@ -74,6 +76,7 @@ final case class Pga3dPlane(x: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dPlane =
     Pga3dPlane(
       x = v * x,
@@ -82,9 +85,11 @@ final case class Pga3dPlane(x: Double = 0.0,
       w = v * w,
     )
 
-  inline def /(v: Double): Pga3dPlane =
+  @targetName("div")
+  def /(v: Double): Pga3dPlane =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
       x = (v.x + x),
@@ -93,6 +98,7 @@ final case class Pga3dPlane(x: Double = 0.0,
       w = (v.w + w),
     )
 
+  @targetName("minus")
   def -(v: Pga3dPlane): Pga3dPlane =
     Pga3dPlane(
       x = (x - v.x),

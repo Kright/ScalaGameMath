@@ -26,6 +26,10 @@ case class MultivectorSubClass(name: String,
 
   override def isObject: Boolean = variableFields.isEmpty
 
+  override def generateImports(): String =
+    """import scala.annotation.targetName
+      |""".stripMargin
+
   def makeSymbolic(instanceName: String): MultiVector[Sym] =
     if (name == "Double") {
       MultiVector.scalar(Sym(instanceName))
@@ -435,7 +439,7 @@ object MultivectorSubClass:
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "dual", pga3.operations.dual(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "weight", pga3.operations.weight(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "bulk", pga3.operations.bulk(v))),
-    MultivectorUnaryOp((cls, s) => GeneratedValue(cls, "unary_- ", -s)),
+    MultivectorUnaryOp((cls, s) => GeneratedValue(cls, "unary_- ", -s, "unaryMinus")),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "reverse", pga3.operations.reverse(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "antiReverse", pga3.operations.antiReverse(v))),
     DefRenormalizedForMotor(),

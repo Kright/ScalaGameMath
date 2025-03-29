@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dPoint(x: Double = 0.0,
@@ -36,6 +37,7 @@ final case class Pga3dPoint(x: Double = 0.0,
   def bulk: Pga3dPointCenter.type =
     Pga3dPointCenter
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dTrivector =
     Pga3dTrivector(
       x = -x,
@@ -82,6 +84,7 @@ final case class Pga3dPoint(x: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dTrivector =
     Pga3dTrivector(
       x = v * x,
@@ -90,9 +93,11 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = v,
     )
 
-  inline def /(v: Double): Pga3dTrivector =
+  @targetName("div")
+  def /(v: Double): Pga3dTrivector =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dTrivector): Pga3dTrivector =
     Pga3dTrivector(
       x = (v.x + x),
@@ -101,6 +106,7 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = (1.0 + v.w),
     )
 
+  @targetName("minus")
   def -(v: Pga3dTrivector): Pga3dTrivector =
     Pga3dTrivector(
       x = (x - v.x),
@@ -117,6 +123,7 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = (1.0 + mult * v.w),
     )
 
+  @targetName("plus")
   def +(v: Pga3dPoint): Pga3dTrivector =
     Pga3dTrivector(
       x = (v.x + x),
@@ -125,6 +132,7 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = 2.0,
     )
 
+  @targetName("minus")
   def -(v: Pga3dPoint): Pga3dVector =
     Pga3dVector(
       x = (x - v.x),
@@ -140,6 +148,7 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = (1.0 + mult),
     )
 
+  @targetName("plus")
   def +(v: Pga3dVector): Pga3dPoint =
     Pga3dPoint(
       x = (v.x + x),
@@ -147,6 +156,7 @@ final case class Pga3dPoint(x: Double = 0.0,
       z = (v.z + z),
     )
 
+  @targetName("minus")
   def -(v: Pga3dVector): Pga3dPoint =
     Pga3dPoint(
       x = (x - v.x),

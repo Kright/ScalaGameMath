@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dQuaternion(s: Double = 0.0,
@@ -25,6 +26,7 @@ final case class Pga3dQuaternion(s: Double = 0.0,
   def bulk: Pga3dQuaternion =
     this
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dQuaternion =
     Pga3dQuaternion(
       s = -s,
@@ -67,6 +69,7 @@ final case class Pga3dQuaternion(s: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dQuaternion =
     Pga3dQuaternion(
       s = s * v,
@@ -75,9 +78,11 @@ final case class Pga3dQuaternion(s: Double = 0.0,
       yz = v * yz,
     )
 
-  inline def /(v: Double): Pga3dQuaternion =
+  @targetName("div")
+  def /(v: Double): Pga3dQuaternion =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dQuaternion): Pga3dQuaternion =
     Pga3dQuaternion(
       s = (s + v.s),
@@ -86,6 +91,7 @@ final case class Pga3dQuaternion(s: Double = 0.0,
       yz = (v.yz + yz),
     )
 
+  @targetName("minus")
   def -(v: Pga3dQuaternion): Pga3dQuaternion =
     Pga3dQuaternion(
       s = (s - v.s),

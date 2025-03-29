@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 object Pga3dPointCenter:
@@ -32,6 +33,7 @@ object Pga3dPointCenter:
   def bulk: Pga3dPointCenter.type =
     Pga3dPointCenter
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dTrivector =
     Pga3dTrivector(
       x = 0.0,
@@ -69,6 +71,7 @@ object Pga3dPointCenter:
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dTrivector =
     Pga3dTrivector(
       x = 0.0,
@@ -77,9 +80,11 @@ object Pga3dPointCenter:
       w = v,
     )
 
-  inline def /(v: Double): Pga3dTrivector =
+  @targetName("div")
+  def /(v: Double): Pga3dTrivector =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dPointCenter.type): Pga3dTrivector =
     Pga3dTrivector(
       x = 0.0,

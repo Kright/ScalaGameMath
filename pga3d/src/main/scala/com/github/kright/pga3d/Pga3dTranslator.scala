@@ -1,5 +1,6 @@
 package com.github.kright.pga3d
 
+import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dTranslator(wx: Double = 0.0,
@@ -32,6 +33,7 @@ final case class Pga3dTranslator(wx: Double = 0.0,
   def bulk: Double =
     1.0
 
+  @targetName("unaryMinus")
   def unary_- : Pga3dMotor =
     Pga3dMotor(
       s = -1.0,
@@ -85,6 +87,7 @@ final case class Pga3dTranslator(wx: Double = 0.0,
   def normalizedByNorm =
     this / norm
 
+  @targetName("times")
   def *(v: Double): Pga3dMotor =
     Pga3dMotor(
       s = v,
@@ -97,9 +100,11 @@ final case class Pga3dTranslator(wx: Double = 0.0,
       i = 0.0,
     )
 
-  inline def /(v: Double): Pga3dMotor =
+  @targetName("div")
+  def /(v: Double): Pga3dMotor =
     this * (1.0 / v)
 
+  @targetName("plus")
   def +(v: Pga3dTranslator): Pga3dMotor =
     Pga3dMotor(
       s = 2.0,
@@ -112,6 +117,7 @@ final case class Pga3dTranslator(wx: Double = 0.0,
       i = 0.0,
     )
 
+  @targetName("minus")
   def -(v: Pga3dTranslator): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = (wx - v.wx),
