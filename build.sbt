@@ -51,8 +51,8 @@ lazy val matrix = (project in file("matrix"))
 lazy val symbolic = (project in file("symbolic"))
   .settings(scalatestSettings *)
 
-lazy val ga = (project in file("ga")).
-  settings(scalatestSettings *)
+lazy val ga = (project in file("ga"))
+  .settings(scalatestSettings *)
   .dependsOn(
     util,
     symbolic % "test",
