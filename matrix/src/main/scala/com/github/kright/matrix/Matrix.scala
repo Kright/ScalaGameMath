@@ -2,13 +2,17 @@ package com.github.kright.matrix
 
 import com.github.kright.math.FastRange
 
+import scala.annotation.targetName
+
 class Matrix(val h: Int, val w: Int):
 
   val elements: Array[Double] = new Array[Double](h * w)
 
+  @targetName("get")
   def apply(y: Int, x: Int): Double =
     elements(x + y * w)
 
+  @targetName("set")
   def update(y: Int, x: Int, v: Double): Unit =
     elements(x + y * w) = v
 
@@ -27,28 +31,33 @@ class Matrix(val h: Int, val w: Int):
       }
     }
 
+  @targetName("set")
   def :=(m: Matrix): Unit =
     require(hasSameSize(m))
     m.elements.copyToArray(elements)
 
+  @targetName("timesAssign")
   def *=(s: Double): Unit =
     mapElements(_ * s)
 
   private inline def elementsIndices =
     FastRange(elements.length)
 
+  @targetName("plusAssign")
   def +=(m: Matrix): Unit =
     require(hasSameSize(m))
     for (i <- elementsIndices) {
       elements(i) += m.elements(i)
     }
 
+  @targetName("minusAssign")
   def -=(m: Matrix): Unit =
     require(hasSameSize(m))
     for (i <- elementsIndices) {
       elements(i) -= m.elements(i)
     }
 
+  @targetName("plus")
   def +(m: Matrix): Matrix =
     require(hasSameSize(m))
     val result = Matrix(h, w)
@@ -57,6 +66,7 @@ class Matrix(val h: Int, val w: Int):
     }
     result
 
+  @targetName("minus")
   def -(m: Matrix): Matrix =
     require(hasSameSize(m))
     val result = Matrix(h, w)
@@ -65,6 +75,7 @@ class Matrix(val h: Int, val w: Int):
     }
     result
 
+  @targetName("times")
   def *(right: Matrix): Matrix =
     require(this.w == right.h)
 

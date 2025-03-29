@@ -2,6 +2,8 @@ package com.github.kright.matrix
 
 import com.github.kright.math.FastRange
 
+import scala.annotation.targetName
+
 /**
  * Cholesky decomposition is defined for symmetrical positive-definite matrix.
  *
@@ -17,6 +19,7 @@ object CholeskyDecomposition:
   /**
    * @return low triangular matrix L, so L * L.transposed = m
    */
+  @targetName("invoke")
   def apply(m: Matrix): Matrix =
     require(m.isSquare)
 

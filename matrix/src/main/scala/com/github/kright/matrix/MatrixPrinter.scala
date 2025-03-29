@@ -1,10 +1,13 @@
 package com.github.kright.matrix
 
+import scala.annotation.targetName
+
 case class MatrixPrinter(elemToStr: Double => String,
                          elemSep: String,
                          rowSep: String,
                          useBrackets: Boolean) {
 
+  @targetName("invoke")
   def apply(m: Matrix): String =
     val openBr = if (useBrackets) "[" else ""
     val closeBr = if (useBrackets) "]" else ""
