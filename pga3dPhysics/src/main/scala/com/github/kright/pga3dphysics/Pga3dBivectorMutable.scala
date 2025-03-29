@@ -2,6 +2,8 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.Pga3dBivector
 
+import scala.annotation.targetName
+
 class Pga3dBivectorMutable:
   private var wx: Double = 0.0
   private var wy: Double = 0.0
@@ -18,6 +20,7 @@ class Pga3dBivectorMutable:
     xz = 0.0
     yz = 0.0
 
+  @targetName("set")
   def :=(b: Pga3dBivector): Unit =
     wx = b.wx
     wy = b.wy
@@ -26,6 +29,7 @@ class Pga3dBivectorMutable:
     xz = b.xz
     yz = b.yz
 
+  @targetName("set")
   def :=(b: Pga3dBivectorMutable): Unit =
     wx = b.wx
     wy = b.wy
@@ -34,6 +38,7 @@ class Pga3dBivectorMutable:
     xz = b.xz
     yz = b.yz
 
+  @targetName("plusAssign")
   def +=(b: Pga3dBivector): Unit =
     wx += b.wx
     wy += b.wy
@@ -42,6 +47,7 @@ class Pga3dBivectorMutable:
     xz += b.xz
     yz += b.yz
 
+  @targetName("minusAssign")
   def -=(b: Pga3dBivector): Unit =
     wx -= b.wx
     wy -= b.wy

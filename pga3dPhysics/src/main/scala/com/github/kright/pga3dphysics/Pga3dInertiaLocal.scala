@@ -2,6 +2,8 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.*
 
+import scala.annotation.targetName
+
 final case class Pga3dInertiaLocal(mass: Double,
                                    mryz: Double,
                                    mrxz: Double,

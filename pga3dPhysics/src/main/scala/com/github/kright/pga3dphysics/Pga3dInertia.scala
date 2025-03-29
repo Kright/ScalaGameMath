@@ -10,7 +10,6 @@ trait Pga3dInertia:
 
   def centerOfMassTrivector: Pga3dTrivector
 
-
   def apply(velocity: Pga3dBivector): Pga3dBivector
 
   def invert(localInertia: Pga3dBivector): Pga3dBivector
