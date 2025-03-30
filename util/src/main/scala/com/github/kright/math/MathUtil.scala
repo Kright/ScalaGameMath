@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-object MathUtils:
+object MathUtil:
   def isEquals(arr1: Array[Double], arr2: Array[Double], eps: Double): Boolean =
     for (i <- FastRange(arr1.length)) {
       if (math.abs(arr1(i) - arr2(i)) > eps) return false
@@ -20,7 +20,7 @@ object MathUtils:
     }
 
   def interpolate(a: Double, b: Double, t: Double): Double =
-    a * (1.0 - t) + b * t   
+    a * (1.0 - t) + b * t
 
   extension (d: Double)
     def clamp(lower: Double, upper: Double): Double =

@@ -20,17 +20,20 @@ object VectorMathGenerators:
           1e-1,
           1e-2,
           1e-3,
+          1e-4,
+          1e-5,
           1e-6,
+          1e-8,
           1e-10,
           1e-12,
           1e-15,
           1e-20
         ).flatMap { eps =>
           Seq(
-            MathUtils.interpolate(min, max, eps),
-            MathUtils.interpolate(min, max, 1.0 - eps),
-            MathUtils.interpolate(min, max, 0.5 + eps),
-            MathUtils.interpolate(min, max, 0.5 - eps),
+            MathUtil.interpolate(min, max, eps),
+            MathUtil.interpolate(min, max, 1.0 - eps),
+            MathUtil.interpolate(min, max, 0.5 + eps),
+            MathUtil.interpolate(min, max, 0.5 - eps),
           )
         }),
       Gen.double.map { d =>

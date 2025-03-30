@@ -47,7 +47,7 @@ object Pga3dInertiaGenerators:
 
   val inertiaSummable: Gen[Pga3dInertiaSummable] =
     inertiaMovedLocal.map(_.toSummable)
-  
+
   val anyInertia: Gen[Pga3dInertia] =
     Gen.oneOf(
       inertiaSimple(0.1, 10.0, 0.1, 10.0).flatMap(i => Gen.oneOf(i, i.toMovedSimple)),

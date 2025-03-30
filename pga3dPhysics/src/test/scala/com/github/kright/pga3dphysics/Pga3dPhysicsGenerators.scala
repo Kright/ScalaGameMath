@@ -1,0 +1,32 @@
+package com.github.kright.pga3dphysics
+
+import com.github.kright.math.VectorMathGenerators
+import com.github.kright.pga3d.Pga3dPoint
+import org.scalacheck.Gen
+
+object Pga3dPhysicsGenerators:
+  def pointIn(box: Pga3dAABB): Gen[Pga3dPoint] =
+    for {
+      x <- VectorMathGenerators.doubleInRange(box.min.x, box.max.x)
+      y <- VectorMathGenerators.doubleInRange(box.min.y, box.max.y)
+      z <- VectorMathGenerators.doubleInRange(box.min.z, box.max.z)
+    } yield Pga3dPoint(x, y, z)
+
+  def aabbIn(aabb: Pga3dAABB): Gen[Pga3dAABB] =
+    for {
+      a <- pointIn(aabb)
+      b <- pointIn(aabb)
+    } yield Pga3dAABB(a).union(b)
+
+  def edgeIn(aabb: Pga3dAABB): Gen[Pga3dEdge] =
+    for {
+      a <- pointIn(aabb)
+      b <- pointIn(aabb)
+    } yield Pga3dEdge(a, b)
+
+  def triangleIn(aabb: Pga3dAABB): Gen[Pga3dTriangle] =
+    for {
+      a <- pointIn(aabb)
+      b <- pointIn(aabb)
+      c <- pointIn(aabb)
+    } yield Pga3dTriangle(a, b, c)

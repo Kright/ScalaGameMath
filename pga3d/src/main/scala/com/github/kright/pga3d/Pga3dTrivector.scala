@@ -883,6 +883,15 @@ final case class Pga3dTrivector(x: Double = 0.0,
       w = v.i * w,
     )
 
+  infix def antiDotI(v: Pga3dTrivector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dVector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dPoint): Double =
+    (v.x * x + v.y * y + v.z * z)
+
   infix def antiWedge(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,

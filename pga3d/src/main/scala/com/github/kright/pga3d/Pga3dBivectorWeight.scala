@@ -694,6 +694,12 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
       wz = v.i * wz,
     )
 
+  infix def antiDotI(v: Pga3dBivector): Double =
+    (-v.wx * wx - v.wy * wy - v.wz * wz)
+
+  infix def antiDotI(v: Pga3dBivectorWeight): Double =
+    (-v.wx * wx - v.wy * wy - v.wz * wz)
+
   infix def antiWedge(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = (v.xy * wz + v.yz * wx - v.xz * wy),

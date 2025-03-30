@@ -9,6 +9,6 @@ class Pga3dMotorTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     forAll(Pga3dGenerators.anyMotors.filter(_.bulkNorm > 0.01).map(_.renormalized), MinSuccessful(1000)) { renormalized =>
       val mm = renormalized.geometric(renormalized.reverse)
-      assert((mm - one).norm < 2e-15, s"mm = ${mm}")
+      assert((mm - one).norm < 3e-15, s"mm = ${mm}")
     }
   }

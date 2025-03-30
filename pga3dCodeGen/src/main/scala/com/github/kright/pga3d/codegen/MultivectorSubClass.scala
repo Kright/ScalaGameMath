@@ -153,29 +153,33 @@ case class MultivectorSubClass(name: String,
                && (rightCls != scalar)
                && ((this == MultivectorSubClass.multivector) == (rightCls == MultivectorSubClass.multivector))) {
           val v = rightCls.makeSymbolic("v")
-          val result = binaryOp(self, v)
-          val resultCls = findMatchingClass(result)
-          if (resultCls != zeroCls) {
-            code(s"\ninfix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
+          binaryOp(self, v) match {
+            case None => ()
+            case Some(result) => {
+              val resultCls = findMatchingClass(result)
+              if (resultCls != zeroCls) {
+                code(s"\ninfix def ${binaryOp.name}(v: ${rightCls.typeName}): ${resultCls.typeName} =")
 
-            code.block {
-              if (resultCls == this && result == self) {
-                code("this")
-              } else if (resultCls == this && result == -self) {
-                code("-this")
-              } else if (resultCls == rightCls && result == v) {
-                code("v")
-              } else if (resultCls == rightCls && result == -v) {
-                code("-v")
-              } else {
-                binaryOp.name match
-                  case "sandwich" | "reverseSandwich" => code(makeConstructorOptimized(result, resultCls))
-                  case _ => code(resultCls.makeConstructor(result))
+                code.block {
+                  if (resultCls == this && result == self) {
+                    code("this")
+                  } else if (resultCls == this && result == -self) {
+                    code("-this")
+                  } else if (resultCls == rightCls && result == v) {
+                    code("v")
+                  } else if (resultCls == rightCls && result == -v) {
+                    code("-v")
+                  } else {
+                    binaryOp.name match
+                      case "sandwich" | "reverseSandwich" => code(makeConstructorOptimized(result, resultCls))
+                      case _ => code(resultCls.makeConstructor(result))
+                  }
+                }
+
+                for (opName <- binaryOp.names.tail) {
+                  code(s"\ninline infix def ${opName}(v: ${rightCls.typeName}): ${resultCls.typeName} = ${binaryOp.name}(v)")
+                }
               }
-            }
-
-            for (opName <- binaryOp.names.tail) {
-              code(s"\ninline infix def ${opName}(v: ${rightCls.typeName}): ${resultCls.typeName} = ${binaryOp.name}(v)")
             }
           }
         }
@@ -277,6 +281,31 @@ case class MultivectorSubClass(name: String,
         code("a * (1.0 - t) + b * t")
       } else {
         code("(a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe")
+      }
+    }
+
+    if (this == point) {
+      code("")
+      code(s"def mid(a: ${point.typeName}, b: ${point.typeName}): ${point.typeName} =")
+      code.block {
+        code(
+          s"""${point.typeName}(
+             |  x = (a.x + b.x) * 0.5,
+             |  y = (a.y + b.y) * 0.5,
+             |  z = (a.z + b.z) * 0.5,
+             |)""".stripMargin)
+      }
+
+      code("")
+      code(s"def mid(a: ${point.typeName}, b: ${point.typeName}, c: ${point.typeName}): ${point.typeName} =")
+      code.block {
+        code(
+          s"""val m = 1.0 / 3.0
+             |${point.typeName}(
+             |  x = (a.x + b.x + c.x) * m,
+             |  y = (a.y + b.y + c.y) * m,
+             |  z = (a.z + b.z + c.z) * m,
+             |)""".stripMargin)
       }
     }
   }
@@ -448,6 +477,7 @@ object MultivectorSubClass:
     DefNorm("normSquare", "norm", "normalizedByNorm", s => s.geometric(s.reverse).grade(0) + s.dual.geometric(s.dual.reverse).grade(0)),
     DefMultiplyToScalar(),
     DefDivideByScalar(),
+    DefMinMaxForPointOrVector(),
     DefPlusMinusMadd(),
     DefExpForBivector(),
     DefLogForMotor(),
@@ -463,6 +493,7 @@ object MultivectorSubClass:
 
     MultivectorBinaryOp(Seq("antiGeometric"), pga3.operations.anti.geometric(_, _)),
     MultivectorBinaryOp(Seq("antiDot"), pga3.operations.anti.dot(_, _)),
+    MultivectorBinaryOp.option(Seq("antiDotI"), (a, b) => Option(pga3.operations.anti.dot(a, b).dual).filter(findMatchingClass(_) == scalar)),
     MultivectorBinaryOp(Seq("antiWedge", "v"), pga3.operations.anti.wedge(_, _)),
 
     MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),

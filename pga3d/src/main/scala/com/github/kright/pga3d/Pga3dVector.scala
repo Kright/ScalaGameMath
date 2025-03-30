@@ -70,6 +70,12 @@ final case class Pga3dVector(x: Double = 0.0,
   def /(v: Double): Pga3dVector =
     this * (1.0 / v)
 
+  infix def min(other: Pga3dVector): Pga3dVector =
+    Pga3dVector(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+
+  infix def max(other: Pga3dVector): Pga3dVector = 
+    Pga3dVector(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+
   @targetName("plus")
   def +(v: Pga3dTrivector): Pga3dTrivector =
     Pga3dTrivector(
@@ -735,6 +741,15 @@ final case class Pga3dVector(x: Double = 0.0,
       y = v.i * y,
       z = v.i * z,
     )
+
+  infix def antiDotI(v: Pga3dTrivector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dVector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dPoint): Double =
+    (v.x * x + v.y * y + v.z * z)
 
   infix def antiWedge(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(

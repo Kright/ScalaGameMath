@@ -1,6 +1,6 @@
 package com.github.kright.ga
 
-import com.github.kright.math.MathUtils.swap
+import com.github.kright.math.MathUtil.swap
 
 import scala.collection.mutable
 

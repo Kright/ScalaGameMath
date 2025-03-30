@@ -1,6 +1,6 @@
 package com.github.kright.math
 
-import com.github.kright.math.MathUtils.swap
+import com.github.kright.math.MathUtil.swap
 
 
 /**
@@ -330,7 +330,7 @@ final class Matrix4d(val elements: Array[Double]) extends MatrixNd[Matrix4d]:
     )
 
   override def isEquals(other: Matrix4d, eps: Double): Boolean =
-    MathUtils.isEquals(elements, other.elements, eps)
+    MathUtil.isEquals(elements, other.elements, eps)
 
   override def toString: String =
     s"Matrix4d(${elements.mkString(", ")})"

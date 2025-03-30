@@ -870,6 +870,9 @@ final case class Pga3dPlane(x: Double = 0.0,
       w = v.i * w,
     )
 
+  infix def antiDotI(v: Pga3dPlane): Double =
+    -v.w * w
+
   infix def antiWedge(v: Pga3dMotor): Pga3dPlane =
     Pga3dPlane(
       x = v.i * x,

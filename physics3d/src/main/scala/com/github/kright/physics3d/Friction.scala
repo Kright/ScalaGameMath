@@ -1,7 +1,7 @@
 package com.github.kright.physics3d
 
 import com.github.kright.math.*
-import com.github.kright.math.MathUtils.clamp
+import com.github.kright.math.MathUtil.clamp
 
 
 trait Friction:

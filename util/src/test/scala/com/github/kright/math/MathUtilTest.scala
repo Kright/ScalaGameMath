@@ -1,9 +1,9 @@
 package com.github.kright.math
 
-import com.github.kright.math.MathUtils.*
+import com.github.kright.math.MathUtil.*
 import org.scalatest.funsuite.AnyFunSuite
 
-class MathUtilsTest extends AnyFunSuite:
+class MathUtilTest extends AnyFunSuite:
   test("clamp") {
     val lower = -1.1
     val upper = 2.2
@@ -22,6 +22,6 @@ class MathUtilsTest extends AnyFunSuite:
   }
 
   test("pow") {
-    assert(MathUtils.pow(2, 10, _ * _) == 1024)
-    assert(MathUtils.pow(1, 100, _ + _) == 100)
+    assert(MathUtil.pow(2, 10, _ * _) == 1024)
+    assert(MathUtil.pow(1, 100, _ + _) == 100)
   }

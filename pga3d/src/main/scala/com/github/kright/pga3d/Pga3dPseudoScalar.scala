@@ -499,6 +499,9 @@ final case class Pga3dPseudoScalar(i: Double = 0.0):
       w = i,
     )
 
+  infix def antiDotI(v: Pga3dPseudoScalar): Double =
+    i * v.i
+
   infix def antiWedge(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = i * v.s,

@@ -1,6 +1,6 @@
 package com.github.kright.ga
 
-import com.github.kright.math.MathUtils.*
+import com.github.kright.math.MathUtil.*
 
 class CachedUnaryOp(val signature: Signature,
                     val singleOp: UnaryOp) extends UnaryOp:

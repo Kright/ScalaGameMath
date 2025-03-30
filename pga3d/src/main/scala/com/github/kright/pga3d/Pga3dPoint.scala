@@ -97,6 +97,12 @@ final case class Pga3dPoint(x: Double = 0.0,
   def /(v: Double): Pga3dTrivector =
     this * (1.0 / v)
 
+  infix def min(other: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+
+  infix def max(other: Pga3dPoint): Pga3dPoint = 
+    Pga3dPoint(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+
   @targetName("plus")
   def +(v: Pga3dTrivector): Pga3dTrivector =
     Pga3dTrivector(
@@ -871,6 +877,15 @@ final case class Pga3dPoint(x: Double = 0.0,
       w = v.i,
     )
 
+  infix def antiDotI(v: Pga3dTrivector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dVector): Double =
+    (v.x * x + v.y * y + v.z * z)
+
+  infix def antiDotI(v: Pga3dPoint): Double =
+    (v.x * x + v.y * y + v.z * z)
+
   infix def antiWedge(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -1320,3 +1335,18 @@ object Pga3dPoint:
 
   def interpolate(a: Pga3dPoint, b: Pga3dPoint, t: Double): Pga3dPoint =
     (a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe
+
+  def mid(a: Pga3dPoint, b: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(
+      x = (a.x + b.x) * 0.5,
+      y = (a.y + b.y) * 0.5,
+      z = (a.z + b.z) * 0.5,
+    )
+
+  def mid(a: Pga3dPoint, b: Pga3dPoint, c: Pga3dPoint): Pga3dPoint =
+    val m = 1.0 / 3.0
+    Pga3dPoint(
+      x = (a.x + b.x + c.x) * m,
+      y = (a.y + b.y + c.y) * m,
+      z = (a.z + b.z + c.z) * m,
+    )
