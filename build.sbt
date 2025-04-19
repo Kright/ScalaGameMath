@@ -29,7 +29,7 @@ lazy val root = (project in file("."))
     vector.jvm,
     ga,
     matrix.jvm,
-    pga3d,
+    pga3d.jvm,
     pga3dphysics,
   )
 
@@ -83,18 +83,20 @@ lazy val pga3dCodeGen = (project in file("pga3dCodeGen"))
     symbolic,
   )
 
-lazy val pga3d = (project in file("pga3d"))
+lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
+  .withoutSuffixFor(JVMPlatform)
+  .in(file("pga3d"))
   .settings(scalatestSettings *)
   .dependsOn(
-    matrix.jvm,
-    util.jvm % "test",
-    vector.jvm % "test->test",
+    matrix,
+    util % "test",
+    vector % "test->test",
   )
 
 lazy val pga3dphysics = (project in file("pga3dphysics"))
   .settings(scalatestSettings *)
   .dependsOn(
-    pga3d % "compile->compile;test->test",
+    pga3d.jvm % "compile->compile;test->test",
     matrix.jvm,
     vector.jvm % "test->test",
     solvers % "test",
