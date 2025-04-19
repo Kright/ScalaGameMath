@@ -84,7 +84,6 @@ lazy val pga3d = (project in file("pga3d"))
   .settings(scalatestSettings *)
   .dependsOn(
     matrix.jvm,
-    solvers % "test",
     util.jvm % "test",
     vector % "test->test",
   )
