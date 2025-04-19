@@ -23,14 +23,14 @@ lazy val root = (project in file("."))
   ).aggregate(
     math,
     physics3d,
-    solvers.jvm,
+    solvers.jvm, solvers.js,
     symbolic,
-    util.jvm,
-    vector.jvm,
+    util.jvm, util.js,
+    vector.jvm, vector.js,
     ga,
-    matrix.jvm,
-    pga3d.jvm,
-    pga3dPhysics.jvm,
+    matrix.jvm, matrix.js,
+    pga3d.jvm, pga3d.js,
+    pga3dPhysics.jvm, pga3dPhysics.js,
   )
 
 lazy val util = crossProject(JSPlatform, JVMPlatform)
