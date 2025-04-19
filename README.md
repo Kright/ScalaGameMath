@@ -31,15 +31,15 @@ You may add the whole library or specific modules.
 ```
 resolvers += "jitpack" at "https://jitpack.io"
 ...
-libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.7.2"
+libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "0.7.3"
 ```
 
 Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.7.2",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.7.2",
+  "com.github.Kright.ScalaGameMath" %% "math" % "0.7.3",
+  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.7.3",
 )
 ```
 
@@ -57,10 +57,10 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.github.Kright.ScalaGameMath:pga3d_3:v0.7.2'
-  implementation 'com.github.Kright.ScalaGameMath:util_3:v0.7.2'
-  implementation 'com.github.Kright.ScalaGameMath:matrix_3:v0.7.2'
-  implementation 'com.github.Kright.ScalaGameMath:pga3dphysics_3:v0.7.2'
+  implementation 'com.github.Kright.ScalaGameMath:pga3d_3:v0.7.3'
+  implementation 'com.github.Kright.ScalaGameMath:util_3:v0.7.3'
+  implementation 'com.github.Kright.ScalaGameMath:matrix_3:v0.7.3'
+  implementation 'com.github.Kright.ScalaGameMath:pga3dphysics_3:v0.7.3'
 }
 ```
 
@@ -137,13 +137,13 @@ and "\~/.m2/repository/scalagamemath/scalagamemath_3/0.7.0-SNAPSHOT"
 After that, add the local library to another project. In my case, it was for sbt:
 
 ```scala
-libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.7.2-SNAPSHOT"
+libraryDependencies += "scalagamemath" %% "scalagamemath" % "0.7.3-SNAPSHOT"
 ```
 
 And for Gradle:
 
 ```groovy
-implementation "pga3d:pga3d_3:0.7.2-SNAPSHOT"
+implementation "pga3d:pga3d_3:0.7.3-SNAPSHOT"
 ```
 
 Maybe you will need to remove cached lib of jitpack, it will be placed in path like "~
