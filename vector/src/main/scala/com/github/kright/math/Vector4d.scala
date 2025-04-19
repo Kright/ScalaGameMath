@@ -88,9 +88,9 @@ final case class Vector4d(var x: Double,
     this
 
 
-object Vector4d extends ZeroFactory[Vector4d]:
+object Vector4d:
   inline def apply(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0): Vector4d =
     new Vector4d(x, y, z, w)
 
-  override def zero: Vector4d =
+  def zero: Vector4d =
     new Vector4d(0.0, 0.0, 0.0, 0.0)

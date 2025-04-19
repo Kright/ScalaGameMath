@@ -77,9 +77,9 @@ final case class Vector2d(var x: Double,
     this
 
 
-object Vector2d extends ZeroFactory[Vector2d]:
+object Vector2d:
   inline def apply(x: Double = 0.0, y: Double = 0.0): Vector2d =
     new Vector2d(x, y)
 
-  override def zero: Vector2d =
+  def zero: Vector2d =
     new Vector2d(0.0, 0.0)

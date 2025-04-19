@@ -105,9 +105,9 @@ final case class Vector3d(var x: Double,
     this
 
 
-object Vector3d extends ZeroFactory[Vector3d]:
+object Vector3d:
   inline def apply(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0): Vector3d =
     new Vector3d(x, y, z)
 
-  override def zero: Vector3d =
+  def zero: Vector3d =
     new Vector3d(0.0, 0.0, 0.0)

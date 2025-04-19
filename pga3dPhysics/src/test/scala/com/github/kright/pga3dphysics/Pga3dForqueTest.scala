@@ -89,3 +89,8 @@ class Pga3dForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(Pga3dForque.spring(a, b, k, springLength = 0.5) == Pga3dForque.force(a, Pga3dVector(0, 0, 0.5 * k)))
     assert(Pga3dForque.spring(a, b, k, springLength = 2.0) == Pga3dForque.force(a, Pga3dVector(0, 0, -1.0 * k)))
   }
+
+  test("forque of spring when the poinst are the same") {
+    val a = Pga3dPoint(0, 0, 0)
+    assert(Pga3dForque.spring(a, a, k = 10, springLength = 1.0) == Pga3dBivector(0, 0, 0, 0, 0, 0))
+  }
