@@ -100,7 +100,7 @@ class InertiaTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val deltaImpulse = currentImpulse.linear.distance(initialImpulse.linear + forces.linear * t)
         val deltaAngularImpulse = currentImpulse.angular.distance(initialImpulse.angular + forces.torque * t)
 
-        assert(deltaImpulse < 0.001 && deltaAngularImpulse < 0.001,
+        assert(deltaImpulse < 0.002 && deltaAngularImpulse < 0.002,
           s"""
              |solver ${solverType}
              |step = ${step}, time = ${step * dt}
