@@ -2,10 +2,13 @@
 
 Contains generated code for special cases: planes, quaternions, points, etc.
 They behave exactly like multivectors, but where a lot of fields are zeros and computations are much simpler.
-In addition, this provides more type-safety, so sum of two Pga3dVector is a Pga3dVector.
+In addition, this provides more type-safety, so a sum of two Pga3dVector is a Pga3dVector.
 
-For example, point class contains only three fields and quaternion has only four. So rotation of point by quaternion is
+For example, the point class contains only three fields and quaternion has only four. So rotation of point by quaternion is
 efficient as usual code in math libraries.
+
+All classes are immutable, modern JVM is quite good with JIT and escape analysis.
+Geometric algebra and classes are complex enough, thinking about mutability will make coding and debugging much harder.  
 
 ### Plane:
 
@@ -32,9 +35,9 @@ val mirroredPoint = plane.sandwich(point)
   vectors.
 * [**Pga3dTrivector**](src/main/scala/com/github/kright/pga3d/Pga3dTrivector.scala): general case with four fields (x, y, z, w).
 
-There is name collision, Pga3dVector is a 3-vector (and a Pga3dTrivector), but I decided to give it a human-friendly
+There is a name collision, Pga3dVector is a 3-vector (and a Pga3dTrivector), but I decided to give it a human-friendly
 name. In plane-based algebra 1-vector is a plane. Usually Pga3dTrivector is rarely needed, Pga3dPoint and Pga3dVector
-are better suit for common cases.
+are better suited for common cases.
 
 ```scala
 // Creating a point
@@ -84,7 +87,7 @@ val (line, shift) = bivector.split()
 * [**Pga3dMotor**](src/main/scala/com/github/kright/pga3d/Pga3dMotor.scala): combination of rotation and linear movement. Has 8 fields (scalar, all bivector fields and pseudoscalar),
   exponent of Pga3dBivector
 
-To move everything with this classes, you need to call `motor.sandwich(obj)`
+To move everything with these classes, you need to call `motor.sandwich(obj)`
 
 ```scala
 // Creating a quaternion for rotation between two vectors

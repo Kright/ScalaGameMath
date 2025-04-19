@@ -40,4 +40,15 @@ object Pga3dForque:
     } else {
       Pga3dVector(forque.wx, forque.wy, forque.wz)
     }
-  }  
+  }
+
+  def spring(current: Pga3dPoint, another: Pga3dPoint, k: Double, springLength: Double): Pga3dBivector =
+    val dir = another - current
+    val dirDist = dir.norm
+
+    if (dirDist > 1e-50) {
+      val f = k * (dirDist - springLength)
+      force(current, dir * (f / dirDist))
+    } else {
+      Pga3dBivector.zero
+    }

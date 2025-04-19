@@ -1,6 +1,32 @@
-# Scala game math
+# Scala Game Math
 
-## How to add in sbt:
+## Introduction
+
+ScalaGameMath library consists of several independent modules in Scala for 3d applications: math and physics simulation.
+
+It contains some basic classes like vectors, quaternion, matrices, and rigid body physics built on top of them. 
+All of this is implemented from scratch and doesn't depend on other libraries. 
+So I hope the library could be used with in graalvm or from Kotlin or Java. 
+
+Library is under MIT license. Contributions are welcome, feel free to send a pull request.
+
+## Table of Contents
+- [Getting started](#Getting-started)
+   - [Sbt](#sbt)
+   - [Gradle](#Gradle)
+- [Library modules](#Library-modules)
+  - [Simple modules](#simple-modules)
+  - [Advanced modules with geometric algebra](#advanced-modules-with-geometric-algebra)
+- [Tests](#tests)
+- [How to change this library and try changes locally in other project](#how-to-change-this-library-and-try-changes-locally-in-other-project)
+
+## Getting started
+
+I'm using jitpack [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath)
+
+You may add the whole library or specific modules.
+
+### sbt
 
 ```
 resolvers += "jitpack" at "https://jitpack.io"
@@ -23,7 +49,7 @@ for latest version:
 libraryDependencies += "com.github.Kright" % "ScalaGameMath" % "master-SNAPSHOT"
 ```
 
-Or for Gradle:
+### Gradle:
 
 ```
 repositories {
@@ -40,20 +66,20 @@ dependencies {
 
 For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath).
 
-## Modules
+## Library modules
 
 Initially, it was repo for simple math with matrices and vectors. I implemented physics for 3d on top of that math. During my development, I figured out that plane-based geometric algebra is a fantastic way to describe physics
 equations. So there a lot of quite experimental, but very promising code with geometric algebra, which includes math and physics
 too.
 
-### Simple modules:
+### Simple modules
 
-* **vector**: Vector2d, Vector3d, Vector4d
-* **math**:
+* [**vector**](vector/README.md): Vector2d, Vector3d, Vector4d
+* [**math**](math/README.md):
     * Quaternion
     * Matrix: 2x2, 3x3, 4x4
     * Euler angles: yaw Z, pitch Y, roll X
-* **physics3d**: Rigid body physics
+* [**physics3d**](physics3d/README.md): Rigid body physics
     * Transform3d (position and orientation)
     * Inertia3d (mass and tensor of angular mass)
     * Force3d, Impulse3d, Velocity3d, Acceleration3d (combined linear and angular)
@@ -61,55 +87,26 @@ too.
     * BodySystem for handling a system of bodies with joints between them
 * **solvers**: helper for solving differential equations with Euler or Runge-Kutta methods
 
-### Advanced modules with geometric algebra:
+### Advanced modules with geometric algebra
+
+I'm inspired by https://bivector.net/PGADYN.html
+
+I rewrote physics equations in PGA, it looks like PGA is a better way of describing physics.
 
 * **symbolic**: simple implementation for AST like `(1.0 + ("y" * "x"))`
 * **ga**: experimental support for geometric algebra (GA) and plane-based geometric algebra (PGA).
   See [https://bivector.net](https://bivector.net) for more details. Suitable for any dimensions
-* [**pga3d README**](pga3d/README.md): efficient library for 3d PGA with generated code and some common cases—Pga3dPlane, Pga3dPoint,
+* [**pga3d**](pga3d/README.md): efficient library for 3d PGA with generated code and some common cases—Pga3dPlane, Pga3dPoint,
   Pga3dQuaternion, Pga3dBivector, etc.
   There is a huge number of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
 * **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for the result.
-* [**pga3dPhysics README**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
+* [**pga3dPhysics**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
 
-Vectors treated as columns. For quaternions and matrices, multiplication order is math-like, for example:
 
-```scala
-(matrixA * matrixB) * vec === matrixA * (matrixB * vec)
-(quaternionA * quaternionB) * vec === quaternionA * (quaternionB * vec)
-```
-
-Support conversions between rotation matrix, quaternions and Euler angles.
-
-Unfortunately, JVM doesn't support lightweight structs, so there are a bunch of helper operators:
-
-```scala 
-import com.github.kright.math.Quaternion
-
-val q = Quaternion() // assign reference
-q := Quaternion()    // assign by value (w, x, y, z)
-val q2 = q * q       // new object created, reference assigned to q2
-q *= q2              // q := q * q2, inplace, no objects created
-q *> q2              // q2 := q * q2, inplace, no objects created
-```
-
-### Physics
-
-I prefer code correctness and simplicity over computational efficiency.
-
-For example, BodySystem allocates a lot of temporary objects.
-So this class could be used as example or as reference implementation for bug-fixing.
-Maybe for some specific case with a lot of objects, you will need your own implementation.
-
-### PGA
-
-I'm inspired by https://bivector.net/PGADYN.html
-I rewrote physics equations in PGA, it looks like PGA is a better way of describing physics.
-
-### Tests
+## Tests
 
 ```bash
 sbt test
@@ -120,7 +117,7 @@ multiplication associativity, zero and id elements, morphisms between quaternion
 angles.
 For physics, it's ok to check that total energy and impulse are constant in body systems without friction.
 
-### How to change this library and try changes locally in other project
+# How to change this library and try changes locally in other project
 
 Change lib code, publish to local ivy repo:
 

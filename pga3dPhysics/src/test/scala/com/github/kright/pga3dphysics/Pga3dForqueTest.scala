@@ -80,3 +80,12 @@ class Pga3dForqueTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(extractedTorque == t)
     assert(extractedCenter == center)
   }
+
+  test("forque of spring") {
+    val a = Pga3dPoint(0, 0, 0)
+    val b = Pga3dPoint(0, 0, 1)
+    val k = 7.7
+    assert(Pga3dForque.spring(a, b, k, springLength = 1.0) == Pga3dBivector(0, 0, 0, 0, 0, 0))
+    assert(Pga3dForque.spring(a, b, k, springLength = 0.5) == Pga3dForque.force(a, Pga3dVector(0, 0, 0.5 * k)))
+    assert(Pga3dForque.spring(a, b, k, springLength = 2.0) == Pga3dForque.force(a, Pga3dVector(0, 0, -1.0 * k)))
+  }
