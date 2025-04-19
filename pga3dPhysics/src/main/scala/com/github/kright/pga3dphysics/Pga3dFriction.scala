@@ -29,7 +29,7 @@ object Pga3dFriction:
     override def apply(velocity: Pga3dVector): Pga3dVector =
       Pga3dVector.zero
 
-    override def scale(m: Double): Pga3dFriction =
+    override def scale(m: Double): Zero.type =
       Zero
 
 
@@ -75,5 +75,5 @@ object Pga3dFriction:
         result
       }
 
-    override def scale(m: Double): Pga3dFriction =
+    override def scale(m: Double): Clamped =
       Clamped(friction.scale(m), maxForce * m)
