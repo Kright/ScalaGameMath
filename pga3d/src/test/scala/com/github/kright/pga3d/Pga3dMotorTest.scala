@@ -12,3 +12,19 @@ class Pga3dMotorTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert((mm - one).norm < 3e-15, s"mm = ${mm}")
     }
   }
+
+  test("motor to quaternion and translator") {
+    forAll(Pga3dGenerators.normalizedMotors, MinSuccessful(1000)) { motor =>
+      val (q, m) = motor.toQuaternionAndTranslator
+      val restored = q.geometric(m)
+      assert((restored - motor).norm < 1e-15)
+    }
+  }
+
+  test("motor to translator and quaternion") {
+    forAll(Pga3dGenerators.normalizedMotors, MinSuccessful(1000)) { motor =>
+      val (q, m) = motor.toTranslatorAndQuaternion
+      val restored = q.geometric(m)
+      assert((restored - motor).norm < 1e-15)
+    }
+  }

@@ -103,6 +103,20 @@ final case class Pga3dMotor(s: Double = 0.0,
       i = a * i - b * s,
     )
 
+  /** motor has to be normalized */
+  def toQuaternionAndTranslator: (Pga3dQuaternion, Pga3dTranslator) = {
+    val q = this.toQuaternionUnsafe
+    val t = q.reverse.geometric(this)
+    (q, t.toTranslatorUnsafe)
+  }
+
+  /** motor has to be normalized */
+  def toTranslatorAndQuaternion: (Pga3dTranslator, Pga3dQuaternion) = {
+    val q = this.toQuaternionUnsafe
+    val t = this.geometric(q.reverse)
+    (t.toTranslatorUnsafe, q)
+  }
+
   def bulkNormSquare: Double =
     (s * s + xy * xy + xz * xz + yz * yz)
 
