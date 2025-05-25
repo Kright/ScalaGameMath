@@ -59,3 +59,6 @@ object Pga3dMatrixForPoints:
       matrix(9) = -2.0 * (sMyz + xyMxz)
       matrix(10) = -(xzMxz + yzMyz - sMs - xyMxy)
       matrix(11) = -2.0 * (m.i * m.xy + m.s * m.wz - m.wx * m.xz - m.wy * m.yz)
+
+    def asArray: Array[Double] =
+      matrix
