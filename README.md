@@ -22,6 +22,8 @@ Library is under MIT license. Contributions are welcome, feel free to send a pul
 
 ## Getting started
 
+You can find examples in `examples` directory.
+
 I'm using jitpack [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath)
 
 You may add the whole library or specific modules.
@@ -38,8 +40,9 @@ Or for separate modules
 
 ```
 libraryDependencies += Seq(
-  "com.github.Kright.ScalaGameMath" %% "math" % "0.7.3",
-  "com.github.Kright.ScalaGameMath" %% "physics3d" % "0.7.3",
+  "com.github.Kright.ScalaGameMath" %% "pga3d" % "0.7.3",
+  "com.github.Kright.ScalaGameMath" %% "pga3dphysics" % "0.7.3",
+  "com.github.Kright.ScalaGameMath" %% "util" % "0.7.3",
 )
 ```
 
