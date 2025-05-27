@@ -6,7 +6,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "rotationDemo",
+    name := "precession",
     libraryDependencies += "com.badlogicgames.gdx" % "gdx" % "1.13.5",
     libraryDependencies += "com.badlogicgames.gdx" % "gdx-backend-lwjgl3" % "1.13.5",
     libraryDependencies += "com.badlogicgames.gdx" % "gdx-platform" % "1.13.5" classifier "natives-desktop",

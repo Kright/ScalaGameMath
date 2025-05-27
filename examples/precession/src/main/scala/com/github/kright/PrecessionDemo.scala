@@ -17,15 +17,15 @@ import scala.util.chaining.*
 
 
 @main
-def runLibgdxDemo(): Unit =
+def runPrecessionDemo(): Unit =
   val config = new Lwjgl3ApplicationConfiguration
   config.setForegroundFPS(60)
-  config.setTitle("RotationDemo")
+  config.setTitle("PrecessionDemo")
   config.setWindowedMode(800, 600)
-  new Lwjgl3Application(new RotationDemo, config)
+  new Lwjgl3Application(new PrecessionDemo, config)
 
 
-class RotationDemo extends ApplicationAdapter:
+class PrecessionDemo extends ApplicationAdapter:
   private val loader = new ObjLoader()
   private val wingNut = new WingNut()
 
