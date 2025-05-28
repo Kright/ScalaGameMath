@@ -23,14 +23,17 @@ object MathUtil:
     a * (1.0 - t) + b * t
 
   extension (d: Double)
+    /**
+     * @return value in range [lower, upper] or NaN if d is NaN
+     */
     def clamp(lower: Double, upper: Double): Double =
       if (d < lower) lower
       else if (d > upper) upper
       else d
 
     def sign: Double =
-      if (d > 0) 1.0
-      else if (d < 0) -1.0
+      if (d > 0.0) 1.0
+      else if (d < 0.0) -1.0
       else 0.0
 
     def square: Double =
