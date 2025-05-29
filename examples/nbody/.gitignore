@@ -1,0 +1,7 @@
+## Gradle:
+.gradle/
+gradle-app.setting
+/build/
+/core/build/
+/lwjgl3/build/
+
