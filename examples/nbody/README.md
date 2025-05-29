@@ -1,6 +1,22 @@
 # NBody
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+It's a demo with Kotlin and Java on JVM and GraalVM.
+
+I can't say that my Scala game math library is easy to use from Java or Kotlin, but it is possible.
+For an unknown reason, code completion in Kotlin doesn't work with my Scala classes, but the code compiles well.
+
+To enable GraalVM you need to set `enableGraalNative=true` in gradle.properties
+
+To run the project:
+```
+./gradlew lwjgl3:run
+```
+
+Demo shows [N-body problem](https://en.wikipedia.org/wiki/N-body_problem).
+
+## Other info from project template
+
+Project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
 
