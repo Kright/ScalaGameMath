@@ -20,9 +20,12 @@ Library is under MIT license. Contributions are welcome, feel free to send a pul
 - [Tests](#tests)
 - [How to change this library and try changes locally in other project](#how-to-change-this-library-and-try-changes-locally-in-other-project)
 
-## Getting started
+## Examples:
 
-You can find examples in `examples` directory.
+1. [examples/precession](examples/precession/README.md): Scala + sbt, simulate body precession
+2. [examples/nbody](examples/nbody/README.md): Gradle + Kotlin + Java on JVM and GraalVM, simulation of N-bodies in space.
+
+### Getting started
 
 I'm using jitpack [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath)
 

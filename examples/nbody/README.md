@@ -3,7 +3,7 @@
 It's a demo with Kotlin and Java on JVM and GraalVM.
 
 I can't say that my Scala game math library is easy to use from Java or Kotlin, but it is possible.
-For an unknown reason, code completion in Kotlin doesn't work with my Scala classes, but the code compiles well.
+For an unknown reason, code completion in Kotlin in IDEA doesn't work with my Scala classes, but the code compiles well.
 
 To enable GraalVM you need to set `enableGraalNative=true` in gradle.properties
 
