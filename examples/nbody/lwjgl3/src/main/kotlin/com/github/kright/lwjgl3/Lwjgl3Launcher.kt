@@ -15,6 +15,6 @@ fun main() {
         setTitle("NBody")
         useVsync(true)
         setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1)
-        setWindowedMode(800, 600)
+        setWindowedMode(800, 800)
     })
 }
