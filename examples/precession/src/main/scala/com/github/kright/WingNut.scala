@@ -19,7 +19,7 @@ class WingNut:
     system.state(0).motor.toQuaternionUnsafe
 
   def setToMatrix(m: Matrix4): Unit =
-    val array = Pga3dMatrixForPoints(rotation.toMotor).asInstanceOf[Array[Double]]
+    val array = Pga3dMatrixForPoints(rotation.toMotor).asArray
 
     m.idt()
     for (i <- 0 until 12) {
