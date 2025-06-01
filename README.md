@@ -24,6 +24,7 @@ Library is under MIT license. Contributions are welcome, feel free to send a pul
 
 1. [examples/precession](examples/precession/README.md): Scala + sbt, simulate body precession
 2. [examples/nbody](examples/nbody/README.md): Gradle + Kotlin + Java on JVM and GraalVM, simulation of N-bodies in space.
+3. [examples/indigodemo](examples/indigodemo/README.md): Indigo game engine with scala js.
 
 ### Getting started
 
