@@ -30,7 +30,7 @@ lazy val root = (project in file("."))
     ga,
     matrix,
     pga3d,
-    pga3dPhysics,
+    pga3dphysics,
   )
 
 lazy val util = (project in file("util"))
@@ -85,7 +85,7 @@ lazy val pga3d = (project in file("pga3d"))
     vector % "test->test",
   )
 
-lazy val pga3dPhysics = (project in file("pga3dPhysics"))
+lazy val pga3dphysics = (project in file("pga3dphysics"))
   .settings(scalatestSettings *)
   .dependsOn(
     pga3d % "compile->compile;test->test",
