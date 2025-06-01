@@ -13,3 +13,6 @@ class Pga3dPhysicsSystem(val state: Array[Pga3dPhysicsBody],
 
   def doStep(dt: Double, addForquesToBodies: Double => Unit): Unit =
     solver.step(state, dt, addForquesToBodies)
+
+  def withStateDeepCopy: Pga3dPhysicsSystem =
+    Pga3dPhysicsSystem(state.map(_.deepCopy), solver)

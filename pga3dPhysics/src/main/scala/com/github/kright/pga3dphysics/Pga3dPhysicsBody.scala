@@ -11,7 +11,7 @@ class Pga3dPhysicsBody(var inertia: Pga3dInertia,
 
   private val globalForqueAccumulator = Pga3dBivectorMutable()
 
-  def deepCopy(): Pga3dPhysicsBody =
+  def deepCopy: Pga3dPhysicsBody =
     Pga3dPhysicsBody(inertia, motor, localB).tap { b =>
       b.globalForqueAccumulator := globalForqueAccumulator
     }
