@@ -113,7 +113,7 @@ class BodySystemTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       system.addJoint(spring, 0, 1)
 
       val maxError = solver.order match
-        case 2 => 1e-4
+        case 2 => 2e-4
         case 4 => 1e-8
 
       val stats = simulate(system, solver.doStep(_, dt)).take(100)

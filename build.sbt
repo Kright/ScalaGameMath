@@ -92,7 +92,6 @@ lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(
     matrix,
     util % "test",
-    vector % "test->test",
   )
 
 lazy val pga3dphysics = crossProject(JSPlatform, JVMPlatform)
@@ -102,6 +101,5 @@ lazy val pga3dphysics = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(
     pga3d % "compile->compile;test->test",
     matrix,
-    vector % "test->test",
     solvers % "test",
   )

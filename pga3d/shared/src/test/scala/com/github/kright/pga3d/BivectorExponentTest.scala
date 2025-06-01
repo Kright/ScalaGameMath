@@ -1,6 +1,5 @@
 package com.github.kright.pga3d
 
-import com.github.kright.math.VectorMathGenerators
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -14,7 +13,7 @@ class BivectorExponentTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks
   }
 
   test("exp for full with t") {
-    forAll(Pga3dGenerators.bivectors, VectorMathGenerators.double1) { (bivector, t) =>
+    forAll(Pga3dGenerators.bivectors, Pga3dGenerators.double1) { (bivector, t) =>
       assert(((bivector * t).exp() - bivector.exp(t)).norm < 1e-15)
       assert(((bivector.bulk * t).exp() - bivector.bulk.exp(t)).norm < 1e-15)
       assert(((bivector.weight * t).exp() - bivector.weight.exp(t)).norm < 1e-15)

@@ -1,14 +1,16 @@
 package com.github.kright.pga3d
 
-import com.github.kright.math.{FlatSerializer, VectorMathGenerators}
+import com.github.kright.math.FlatSerializer
 import com.github.kright.matrix.Matrix
 import org.scalacheck.Gen
 
 object Pga3dGenerators:
   private def makeGenT[T](elemsCount: Int, factory: (Array[Double], Int) => T): Gen[T] =
-    Gen.containerOfN[Array, Double](elemsCount, VectorMathGenerators.double1)
+    Gen.containerOfN[Array, Double](elemsCount, double1)
       .map(arr => factory(arr, 0))
 
+  val double1: Gen[Double] = Gen.double.map(_ * 2.0 - 1.0)
+  
   val bivectorProbes: Seq[Pga3dBivector] = Seq(
     Pga3dBivector(1, 0, 0, 0, 0, 0),
     Pga3dBivector(0, 1, 0, 0, 0, 0),
@@ -94,4 +96,4 @@ object Pga3dGenerators:
     makeGenT(8, FlatSerializer.read[Pga3dMotor])
 
   def matrices(h: Int, w: Int): Gen[Matrix] =
-    Gen.containerOfN[Array, Double](h * w, VectorMathGenerators.double1).map(arr => Matrix.fromValues(h, w)(arr *))
+    Gen.containerOfN[Array, Double](h * w, double1).map(arr => Matrix.fromValues(h, w)(arr *))
