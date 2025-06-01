@@ -174,15 +174,13 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
 
     val initialEnergy = getEnergy()
 
-    for (step <- 1 to stepsCount) {
-      val t = step * dt
-
+    for (_ <- 1 to stepsCount) {
       system.doStep(dt, _ => {
         val globalForque = (system.state.head.globalCenter v springCenter) * springK
         system.state.head.addGlobalForque(globalForque)
       })
 
-      val expectedPos = springCenter - (springCenter.weight * Math.cos(t * Math.sqrt(springK / mass))).toTrivector
+      val expectedPos = springCenter - (springCenter.weight * Math.cos(system.time * Math.sqrt(springK / mass))).toTrivector
 
       val dE = math.abs(initialEnergy - getEnergy()) / initialEnergy
       val dPos = (expectedPos - system.state.head.globalCenter).norm
