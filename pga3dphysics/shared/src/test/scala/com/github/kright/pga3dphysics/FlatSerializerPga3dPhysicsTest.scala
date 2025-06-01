@@ -1,8 +1,7 @@
 package com.github.kright.pga3dphysics
 
 import com.github.kright.math.FlatSerializer
-import com.github.kright.pga3d.{Pga3dBivector, Pga3dBivectorBulk, Pga3dBivectorWeight, Pga3dGenerators, Pga3dPlane, Pga3dPlaneIdeal, Pga3dPoint, Pga3dQuaternion, Pga3dTranslator, Pga3dTrivector, Pga3dVector}
-import com.github.kright.pga3d.FlatSerializerPga3dTest
+import com.github.kright.pga3d.*
 import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
