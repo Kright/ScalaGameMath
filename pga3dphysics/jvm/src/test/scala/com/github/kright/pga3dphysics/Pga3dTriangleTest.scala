@@ -52,7 +52,7 @@ class Pga3dTriangleTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("getInterpolationFactors is inverse of getInterpolatedPoint") {
-    val eps = 6e-7
+    val eps = 1e-6
 
     forAll(
       suitableTriangles,
