@@ -124,8 +124,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix2d().setIdentity()
 
-        assert(id === (m * inverted))
-        assert(id === (inverted * m))
+        assert(id === (m * inverted), s"diff = ${(id - (m * inverted))}")
+        assert(id === (inverted * m), s"diff = ${(id - (inverted * m))}")
       }
     }
 
