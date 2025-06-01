@@ -1,0 +1,30 @@
+# Mill
+out
+
+# sbt
+sbt
+.sbt-local
+target
+lib_managed
+src_managed
+
+# IDE
+.idea
+*.iml
+.vscode
+metals.sbt
+.bsp
+.bloop
+.metals
+
+# Direnv
+.envrc
+.direnv
+
+# Misc
+.DS_Store
+.cache
+.history
+.lib
+dist
+node_modules
