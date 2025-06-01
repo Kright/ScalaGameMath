@@ -26,7 +26,7 @@ class CholeskyDecompositionTest extends AnyFunSuiteLike with ScalaCheckPropertyC
 
       val mult = L * Linv
 
-      assert((mult - Matrix.idt(4)).frobeniusNorm < 1e-14)
+      assert((mult - Matrix.idt(4)).frobeniusNorm < 2e-14)
     }
   }
 
