@@ -1,6 +1,5 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.math.VectorMathGenerators
 import com.github.kright.pga3d.{Pga3dBivector, Pga3dPoint, Pga3dVector}
 import com.github.kright.pga3dphysics.Pga3dFriction.Clamped
 import org.scalacheck.Gen
@@ -14,11 +13,11 @@ class Pga3dFrictionTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   private val velocities = Pga3dPhysicsGenerators.vectorIn(bounds)
 
   private val linearFriction: Gen[Pga3dFriction.Linear] =
-    for (k <- VectorMathGenerators.doubleInRange(0.0, 1e6))
+    for (k <- Pga3dVectorMathGenerators.doubleInRange(0.0, 1e6))
       yield Pga3dFriction.Linear(k)
 
   private val quadraticFriction: Gen[Pga3dFriction.Quadratic] =
-    for (k <- VectorMathGenerators.doubleInRange(0.0, 1e4))
+    for (k <- Pga3dVectorMathGenerators.doubleInRange(0.0, 1e4))
       yield Pga3dFriction.Quadratic(k)
 
   private val zeroFriction: Gen[Pga3dFriction] =
@@ -40,7 +39,7 @@ class Pga3dFrictionTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private val clampedFrictions: Gen[Pga3dFriction] =
     for (f <- nonClampedFrictions;
-         max <- VectorMathGenerators.doubleInRange(0, 1e6))
+         max <- Pga3dVectorMathGenerators.doubleInRange(0, 1e6))
     yield Clamped(f, max)
 
 

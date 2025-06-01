@@ -1,6 +1,5 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.math.VectorMathGenerators
 import com.github.kright.pga3d.Pga3dPoint
 import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuiteLike
@@ -57,8 +56,8 @@ class Pga3dTriangleTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     forAll(
       suitableTriangles,
-      Gen.oneOf(VectorMathGenerators.doubleInRange(0.0, 1.0), VectorMathGenerators.doubleInRange(-100, 100.0)),
-      Gen.oneOf(VectorMathGenerators.doubleInRange(0.0, 1.0), VectorMathGenerators.doubleInRange(-100, 100.0)),
+      Gen.oneOf(Pga3dVectorMathGenerators.doubleInRange(0.0, 1.0), Pga3dVectorMathGenerators.doubleInRange(-100, 100.0)),
+      Gen.oneOf(Pga3dVectorMathGenerators.doubleInRange(0.0, 1.0), Pga3dVectorMathGenerators.doubleInRange(-100, 100.0)),
       MinSuccessful(1000)
     ) { (triangle, tba, tca) =>
       val p = triangle.getInterpolatedPoint(tba, tca)

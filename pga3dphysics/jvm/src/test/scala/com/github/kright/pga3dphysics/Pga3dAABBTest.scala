@@ -1,6 +1,5 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.math.VectorMathGenerators
 import com.github.kright.pga3d.{Pga3dPoint, Pga3dTranslator, Pga3dVector}
 import org.scalacheck.Gen
 import org.scalatest.funsuite.AnyFunSuiteLike
@@ -136,7 +135,7 @@ class Pga3dAABBTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("expand increases the size by the specified amount in all directions") {
-    forAll(Pga3dPhysicsGenerators.aabbIn(bounds), VectorMathGenerators.doubleInRange(0.1, 10.0), MinSuccessful(1000)) { (aabb, amount) =>
+    forAll(Pga3dPhysicsGenerators.aabbIn(bounds), Pga3dVectorMathGenerators.doubleInRange(0.1, 10.0), MinSuccessful(1000)) { (aabb, amount) =>
       val expanded = aabb.expand(amount)
 
       // Check that the expanded AABB is larger by the expected amount
@@ -194,9 +193,9 @@ class Pga3dAABBTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   test("translator sandwich transforms AABB correctly") {
     val translatorGen = for {
-      x <- VectorMathGenerators.doubleInRange(-10, 10)
-      y <- VectorMathGenerators.doubleInRange(-10, 10)
-      z <- VectorMathGenerators.doubleInRange(-10, 10)
+      x <- Pga3dVectorMathGenerators.doubleInRange(-10, 10)
+      y <- Pga3dVectorMathGenerators.doubleInRange(-10, 10)
+      z <- Pga3dVectorMathGenerators.doubleInRange(-10, 10)
     } yield Pga3dTranslator(x, y, z)
 
     forAll(Pga3dPhysicsGenerators.aabbIn(bounds), translatorGen, MinSuccessful(1000)) { (aabb, translator) =>

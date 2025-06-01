@@ -1,6 +1,5 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.math.VectorMathGenerators
 import com.github.kright.pga3d.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
@@ -11,8 +10,8 @@ class Pga3dInertiaSimpleTest extends AnyFunSuiteLike with ScalaCheckPropertyChec
     given doubleEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(1e-13)
 
     forAll(
-      VectorMathGenerators.doubleInRange(0.1, 10.0),
-      VectorMathGenerators.doubleInRange(0.1, 10.0), MinSuccessful(1000)) { (mass, r) =>
+      Pga3dVectorMathGenerators.doubleInRange(0.1, 10.0),
+      Pga3dVectorMathGenerators.doubleInRange(0.1, 10.0), MinSuccessful(1000)) { (mass, r) =>
 
       val simpleInertia = Pga3dInertiaSimple.cube(mass, r)
       val localInertia = Pga3dInertiaLocal.cube(mass, r, r, r)

@@ -96,7 +96,7 @@ lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
 
 lazy val pga3dphysics = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
-  .in(file("pga3dPhysics"))
+  .in(file("pga3dphysics"))
   .settings(scalatestSettings *)
   .dependsOn(
     pga3d % "compile->compile;test->test",
