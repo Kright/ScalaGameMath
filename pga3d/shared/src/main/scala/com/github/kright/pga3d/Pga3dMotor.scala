@@ -300,6 +300,15 @@ final case class Pga3dMotor(s: Double = 0.0,
       wz = wz,
     )
 
+  def axisX: Pga3dVector =
+    toQuaternionUnsafe.axisX
+
+  def axisY: Pga3dVector =
+    toQuaternionUnsafe.axisY
+
+  def axisZ: Pga3dVector =
+    toQuaternionUnsafe.axisZ
+
   infix def geometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),

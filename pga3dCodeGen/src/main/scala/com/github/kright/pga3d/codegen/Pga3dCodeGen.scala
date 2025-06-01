@@ -7,7 +7,7 @@ import java.io.File
 
 @main
 def main(): Unit = {
-  val packageDir = new File("pga3d/src/main/scala/com/github/kright/pga3d")
+  val packageDir = new File("pga3d/shared/src/main/scala/com/github/kright/pga3d")
   assert(packageDir.exists())
 
   for (cls <- pgaClasses if cls.shouldBeGenerated) {

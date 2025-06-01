@@ -485,6 +485,7 @@ object MultivectorSubClass:
     DefBivectorSplit(),
     DefConvertTo(),
     DefProjection(),
+    DefMotorAndQuaternionAxices(),
   )
 
   val binaryOperations = Seq(

@@ -1,11 +1,12 @@
 package com.github.kright.pga3d
 
 import org.scalatest.funsuite.AnyFunSuiteLike
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class QuaternionTest extends AnyFunSuiteLike:
+class QuaternionTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("rotation is same vectors") {
     val from = Pga3dVector(1, 2, 3).normalizedByNorm
     val to = Pga3dVector(3, 4, 5).normalizedByNorm
@@ -48,5 +49,20 @@ class QuaternionTest extends AnyFunSuiteLike:
 
       require(errors.max < 2e-8)
       // println(s"${if (isNormalizedInput) "normalized" else "non normalized"} angle = ${if (isNearPi) "Pi - " else ""}${angle}, errors max ${errors.max}, average ${errors.sum / errors.size}")
+    }
+  }
+
+  test("axisX is equal to sandwich(axisX)") {
+    val eps = 1e-15
+    forAll(Pga3dGenerators.quaternions, MinSuccessful(100)) { q =>
+      assert((q.axisX - q.sandwich(Pga3dVector(1, 0, 0))).norm < eps)
+      assert((q.axisY - q.sandwich(Pga3dVector(0, 1, 0))).norm < eps)
+      assert((q.axisZ - q.sandwich(Pga3dVector(0, 0, 1))).norm < eps)
+    }
+
+    forAll(Pga3dGenerators.anyMotors, MinSuccessful(100)) { m =>
+      assert((m.axisX - m.sandwich(Pga3dVector(1, 0, 0))).norm < eps)
+      assert((m.axisY - m.sandwich(Pga3dVector(0, 1, 0))).norm < eps)
+      assert((m.axisZ - m.sandwich(Pga3dVector(0, 0, 1))).norm < eps)
     }
   }

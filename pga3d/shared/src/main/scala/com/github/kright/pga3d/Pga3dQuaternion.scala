@@ -186,6 +186,27 @@ final case class Pga3dQuaternion(s: Double = 0.0,
       yz = yz,
     )
 
+  def axisX: Pga3dVector =
+    Pga3dVector(
+      x = (s * s + yz * yz - xy * xy - xz * xz),
+      y = 2.0 * (-s * xy - xz * yz),
+      z = (-2.0 * s * xz + 2.0 * xy * yz),
+    )
+
+  def axisY: Pga3dVector =
+    Pga3dVector(
+      x = (-2.0 * xz * yz + 2.0 * s * xy),
+      y = (s * s + xz * xz - xy * xy - yz * yz),
+      z = (-2.0 * s * yz - 2.0 * xy * xz),
+    )
+
+  def axisZ: Pga3dVector =
+    Pga3dVector(
+      x = (2.0 * s * xz + 2.0 * xy * yz),
+      y = 2.0 * (s * yz - xy * xz),
+      z = (s * s + xy * xy - xz * xz - yz * yz),
+    )
+
   infix def geometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
       s = (s * v.s - v.xy * xy - v.xz * xz - v.yz * yz),
