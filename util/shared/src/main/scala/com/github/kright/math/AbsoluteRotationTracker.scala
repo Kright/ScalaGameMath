@@ -49,6 +49,9 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
       rotations += 1.0
     }
 
+  def deepCopy: AbsoluteRotationTracker =
+    AbsoluteRotationTracker(rotations, rotationsOffset)
+
 
 object AbsoluteRotationTracker:
   inline val tau = math.Pi * 2
