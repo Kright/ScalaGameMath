@@ -17,13 +17,13 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
   /**
    * @return angle in radians
    */
-  def absolute: Double =
+  def angle: Double =
     toRadians(rotations + rotationsOffset)
 
   /**
    * resets rotations and rotationsOffset, so the absolute becomes equal newAbsoluteInRadians
    */
-  def absolute_=(newAbsoluteInRadians: Double): Unit =
+  def angle_=(newAbsoluteInRadians: Double): Unit =
     setNewOffset(toRotations(newAbsoluteInRadians) - rotations)
 
   private def setNewOffset(newOffset: Double): Unit = {

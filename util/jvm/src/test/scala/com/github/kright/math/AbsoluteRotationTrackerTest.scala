@@ -14,7 +14,7 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
 
     for (angle <- angles) {
       tracker.update(angle)
-      assert(Math.abs(angle - tracker.absolute) < epsilon)
+      assert(Math.abs(angle - tracker.angle) < epsilon)
       assert(tracker.rotationsOffset < 2 * Math.PI * epsilon && tracker.rotationsOffset >= 0.0)
     }
   }
@@ -23,16 +23,16 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     val eps = 1e-15
     val tracker = AbsoluteRotationTracker(0.234, 0.134)
     tracker.update(1.23)
-    tracker.absolute = 0.0
+    tracker.angle = 0.0
 
-    tracker.absolute += 2.0
-    assert(Math.abs(tracker.absolute - 2.0) < eps)
+    tracker.angle += 2.0
+    assert(Math.abs(tracker.angle - 2.0) < eps)
 
-    tracker.absolute += 3.0
-    assert(Math.abs(tracker.absolute - 5.0) < eps)
+    tracker.angle += 3.0
+    assert(Math.abs(tracker.angle - 5.0) < eps)
 
-    tracker.absolute -= 7.0
-    assert(Math.abs(tracker.absolute + 2.0) < eps)
+    tracker.angle -= 7.0
+    assert(Math.abs(tracker.angle + 2.0) < eps)
   }
 
   test("test angle increasing and resetting") {
@@ -42,9 +42,9 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
 
     for (angle <- angles) {
       tracker.update(angle)
-      assert(Math.abs(tracker.absolute - Math.PI * 2 / 10.0) < epsilon)
-      tracker.absolute = 0.0
-      assert(Math.abs(tracker.absolute) < epsilon)
+      assert(Math.abs(tracker.angle - Math.PI * 2 / 10.0) < epsilon)
+      tracker.angle = 0.0
+      assert(Math.abs(tracker.angle) < epsilon)
       assert(tracker.rotationsOffset <= 1.0 + epsilon)
       assert(tracker.rotationsOffset >= 0.0 - epsilon)
     }
@@ -54,13 +54,13 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     val tracker = new AbsoluteRotationTracker()
 
     tracker.update(math.Pi / 4) // 45 degrees
-    assert(math.abs(tracker.absolute - math.Pi / 4) < epsilon)
+    assert(math.abs(tracker.angle - math.Pi / 4) < epsilon)
 
     tracker.update(math.Pi / 2) // 90 degrees
-    assert(math.abs(tracker.absolute - math.Pi / 2) < epsilon)
+    assert(math.abs(tracker.angle - math.Pi / 2) < epsilon)
 
     tracker.update(math.Pi / 4) // Back to 45 degrees
-    assert(math.abs(tracker.absolute - math.Pi / 4) < epsilon)
+    assert(math.abs(tracker.angle - math.Pi / 4) < epsilon)
   }
 
   test("update crossing zero boundary") {
@@ -68,22 +68,22 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
 
     // Start at slightly negative
     tracker.update(-0.1)
-    assert(math.abs(tracker.absolute - (-0.1)) < epsilon)
+    assert(math.abs(tracker.angle - (-0.1)) < epsilon)
 
     // Cross to positive
     tracker.update(0.1)
-    assert(math.abs(tracker.absolute - 0.1) < epsilon)
+    assert(math.abs(tracker.angle - 0.1) < epsilon)
 
     // Cross back to negative
     tracker.update(-0.1)
-    assert(math.abs(tracker.absolute - (-0.1)) < epsilon)
+    assert(math.abs(tracker.angle - (-0.1)) < epsilon)
   }
 
   test("update with full rotation") {
     val tracker = new AbsoluteRotationTracker()
 
     // Start at 0
-    assert(tracker.absolute == 0.0)
+    assert(tracker.angle == 0.0)
 
     // Update with small increments to complete a full rotation
     val steps = 8
@@ -95,5 +95,5 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     // Should be back at 0 but with 1 rotation
     assert(math.abs(tracker.rotations + 1.0) < epsilon)
     assert(math.abs(tracker.rotationsOffset) < epsilon)
-    assert(math.abs(tracker.absolute + tau) < epsilon)
+    assert(math.abs(tracker.angle + tau) < epsilon)
   }
