@@ -66,3 +66,27 @@ class QuaternionTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert((m.axisZ - m.sandwich(Pga3dVector(0, 0, 1))).norm < eps)
     }
   }
+
+  test("rotation along axis for zero rotation is zero") {
+    assert(Pga3dQuaternion.id.restoreRotationInPlane(Pga3dPlaneIdeal(1, 1, 1)) == 0.0)
+    assert(Pga3dQuaternion.id.restoreRotationInPlaneX == 0.0)
+    assert(Pga3dQuaternion.id.restoreRotationInPlaneY == 0.0)
+    assert(Pga3dQuaternion.id.restoreRotationInPlaneZ == 0.0)
+  }
+
+  test("rotation in X") {
+    val q = Pga3dQuaternion.rotation(Pga3dVector(0, 0, 1), Pga3dVector(0, 1, 0))
+    assert(q.restoreRotationInPlane(Pga3dPlaneIdeal(1, 0, 0)) == 1.5707963267948963)
+    assert(q.restoreRotationInPlane(Pga3dPlaneIdeal(-1, 0, 0)) == -1.5707963267948963)
+    assert(q.restoreRotationInPlaneX == 1.5707963267948963)
+  }
+
+  test("restore rotation with orthogonal err") {
+    val err = Pga3dQuaternion.rotation(Pga3dVector(1, 0, 0), Pga3dVector(0, 1, 0)).log().exp(0.1)
+    val q = Pga3dQuaternion.rotation(Pga3dVector(0, 0, 1), Pga3dVector(0, 1, 0))
+
+    val expected = 1.5707963267948963
+    assert(q.restoreRotationInPlaneX == expected)
+    assert((err geometric q).restoreRotationInPlaneX == expected)
+    assert((q geometric err).restoreRotationInPlaneX == expected)
+  }

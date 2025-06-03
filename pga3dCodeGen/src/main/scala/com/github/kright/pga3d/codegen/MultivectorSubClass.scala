@@ -486,6 +486,7 @@ object MultivectorSubClass:
     DefConvertTo(),
     DefProjection(),
     DefMotorAndQuaternionAxices(),
+    DefQuaternionProjectToRotationInPlane(),
   )
 
   val binaryOperations = Seq(
