@@ -26,6 +26,9 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
   def resetAbsolute(newAbsoluteInRadians: Double): Unit =
     setNewOffset(toRotations(newAbsoluteInRadians) - rotations)
 
+  def shiftAbsolute(absoluteShiftInRadians: Double): Unit =
+    setNewOffset(absolute + absoluteShiftInRadians)
+
   private def setNewOffset(newOffset: Double): Unit = {
     val floor = newOffset.floor
     rotationsOffset = newOffset - floor
