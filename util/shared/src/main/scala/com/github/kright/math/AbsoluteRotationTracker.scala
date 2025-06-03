@@ -21,13 +21,10 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
     toRadians(rotations + rotationsOffset)
 
   /**
-   * resets rotations and rotationsOffset, so absolute becomes equal newAbsoluteInRadians
+   * resets rotations and rotationsOffset, so the absolute becomes equal newAbsoluteInRadians
    */
-  def resetAbsolute(newAbsoluteInRadians: Double): Unit =
+  def absolute_=(newAbsoluteInRadians: Double): Unit =
     setNewOffset(toRotations(newAbsoluteInRadians) - rotations)
-
-  def shiftAbsolute(absoluteShiftInRadians: Double): Unit =
-    setNewOffset(absolute + absoluteShiftInRadians)
 
   private def setNewOffset(newOffset: Double): Unit = {
     val floor = newOffset.floor
@@ -57,7 +54,7 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
 
 
 object AbsoluteRotationTracker:
-  inline val tau = math.Pi * 2
+  inline val tau = math.Pi * 2.0
   inline val tauDiv = 1.0 / tau
 
   def toRotations(angleInRadians: Double): Double =

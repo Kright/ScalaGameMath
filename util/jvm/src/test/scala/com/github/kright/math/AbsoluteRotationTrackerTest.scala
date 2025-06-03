@@ -19,6 +19,22 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     }
   }
 
+  test("shift") {
+    val eps = 1e-15
+    val tracker = AbsoluteRotationTracker(0.234, 0.134)
+    tracker.update(1.23)
+    tracker.absolute = 0.0
+
+    tracker.absolute += 2.0
+    assert(Math.abs(tracker.absolute - 2.0) < eps)
+
+    tracker.absolute += 3.0
+    assert(Math.abs(tracker.absolute - 5.0) < eps)
+
+    tracker.absolute -= 7.0
+    assert(Math.abs(tracker.absolute + 2.0) < eps)
+  }
+
   test("test angle increasing and resetting") {
     val angles = (1 to 20).map(i => Math.PI * 2 * i / 10.0)
 
@@ -27,7 +43,7 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     for (angle <- angles) {
       tracker.update(angle)
       assert(Math.abs(tracker.absolute - Math.PI * 2 / 10.0) < epsilon)
-      tracker.resetAbsolute(0.0)
+      tracker.absolute = 0.0
       assert(Math.abs(tracker.absolute) < epsilon)
       assert(tracker.rotationsOffset <= 1.0 + epsilon)
       assert(tracker.rotationsOffset >= 0.0 - epsilon)
