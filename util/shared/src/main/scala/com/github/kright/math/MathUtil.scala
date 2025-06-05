@@ -1,6 +1,10 @@
 package com.github.kright.math
 
 object MathUtil:
+  inline val Pi = math.Pi
+  inline val Tau = 2.0 * Pi
+  inline val TauDiv = 1.0 / Tau
+
   def isEquals(arr1: Array[Double], arr2: Array[Double], eps: Double): Boolean =
     for (i <- FastRange(arr1.length)) {
       if (math.abs(arr1(i) - arr2(i)) > eps) return false

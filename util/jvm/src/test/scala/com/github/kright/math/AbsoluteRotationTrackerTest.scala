@@ -88,12 +88,12 @@ class AbsoluteRotationTrackerTest extends AnyFunSuite with ScalaCheckPropertyChe
     // Update with small increments to complete a full rotation
     val steps = 8
     for (i <- 1 to steps) {
-      val angle = -i * (tau / steps)
+      val angle = -i * (MathUtil.Tau / steps)
       tracker.update(angle)
     }
 
     // Should be back at 0 but with 1 rotation
     assert(math.abs(tracker.rotations + 1.0) < epsilon)
     assert(math.abs(tracker.rotationsOffset) < epsilon)
-    assert(math.abs(tracker.angle + tau) < epsilon)
+    assert(math.abs(tracker.angle + MathUtil.Tau) < epsilon)
   }

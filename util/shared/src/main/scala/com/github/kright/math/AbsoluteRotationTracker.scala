@@ -36,7 +36,7 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
    * newAngleInRadians could have any value and will be wrapped into an interval of length 2 * PI
    */
   def update(newAngleInRadians: Double): Unit =
-    val wrappedNewAngle = getWrapped(newAngleInRadians * tauDiv)
+    val wrappedNewAngle = getWrapped(toRotations(newAngleInRadians))
     val wrappedOldAngle = getWrapped(rotations)
 
     // diff is in [-1, 1]
@@ -54,14 +54,11 @@ class AbsoluteRotationTracker(var rotations: Double = 0.0,
 
 
 object AbsoluteRotationTracker:
-  inline val tau = math.Pi * 2.0
-  inline val tauDiv = 1.0 / tau
-
   def toRotations(angleInRadians: Double): Double =
-    angleInRadians * tauDiv
+    angleInRadians * MathUtil.TauDiv
 
   def toRadians(angleInRotations: Double): Double =
-    angleInRotations * tau
+    angleInRotations * MathUtil.Tau
 
   /**
    * @return wrapped angle in interval [0, 1)
