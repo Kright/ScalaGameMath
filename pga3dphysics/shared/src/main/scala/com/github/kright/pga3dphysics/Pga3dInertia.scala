@@ -41,19 +41,40 @@ trait Pga3dInertia:
  * class with useful constructor methods for base classes
  */
 object Pga3dInertia:
-  def cube(mass: Double, r: Double) = Pga3dInertiaSimple.cube(mass, r)
+  def rod(length: Double): Double =
+    length * length / 3.0
 
-  def sphere(mass: Double, r: Double) = Pga3dInertiaSimple.sphere(mass, r)
+  def disk(r: Double, innerR: Double = 0.0): Double =
+    0.5 * (r * r + innerR * innerR)
 
-  def solidSphere(mass: Double, r: Double) = Pga3dInertiaSimple.solidSphere(mass, r)
+  def cube(mass: Double, r: Double): Pga3dInertiaSimple =
+    Pga3dInertiaSimple.cube(mass, r)
 
-  def cube(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.cube(mass, rx, ry, rz)
+  def sphere(mass: Double, r: Double): Pga3dInertiaSimple =
+    Pga3dInertiaSimple.sphere(mass, r)
 
-  def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double) = Pga3dInertiaLocal.solidEllipsoid(mass, rx, ry, rz)
+  def solidSphere(mass: Double, r: Double): Pga3dInertiaSimple =
+    Pga3dInertiaSimple.solidSphere(mass, r)
 
-  def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal) = Pga3dInertiaMovedLocal(motor, inertia)
+  def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
+    Pga3dInertiaLocal.cube(mass, rx, ry, rz)
 
-  def movedSimple(translator: Pga3dTranslator, inertia: Pga3dInertiaSimple) = Pga3dInertiaMovedSimple(translator, inertia)
+  def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
+    Pga3dInertiaLocal.solidEllipsoid(mass, rx, ry, rz)
+
+  def cylinderX(mass: Double, width: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal =
+    Pga3dInertiaLocal.cylinderX(mass, width, r, innerR)
+
+  def fromXXYYZZ(mass: Double, xx: Double, yy: Double, zz: Double): Pga3dInertiaLocal =
+    Pga3dInertiaLocal.fromXXYYZZ(mass, xx, yy, zz)
+
+
+  def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal): Pga3dInertiaMovedLocal =
+    Pga3dInertiaMovedLocal(motor, inertia)
+
+  def movedSimple(translator: Pga3dTranslator, inertia: Pga3dInertiaSimple) =
+    Pga3dInertiaMovedSimple(translator, inertia)
+
 
   /** transparent inline allows narrower return types */
   extension (motor: Pga3dMotor)

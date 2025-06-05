@@ -2,8 +2,6 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.*
 
-import scala.annotation.targetName
-
 final case class Pga3dInertiaLocal(mass: Double,
                                    mryz: Double,
                                    mrxz: Double,
@@ -112,4 +110,18 @@ object Pga3dInertiaLocal:
       mryz = (ry2 + rz2) * mass * (1.0 / 5.0),
       mrxz = (rx2 + rz2) * mass * (1.0 / 5.0),
       mrxy = (rx2 + ry2) * mass * (1.0 / 5.0),
-    )  
+    )
+
+  def fromXXYYZZ(mass: Double, xx: Double, yy: Double, zz: Double): Pga3dInertiaLocal =
+    Pga3dInertiaLocal(
+      mass,
+      mryz = mass * (yy + zz),
+      mrxz = mass * (xx + zz),
+      mrxy = mass * (xx + yy),
+    )
+
+  def cylinderX(mass: Double, width: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal = {
+    val xx = Pga3dInertia.disk(r, innerR)
+    val yy = Pga3dInertia.rod(width) + 0.5 * xx
+    fromXXYYZZ(mass, xx, yy, yy)
+  }

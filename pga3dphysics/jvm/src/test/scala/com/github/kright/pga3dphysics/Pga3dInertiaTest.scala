@@ -322,3 +322,65 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       assert((s1 - s2).norm < eps)
     }
   }
+
+  test("inertia for disk") {
+    val eps = 1e-15
+
+    val disk = Pga3dInertia.cylinderX(mass = 1.0, width = 0.0, r = 1.0)
+
+    assert(Math.abs(disk.toSummable.xx - 0.5) < eps)
+    assert(Math.abs(disk.toSummable.yy - 0.25) < eps)
+    assert(Math.abs(disk.toSummable.yy - 0.25) < eps)
+  }
+
+  test("inertia for circle disk") {
+    val eps = 1e-15
+
+    val circle = Pga3dInertia.cylinderX(mass = 1.0, width = 0.0, r = 1.0, innerR = 1.0)
+
+    assert(Math.abs(circle.toSummable.xx - 1.0) < eps)
+    assert(Math.abs(circle.toSummable.yy - 0.5) < eps)
+    assert(Math.abs(circle.toSummable.yy - 0.5) < eps)
+  }
+
+  test("inertia for rod") {
+    val eps = 1e-15
+
+    val circle = Pga3dInertia.cylinderX(mass = 3.0, width = 1.0, r = 0.0)
+
+    assert(Math.abs(circle.toSummable.xx - 0.0) < eps)
+    assert(Math.abs(circle.toSummable.yy - 1.0) < eps)
+    assert(Math.abs(circle.toSummable.yy - 1.0) < eps)
+  }
+
+  test("inertia for cylinder") {
+    val eps = 1e-15
+
+    val circle = Pga3dInertia.cylinderX(mass = 1.0, width = 1.0, r = 1.0)
+
+    assert(Math.abs(circle.toSummable.xx - 0.5) < eps)
+    assert(Math.abs(circle.toSummable.yy - (0.25 + 1.0 / 3.0)) < eps)
+    assert(Math.abs(circle.toSummable.yy - (0.25 + 1.0 / 3.0)) < eps)
+  }
+
+
+  test("test method fromXXYYZZ") {
+    val eps = 1e-15
+
+    val localInertiaGenerator = for {
+      mass <- Pga3dVectorMathGenerators.double01.map(_ + 0.1)
+      rx <- Pga3dVectorMathGenerators.double01.map(_ + 0.1)
+      ry <- Pga3dVectorMathGenerators.double01.map(_ + 0.1)
+      rz <- Pga3dVectorMathGenerators.double01.map(_ + 0.1)
+    } yield Pga3dInertiaLocal.cube(mass, rx, ry, rz)
+
+    forAll(localInertiaGenerator) { inertia =>
+      val summable = inertia.toSummable
+      val restored = Pga3dInertia.fromXXYYZZ(summable.mass, summable.xx / summable.mass, summable.yy / summable.mass, summable.zz / summable.mass)
+
+      assert(Math.abs(inertia.mass - restored.mass) < eps)
+      assert(Math.abs(inertia.mrxy - restored.mrxy) < eps)
+      assert(Math.abs(inertia.mrxz - restored.mrxz) < eps)
+      assert(Math.abs(inertia.mryz - restored.mryz) < eps)
+    }
+  }

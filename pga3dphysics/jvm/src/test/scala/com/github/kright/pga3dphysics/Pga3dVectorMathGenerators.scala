@@ -5,6 +5,7 @@ import org.scalacheck.Gen
 
 object Pga3dVectorMathGenerators:
   val gaussian: Gen[Double] = Gen.gaussian(mean = 0, stdDev = 1)
+  val double01: Gen[Double] = Gen.double
   val double1: Gen[Double] = Gen.double.map(_ * 2.0 - 1.0)
 
   val angleRadians: Gen[Double] = Gen.double.map(2.0 * Math.PI * _)
