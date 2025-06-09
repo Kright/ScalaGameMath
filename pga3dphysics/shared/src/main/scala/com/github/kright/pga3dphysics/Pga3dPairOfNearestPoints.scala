@@ -28,4 +28,4 @@ final class Pga3dPairOfNearestPoints(var a: Pga3dPoint,
     }
 
   def update(pair: (Pga3dPoint, Pga3dPoint)): Unit =
-    update(pair._1, pair._2)  
+    update(pair._1, pair._2)
