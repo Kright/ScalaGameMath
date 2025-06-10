@@ -246,3 +246,16 @@ class Pga3dAABBTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
       }
     }
   }
+
+  test("aabb intersecion with big triangles") {
+    val triangles = Seq(
+      Pga3dTriangle(Pga3dPoint(10, 0, 10), Pga3dPoint(10, 0, -10), Pga3dPoint(-10, 0, 10)),
+      Pga3dTriangle(Pga3dPoint(-10, 0, -10), Pga3dPoint(10, 0, -10), Pga3dPoint(-10, 0, 10)),
+    )
+
+    for (i <- -10 to 10; j <- -10 to 10) {
+      val aabb = Pga3dAABB(Pga3dPoint(i, 0.0, j)).expand(0.5)
+
+      assert(triangles.exists { t => aabb.intersects(t) })
+    }
+  }

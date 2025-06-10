@@ -9,7 +9,7 @@ class Pga3dMatrixTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("matrix linear mapping is correct") {
     forAll(Pga3dGenerators.matrices(6, 6)) { matrix =>
       val mapping = Pga3dMatrix.linearMapping(b => matrixToBivector(matrix * bivectorToMatrix(b)))
-      assert(Math.sqrt((matrix - mapping).elements.map(v => v * v).sum) < 1e-15)
+      assert(Math.sqrt((matrix - mapping).data.map(v => v * v).sum) < 1e-15)
     }
   }
 
@@ -23,10 +23,10 @@ class Pga3dMatrixTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private def bivectorToMatrix(b: Pga3dBivector): Matrix =
     val m = new Matrix(6, 1)
-    FlatSerializer.write(b, m.elements, 0)
+    FlatSerializer.write(b, m.data, 0)
     m
 
   private def matrixToBivector(m: Matrix): Pga3dBivector =
     require(m.h == 6, m.w == 1)
-    FlatSerializer.read[Pga3dBivector](m.elements, 0)
+    FlatSerializer.read[Pga3dBivector](m.data, 0)
 

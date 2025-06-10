@@ -1,60 +1,50 @@
 package com.github.kright.matrix
 
+import com.github.kright.arrayview.ArrayView2d
 import com.github.kright.math.FastRange
 
 import scala.annotation.targetName
 
-class Matrix(val h: Int, val w: Int):
+class Matrix(val h: Int, val w: Int) extends ArrayView2d[Double]:
+  override val data: Array[Double] = new Array[Double](h * w)
 
-  val elements: Array[Double] = new Array[Double](h * w)
+  override def shape0: Int = h
+  override def shape1: Int = w
+  override inline val offset = 0
+  override inline def stride0: Int = w
+  override inline val stride1 = 1
+  override inline val hasSimpleFlatLayout = true
 
-  @targetName("get")
-  def apply(y: Int, x: Int): Double =
-    elements(x + y * w)
-
-  @targetName("set")
-  def update(y: Int, x: Int, v: Double): Unit =
-    elements(x + y * w) = v
-
-  def isSquare: Boolean =
-    w == h
-
-  def hasSameSize(m: Matrix): Boolean =
-    h == m.h && w == m.w
+  override def getIndex(y: Int, x: Int): Int =
+    y * stride0 + x
 
   def setIdt(): Unit =
-    require(w == h)
-    for (y <- 0 until h) {
-      for (x <- 0 until w) {
-        val v = if (x == y) 1.0 else 0.0
-        this (y, x) = v
-      }
+    require(isSquare)
+    for (y <- FastRange(h);
+         x <- FastRange(w)) {
+      val v = if (x == y) 1.0 else 0.0
+      this (y, x) = v
     }
-
-  @targetName("set")
-  def :=(m: Matrix): Unit =
-    require(hasSameSize(m))
-    m.elements.copyToArray(elements)
 
   @targetName("timesAssign")
   def *=(s: Double): Unit =
     mapElements(_ * s)
 
   private inline def elementsIndices =
-    FastRange(elements.length)
+    FastRange(data.length)
 
   @targetName("plusAssign")
   def +=(m: Matrix): Unit =
     require(hasSameSize(m))
     for (i <- elementsIndices) {
-      elements(i) += m.elements(i)
+      data(i) += m.data(i)
     }
 
   @targetName("minusAssign")
   def -=(m: Matrix): Unit =
     require(hasSameSize(m))
     for (i <- elementsIndices) {
-      elements(i) -= m.elements(i)
+      data(i) -= m.data(i)
     }
 
   @targetName("plus")
@@ -62,7 +52,7 @@ class Matrix(val h: Int, val w: Int):
     require(hasSameSize(m))
     val result = Matrix(h, w)
     for (i <- elementsIndices) {
-      result.elements(i) = elements(i) + m.elements(i)
+      result.data(i) = data(i) + m.data(i)
     }
     result
 
@@ -71,7 +61,7 @@ class Matrix(val h: Int, val w: Int):
     require(hasSameSize(m))
     val result = Matrix(h, w)
     for (i <- elementsIndices) {
-      result.elements(i) = elements(i) - m.elements(i)
+      result.data(i) = data(i) - m.data(i)
     }
     result
 
@@ -113,23 +103,23 @@ class Matrix(val h: Int, val w: Int):
 
   def mapElements(f: Double => Double): Unit = {
     for (i <- elementsIndices) {
-      elements(i) = f(elements(i))
+      data(i) = f(data(i))
     }
   }
 
   def setZero(): Unit =
     for (i <- elementsIndices) {
-      elements(i) = 0.0
+      data(i) = 0.0
     }
 
   def copy(): Matrix =
     val r = Matrix(h, w)
-    elements.copyToArray(r.elements)
+    data.copyToArray(r.data)
     r
 
   def frobeniusNormSquare: Double =
     var sum = 0.0
-    for (elem <- elements) {
+    for (elem <- data) {
       sum = Math.fma(elem, elem, sum)
     }
     sum
@@ -145,10 +135,10 @@ object Matrix:
   def symmetricMatrixToDiagonalAndEigenvectors(m: Matrix): (Matrix, Matrix) =
     SymmetricMatrixDiagonalization.toDiagonalAndEigenvectors(m)
 
-  def fromValues(h: Int, w: Int)(elems: Double*): Matrix = {
-    require(elems.size == h * w)
+  def fromValues(h: Int, w: Int)(data: Double*): Matrix = {
+    require(data.size == h * w)
     val m = Matrix(h, w)
-    elems.copyToArray(m.elements)
+    data.copyToArray(m.data)
     m
   }
 

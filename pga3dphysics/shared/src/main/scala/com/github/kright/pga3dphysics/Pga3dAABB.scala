@@ -2,6 +2,8 @@ package com.github.kright.pga3dphysics
 
 import com.github.kright.pga3d.{Pga3dPlane, Pga3dPoint, Pga3dTranslator, Pga3dVector}
 
+import scala.annotation.targetName
+
 /**
  * Axis-aligned bounding box
  * [[https://en.wikipedia.org/wiki/Minimum_bounding_box#Axis-aligned_minimum_bounding_box]]
@@ -92,6 +94,11 @@ case class Pga3dAABB(min: Pga3dPoint,
       max + Pga3dVector(amount, amount, amount)
     )
 
+  def expand(v: Pga3dVector): Pga3dAABB =
+    Pga3dAABB(
+      min - v,
+      max + v
+    )
 
   def contains(p: Pga3dPoint): Boolean =
     (p.x >= min.x && p.x <= max.x) &&
@@ -178,7 +185,24 @@ object Pga3dAABB:
       max = (t.a max t.b) max t.c,
     )
 
+  @targetName("unionPoints")
   def apply(t: Iterable[Pga3dPoint]): Pga3dAABB =
+    var result = Pga3dAABB(t.head)
+    for (p <- t) {
+      result = result.union(p)
+    }
+    result
+
+  @targetName("unionEdges")
+  def apply(t: Iterable[Pga3dEdge]): Pga3dAABB =
+    var result = Pga3dAABB(t.head)
+    for (p <- t) {
+      result = result.union(p)
+    }
+    result
+
+  @targetName("unionTriangles")
+  def apply(t: Iterable[Pga3dTriangle]): Pga3dAABB =
     var result = Pga3dAABB(t.head)
     for (p <- t) {
       result = result.union(p)
