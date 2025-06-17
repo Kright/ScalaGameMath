@@ -1,4 +1,4 @@
-package com.github.kright.pga3dphysics
+package com.github.kright.pga3dgeom
 
 import com.github.kright.pga3d.{Pga3dPlane, Pga3dPoint, Pga3dVector}
 

@@ -1,4 +1,4 @@
-package com.github.kright.pga3dphysics
+package com.github.kright.pga3dgeom
 
 import com.github.kright.math.MathUtil
 import com.github.kright.math.MathUtil.clamp

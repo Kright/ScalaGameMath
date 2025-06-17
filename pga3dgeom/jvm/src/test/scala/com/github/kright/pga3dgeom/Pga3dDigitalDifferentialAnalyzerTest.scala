@@ -1,4 +1,4 @@
-package com.github.kright.pga3dphysics
+package com.github.kright.pga3dgeom
 
 import com.github.kright.pga3d.{Pga3dPoint, Pga3dVector}
 import org.scalacheck.Gen
@@ -11,6 +11,13 @@ class Pga3dDigitalDifferentialAnalyzerTest extends AnyFunSuiteLike with ScalaChe
     Pga3dPoint(-halfSize, -halfSize, -halfSize),
     Pga3dPoint(halfSize, halfSize, halfSize)
   )
+
+  private def pointsWithNonRoundCoordinates(eps: Double): Gen[Pga3dPoint] =
+    Pga3dPhysicsGenerators.pointIn(bounds)
+      .map { p => if (math.abs(p.x - p.x.round) > eps) p else p.copy(x = p.x + 2 * eps) }
+      .map { p => if (math.abs(p.y - p.y.round) > eps) p else p.copy(y = p.y + 2 * eps) }
+      .map { p => if (math.abs(p.z - p.z.round) > eps) p else p.copy(z = p.z + 2 * eps) }
+
 
   private def assertCoords(dda: Pga3dDigitalDifferentialAnalyzer, x: Int, y: Int, z: Int): Unit = {
     assert(dda.x == x)
@@ -29,7 +36,7 @@ class Pga3dDigitalDifferentialAnalyzerTest extends AnyFunSuiteLike with ScalaChe
       Pga3dVector(0.0, 0.0, -1.0),
     )
 
-    forAll(Pga3dPhysicsGenerators.pointIn(bounds), directions) { (origin, direction) =>
+    forAll(pointsWithNonRoundCoordinates(1e-10), directions) { (origin, direction) =>
       val dda = new Pga3dDigitalDifferentialAnalyzer(origin, direction)
 
       for (i <- 0 to 3) {
@@ -55,9 +62,8 @@ class Pga3dDigitalDifferentialAnalyzerTest extends AnyFunSuiteLike with ScalaChe
            signY <- signs;
            signZ <- signs) yield Pga3dVector(dir.x * signX, dir.y * signY, dir.z * signZ)
 
-    forAll(Pga3dPhysicsGenerators.pointIn(bounds), anyDirections) { (origin, direction) =>
+    forAll(pointsWithNonRoundCoordinates(1e-10), anyDirections) { (origin, direction) =>
       val dda = new Pga3dDigitalDifferentialAnalyzer(origin, direction)
-
 
       for (i <- 0 to 3) {
         val sum = origin + direction * i

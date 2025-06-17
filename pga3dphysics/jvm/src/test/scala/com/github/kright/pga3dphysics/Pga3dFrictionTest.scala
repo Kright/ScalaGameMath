@@ -9,8 +9,8 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 class Pga3dFrictionTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private val maxV = 100
-  private val bounds = Pga3dAABB(Pga3dPoint(-maxV, -maxV, -maxV), Pga3dPoint(maxV, maxV, maxV))
-  private val velocities = Pga3dPhysicsGenerators.vectorIn(bounds)
+  private val bounds = (Pga3dPoint(-maxV, -maxV, -maxV), Pga3dPoint(maxV, maxV, maxV))
+  private val velocities = Pga3dPhysicsGenerators.vectorIn(bounds._1, bounds._2)
 
   private val linearFriction: Gen[Pga3dFriction.Linear] =
     for (k <- Pga3dVectorMathGenerators.doubleInRange(0.0, 1e6))

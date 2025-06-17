@@ -6,7 +6,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 class SymmetricMatrixDiagonalizationTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   private def dist(a: Matrix, b: Matrix): Double =
-    Math.sqrt((a - b).elements.map(v => v * v).sum)
+    Math.sqrt((a - b).data.map(v => v * v).sum)
 
   test("test matrix 2x2 diagonalization corner cases") {
     val matrixSize = 2
@@ -70,7 +70,7 @@ class SymmetricMatrixDiagonalizationTest extends AnyFunSuiteLike with ScalaCheck
         s"""
            |diag = $diag
            |diag2 = $diag2
-           |wtf = ${Math.sqrt((diag - diag2).elements.map(v => v * v).sum)}
+           |wtf = ${Math.sqrt((diag - diag2).data.map(v => v * v).sum)}
            |
            |angle = $angle
            |rot = $rot
