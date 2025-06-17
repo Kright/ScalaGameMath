@@ -150,7 +150,7 @@ case class Pga3dAABB(min: Pga3dPoint,
   def intersects(edge: Pga3dEdge): Boolean = 
     intersection(edge).isDefined
 
-  def intersects(triangle: Pga3dTriangle): Boolean = {
+  def intersects(triangle: Pga3dTriangle, eps: Double): Boolean = {
     if (!intersects(triangle.toAABB)) return false // short path for triangles far away
     if (contains(triangle.a) || contains(triangle.b) || contains(triangle.c)) return true // when vertex inside AABB
 
@@ -158,7 +158,7 @@ case class Pga3dAABB(min: Pga3dPoint,
 
     // currently code below is not much efficient, but correctness and code size are more important
     if (triangle.edges.exists(this.intersects)) return true
-    edges.exists(e => triangle.intersects(e, eps = 0.0))
+    edges.exists(e => triangle.intersects(e, eps))
   }
 
   def intersection(edge: Pga3dEdge): Option[Pga3dEdge] =
