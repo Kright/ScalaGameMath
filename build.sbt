@@ -17,10 +17,11 @@ lazy val explicitNulls =
 lazy val wError =
   scalacOptions += "-Werror"
 
-lazy val scalatestSettings = Seq(
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  libraryDependencies += "org.scalatestplus" %% "scalacheck-1-18" % "3.2.19.0" % "test",
-)
+lazy val scalatestSettings =
+  libraryDependencies ++= Seq(
+    "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+    "org.scalatestplus" %% "scalacheck-1-18" % "3.2.19.0" % "test"
+  )
 
 lazy val root = (project in file("."))
   .settings(
@@ -43,17 +44,16 @@ lazy val root = (project in file("."))
 lazy val util = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("util"))
-  .settings(explicitNulls, wError)
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings, explicitNulls, wError)
 
 lazy val vector = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("vector"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(util)
 
 lazy val math = (project in file("math"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(vector.jvm % "compile->compile;test->test")
   .dependsOn(util.jvm % "compile->compile;test->test")
 
@@ -65,14 +65,14 @@ lazy val matrix = crossProject(JSPlatform, JVMPlatform)
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies += "com.github.kright.ArrayView" %% "arrayview" % "0.1.3",
   )
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(util)
 
 lazy val symbolic = (project in file("symbolic"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
 
 lazy val ga = (project in file("ga"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(
     util.jvm,
     symbolic % "test",
@@ -81,17 +81,17 @@ lazy val ga = (project in file("ga"))
   )
 
 lazy val solvers = (project in file("solvers"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
 
 lazy val physics3d = (project in file("physics3d"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(
     math % "compile->compile;test->test",
     solvers,
   )
 
 lazy val pga3dCodeGen = (project in file("pga3dCodeGen"))
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(
     ga,
     symbolic,
@@ -101,7 +101,7 @@ lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("pga3d"))
   .settings(explicitNulls, wError)
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings)
   .dependsOn(
     matrix,
     util % "test",
@@ -110,8 +110,7 @@ lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
 lazy val pga3dgeom = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("pga3dgeom"))
-  .settings(scalatestSettings *)
-  .settings(explicitNulls, wError)
+  .settings(scalatestSettings, explicitNulls, wError)
   .dependsOn(
     pga3d % "compile->compile;test->test",
     matrix,
@@ -120,8 +119,7 @@ lazy val pga3dgeom = crossProject(JSPlatform, JVMPlatform)
 lazy val pga3dphysics = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("pga3dphysics"))
-  .settings(explicitNulls, wError)
-  .settings(scalatestSettings *)
+  .settings(scalatestSettings, explicitNulls, wError)
   .dependsOn(
     pga3d % "compile->compile;test->test",
     matrix,

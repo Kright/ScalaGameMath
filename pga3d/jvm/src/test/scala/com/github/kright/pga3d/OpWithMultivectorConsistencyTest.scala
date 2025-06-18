@@ -2,6 +2,7 @@ package com.github.kright.pga3d
 
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import scala.language.unsafeNulls
 
 class OpWithMultivectorConsistencyTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
