@@ -110,7 +110,8 @@ I rewrote physics equations in PGA, it looks like PGA is a better way of describ
   is a scalar or geometric product of two planes is a motor.
 * **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for the result.
-* [**pga3dPhysics**](pga3dPhysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
+* [**pga3dPhysics**](pga3dphysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
+* [**pga3dgeom**](pga3dgeom/README.md): classes for geometry - edges, triangles, axis-aligned bounding boxes
 
 
 ## Tests
