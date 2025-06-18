@@ -3,7 +3,7 @@ package com.github.kright.pga3d
 import scala.annotation.targetName
 
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
-final case class Pga3dPseudoScalar(i: Double = 0.0):
+final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
 
   override def toString: String =
     s"Pga3dPseudoScalar(i = $i)"

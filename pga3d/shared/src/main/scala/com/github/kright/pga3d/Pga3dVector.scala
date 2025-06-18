@@ -5,7 +5,7 @@ import scala.annotation.targetName
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dVector(x: Double = 0.0,
                              y: Double = 0.0,
-                             z: Double = 0.0):
+                             z: Double = 0.0) derives CanEqual:
 
   inline def wyz: Double = -x
 

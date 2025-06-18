@@ -6,7 +6,7 @@ import scala.annotation.targetName
 final case class Pga3dQuaternion(s: Double = 0.0,
                                  xy: Double = 0.0,
                                  xz: Double = 0.0,
-                                 yz: Double = 0.0):
+                                 yz: Double = 0.0) derives CanEqual:
 
   override def toString: String =
     s"Pga3dQuaternion(s = $s, xy = $xy, xz = $xz, yz = $yz)"

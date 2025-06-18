@@ -17,6 +17,9 @@ lazy val explicitNulls =
 lazy val wError =
   scalacOptions += "-Werror"
 
+lazy val strictEquality =
+  scalacOptions += "-language:strictEquality"
+
 lazy val scalatestSettings =
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.2.19" % "test",
@@ -44,7 +47,7 @@ lazy val root = (project in file("."))
 lazy val util = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("util"))
-  .settings(scalatestSettings, explicitNulls, wError)
+  .settings(scalatestSettings, explicitNulls, wError, strictEquality)
 
 lazy val vector = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
@@ -100,8 +103,7 @@ lazy val pga3dCodeGen = (project in file("pga3dCodeGen"))
 lazy val pga3d = crossProject(JSPlatform, JVMPlatform)
   .withoutSuffixFor(JVMPlatform)
   .in(file("pga3d"))
-  .settings(explicitNulls, wError)
-  .settings(scalatestSettings)
+  .settings(scalatestSettings, explicitNulls, wError)
   .dependsOn(
     matrix,
     util % "test",

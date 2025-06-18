@@ -25,7 +25,7 @@ class MatrixCodeGen extends CodeGenClass:
        |  )
        |
        |  def multiply(matrix: Matrix, b: Pga3dBivector): Pga3dBivector =
-       |    val m = matrix.elements
+       |    val m = matrix.data
        |
        |    inline def dot(offset: Int): Double =
        |      b.wx * m(offset) +
@@ -48,7 +48,7 @@ class MatrixCodeGen extends CodeGenClass:
        |    val matrix = Matrix(6, 6)
        |    for ((b, i) <- bivectors.zipWithIndex) {
        |      val mappedB = map(b)
-       |      FlatSerializer.write(mappedB, matrix.elements, i * 6)
+       |      FlatSerializer.write(mappedB, matrix.data, i * 6)
        |    }
        |    matrix.transposeInplace()
        |    matrix

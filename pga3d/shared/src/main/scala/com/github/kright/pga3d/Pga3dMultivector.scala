@@ -18,7 +18,7 @@ final case class Pga3dMultivector(s: Double = 0.0,
                                   wxz: Double = 0.0,
                                   wyz: Double = 0.0,
                                   xyz: Double = 0.0,
-                                  i: Double = 0.0):
+                                  i: Double = 0.0) derives CanEqual:
 
   override def toString: String =
     s"Pga3dMultivector(s = $s, w = $w, x = $x, y = $y, z = $z, wx = $wx, wy = $wy, wz = $wz, xy = $xy, xz = $xz, yz = $yz, wxy = $wxy, wxz = $wxz, wyz = $wyz, xyz = $xyz, i = $i)"

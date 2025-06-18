@@ -6,7 +6,7 @@ import scala.annotation.targetName
 final case class Pga3dPlane(x: Double = 0.0,
                             y: Double = 0.0,
                             z: Double = 0.0,
-                            w: Double = 0.0):
+                            w: Double = 0.0) derives CanEqual:
 
   override def toString: String =
     s"Pga3dPlane(x = $x, y = $y, z = $z, w = $w)"

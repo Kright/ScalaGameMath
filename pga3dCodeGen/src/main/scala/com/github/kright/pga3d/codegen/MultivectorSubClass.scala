@@ -119,7 +119,7 @@ case class MultivectorSubClass(name: String,
         .map(f => s"${f.name}: Double = 0.0")
         .zipWithIndex
         .map((s, i) => if (i == 0) s else pad + s)
-        .mkString(start, ",\n", "):"))
+        .mkString(start, ",\n", ") derives CanEqual:"))
     }
 
     code.block {

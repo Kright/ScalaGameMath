@@ -5,7 +5,7 @@ import scala.annotation.targetName
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dBivectorBulk(xy: Double = 0.0,
                                    xz: Double = 0.0,
-                                   yz: Double = 0.0):
+                                   yz: Double = 0.0) derives CanEqual:
 
   override def toString: String =
     s"Pga3dBivectorBulk(xy = $xy, xz = $xz, yz = $yz)"

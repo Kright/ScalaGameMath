@@ -5,7 +5,7 @@ import scala.annotation.targetName
 /** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
 final case class Pga3dTranslator(wx: Double = 0.0,
                                  wy: Double = 0.0,
-                                 wz: Double = 0.0):
+                                 wz: Double = 0.0) derives CanEqual:
   inline val s = 1.0
 
   override def toString: String =

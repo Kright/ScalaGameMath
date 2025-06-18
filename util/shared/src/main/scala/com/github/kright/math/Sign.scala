@@ -1,7 +1,7 @@
 package com.github.kright.math
 
 
-sealed trait Sign extends Ordered[Sign]:
+sealed trait Sign extends Ordered[Sign] derives CanEqual:
   def toInt: Int
 
   def toNumeric[T: Numeric]: T =
