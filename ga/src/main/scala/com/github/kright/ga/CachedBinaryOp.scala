@@ -1,7 +1,5 @@
 package com.github.kright.ga
 
-import com.github.kright.math.MathUtil.*
-
 class CachedBinaryOp(val signature: Signature,
                      val binaryOp: BinaryOp) extends BinaryOp:
   private val vectorsCount = signature.generatorsCount

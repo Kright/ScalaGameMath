@@ -49,13 +49,3 @@ object MathUtil:
       val t = arr(i)
       arr(i) = arr(j)
       arr(j) = t
-
-    inline def getOrElseUpdate(i: Int, inline update: => T): T =
-      val result = arr(i)
-      if (result != null) {
-        result
-      } else {
-        val newValue = update
-        arr(i) = newValue
-        newValue
-      }

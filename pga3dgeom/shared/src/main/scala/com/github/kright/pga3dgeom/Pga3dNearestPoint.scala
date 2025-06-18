@@ -6,7 +6,7 @@ final class Pga3dNearestPoint(val origin: Pga3dPoint,
                               var nearestPoint: Pga3dPoint | Null = null):
   var distSquare: Double =
     if (nearestPoint == null) Double.PositiveInfinity
-    else (origin - nearestPoint).normSquare
+    else (origin - nearestPoint.nn).normSquare
 
   def distance: Double =
     Math.sqrt(distSquare)

@@ -25,7 +25,7 @@ class OpWithMultivectorConsistencyTest extends AnyFunSuiteLike with ScalaCheckPr
   )
 
   def makeRandom(cls: Class[?]): AnyRef = {
-    val constructor = cls.getConstructors.head
+    val constructor = cls.getConstructors.nn.head.nn
     val args = constructor.getParameterTypes.map(_ => scala.util.Random.nextDouble())
     constructor.newInstance(args *)
   }
@@ -37,14 +37,14 @@ class OpWithMultivectorConsistencyTest extends AnyFunSuiteLike with ScalaCheckPr
     } else if (cls == classOf[java.lang.Double]) {
       Pga3dMultivector(s = instance.asInstanceOf[Double])
     } else {
-      cls.getMethod("toMultivector").invoke(instance)
+      cls.getMethod("toMultivector").nn.invoke(instance)
     }).asInstanceOf[Pga3dMultivector]
   }
 
   private def call(first: AnyRef, methodName: String, second: AnyRef): AnyRef = {
     val cls = first.getClass
     val method = cls.getMethod(methodName, second.getClass)
-    method.invoke(first, second)
+    method.nn.invoke(first, second)
   }
 
   private def call(first: AnyRef, methodName: String): AnyRef = {
