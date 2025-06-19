@@ -479,6 +479,7 @@ object MultivectorSubClass:
     DefMultiplyToScalar(),
     DefDivideByScalar(),
     DefMinMaxForPointOrVector(),
+    DefDistanceToPoint(),
     DefPlusMinusMadd(),
     DefExpForBivector(),
     DefLogForMotor(),

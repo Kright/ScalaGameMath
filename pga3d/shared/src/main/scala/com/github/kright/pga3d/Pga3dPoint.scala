@@ -98,10 +98,13 @@ final case class Pga3dPoint(x: Double = 0.0,
     this * (1.0 / v)
 
   infix def min(other: Pga3dPoint): Pga3dPoint =
-    Pga3dPoint(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+    Pga3dPoint(math.min(x, other.x), math.min(y, other.y), math.min(z, other.z))
 
-  infix def max(other: Pga3dPoint): Pga3dPoint = 
-    Pga3dPoint(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+  infix def max(other: Pga3dPoint): Pga3dPoint =
+    Pga3dPoint(math.max(x, other.x), math.max(y, other.y), math.max(z, other.z))
+
+  def distanceTo(point: Pga3dPoint): Double =
+    (this - point).norm
 
   @targetName("plus")
   def +(v: Pga3dTrivector): Pga3dTrivector =

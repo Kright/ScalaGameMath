@@ -71,10 +71,10 @@ final case class Pga3dVector(x: Double = 0.0,
     this * (1.0 / v)
 
   infix def min(other: Pga3dVector): Pga3dVector =
-    Pga3dVector(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+    Pga3dVector(math.min(x, other.x), math.min(y, other.y), math.min(z, other.z))
 
-  infix def max(other: Pga3dVector): Pga3dVector = 
-    Pga3dVector(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+  infix def max(other: Pga3dVector): Pga3dVector =
+    Pga3dVector(math.max(x, other.x), math.max(y, other.y), math.max(z, other.z))
 
   @targetName("plus")
   def +(v: Pga3dTrivector): Pga3dTrivector =

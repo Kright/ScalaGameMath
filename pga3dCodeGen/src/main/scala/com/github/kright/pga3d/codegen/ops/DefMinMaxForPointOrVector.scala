@@ -10,10 +10,10 @@ object DefMinMaxForPointOrVector:
         code(
           s"""
              |infix def min(other: ${cls.typeName}): ${cls.typeName} =
-             |  ${cls.typeName}(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+             |  ${cls.typeName}(math.min(x, other.x), math.min(y, other.y), math.min(z, other.z))
              |
-             |infix def max(other: ${cls.typeName}): ${cls.typeName} = 
-             |  ${cls.typeName}(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+             |infix def max(other: ${cls.typeName}): ${cls.typeName} =
+             |  ${cls.typeName}(math.max(x, other.x), math.max(y, other.y), math.max(z, other.z))
              |""".stripMargin
         )
       }
