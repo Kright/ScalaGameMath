@@ -12,16 +12,11 @@ case class Pga3dEdge(a: Pga3dPoint,
   def line: Pga3dBivector =
     a v b
 
-  def normalizedLine: Pga3dBivector =
-    line.normalizedByBulk
-
   def interpolatedPoint(t: Double): Pga3dPoint =
     Pga3dPoint.interpolate(a, b, t)
 
-  def getInterpolationFactor(p: Pga3dPoint): Double =
-    val pDir = p - a
-    val ba = b - a
-    ba.antiDotI(pDir) / ba.normSquare
+  def getInterpolationFactor(point: Pga3dPoint): Double =
+    Pga3dEdge.getInterpolationFactor(a, b, point)
 
   def center: Pga3dPoint =
     Pga3dPoint.mid(a, b)
@@ -189,4 +184,10 @@ object Pga3dEdge:
     searcher.update(self.b, other.getNearestPoint(self.b))
 
     (searcher.a, searcher.b)
+  }
+  
+  def getInterpolationFactor(a: Pga3dPoint, b: Pga3dPoint, point: Pga3dPoint): Double = {
+    val pDir = point - a
+    val ba = b - a
+    ba.antiDotI(pDir) / ba.normSquare
   }

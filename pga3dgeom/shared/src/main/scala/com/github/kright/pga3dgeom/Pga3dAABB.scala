@@ -147,7 +147,7 @@ case class Pga3dAABB(min: Pga3dPoint,
       hasIntersection1d(min.y - expand, max.y + expand, a.min.y, a.max.y) &&
       hasIntersection1d(min.z - expand, max.z + expand, a.min.z, a.max.z)
 
-  def intersects(edge: Pga3dEdge): Boolean = 
+  def intersects(edge: Pga3dEdge): Boolean =
     intersection(edge).isDefined
 
   def intersects(triangle: Pga3dTriangle, eps: Double): Boolean = {
@@ -184,6 +184,15 @@ object Pga3dAABB:
       min = (t.a min t.b) min t.c,
       max = (t.a max t.b) max t.c,
     )
+
+  def apply(sphere: Pga3dSphere): Pga3dAABB = {
+    val center = sphere.center
+    val r = sphere.r
+    Pga3dAABB(
+      center - Pga3dVector(r, r, r),
+      center + Pga3dVector(r, r, r),
+    )
+  }
 
   @targetName("unionPoints")
   def apply(t: Iterable[Pga3dPoint]): Pga3dAABB =
