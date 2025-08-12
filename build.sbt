@@ -66,7 +66,7 @@ lazy val matrix = crossProject(JSPlatform, JVMPlatform)
   .settings(explicitNulls, wError)
   .settings(
     resolvers += "jitpack" at "https://jitpack.io",
-    libraryDependencies += "com.github.kright.ArrayView" %% "arrayview" % "0.1.3",
+    libraryDependencies += "com.github.kright.ArrayView" %% "arrayview" % "0.1.5",
   )
   .settings(scalatestSettings)
   .dependsOn(util)
