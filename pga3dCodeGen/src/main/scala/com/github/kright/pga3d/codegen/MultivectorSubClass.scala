@@ -187,10 +187,6 @@ case class MultivectorSubClass(name: String,
         }
 
 
-        if (this == translator) {
-          generateObjectMethodsForTranslator(code)
-        }
-
         if (this == quaternion) {
           generateObjectMethodsForQuaternion(code)
         }
@@ -204,18 +200,6 @@ case class MultivectorSubClass(name: String,
     code.toString
   }
 
-  private def generateObjectMethodsForTranslator(code: CodeGen): Unit = {
-    code(
-      s"""
-         |val id: ${typeName} = ${typeName}(0.0, 0.0, 0.0)""".stripMargin)
-    code("")
-    code(s"def addVector(v: ${vector.typeName}): ${typeName} =")
-    code.block {
-      val v = vector.makeSymbolic("v")
-      val mult = MultiVector("w" -> Sym(-0.5))
-      code(makeConstructor(mult.geometric(v.dual)))
-    }
-  }
 
   private def generateObjectMethodsForMotor(code: CodeGen): Unit = {
     code(
@@ -413,4 +397,5 @@ object MultivectorSubClass:
     DefVariablesComponentsCount(),
     DefZeroObjectMethods(),
     DefMethodsIfAnyPoint(),
+    DefObjectMethodsForTranslator(),
   )
