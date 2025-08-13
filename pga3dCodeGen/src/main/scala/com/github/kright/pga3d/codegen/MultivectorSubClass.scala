@@ -98,11 +98,6 @@ case class MultivectorSubClass(name: String,
   override def generateCode(): String =
     generateCode(unaryOperations, binaryOperations)
 
-  private def addVariablesComponentsCountAsConst(code: CodeGen): Unit = {
-    code("")
-    code(s"inline val componentsCount = ${variableFields.size}")
-  }
-  
   private def generateConstructorCode(code: CodeGen): Unit = {
     if (isObject) {
       code(s"object ${name}:")
@@ -123,12 +118,14 @@ case class MultivectorSubClass(name: String,
   private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
                            binaryOps: Seq[MultivectorBinaryOp]): String = {
     val code = CodeGen()
-    
+
     generateConstructorCode(code)
 
     code.block {
       if (isObject) {
-        addVariablesComponentsCountAsConst(code)
+        DefVariablesComponentsCount()(using pga3).apply(this, self).foreach { lines =>
+          code(lines)
+        }
       }
 
       for (unaryOp <- unaryOps) {
@@ -177,9 +174,17 @@ case class MultivectorSubClass(name: String,
     }
 
     if (!isObject) {
-      code(s"\n\nobject ${typeName}:")
+      code(
+        s"""
+           |
+           |object ${typeName}:""".stripMargin)
       code.block {
-        addVariablesComponentsCountAsConst(code)
+
+        for (unaryOp <- companionObjectOperations) {
+          unaryOp(this, self).foreach { lines =>
+            code(lines)
+          }
+        }
 
         if (this != point && this != quaternion && this != translator) {
           generateZeroObjectMethods(code)
@@ -475,4 +480,8 @@ object MultivectorSubClass:
     MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),
     MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b)),
     MultivectorBinaryOp(Seq("cross"), (a, b) => a.crossX2(b) * Sym(0.5)),
+  )
+
+  val companionObjectOperations = Seq(
+    DefVariablesComponentsCount(),
   )
