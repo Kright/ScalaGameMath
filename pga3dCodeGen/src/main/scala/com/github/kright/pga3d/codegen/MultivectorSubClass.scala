@@ -102,11 +102,8 @@ case class MultivectorSubClass(name: String,
     code("")
     code(s"inline val componentsCount = ${variableFields.size}")
   }
-
-  private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
-                           binaryOps: Seq[MultivectorBinaryOp]): String = {
-    val code = CodeGen()
-
+  
+  private def generateConstructorCode(code: CodeGen): Unit = {
     if (isObject) {
       code(s"object ${name}:")
     } else {
@@ -121,6 +118,13 @@ case class MultivectorSubClass(name: String,
         .map((s, i) => if (i == 0) s else pad + s)
         .mkString(start, ",\n", ") derives CanEqual:"))
     }
+  }
+
+  private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
+                           binaryOps: Seq[MultivectorBinaryOp]): String = {
+    val code = CodeGen()
+    
+    generateConstructorCode(code)
 
     code.block {
       if (isObject) {
@@ -138,8 +142,6 @@ case class MultivectorSubClass(name: String,
           code(s"inline def $fName: Double = ${sym}")
         }
       }
-
-      generateToStringMethod(code)
 
       for (unaryOp <- unaryOps) {
         unaryOp(this, self).foreach { lines =>
@@ -225,26 +227,6 @@ case class MultivectorSubClass(name: String,
       val mult = MultiVector("w" -> Sym(-0.5))
       code(makeConstructor(mult.geometric(v.dual)))
     }
-  }
-
-  private def generateToStringMethod(code: CodeGen): Unit = {
-    if (variableFields.nonEmpty) {
-      code(
-        s"""
-           |override def toString: String =
-           |  s"${name}(${variableFields.map(f => s"${f.name} = ${"$" + f.name}").mkString(", ")})"""".stripMargin)
-      return
-    }
-
-    if (this == pointCenter) {
-      code(
-        s"""
-           |override def toString: String =
-           |  "${name}"""".stripMargin)
-      return
-    }
-
-    assert(false, "unknown class")
   }
 
   private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
@@ -465,6 +447,7 @@ object MultivectorSubClass:
     pgaClasses.reverseIterator.find(_.isMatching(v)).get
 
   val unaryOperations = Seq(
+    DefToString(),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "dual", pga3.operations.dual(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "weight", pga3.operations.weight(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "bulk", pga3.operations.bulk(v))),
