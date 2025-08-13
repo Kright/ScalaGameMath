@@ -1,8 +1,7 @@
 package com.github.kright.pga3d.codegen
 
-import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, StandardOpenOption}
+import java.nio.file.{Files, Path, StandardOpenOption}
 
 trait CodeGenClass:
   def name: String
@@ -21,10 +20,10 @@ trait CodeGenClass:
 
   def generateCode(): String
 
-  def writeToFile(packageDir: File): Unit =
-    require(packageDir.exists())
+  def writeToFile(packageDir: Path): Unit =
+    require(Files.exists(packageDir))
 
-    val clsFile = File(packageDir, s"${name}.scala")
+    val clsPath = packageDir.resolve(s"${name}.scala")
 
     val code =
       s"""package com.github.kright.pga3d
@@ -33,10 +32,19 @@ trait CodeGenClass:
          |/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
          |${generateCode()}""".stripMargin
 
-    Files.write(clsFile.toPath, code.getBytes(StandardCharsets.UTF_8),
+    // if file exists and content is identical, skip writing and report
+    if (Files.exists(clsPath)) {
+      val existing = Files.readString(clsPath, StandardCharsets.UTF_8)
+      if (existing == code) {
+        println(s"class is up-to-date = ${clsPath}, linesCount = ${code.lines().count()}")
+        return
+      }
+    }
+
+    Files.write(clsPath, code.getBytes(StandardCharsets.UTF_8),
       StandardOpenOption.CREATE,
       StandardOpenOption.WRITE,
       StandardOpenOption.TRUNCATE_EXISTING,
     )
 
-    println(s"class generated = ${clsFile}, linesCount = ${code.lines().count()}")
+    println(s"class generated = ${clsPath}, linesCount = ${code.lines().count()}")
