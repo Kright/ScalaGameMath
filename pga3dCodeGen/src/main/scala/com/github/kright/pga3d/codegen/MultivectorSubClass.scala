@@ -186,23 +186,10 @@ case class MultivectorSubClass(name: String,
           }
         }
 
-
-        if (this == motor) {
-          generateObjectMethodsForMotor(code)
-        }
       }
     }
 
     code.toString
-  }
-
-
-  private def generateObjectMethodsForMotor(code: CodeGen): Unit = {
-    code(
-      s"""
-         |val id: ${typeName} = ${typeName}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-         |
-         |def addVector(v: ${vector.typeName}): ${typeName} = ${translator.name}.addVector(v).toMotor""".stripMargin)
   }
   
   def makeConstructorOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {
@@ -357,4 +344,5 @@ object MultivectorSubClass:
     DefMethodsIfAnyPoint(),
     DefObjectMethodsForTranslator(),
     DefObjectMethodsForQuaternion(),
+    DefObjectMethodsForMotor(),
   )
