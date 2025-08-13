@@ -131,18 +131,6 @@ case class MultivectorSubClass(name: String,
         addVariablesComponentsCountAsConst(code)
       }
 
-      for ((f, v) <- constantFields) {
-        code(s"inline val ${f.name} = ${v}")
-      }
-
-      if (Seq(vector, trivector, point, pointCenter).contains(this)) {
-        self.values.foreach { (b, sym) =>
-          val fName = s"${ga.representation(b)}"
-          code("")
-          code(s"inline def $fName: Double = ${sym}")
-        }
-      }
-
       for (unaryOp <- unaryOps) {
         unaryOp(this, self).foreach { lines =>
           code(lines)
@@ -447,6 +435,7 @@ object MultivectorSubClass:
     pgaClasses.reverseIterator.find(_.isMatching(v)).get
 
   val unaryOperations = Seq(
+    DefConstAndDualFields(),
     DefToString(),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "dual", pga3.operations.dual(v))),
     MultivectorUnaryOp((cls, v) => GeneratedValue(cls, "weight", pga3.operations.weight(v))),
