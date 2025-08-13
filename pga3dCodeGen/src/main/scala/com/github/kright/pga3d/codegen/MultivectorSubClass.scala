@@ -186,7 +186,6 @@ case class MultivectorSubClass(name: String,
           }
         }
 
-        generateMethodsIfAnyPoint(code)
 
         if (this == translator) {
           generateObjectMethodsForTranslator(code)
@@ -215,69 +214,6 @@ case class MultivectorSubClass(name: String,
       val v = vector.makeSymbolic("v")
       val mult = MultiVector("w" -> Sym(-0.5))
       code(makeConstructor(mult.geometric(v.dual)))
-    }
-  }
-
-  private def generateMethodsIfAnyPoint(code: CodeGen): Unit = {
-    val points = Set(trivector, point, vector)
-    if (!points.contains(this)) return
-
-    if (this == point) {
-      code(
-        s"""
-           |val center: ${point.typeName} =
-           |  ${point.typeName}(0.0, 0.0, 0.0)""".stripMargin)
-    }
-
-    code("")
-    if (this == trivector) {
-      val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
-      code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${typeName} =")
-      code.block {
-        code(makeConstructor(v))
-      }
-    }
-    else {
-      val v = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"))
-      code(s"def blade3(wxy: Double, wxz: Double, wyz: Double): ${typeName} =")
-      code.block {
-        code(makeConstructor(v))
-      }
-    }
-
-    code("")
-    code(s"def interpolate(a: ${this.typeName}, b: ${this.typeName}, t: Double): ${this.typeName} =")
-    code.block {
-      if (this == trivector || this == vector) {
-        code("a * (1.0 - t) + b * t")
-      } else {
-        code("(a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe")
-      }
-    }
-
-    if (this == point) {
-      code("")
-      code(s"def mid(a: ${point.typeName}, b: ${point.typeName}): ${point.typeName} =")
-      code.block {
-        code(
-          s"""${point.typeName}(
-             |  x = (a.x + b.x) * 0.5,
-             |  y = (a.y + b.y) * 0.5,
-             |  z = (a.z + b.z) * 0.5,
-             |)""".stripMargin)
-      }
-
-      code("")
-      code(s"def mid(a: ${point.typeName}, b: ${point.typeName}, c: ${point.typeName}): ${point.typeName} =")
-      code.block {
-        code(
-          s"""val m = 1.0 / 3.0
-             |${point.typeName}(
-             |  x = (a.x + b.x + c.x) * m,
-             |  y = (a.y + b.y + c.y) * m,
-             |  z = (a.z + b.z + c.z) * m,
-             |)""".stripMargin)
-      }
     }
   }
 
@@ -476,4 +412,5 @@ object MultivectorSubClass:
   val companionObjectOperations = Seq(
     DefVariablesComponentsCount(),
     DefZeroObjectMethods(),
+    DefMethodsIfAnyPoint(),
   )
