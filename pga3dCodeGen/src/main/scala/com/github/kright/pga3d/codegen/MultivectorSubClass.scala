@@ -186,10 +186,6 @@ case class MultivectorSubClass(name: String,
           }
         }
 
-        if (this != point && this != quaternion && this != translator) {
-          generateZeroObjectMethods(code)
-        }
-
         generateMethodsIfAnyPoint(code)
 
         if (this == translator) {
@@ -330,12 +326,7 @@ case class MultivectorSubClass(name: String,
          |  rotation(from.dual, to.dual)
          |""".stripMargin)
   }
-
-  private def generateZeroObjectMethods(code: CodeGen): Unit = {
-    code("")
-    code(s"val zero: ${typeName} = ${typeName}(${variableFields.map(_ => "0.0").mkString(", ")})")
-  }
-
+  
   def makeConstructorOptimized(result: MultiVector[Sym], resultCls: MultivectorSubClass): String = {
     val code = CodeGen()
 
@@ -484,4 +475,5 @@ object MultivectorSubClass:
 
   val companionObjectOperations = Seq(
     DefVariablesComponentsCount(),
+    DefZeroObjectMethods(),
   )
