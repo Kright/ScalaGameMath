@@ -41,11 +41,17 @@ trait Pga3dInertia:
  * class with useful constructor methods for base classes
  */
 object Pga3dInertia:
+  /**
+   * inertia of rod at its center
+   */
   def rod(length: Double): Double =
     length * length / 12.0
 
   def disk(r: Double, innerR: Double = 0.0): Double =
     0.5 * (r * r + innerR * innerR)
+
+  def point(mass: Double): Pga3dInertiaSimple =
+    Pga3dInertiaSimple(mass, 0.0)
 
   def cube(mass: Double, r: Double): Pga3dInertiaSimple =
     Pga3dInertiaSimple.cube(mass, r)
@@ -56,18 +62,31 @@ object Pga3dInertia:
   def solidSphere(mass: Double, r: Double): Pga3dInertiaSimple =
     Pga3dInertiaSimple.solidSphere(mass, r)
 
+  /**
+   * @param mass - mass of cube
+   * @param rx   - half of size along the x-axis
+   * @param ry   - half of size along the y-axis
+   * @param rz   - half of size along the z-axis
+   */
   def cube(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
     Pga3dInertiaLocal.cube(mass, rx, ry, rz)
 
   def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
     Pga3dInertiaLocal.solidEllipsoid(mass, rx, ry, rz)
 
+  /**
+   * inertia of cylinder with rotation axis along x-axis
+   */
   def cylinderX(mass: Double, length: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal =
     Pga3dInertiaLocal.cylinderX(mass, length, r, innerR)
 
+  /**
+   * values xx, yy and zz are values in digonal tensor matrix (not multiplied by mass)
+   *
+   * The moment around x-axis will be `mryz = mass * (yy + zz)` and in the same way for others
+   */
   def fromXXYYZZ(mass: Double, xx: Double, yy: Double, zz: Double): Pga3dInertiaLocal =
     Pga3dInertiaLocal.fromXXYYZZ(mass, xx, yy, zz)
-
 
   def moved(motor: Pga3dMotor, inertia: Pga3dInertiaLocal): Pga3dInertiaMovedLocal =
     Pga3dInertiaMovedLocal(motor, inertia)

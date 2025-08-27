@@ -363,6 +363,108 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     assert(Math.abs(cylinder.toSummable.yy - (0.25 + 1.0 / 12.0)) < eps)
   }
 
+  test("inertia for cylinder as sum of rod and cylinder") {
+    val eps = 1e-15
+
+    val mass = 4.0
+    val length = 3.0
+    val r = 1.0
+
+    val rod = Pga3dInertia.cylinderX(mass = mass, length = length, r = 0)
+    val circle = Pga3dInertia.cylinderX(mass = mass, length = 0.0, r = r)
+    val cylinder = Pga3dInertia.cylinderX(mass = mass, length = length, r = r)
+
+    assert(cylinder.mass == circle.mass && cylinder.mass == rod.mass)
+    assert(Math.abs(rod.mrxy + circle.mrxy - cylinder.mrxy) < eps)
+    assert(Math.abs(rod.mrxz + circle.mrxz - cylinder.mrxz) < eps)
+    assert(Math.abs(rod.mryz + circle.mryz - cylinder.mryz) < eps)
+  }
+
+  test("Parallel axis theorem for models") {
+    val models = Seq(
+      Pga3dInertia.point(mass = 1.0),
+      Pga3dInertia.cube(mass = 1.0, 1.0),
+      Pga3dInertia.cube(mass = 1.0, 1.0, 1.0, 1.0),
+      Pga3dInertia.cube(mass = 2.0, 3.0, 4.0, 5.0),
+      Pga3dInertia.cylinderX(mass = 1.0, length = 1.0, r = 1.0),
+      Pga3dInertia.cylinderX(mass = 2.0, length = 3.0, r = 5.0, innerR = 4.0),
+      Pga3dInertia.solidEllipsoid(mass = 2.0, 3.0, 4.0, 5.0),
+    )
+
+    val offsets = Seq[Pga3dTranslator](
+      Pga3dTranslator.addVector(Pga3dVector(0.0, 0.0, 0.0)),
+      Pga3dTranslator.addVector(Pga3dVector(1.0, 0.0, 0.0)),
+      Pga3dTranslator.addVector(Pga3dVector(0.0, 2.0, 0.0)),
+      Pga3dTranslator.addVector(Pga3dVector(0.0, 0.0, 3.0)),
+      Pga3dTranslator.addVector(Pga3dVector(1.0, 2.0, 3.0)),
+    )
+
+    for (model <- models;
+         offset <- offsets) {
+
+      val movedPoint = Pga3dInertia.point(model.mass).movedBy(offset)
+      val movedPointPlusCube = movedPoint.toSummable + model.toSummable
+      val movedModel = model.movedBy(offset).toSummable
+      assert((movedPointPlusCube.copy(ww = movedModel.ww) - movedModel).norm < 1e-12)
+    }
+  }
+
+  test("inertia for cylinder equal to sum of two its parts") {
+    forAll(
+      Pga3dVectorMathGenerators.double01.map(_ + 0.1),
+      Pga3dVectorMathGenerators.double01.map(_ + 0.1),
+      Pga3dVectorMathGenerators.double01.map(_ + 0.1),
+      Pga3dVectorMathGenerators.double01.map(_ + 0.1),
+    ) { (mass, length, r1, r2) =>
+      val innerR = math.min(r1, r2)
+      val outerR = math.max(r1, r2)
+
+      val cylinder = Pga3dInertia.cylinderX(mass = mass, length = length, r = outerR, innerR = innerR)
+
+      val part0 = Pga3dInertia.cylinderX(mass = mass * 0.5, length = length * 0.5, r = outerR, innerR = innerR)
+        .movedBy(Pga3dTranslator.addVector(Pga3dVector(length / 4, 0, 0)))
+
+      val part1 = Pga3dInertia.cylinderX(mass = mass * 0.5, length = length * 0.5, r = outerR, innerR = innerR)
+        .movedBy(Pga3dTranslator.addVector(Pga3dVector(-length / 4, 0, 0)))
+
+      val eps = 1e-15
+
+      val sum = part0.toSummable + part1.toSummable
+      assert((sum - cylinder.toSummable).norm < eps)
+    }
+  }
+
+  test("inertia of cube as sum of 8 small cubes") {
+    val mass = 8.0
+    val r = 6.0
+
+    val cube = Pga3dInertia.cube(mass, r, r, r)
+
+    val smallCube = Pga3dInertia.cube(mass / 8, r / 2, r / 2, r / 2)
+
+    val smallCubes =
+      for (dx <- Seq(-1, 1); dy <- Seq(-1, 1); dz <- Seq(-1, 1))
+        yield smallCube.movedBy(Pga3dTranslator.addVector(Pga3dVector(dx * r / 2, dy * r / 2, dz * r / 2)))
+
+    val sum = smallCubes.map(_.toSummable).reduce(_ + _)
+
+    assert(cube.mass == sum.mass &&
+      cube.toSummable.xx == sum.xx &&
+      cube.toSummable.yy == sum.yy &&
+      cube.toSummable.zz == sum.zz,
+      s"${cube.toSummable} != ${sum}")
+  }
+
+  test("inertia of parallelepiped equal to a sum of two cubes") {
+    val mass = 5.0
+    val parallelepiped = Pga3dInertia.cube(mass, 1.0, 0.5, 0.5)
+    val cube = Pga3dInertia.cube(mass / 2, 0.5, 0.5, 0.5)
+
+    val sum = cube.movedBy(Pga3dTranslator.addVector(Pga3dVector(0.5, 0.0, 0.0))).toSummable +
+      cube.movedBy(Pga3dTranslator.addVector(Pga3dVector(-0.5, 0.0, 0.0))).toSummable
+
+    assert((parallelepiped.toSummable - sum).norm < 1e-14)
+  }
 
   test("test method fromXXYYZZ") {
     val eps = 1e-15

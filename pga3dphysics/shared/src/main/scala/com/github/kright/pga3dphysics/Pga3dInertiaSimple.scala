@@ -4,7 +4,7 @@ import com.github.kright.pga3d.*
 
 /**
  * Fully symmetrical tensor of inertia (for example, for cube or sphere).
- * It has no precession and computations are much simpler and faster
+ * It has no precession, and computations are much simpler and faster
  *
  * @param mass - mass
  * @param mr2  - square of effective radius multiplied by mass
@@ -100,6 +100,9 @@ final case class Pga3dInertiaSimple(mass: Double,
 object Pga3dInertiaSimple:
 
   inline val componentsCount = 2
+  
+  def point(mass: Double): Pga3dInertiaSimple =
+    Pga3dInertiaSimple(mass, mr2 = 0.0)
 
   def cube(mass: Double, rx: Double): Pga3dInertiaSimple =
     Pga3dInertiaSimple(
