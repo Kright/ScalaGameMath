@@ -31,7 +31,7 @@ class SymmetricMatrixDiagonalizationTest extends AnyFunSuiteLike with ScalaCheck
     }
 
     def rotateDiag(diag: Matrix, rot: Matrix): Matrix =
-      rot * diag * rot.transposed()
+      rot * diag * rot.transposedCopy()
 
     val diags = Seq(
       makeDiagMatrics(1.0, 1.0),
@@ -89,7 +89,7 @@ class SymmetricMatrixDiagonalizationTest extends AnyFunSuiteLike with ScalaCheck
 
     forAll(MatrixGenerators.rotatedDiagonal(matrixSize, rotationsMixed, 0.01, 1.0)) { input =>
       val (diagonal, eigenvectors) = Matrix.symmetricMatrixToDiagonalAndEigenvectors(input)
-      val recreated = eigenvectors * diagonal * eigenvectors.transposed()
+      val recreated = eigenvectors * diagonal * eigenvectors.transposedCopy()
       assert(dist(input, recreated) < 1e-14)
     }
   }
@@ -100,13 +100,13 @@ class SymmetricMatrixDiagonalizationTest extends AnyFunSuiteLike with ScalaCheck
 
     forAll(MatrixGenerators.rotatedDiagonal(matrixSize, rotationsMixed, 0.01, 1.0)) { input =>
       val (diagonal, eigenvectors) = Matrix.symmetricMatrixToDiagonalAndEigenvectors(input)
-      val recreated = eigenvectors * diagonal * eigenvectors.transposed()
+      val recreated = eigenvectors * diagonal * eigenvectors.transposedCopy()
       assert(dist(input, recreated) < 1e-14)
     }
 
     forAll(MatrixGenerators.rotatedDiagonal(matrixSize, rotationsMixed, 0.01, 1.0)) { input =>
       val (diagonal, eigenvectors) = Matrix.symmetricMatrixToDiagonalAndEigenvectors(input)
-      val recreated = eigenvectors * diagonal * eigenvectors.transposed()
+      val recreated = eigenvectors * diagonal * eigenvectors.transposedCopy()
       assert(dist(input, recreated) < 1e-14)
     }
   }

@@ -120,8 +120,8 @@ object Pga3dInertiaLocal:
       mrxy = mass * (xx + yy),
     )
 
-  def cylinderX(mass: Double, width: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal = {
+  def cylinderX(mass: Double, length: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal = {
     val xx = Pga3dInertia.disk(r, innerR)
-    val yy = Pga3dInertia.rod(width) + 0.5 * xx
+    val yy = Pga3dInertia.rod(length) + 0.5 * xx
     fromXXYYZZ(mass, xx, yy, yy)
   }

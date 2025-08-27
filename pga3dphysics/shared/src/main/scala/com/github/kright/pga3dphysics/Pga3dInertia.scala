@@ -42,7 +42,7 @@ trait Pga3dInertia:
  */
 object Pga3dInertia:
   def rod(length: Double): Double =
-    length * length / 3.0
+    length * length / 12.0
 
   def disk(r: Double, innerR: Double = 0.0): Double =
     0.5 * (r * r + innerR * innerR)
@@ -62,8 +62,8 @@ object Pga3dInertia:
   def solidEllipsoid(mass: Double, rx: Double, ry: Double, rz: Double): Pga3dInertiaLocal =
     Pga3dInertiaLocal.solidEllipsoid(mass, rx, ry, rz)
 
-  def cylinderX(mass: Double, width: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal =
-    Pga3dInertiaLocal.cylinderX(mass, width, r, innerR)
+  def cylinderX(mass: Double, length: Double, r: Double, innerR: Double = 0.0): Pga3dInertiaLocal =
+    Pga3dInertiaLocal.cylinderX(mass, length, r, innerR)
 
   def fromXXYYZZ(mass: Double, xx: Double, yy: Double, zz: Double): Pga3dInertiaLocal =
     Pga3dInertiaLocal.fromXXYYZZ(mass, xx, yy, zz)

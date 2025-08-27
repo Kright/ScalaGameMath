@@ -14,7 +14,7 @@ class CholeskyDecompositionTest extends AnyFunSuiteLike with ScalaCheckPropertyC
   test("decomposition") {
     forAll(MatrixGenerators.rotatedDiagonal(matrixSize, repeats = 10, 0.1, 10.0), MinSuccessful(100)) { matrix =>
       val L = CholeskyDecomposition(matrix)
-      val restoredMatrix = L * L.transposed()
+      val restoredMatrix = L * L.transposedCopy()
       assert((matrix - restoredMatrix).frobeniusNorm < 1e-14)
     }
   }

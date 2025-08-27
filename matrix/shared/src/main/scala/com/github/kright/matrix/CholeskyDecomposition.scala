@@ -77,4 +77,4 @@ object CholeskyDecomposition:
   def inverted(m: Matrix): Matrix =
     val L = apply(m)
     inplaceInvertLowerTriangularMatrix(L)
-    L.transposed() * L
+    L.transposedCopy() * L

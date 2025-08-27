@@ -82,7 +82,7 @@ class Matrix(val h: Int, val w: Int) extends ArrayView2d[Double]:
 
     result
 
-  def transposed(): Matrix =
+  def transposedCopy(): Matrix =
     val result = new Matrix(w, h)
     for (y <- FastRange(result.h);
          x <- FastRange(result.w)) {

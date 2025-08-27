@@ -45,4 +45,4 @@ object MatrixGenerators:
     for {
       diagonal <- diagonalPositiveMatrix(size, min, max)
       rotation <- rotationMatrix(size, repeats)
-    } yield rotation * diagonal * rotation.transposed()
+    } yield rotation * diagonal * rotation.transposedCopy()

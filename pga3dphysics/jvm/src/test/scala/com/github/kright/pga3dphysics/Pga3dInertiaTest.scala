@@ -326,7 +326,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("inertia for disk") {
     val eps = 1e-15
 
-    val disk = Pga3dInertia.cylinderX(mass = 1.0, width = 0.0, r = 1.0)
+    val disk = Pga3dInertia.cylinderX(mass = 1.0, length = 0.0, r = 1.0)
 
     assert(Math.abs(disk.toSummable.xx - 0.5) < eps)
     assert(Math.abs(disk.toSummable.yy - 0.25) < eps)
@@ -336,7 +336,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("inertia for circle disk") {
     val eps = 1e-15
 
-    val circle = Pga3dInertia.cylinderX(mass = 1.0, width = 0.0, r = 1.0, innerR = 1.0)
+    val circle = Pga3dInertia.cylinderX(mass = 1.0, length = 0.0, r = 1.0, innerR = 1.0)
 
     assert(Math.abs(circle.toSummable.xx - 1.0) < eps)
     assert(Math.abs(circle.toSummable.yy - 0.5) < eps)
@@ -346,7 +346,7 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("inertia for rod") {
     val eps = 1e-15
 
-    val circle = Pga3dInertia.cylinderX(mass = 3.0, width = 1.0, r = 0.0)
+    val circle = Pga3dInertia.cylinderX(mass = 12.0, length = 1.0, r = 0.0)
 
     assert(Math.abs(circle.toSummable.xx - 0.0) < eps)
     assert(Math.abs(circle.toSummable.yy - 1.0) < eps)
@@ -356,11 +356,11 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   test("inertia for cylinder") {
     val eps = 1e-15
 
-    val circle = Pga3dInertia.cylinderX(mass = 1.0, width = 1.0, r = 1.0)
+    val cylinder = Pga3dInertia.cylinderX(mass = 1.0, length = 1.0, r = 1.0)
 
-    assert(Math.abs(circle.toSummable.xx - 0.5) < eps)
-    assert(Math.abs(circle.toSummable.yy - (0.25 + 1.0 / 3.0)) < eps)
-    assert(Math.abs(circle.toSummable.yy - (0.25 + 1.0 / 3.0)) < eps)
+    assert(Math.abs(cylinder.toSummable.xx - 0.5) < eps)
+    assert(Math.abs(cylinder.toSummable.yy - (0.25 + 1.0 / 12.0)) < eps)
+    assert(Math.abs(cylinder.toSummable.yy - (0.25 + 1.0 / 12.0)) < eps)
   }
 
 
