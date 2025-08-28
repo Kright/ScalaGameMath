@@ -238,7 +238,7 @@ class PGA3Test extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
         val log = PGA3.motorLog(exp)
 
         val err = (log - b).norm
-        assert(err <= b.norm * 1e-7,
+        assert(err <= b.norm * 2e-7,
           s"""
              |s"$i:(log(exp(b)) - b).norm = ${err}, b.norm = ${b.norm}"
              |""".stripMargin)

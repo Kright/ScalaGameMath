@@ -27,6 +27,25 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
     Pga3dVector(1.0, 1.0, 1.0),
   )
 
+  val models: Gen[Pga3dInertia] = Gen.oneOf(
+    Pga3dInertia.point(mass = 1.0),
+    Pga3dInertia.cube(mass = 1.0, 1.0),
+    Pga3dInertia.cube(mass = 1.0, 1.0, 1.0, 1.0),
+    Pga3dInertia.cube(mass = 2.0, 3.0, 4.0, 5.0),
+    Pga3dInertia.cylinderX(mass = 1.0, length = 1.0, r = 1.0),
+    Pga3dInertia.cylinderX(mass = 2.0, length = 3.0, r = 5.0, innerR = 4.0),
+    Pga3dInertia.solidEllipsoid(mass = 2.0, 3.0, 4.0, 5.0),
+  )
+
+  val anyShifts: Gen[Pga3dVector] = Gen.oneOf(
+    Gen.oneOf(shifts),
+    for {
+      x <- Pga3dVectorMathGenerators.double1
+      y <- Pga3dVectorMathGenerators.double1
+      z <- Pga3dVectorMathGenerators.double1
+    } yield Pga3dVector(x, y, z),
+  )
+
   def p(p: Pga3dInertiaSummable): Unit =
     println(p.str)
     println(p)
@@ -268,7 +287,6 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
   test("any inertia acceleration") {
     forAll(Pga3dInertiaGenerators.anyInertia, Pga3dGenerators.bivectors, Pga3dGenerators.bivectors, MinSuccessful(10000)) { (inertia, b, forque) =>
-
       val a = inertia.getAcceleration(b, forque)
       val a2 = inertia.invert(b.cross(inertia(b)) + forque)
 
@@ -328,9 +346,9 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val disk = Pga3dInertia.cylinderX(mass = 1.0, length = 0.0, r = 1.0)
 
-    assert(Math.abs(disk.toSummable.xx - 0.5) < eps)
-    assert(Math.abs(disk.toSummable.yy - 0.25) < eps)
-    assert(Math.abs(disk.toSummable.yy - 0.25) < eps)
+    assert(Math.abs(disk.mryz - 0.5) < eps, s"${disk} ${disk.toSummable}")
+    assert(Math.abs(disk.mrxz - 0.25) < eps, s"${disk} ${disk.toSummable}")
+    assert(Math.abs(disk.mrxy - 0.25) < eps, s"${disk} ${disk.toSummable}")
   }
 
   test("inertia for circle disk") {
@@ -338,9 +356,9 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val circle = Pga3dInertia.cylinderX(mass = 1.0, length = 0.0, r = 1.0, innerR = 1.0)
 
-    assert(Math.abs(circle.toSummable.xx - 1.0) < eps)
-    assert(Math.abs(circle.toSummable.yy - 0.5) < eps)
-    assert(Math.abs(circle.toSummable.yy - 0.5) < eps)
+    assert(Math.abs(circle.mryz - 1.0) < eps)
+    assert(Math.abs(circle.mrxz - 0.5) < eps)
+    assert(Math.abs(circle.mrxy - 0.5) < eps)
   }
 
   test("inertia for rod") {
@@ -348,9 +366,9 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val circle = Pga3dInertia.cylinderX(mass = 12.0, length = 1.0, r = 0.0)
 
-    assert(Math.abs(circle.toSummable.xx - 0.0) < eps)
-    assert(Math.abs(circle.toSummable.yy - 1.0) < eps)
-    assert(Math.abs(circle.toSummable.yy - 1.0) < eps)
+    assert(Math.abs(circle.mryz - 0.0) < eps)
+    assert(Math.abs(circle.mrxy - 1.0) < eps)
+    assert(Math.abs(circle.mrxz - 1.0) < eps)
   }
 
   test("inertia for cylinder") {
@@ -358,9 +376,9 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
 
     val cylinder = Pga3dInertia.cylinderX(mass = 1.0, length = 1.0, r = 1.0)
 
-    assert(Math.abs(cylinder.toSummable.xx - 0.5) < eps)
-    assert(Math.abs(cylinder.toSummable.yy - (0.25 + 1.0 / 12.0)) < eps)
-    assert(Math.abs(cylinder.toSummable.yy - (0.25 + 1.0 / 12.0)) < eps)
+    assert(Math.abs(cylinder.mryz - 0.5) < eps)
+    assert(Math.abs(cylinder.mrxz - (0.25 + 1.0 / 12.0)) < eps)
+    assert(Math.abs(cylinder.mrxy - (0.25 + 1.0 / 12.0)) < eps)
   }
 
   test("inertia for cylinder as sum of rod and cylinder") {
@@ -381,31 +399,20 @@ class Pga3dInertiaTest extends AnyFunSuiteLike with ScalaCheckPropertyChecks:
   }
 
   test("Parallel axis theorem for models") {
-    val models = Seq(
-      Pga3dInertia.point(mass = 1.0),
-      Pga3dInertia.cube(mass = 1.0, 1.0),
-      Pga3dInertia.cube(mass = 1.0, 1.0, 1.0, 1.0),
-      Pga3dInertia.cube(mass = 2.0, 3.0, 4.0, 5.0),
-      Pga3dInertia.cylinderX(mass = 1.0, length = 1.0, r = 1.0),
-      Pga3dInertia.cylinderX(mass = 2.0, length = 3.0, r = 5.0, innerR = 4.0),
-      Pga3dInertia.solidEllipsoid(mass = 2.0, 3.0, 4.0, 5.0),
-    )
-
-    val offsets = Seq[Pga3dTranslator](
-      Pga3dTranslator.addVector(Pga3dVector(0.0, 0.0, 0.0)),
-      Pga3dTranslator.addVector(Pga3dVector(1.0, 0.0, 0.0)),
-      Pga3dTranslator.addVector(Pga3dVector(0.0, 2.0, 0.0)),
-      Pga3dTranslator.addVector(Pga3dVector(0.0, 0.0, 3.0)),
-      Pga3dTranslator.addVector(Pga3dVector(1.0, 2.0, 3.0)),
-    )
-
-    for (model <- models;
-         offset <- offsets) {
-
-      val movedPoint = Pga3dInertia.point(model.mass).movedBy(offset)
+    forAll(anyShifts, models, MinSuccessful(100)) { (offset, model) =>
+      val shift = Pga3dTranslator.addVector(offset)
+      val movedPoint = Pga3dInertia.point(model.mass).movedBy(shift)
       val movedPointPlusCube = movedPoint.toSummable + model.toSummable
-      val movedModel = model.movedBy(offset).toSummable
+      val movedModel = model.movedBy(shift).toSummable
       assert((movedPointPlusCube.copy(ww = movedModel.ww) - movedModel).norm < 1e-12)
+    }
+  }
+
+  test("sum of shifts is shift of sum") {
+    forAll(anyShifts, anyShifts, models, MinSuccessful(100)) { (offset0, offset1, model) =>
+      val afterTwoMoves = model.movedBy(Pga3dTranslator.addVector(offset0)).movedBy(Pga3dTranslator.addVector(offset1))
+      val afterSingleMove = model.movedBy(Pga3dTranslator.addVector(offset0 + offset1))
+      assert((afterTwoMoves.toSummable - afterSingleMove.toSummable).norm < 1e-12)
     }
   }
 

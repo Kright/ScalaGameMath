@@ -119,13 +119,15 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
   }
 
   test("matrix inversion") {
+    implicit val eps: EqualityEps = EqualityEps(1e-12)
+    
     forAll(matrices2) { m =>
       if (Math.abs(m.det()) > 0.000001) {
         val inverted = m.inverted()
         val id = Matrix2d().setIdentity()
 
-        assert(id === (m * inverted), s"diff = ${(id - (m * inverted))}")
-        assert(id === (inverted * m), s"diff = ${(id - (inverted * m))}")
+        assert(id === (m * inverted), s"diff = ${id - (m * inverted)}")
+        assert(id === (inverted * m), s"diff = ${id - (inverted * m)}")
       }
     }
 
@@ -134,8 +136,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix3d().setIdentity()
 
-        assert(id === (m * inverted))
-        assert(id === (inverted * m))
+        assert(id === (m * inverted), s"diff = ${id - (m * inverted)}")
+        assert(id === (inverted * m), s"diff = ${id - (inverted * m)}")
       }
     }
 
@@ -144,8 +146,8 @@ class MatrixTest extends AnyFunSuite with ScalaCheckPropertyChecks:
         val inverted = m.inverted()
         val id = Matrix4d().setIdentity()
 
-        assert(id === (m * inverted))
-        assert(id === (inverted * m))
+        assert(id === (m * inverted), s"diff = ${id - (m * inverted)}")
+        assert(id === (inverted * m), s"diff = ${id - (inverted * m)}")
       }
     }
   }

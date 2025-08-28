@@ -10,7 +10,7 @@ object Pga3dGenerators:
       .map(arr => factory(arr, 0))
 
   val double1: Gen[Double] = Gen.double.map(_ * 2.0 - 1.0)
-  
+
   val bivectorProbes: Seq[Pga3dBivector] = Seq(
     Pga3dBivector(1, 0, 0, 0, 0, 0),
     Pga3dBivector(0, 1, 0, 0, 0, 0),
@@ -73,12 +73,10 @@ object Pga3dGenerators:
   val vectors: Gen[Pga3dVector] =
     Gen.oneOf(
       Gen.oneOf(
-        Seq(
-          Pga3dVector.zero,
-          Pga3dVector(1, 0, 0),
-          Pga3dVector(0, 1, 0),
-          Pga3dVector(0, 0, 1),
-        )
+        Pga3dVector.zero,
+        Pga3dVector(1, 0, 0),
+        Pga3dVector(0, 1, 0),
+        Pga3dVector(0, 0, 1),
       ),
       makeGenT(3, FlatSerializer.read[Pga3dVector])
     )
