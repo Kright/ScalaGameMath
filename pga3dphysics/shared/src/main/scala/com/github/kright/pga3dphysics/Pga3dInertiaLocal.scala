@@ -13,8 +13,8 @@ final case class Pga3dInertiaLocal(mass: Double,
   override def centerOfMass: Pga3dPoint =
     Pga3dPoint.center
 
-  override def centerOfMassTrivector: Pga3dTrivector =
-    Pga3dTrivector(x = 0.0, y = 0.0, z = 0.0, w = mass)
+  override def centerOfMassProjective: Pga3dProjectivePoint =
+    Pga3dProjectivePoint(x = 0.0, y = 0.0, z = 0.0, w = mass)
 
   override def apply(localB: Pga3dBivector): Pga3dBivector =
     Pga3dBivector(

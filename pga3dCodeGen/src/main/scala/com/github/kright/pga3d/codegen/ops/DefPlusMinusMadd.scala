@@ -23,7 +23,7 @@ object DefPlusMinusMadd:
       }
 
       val self = cls.self
-      val points = Set(trivector, point, vector)
+      val points = Set(projectivePoint, point, vector)
       val bivectors = Set(bivector, bivectorBulk, bivectorWeight)
       if (points.contains(cls)) {
         for (pClass <- points) {

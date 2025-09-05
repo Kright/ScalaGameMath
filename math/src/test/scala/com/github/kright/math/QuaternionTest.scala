@@ -157,7 +157,7 @@ class QuaternionTest extends AnyFunSuite with ScalaCheckPropertyChecks:
       val q2 = Quaternion().setFromAxisOverBisection(sourceAxis, bisection)
 
       assert(q === q2)
-      assert(q === (halfQ * halfQ))
+      assert(q === (halfQ * halfQ), s"\nhalfQ = $halfQ,\nhalfQ^2=${halfQ * halfQ},\nq = $q,\ndiff = ${halfQ * halfQ - q}")
       assert(q.mag === 1.0)
     }
   }

@@ -41,4 +41,4 @@ object Pga3dVectorMathGenerators:
       Gen.double.map { d =>
         d * (max - min) + min
       }
-    )
+    ).filter(d => d >= min && d <= max)

@@ -15,7 +15,7 @@ class Pga3dInertiaMovedLocal(val localToGlobal: Pga3dMotor,
   override def centerOfMass: Pga3dPoint =
     localToGlobal.sandwich(Pga3dPointCenter).toPointUnsafe
 
-  override def centerOfMassTrivector: Pga3dTrivector =
+  override def centerOfMassProjective: Pga3dProjectivePoint =
     centerOfMass * localInertia.mass
 
   /**

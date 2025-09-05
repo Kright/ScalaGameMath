@@ -34,16 +34,16 @@ object Pga3dPointCenter:
     Pga3dPointCenter
 
   @targetName("unaryMinus")
-  def unary_- : Pga3dTrivector =
-    Pga3dTrivector(
+  def unary_- : Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = -1.0,
     )
 
-  def reverse: Pga3dTrivector =
-    Pga3dTrivector(
+  def reverse: Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -72,8 +72,8 @@ object Pga3dPointCenter:
     this / norm
 
   @targetName("times")
-  def *(v: Double): Pga3dTrivector =
-    Pga3dTrivector(
+  def *(v: Double): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -81,20 +81,20 @@ object Pga3dPointCenter:
     )
 
   @targetName("div")
-  def /(v: Double): Pga3dTrivector =
+  def /(v: Double): Pga3dProjectivePoint =
     this * (1.0 / v)
 
   @targetName("plus")
-  def +(v: Pga3dPointCenter.type): Pga3dTrivector =
-    Pga3dTrivector(
+  def +(v: Pga3dPointCenter.type): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = 2.0,
     )
 
-  def madd(v: Pga3dPointCenter.type, mult: Double): Pga3dTrivector =
-    Pga3dTrivector(
+  def madd(v: Pga3dPointCenter.type, mult: Double): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -124,8 +124,8 @@ object Pga3dPointCenter:
       i = 0.0,
     )
 
-  def toTrivector: Pga3dTrivector =
-    Pga3dTrivector(
+  def toProjectivePoint: Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -147,8 +147,8 @@ object Pga3dPointCenter:
     )
 
   /** fused plane.dot(point).geometric(plane) */
-  def projectOntoPlane(plane: Pga3dPlane): Pga3dTrivector =
-    Pga3dTrivector(
+  def projectOntoPlane(plane: Pga3dPlane): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = -plane.w * plane.x,
       y = -plane.w * plane.y,
       z = -plane.w * plane.z,
@@ -178,8 +178,8 @@ object Pga3dPointCenter:
    *   i = 0.0,
    * )
    */
-  def projectOntoLine(line: Pga3dBivector): Pga3dTrivector =
-    Pga3dTrivector(
+  def projectOntoLine(line: Pga3dBivector): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = (-line.wy * line.xy - line.wz * line.xz),
       y = (line.wx * line.xy - line.wz * line.yz),
       z = (line.wx * line.xz + line.wy * line.yz),
@@ -238,7 +238,7 @@ object Pga3dPointCenter:
       i = 0.0,
     )
 
-  infix def geometric(v: Pga3dTrivector): Pga3dMotor =
+  infix def geometric(v: Pga3dProjectivePoint): Pga3dMotor =
     Pga3dMotor(
       s = -v.w,
       wx = -v.x,
@@ -362,7 +362,7 @@ object Pga3dPointCenter:
       z = -v.xy,
     )
 
-  infix def dot(v: Pga3dTrivector): Double =
+  infix def dot(v: Pga3dProjectivePoint): Double =
     -v.w
 
   infix def dot(v: Pga3dQuaternion): Pga3dMultivector =
@@ -416,15 +416,15 @@ object Pga3dPointCenter:
   infix def dot(v: Pga3dPointCenter.type): Double =
     -1.0
 
-  infix def wedge(v: Pga3dMotor): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def wedge(v: Pga3dMotor): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = v.s,
     )
 
-  inline infix def ^(v: Pga3dMotor): Pga3dTrivector = wedge(v)
+  inline infix def ^(v: Pga3dMotor): Pga3dProjectivePoint = wedge(v)
 
   infix def wedge(v: Pga3dPlane): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
@@ -433,15 +433,15 @@ object Pga3dPointCenter:
 
   inline infix def ^(v: Pga3dPlane): Pga3dPseudoScalar = wedge(v)
 
-  infix def wedge(v: Pga3dQuaternion): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def wedge(v: Pga3dQuaternion): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = v.s,
     )
 
-  inline infix def ^(v: Pga3dQuaternion): Pga3dTrivector = wedge(v)
+  inline infix def ^(v: Pga3dQuaternion): Pga3dProjectivePoint = wedge(v)
 
   infix def wedge(v: Pga3dTranslator): Pga3dPointCenter.type =
     this
@@ -478,7 +478,7 @@ object Pga3dPointCenter:
       z = -v.wz,
     )
 
-  infix def antiGeometric(v: Pga3dTrivector): Pga3dBivectorBulk =
+  infix def antiGeometric(v: Pga3dProjectivePoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
       xz = -v.y,
@@ -513,24 +513,24 @@ object Pga3dPointCenter:
       z = -v.wz,
     )
 
-  infix def antiGeometric(v: Pga3dPseudoScalar): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def antiGeometric(v: Pga3dPseudoScalar): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = v.i,
     )
 
-  infix def antiDot(v: Pga3dMotor): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def antiDot(v: Pga3dMotor): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = v.i,
     )
 
-  infix def antiDot(v: Pga3dPseudoScalar): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def antiDot(v: Pga3dPseudoScalar): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
@@ -573,14 +573,14 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dBivector): Pga3dPlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dTrivector): Pga3dBivectorBulk =
+  infix def antiWedge(v: Pga3dProjectivePoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
       xz = -v.y,
       yz = v.x,
     )
 
-  inline infix def v(v: Pga3dTrivector): Pga3dBivectorBulk = antiWedge(v)
+  inline infix def v(v: Pga3dProjectivePoint): Pga3dBivectorBulk = antiWedge(v)
 
   infix def antiWedge(v: Pga3dTranslator): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -618,15 +618,15 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dBivectorWeight): Pga3dPlaneIdeal = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dPseudoScalar): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def antiWedge(v: Pga3dPseudoScalar): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = 0.0,
       y = 0.0,
       z = 0.0,
       w = v.i,
     )
 
-  inline infix def v(v: Pga3dPseudoScalar): Pga3dTrivector = antiWedge(v)
+  inline infix def v(v: Pga3dPseudoScalar): Pga3dProjectivePoint = antiWedge(v)
 
   infix def sandwich(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
@@ -658,8 +658,8 @@ object Pga3dPointCenter:
       yz = v.yz,
     )
 
-  infix def sandwich(v: Pga3dTrivector): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def sandwich(v: Pga3dProjectivePoint): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = -v.x,
       y = -v.y,
       z = -v.z,
@@ -744,8 +744,8 @@ object Pga3dPointCenter:
       yz = v.yz,
     )
 
-  infix def reverseSandwich(v: Pga3dTrivector): Pga3dTrivector =
-    Pga3dTrivector(
+  infix def reverseSandwich(v: Pga3dProjectivePoint): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
       x = -v.x,
       y = -v.y,
       z = -v.z,
@@ -832,7 +832,7 @@ object Pga3dPointCenter:
       z = v.wz,
     )
 
-  infix def cross(v: Pga3dTrivector): Pga3dBivectorWeight =
+  infix def cross(v: Pga3dProjectivePoint): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = -v.x,
       wy = -v.y,

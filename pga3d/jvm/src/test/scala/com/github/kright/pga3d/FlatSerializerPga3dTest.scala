@@ -12,7 +12,7 @@ class FlatSerializerPga3dTest extends AnyFunSuiteLike with ScalaCheckPropertyChe
   test("check sizes") {
     assert(FlatSerializer.getSize[Pga3dBivector] == Pga3dBivector.componentsCount)
     assert(FlatSerializer.getSize[Pga3dVector] == Pga3dVector.componentsCount)
-    assert(FlatSerializer.getSize[Pga3dTrivector] == Pga3dTrivector.componentsCount)
+    assert(FlatSerializer.getSize[Pga3dProjectivePoint] == Pga3dProjectivePoint.componentsCount)
     assert(FlatSerializer.getSize[Pga3dQuaternion] == Pga3dQuaternion.componentsCount)
     assert(FlatSerializer.getSize[Pga3dPlane] == Pga3dPlane.componentsCount)
     assert(FlatSerializer.getSize[Pga3dPlaneIdeal] == Pga3dPlaneIdeal.componentsCount)

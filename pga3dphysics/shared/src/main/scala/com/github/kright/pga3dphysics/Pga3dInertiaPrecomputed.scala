@@ -13,7 +13,7 @@ class Pga3dInertiaPrecomputed(val inertia: Pga3dInertia) extends Pga3dInertia:
   override val centerOfMass: Pga3dPoint =
     inertia.centerOfMass
 
-  override val centerOfMassTrivector: Pga3dTrivector =
+  override val centerOfMassProjective: Pga3dProjectivePoint =
     centerOfMass * mass
 
   private val matrixFwd: Matrix =

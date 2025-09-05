@@ -1,7 +1,7 @@
 package com.github.kright.pga3d.codegen.ops
 
 import com.github.kright.ga.PGA3
-import com.github.kright.pga3d.codegen.MultivectorSubClass.{point, pointCenter, trivector, vector}
+import com.github.kright.pga3d.codegen.MultivectorSubClass.{point, pointCenter, projectivePoint, vector}
 import com.github.kright.pga3d.codegen.{GeneratedCode, MultivectorUnaryOp}
 
 object DefConstAndDualFields:
@@ -12,7 +12,7 @@ object DefConstAndDualFields:
           code(s"inline val ${f.name} = ${v}")
         }
 
-        if (Seq(vector, trivector, point, pointCenter).contains(cls)) {
+        if (Seq(vector, projectivePoint, point, pointCenter).contains(cls)) {
           cls.self.values.foreach { (b, sym) =>
             val fName = s"${pga3.representation(b)}"
             code("")

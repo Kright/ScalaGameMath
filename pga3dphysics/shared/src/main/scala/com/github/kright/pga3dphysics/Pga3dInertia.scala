@@ -8,7 +8,7 @@ trait Pga3dInertia:
 
   def centerOfMass: Pga3dPoint
 
-  def centerOfMassTrivector: Pga3dTrivector
+  def centerOfMassProjective: Pga3dProjectivePoint
 
   def apply(velocity: Pga3dBivector): Pga3dBivector
 

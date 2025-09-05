@@ -9,7 +9,7 @@ class Pga3dInertiaSummableTest extends AnyFunSuiteLike with ScalaCheckPropertyCh
   test("point mass") {
     forAll(Pga3dGenerators.points, Gen.double.map(_ + 0.1)) { (point, mass) =>
       val summable0 = Pga3dInertiaSummable.point(point, mass)
-      val summable1 = Pga3dInertiaSummable.symmetricProduct(point.toTrivector, point * mass)
+      val summable1 = Pga3dInertiaSummable.symmetricProduct(point.toProjectivePoint, point * mass)
       assert((summable0 - summable1).norm < 1e-15)
     }
   }
@@ -19,7 +19,7 @@ class Pga3dInertiaSummableTest extends AnyFunSuiteLike with ScalaCheckPropertyCh
       val summable = Pga3dInertiaSummable.point(point, mass)
       assert(Math.abs(summable.mass - mass) < 1e-15)
       assert((summable.centerOfMass - point).norm < 1e-15)
-      assert((summable.centerOfMassTrivector.w - mass) < 1e-15)
+      assert((summable.centerOfMassProjective.w - mass) < 1e-15)
     }
   }
 

@@ -1,7 +1,7 @@
 package com.github.kright.pga3d.codegen.ops
 
 import com.github.kright.ga.{MultiVector, PGA3}
-import com.github.kright.pga3d.codegen.MultivectorSubClass.{point, trivector, vector}
+import com.github.kright.pga3d.codegen.MultivectorSubClass.{point, projectivePoint, vector}
 import com.github.kright.pga3d.codegen.{GeneratedCode, MultivectorSubClass, MultivectorUnaryOp}
 import com.github.kright.symbolic.Sym
 
@@ -9,7 +9,7 @@ object DefMethodsIfAnyPoint:
   def apply()(using pga3: PGA3): MultivectorUnaryOp =
     MultivectorUnaryOp { (cls, v) =>
       GeneratedCode { code =>
-        val points = Set(trivector, point, vector)
+        val points = Set(projectivePoint, point, vector)
         if (points.contains(cls)) {
           if (cls == point) {
             code(
@@ -19,7 +19,7 @@ object DefMethodsIfAnyPoint:
           }
 
           code("")
-          if (cls == trivector) {
+          if (cls == projectivePoint) {
             val mv = MultiVector("wxy" -> Sym("wxy"), "wxz" -> Sym("wxz"), "wyz" -> Sym("wyz"), "xyz" -> Sym("xyz"))
             code(s"def blade3(wxy: Double, wxz: Double, wyz: Double, xyz: Double): ${cls.typeName} =")
             code.block {
@@ -36,7 +36,7 @@ object DefMethodsIfAnyPoint:
           code("")
           code(s"def interpolate(a: ${cls.typeName}, b: ${cls.typeName}, t: Double): ${cls.typeName} =")
           code.block {
-            if (cls == trivector || cls == vector) {
+            if (cls == projectivePoint || cls == vector) {
               code("a * (1.0 - t) + b * t")
             } else {
               code("(a.toVectorUnsafe * (1.0 - t) + b.toVectorUnsafe * t).toPointUnsafe")

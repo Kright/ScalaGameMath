@@ -34,8 +34,8 @@ final case class Pga3dInertiaSummable(ww: Double,
     val inv = 1.0 / mass
     Pga3dPoint(wx * inv, wy * inv, wz * inv)
 
-  def centerOfMassTrivector: Pga3dTrivector =
-    Pga3dTrivector(wx, wy, wz, ww)
+  def centerOfMassProjective: Pga3dProjectivePoint =
+    Pga3dProjectivePoint(wx, wy, wz, ww)
 
   def +(v: Pga3dInertiaSummable): Pga3dInertiaSummable =
     Pga3dInertiaSummable(
@@ -184,7 +184,7 @@ object Pga3dInertiaSummable:
   val zero: Pga3dInertiaSummable =
     Pga3dInertiaSummable(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-  def symmetricProduct(u: Pga3dTrivector, v: Pga3dTrivector): Pga3dInertiaSummable =
+  def symmetricProduct(u: Pga3dProjectivePoint, v: Pga3dProjectivePoint): Pga3dInertiaSummable =
     Pga3dInertiaSummable(
       ww = (u.w * v.w + v.w * u.w) * 0.5,
       wx = (u.w * v.x + v.w * u.x) * 0.5,
@@ -198,7 +198,7 @@ object Pga3dInertiaSummable:
       xz = (u.x * v.z + v.x * u.z) * 0.5,
     )
 
-  // inertia of a mass in a point = symmetricProduct(p.toTrivector, p * mass)
+  // inertia of a mass in a point = symmetricProduct(p.toProjectivePoint, p * mass)
   def point(p: Pga3dPoint, mass: Double): Pga3dInertiaSummable =
     Pga3dInertiaSummable(
       ww = mass,
@@ -213,16 +213,16 @@ object Pga3dInertiaSummable:
       xz = p.x * p.z * mass,
     )
 
-  private inline def sandwichImpl(b: Pga3dInertiaSummable, sandwichF: Pga3dTrivector => Pga3dTrivector): Pga3dInertiaSummable =
-    val cx = sandwichF(Pga3dTrivector(b.xx, b.xy, b.xz, b.wx))
-    val cy = sandwichF(Pga3dTrivector(b.xy, b.yy, b.yz, b.wy))
-    val cz = sandwichF(Pga3dTrivector(b.xz, b.yz, b.zz, b.wz))
-    val cw = sandwichF(Pga3dTrivector(b.wx, b.wy, b.wz, b.ww))
+  private inline def sandwichImpl(b: Pga3dInertiaSummable, sandwichF: Pga3dProjectivePoint => Pga3dProjectivePoint): Pga3dInertiaSummable =
+    val cx = sandwichF(Pga3dProjectivePoint(b.xx, b.xy, b.xz, b.wx))
+    val cy = sandwichF(Pga3dProjectivePoint(b.xy, b.yy, b.yz, b.wy))
+    val cz = sandwichF(Pga3dProjectivePoint(b.xz, b.yz, b.zz, b.wz))
+    val cw = sandwichF(Pga3dProjectivePoint(b.wx, b.wy, b.wz, b.ww))
 
-    val rx = sandwichF(Pga3dTrivector(cx.x, cy.x, cz.x, cw.x))
-    val ry = sandwichF(Pga3dTrivector(cx.y, cy.y, cz.y, cw.y))
-    val rz = sandwichF(Pga3dTrivector(cx.z, cy.z, cz.z, cw.z))
-    val rw = sandwichF(Pga3dTrivector(cx.w, cy.w, cz.w, cw.w))
+    val rx = sandwichF(Pga3dProjectivePoint(cx.x, cy.x, cz.x, cw.x))
+    val ry = sandwichF(Pga3dProjectivePoint(cx.y, cy.y, cz.y, cw.y))
+    val rz = sandwichF(Pga3dProjectivePoint(cx.z, cy.z, cz.z, cw.z))
+    val rw = sandwichF(Pga3dProjectivePoint(cx.w, cy.w, cz.w, cw.w))
 
     Pga3dInertiaSummable(rw.w, rw.x, rw.y, rw.z, rx.x, ry.y, rz.z, rx.y, ry.z, rx.z)
 

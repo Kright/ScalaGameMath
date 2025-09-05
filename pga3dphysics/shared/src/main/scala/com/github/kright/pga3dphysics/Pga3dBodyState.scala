@@ -1,6 +1,6 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.pga3d.{Pga3dBivector, Pga3dMotor, Pga3dPointCenter, Pga3dTrivector}
+import com.github.kright.pga3d.{Pga3dBivector, Pga3dMotor, Pga3dPointCenter, Pga3dProjectivePoint}
 
 case class Pga3dBodyState(motor: Pga3dMotor,
                           localB: Pga3dBivector):
@@ -17,7 +17,7 @@ case class Pga3dBodyState(motor: Pga3dMotor,
   def getL(bodyInertia: Pga3dInertia): Pga3dBivector =
     motor.sandwich(bodyInertia(localB))
 
-  def center: Pga3dTrivector =
+  def center: Pga3dProjectivePoint =
     motor.sandwich(Pga3dPointCenter)
 
 

@@ -33,11 +33,7 @@ val mirroredPoint = plane.sandwich(point)
 * [**Pga3dPointCenter**](shared/src/main/scala/com/github/kright/pga3d/Pga3dPointCenter.scala): singleton object, center of coordinates.
 * [**Pga3dVector**](shared/src/main/scala/com/github/kright/pga3d/Pga3dVector.scala): difference between points. Consist of x, y, z and fixed w=0. Pga3dTranslator moved points, but not
   vectors.
-* [**Pga3dTrivector**](shared/src/main/scala/com/github/kright/pga3d/Pga3dTrivector.scala): general case with four fields (x, y, z, w).
-
-There is a name collision, Pga3dVector is a 3-vector (and a Pga3dTrivector), but I decided to give it a human-friendly
-name. In plane-based algebra 1-vector is a plane. Usually Pga3dTrivector is rarely needed, Pga3dPoint and Pga3dVector
-are better suited for common cases.
+* [**Pga3dProjectivePoint**](shared/src/main/scala/com/github/kright/pga3d/Pga3dProjectivePoint.scala): general case with four homogeneous coordindates (x, y, z, w). Could be mapped to point via (x/w, y/w, z/w) when w != 0.
 
 ```scala
 // Creating a point
