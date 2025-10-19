@@ -39,6 +39,20 @@ namespace pga3d {
         [[nodiscard]] constexpr PseudoScalar geometric(const PseudoScalar& b) const noexcept;
         [[nodiscard]] constexpr Point geometric(const PointCenter& b) const noexcept;
 
+        [[nodiscard]] constexpr Motor dot(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Bivector dot(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr ProjectivePoint dot(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Motor dot(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Translator dot(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Vector dot(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Point dot(const Point& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr BivectorBulk dot(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight dot(const BivectorWeight& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar dot(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr PointCenter dot(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

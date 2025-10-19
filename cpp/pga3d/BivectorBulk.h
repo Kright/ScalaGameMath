@@ -35,6 +35,19 @@ namespace pga3d {
         [[nodiscard]] constexpr BivectorWeight geometric(const PseudoScalar& b) const noexcept;
         [[nodiscard]] constexpr PlaneIdeal geometric(const PointCenter& b) const noexcept;
 
+        [[nodiscard]] constexpr Motor dot(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr PlaneIdeal dot(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr double dot(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Quaternion dot(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr BivectorBulk dot(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const Point& b) const noexcept;
+        [[nodiscard]] constexpr PlaneIdeal dot(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr double dot(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight dot(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr PlaneIdeal dot(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivector() const noexcept;
