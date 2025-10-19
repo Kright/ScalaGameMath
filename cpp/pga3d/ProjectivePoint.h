@@ -20,6 +20,9 @@ namespace pga3d {
         [[nodiscard]] constexpr double xyz() const noexcept { return w; }
 
         [[nodiscard]] static constexpr ProjectivePoint blade3(double wxy = 0.0, double wxz = 0.0, double wyz = 0.0, double xyz = 0.0) noexcept { return {.x = -wyz, .y = wxz, .z = -wxy, .w = xyz}; }
+        [[nodiscard]] static constexpr ProjectivePoint interpolate(const ProjectivePoint& a, const ProjectivePoint& b, double t) noexcept { return {.x = a.x * (1.0 - t) + b.x * t, .y = a.y * (1.0 - t) + b.y * t, .z = a.z * (1.0 - t) + b.z * t, .w = a.w * (1.0 - t) + b.w * t}; }
+        [[nodiscard]] static constexpr ProjectivePoint mid(const ProjectivePoint& a, const ProjectivePoint& b) noexcept { return {.x = 0.5 * (a.x + b.x), .y = 0.5 * (a.y + b.y), .z = 0.5 * (a.z + b.z), .w = 0.5 * (a.w + b.w)}; }
+        [[nodiscard]] static constexpr ProjectivePoint mid(const ProjectivePoint& a, const ProjectivePoint& b, const ProjectivePoint& c) noexcept { return {.x = (1.0 / 3.0) * (a.x + b.x + c.x), .y = (1.0 / 3.0) * (a.y + b.y + c.y), .z = (1.0 / 3.0) * (a.z + b.z + c.z), .w = (1.0 / 3.0) * (a.w + b.w + c.w)}; }
 
         [[nodiscard]] constexpr Plane dual() const noexcept;
 

@@ -18,6 +18,9 @@ namespace pga3d {
         [[nodiscard]] constexpr double wxy() const noexcept { return -z; }
 
         [[nodiscard]] static constexpr Vector blade3(double wxy = 0.0, double wxz = 0.0, double wyz = 0.0) noexcept { return {.x = -wyz, .y = wxz, .z = -wxy}; }
+        [[nodiscard]] static constexpr Vector interpolate(const Vector& a, const Vector& b, double t) noexcept { return {.x = a.x * (1.0 - t) + b.x * t, .y = a.y * (1.0 - t) + b.y * t, .z = a.z * (1.0 - t) + b.z * t}; }
+        [[nodiscard]] static constexpr Vector mid(const Vector& a, const Vector& b) noexcept { return {.x = 0.5 * (a.x + b.x), .y = 0.5 * (a.y + b.y), .z = 0.5 * (a.z + b.z)}; }
+        [[nodiscard]] static constexpr Vector mid(const Vector& a, const Vector& b, const Vector& c) noexcept { return {.x = (1.0 / 3.0) * (a.x + b.x + c.x), .y = (1.0 / 3.0) * (a.y + b.y + c.y), .z = (1.0 / 3.0) * (a.z + b.z + c.z)}; }
 
         [[nodiscard]] constexpr PlaneIdeal dual() const noexcept;
 
