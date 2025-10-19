@@ -26,6 +26,20 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Bivector antiReverse() const noexcept;
 
+        [[nodiscard]] constexpr Motor geometric(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Motor geometric(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Motor geometric(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Motor geometric(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const Point& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr Motor geometric(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr Motor geometric(const BivectorWeight& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight geometric(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr Multivector geometric(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Quaternion toQuaternionUnsafe() const noexcept;

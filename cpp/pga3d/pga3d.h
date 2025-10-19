@@ -9,6 +9,7 @@
 #include "ops_bulk.h"
 #include "ops_reverse.h"
 #include "ops_antiReverse.h"
+#include "ops_geometric.h"
 #include "ops_to.h"
 #include "ops_arithmetic.h"
 #include "ops_norm.h"
