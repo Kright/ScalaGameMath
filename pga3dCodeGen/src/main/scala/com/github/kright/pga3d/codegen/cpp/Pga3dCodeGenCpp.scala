@@ -30,6 +30,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     new AntiReverseOpGenerator,
     new ConversionOpGenerator,
     new ArithmeticsGenerator,
+    new NormOpGenerator,
     new ToStreamOpGenerator,
   )
 

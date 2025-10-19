@@ -30,6 +30,10 @@ namespace pga3d {
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;
+
+        [[nodiscard]] constexpr double normSquare() const noexcept;
+        [[nodiscard]] double norm() const noexcept;
+        [[nodiscard]] Vector normalizedByNorm() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Vector>);

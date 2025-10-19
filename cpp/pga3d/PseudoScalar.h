@@ -21,6 +21,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
+
+        [[nodiscard]] constexpr double normSquare() const noexcept;
+        [[nodiscard]] double norm() const noexcept;
+        [[nodiscard]] PseudoScalar normalizedByNorm() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<PseudoScalar>);

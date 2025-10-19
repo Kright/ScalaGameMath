@@ -25,6 +25,10 @@ namespace pga3d {
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivector() const noexcept;
         [[nodiscard]] constexpr Quaternion toQuaternion() const noexcept;
+
+        [[nodiscard]] constexpr double normSquare() const noexcept;
+        [[nodiscard]] double norm() const noexcept;
+        [[nodiscard]] BivectorBulk normalizedByNorm() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<BivectorBulk>);

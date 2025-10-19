@@ -32,6 +32,10 @@ namespace pga3d {
         [[nodiscard]] constexpr Translator toTranslatorUnsafe() const noexcept;
         [[nodiscard]] constexpr BivectorBulk toBivectorBulkUnsafe() const noexcept;
         [[nodiscard]] constexpr BivectorWeight toBivectorWeightUnsafe() const noexcept;
+
+        [[nodiscard]] constexpr double normSquare() const noexcept;
+        [[nodiscard]] double norm() const noexcept;
+        [[nodiscard]] Bivector normalizedByNorm() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Bivector>);

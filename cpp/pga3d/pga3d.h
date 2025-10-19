@@ -11,4 +11,5 @@
 #include "ops_antiReverse.h"
 #include "ops_to.h"
 #include "ops_arithmetic.h"
+#include "ops_norm.h"
 #include "ops_str.h"
