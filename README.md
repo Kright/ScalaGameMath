@@ -108,7 +108,7 @@ I rewrote physics equations in PGA, it looks like PGA is a better way of describ
   There is a huge number of similar methods (for each pair of classes for each type of multiplication). Because of
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
-* **pga3dCodeGen**: hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
+* [**pga3dCodeGen**](pga3dCodeGen/README.md): hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
   most narrow subclass of multivector for the result.
 * [**pga3dPhysics**](pga3dphysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
 * [**pga3dgeom**](pga3dgeom/README.md): classes for geometry - edges, triangles, axis-aligned bounding boxes
