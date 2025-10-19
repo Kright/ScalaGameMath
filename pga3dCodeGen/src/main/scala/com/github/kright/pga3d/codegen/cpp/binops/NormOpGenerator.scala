@@ -12,6 +12,8 @@ class NormOpGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code("#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
+    code.apply(s"#include \"ops_arithmetic.h\"")
+
     code.apply("")
     code.generatedBy(getClass.getName)
 
@@ -27,9 +29,9 @@ class NormOpGenerator extends BinOpCodeGen {
         if (coeffs.nonEmpty) {
           val normSqExpr: Sym = coeffs.map(c => c * c).reduce(_ + _)
           code(s"constexpr double ${cls.name}::normSquare() const noexcept { return ${normSqExpr.toString}; }")
-          code(s"double ${cls.name}::norm() const noexcept { return std::sqrt(normSquare()); }")
+          code(s"inline double ${cls.name}::norm() const noexcept { return std::sqrt(normSquare()); }")
           if (resultCls != CppSubclasses.zeroCls) {
-            code(s"${resultCls.name} ${cls.name}::normalizedByNorm() const noexcept { return *this / norm(); }")
+            code(s"inline ${resultCls.name} ${cls.name}::normalizedByNorm() const noexcept { return *this / norm(); }")
           }
           code("")
         }
@@ -39,9 +41,9 @@ class NormOpGenerator extends BinOpCodeGen {
         if (bulkCoeffs.nonEmpty) {
           val bulkNormSqExpr: Sym = bulkCoeffs.map(c => c * c).reduce(_ + _)
           code(s"constexpr double ${cls.name}::bulkNormSquare() const noexcept { return ${bulkNormSqExpr.toString}; }")
-          code(s"double ${cls.name}::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }")
+          code(s"inline double ${cls.name}::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }")
           if (resultCls != CppSubclasses.zeroCls) {
-            code(s"${resultCls.name} ${cls.name}::normalizedByBulk() const noexcept { return *this / bulkNorm(); }")
+            code(s"inline ${resultCls.name} ${cls.name}::normalizedByBulk() const noexcept { return *this / bulkNorm(); }")
           }
           code("")
         }
@@ -51,9 +53,9 @@ class NormOpGenerator extends BinOpCodeGen {
         if (weightCoeffs.nonEmpty) {
           val weightNormSqExpr: Sym = weightCoeffs.map(c => c * c).reduce(_ + _)
           code(s"constexpr double ${cls.name}::weightNormSquare() const noexcept { return ${weightNormSqExpr.toString}; }")
-          code(s"double ${cls.name}::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }")
+          code(s"inline double ${cls.name}::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }")
           if (resultCls != CppSubclasses.zeroCls) {
-            code(s"${resultCls.name} ${cls.name}::normalizedByWeight() const noexcept { return *this / weightNorm(); }")
+            code(s"inline ${resultCls.name} ${cls.name}::normalizedByWeight() const noexcept { return *this / weightNorm(); }")
           }
           code("")
         }
@@ -71,22 +73,22 @@ class NormOpGenerator extends BinOpCodeGen {
     val bulkHas = cls.self.bulk.values.nonEmpty
     val weightHas = cls.self.weight.values.nonEmpty
 
-    val normalizedByNormDecl = if (resultCls == CppSubclasses.zeroCls) "" else s"[[nodiscard]] ${resultCls.name} normalizedByNorm() const noexcept;"
-    val normalizedByBulkDecl = if (bulkHas && resultCls != CppSubclasses.zeroCls) s"[[nodiscard]] ${resultCls.name} normalizedByBulk() const noexcept;" else ""
-    val normalizedByWeightDecl = if (weightHas && resultCls != CppSubclasses.zeroCls) s"[[nodiscard]] ${resultCls.name} normalizedByWeight() const noexcept;" else ""
+    val normalizedByNormDecl = if (resultCls == CppSubclasses.zeroCls) "" else s"[[nodiscard]] inline ${resultCls.name} normalizedByNorm() const noexcept;"
+    val normalizedByBulkDecl = if (bulkHas && resultCls != CppSubclasses.zeroCls) s"[[nodiscard]] inline ${resultCls.name} normalizedByBulk() const noexcept;" else ""
+    val normalizedByWeightDecl = if (weightHas && resultCls != CppSubclasses.zeroCls) s"[[nodiscard]] inline ${resultCls.name} normalizedByWeight() const noexcept;" else ""
 
     val bulkDecls = if (bulkHas) Some(
-      "[[nodiscard]] constexpr double bulkNormSquare() const noexcept;\n[[nodiscard]] double bulkNorm() const noexcept;"
+      "[[nodiscard]] constexpr double bulkNormSquare() const noexcept;\n[[nodiscard]] inline double bulkNorm() const noexcept;"
     ) else None
 
     val weightDecls = if (weightHas) Some(
-      "[[nodiscard]] constexpr double weightNormSquare() const noexcept;\n[[nodiscard]] double weightNorm() const noexcept;"
+      "[[nodiscard]] constexpr double weightNormSquare() const noexcept;\n[[nodiscard]] inline double weightNorm() const noexcept;"
     ) else None
 
     // norm is always declared (as before)
     val parts = Seq(
       "[[nodiscard]] constexpr double normSquare() const noexcept;",
-      "[[nodiscard]] double norm() const noexcept;",
+      "[[nodiscard]] inline double norm() const noexcept;",
       normalizedByNormDecl,
       bulkDecls.getOrElse(""),
       normalizedByBulkDecl,

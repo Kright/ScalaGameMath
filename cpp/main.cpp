@@ -15,6 +15,8 @@ int main() {
     std::cout << p3.antiReverse() << std::endl;
     std::cout << p3.normalizedByWeight() << std::endl;
 
+    std::cout << pga3d::Quaternion::rotation(pga3d::Vector(1, 0, 0), pga3d::Vector(0, 0, 1)) << std::endl;
+
     return 0;
     // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }

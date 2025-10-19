@@ -16,8 +16,8 @@ namespace pga3d {
 
         [[nodiscard]] static constexpr Quaternion id() noexcept { return {.s = 1.0}; }
 
-        [[nodiscard]] static constexpr Quaternion rotation(const Vector& from, const Vector& to) noexcept;
-        [[nodiscard]] static constexpr Quaternion rotation(const PlaneIdeal& from, const PlaneIdeal& to) noexcept;
+        [[nodiscard]] static inline Quaternion rotation(const Vector& from, const Vector& to) noexcept;
+        [[nodiscard]] static inline Quaternion rotation(const PlaneIdeal& from, const PlaneIdeal& to) noexcept;
 
         [[nodiscard]] constexpr Motor dual() const noexcept;
 
@@ -146,11 +146,11 @@ namespace pga3d {
         [[nodiscard]] constexpr Quaternion madd(const Quaternion& other, double mult) const noexcept;
 
         [[nodiscard]] constexpr double normSquare() const noexcept;
-        [[nodiscard]] double norm() const noexcept;
-        [[nodiscard]] Quaternion normalizedByNorm() const noexcept;
+        [[nodiscard]] inline double norm() const noexcept;
+        [[nodiscard]] inline Quaternion normalizedByNorm() const noexcept;
         [[nodiscard]] constexpr double bulkNormSquare() const noexcept;
-        [[nodiscard]] double bulkNorm() const noexcept;
-        [[nodiscard]] Quaternion normalizedByBulk() const noexcept;
+        [[nodiscard]] inline double bulkNorm() const noexcept;
+        [[nodiscard]] inline Quaternion normalizedByBulk() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Quaternion>);

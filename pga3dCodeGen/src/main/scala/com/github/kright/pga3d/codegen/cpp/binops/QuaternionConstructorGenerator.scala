@@ -9,8 +9,8 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
     val code = new CppCodeGen()
 
     if (CppSubclasses.quaternion == cls) {
-      code(s"[[nodiscard]] static constexpr ${cls.name} rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept;")
-      code(s"[[nodiscard]] static constexpr ${cls.name} rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept;")
+      code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept;")
+      code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept;")
     }
 
     code.toString
@@ -21,6 +21,7 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
 
     code.pragmaOnce()
     code("#include <cmath>")
+    code("#include \"ops_norm.h\"")
     code("#include \"ops_arithmetic.h\"")
     code("")
     code.generatedBy(getClass.getName)
@@ -29,13 +30,13 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
 
     code.namespace(codeGen.namespace) {
       code(
-        s"""[[nodiscard]] constexpr ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept {
+        s"""[[nodiscard]] inline ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept {
            |    return rotation(from.dual(), to.dual());
            |}""".stripMargin)
       code("")
 
       code(
-        s"""[[nodiscard]] constexpr ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept {
+        s"""[[nodiscard]] inline ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept {
            |    const double norm = std::sqrt(from.normSquare() * to.normSquare());
            |    const Quaternion q2a = to.geometric(from) / norm;
            |    const double dot = q2a.s;

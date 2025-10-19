@@ -99,11 +99,11 @@ namespace pga3d {
         [[nodiscard]] constexpr PseudoScalar madd(const PseudoScalar& other, double mult) const noexcept;
 
         [[nodiscard]] constexpr double normSquare() const noexcept;
-        [[nodiscard]] double norm() const noexcept;
-        [[nodiscard]] PseudoScalar normalizedByNorm() const noexcept;
+        [[nodiscard]] inline double norm() const noexcept;
+        [[nodiscard]] inline PseudoScalar normalizedByNorm() const noexcept;
         [[nodiscard]] constexpr double weightNormSquare() const noexcept;
-        [[nodiscard]] double weightNorm() const noexcept;
-        [[nodiscard]] PseudoScalar normalizedByWeight() const noexcept;
+        [[nodiscard]] inline double weightNorm() const noexcept;
+        [[nodiscard]] inline PseudoScalar normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<PseudoScalar>);

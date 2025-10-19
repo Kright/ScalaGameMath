@@ -166,14 +166,14 @@ namespace pga3d {
         [[nodiscard]] constexpr Motor madd(const Motor& other, double mult) const noexcept;
 
         [[nodiscard]] constexpr double normSquare() const noexcept;
-        [[nodiscard]] double norm() const noexcept;
-        [[nodiscard]] Motor normalizedByNorm() const noexcept;
+        [[nodiscard]] inline double norm() const noexcept;
+        [[nodiscard]] inline Motor normalizedByNorm() const noexcept;
         [[nodiscard]] constexpr double bulkNormSquare() const noexcept;
-        [[nodiscard]] double bulkNorm() const noexcept;
-        [[nodiscard]] Motor normalizedByBulk() const noexcept;
+        [[nodiscard]] inline double bulkNorm() const noexcept;
+        [[nodiscard]] inline Motor normalizedByBulk() const noexcept;
         [[nodiscard]] constexpr double weightNormSquare() const noexcept;
-        [[nodiscard]] double weightNorm() const noexcept;
-        [[nodiscard]] Motor normalizedByWeight() const noexcept;
+        [[nodiscard]] inline double weightNorm() const noexcept;
+        [[nodiscard]] inline Motor normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Motor>);

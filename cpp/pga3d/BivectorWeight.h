@@ -100,11 +100,11 @@ namespace pga3d {
         [[nodiscard]] constexpr BivectorWeight madd(const BivectorWeight& other, double mult) const noexcept;
 
         [[nodiscard]] constexpr double normSquare() const noexcept;
-        [[nodiscard]] double norm() const noexcept;
-        [[nodiscard]] BivectorWeight normalizedByNorm() const noexcept;
+        [[nodiscard]] inline double norm() const noexcept;
+        [[nodiscard]] inline BivectorWeight normalizedByNorm() const noexcept;
         [[nodiscard]] constexpr double weightNormSquare() const noexcept;
-        [[nodiscard]] double weightNorm() const noexcept;
-        [[nodiscard]] BivectorWeight normalizedByWeight() const noexcept;
+        [[nodiscard]] inline double weightNorm() const noexcept;
+        [[nodiscard]] inline BivectorWeight normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<BivectorWeight>);
