@@ -11,7 +11,8 @@ int main() {
     std::cout << p << std::endl;
     std::cout << projectivePoint << std::endl;
     auto p3 = pga3d::ProjectivePoint{.x = 3, .y = 4, .z = 5, .w = 6};
-    std::cout << p3 << std::endl;
+    std::cout << p3.reverse() << std::endl;
+    std::cout << p3.antiReverse() << std::endl;
 
     return 0;
     // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.

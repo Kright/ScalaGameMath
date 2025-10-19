@@ -15,6 +15,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr PseudoScalar weight() const noexcept;
 
+        [[nodiscard]] constexpr PseudoScalar reverse() const noexcept;
+
+        [[nodiscard]] constexpr PseudoScalar antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
     };

@@ -27,6 +27,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr ProjectivePoint bulk() const noexcept;
 
+        [[nodiscard]] constexpr ProjectivePoint reverse() const noexcept;
+
+        [[nodiscard]] constexpr ProjectivePoint antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Vector toVectorUnsafe() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;

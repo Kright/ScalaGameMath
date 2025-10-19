@@ -23,6 +23,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Vector weight() const noexcept;
 
+        [[nodiscard]] constexpr Vector reverse() const noexcept;
+
+        [[nodiscard]] constexpr Vector antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;

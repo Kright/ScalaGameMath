@@ -17,6 +17,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr BivectorWeight weight() const noexcept;
 
+        [[nodiscard]] constexpr BivectorWeight reverse() const noexcept;
+
+        [[nodiscard]] constexpr BivectorWeight antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivector() const noexcept;

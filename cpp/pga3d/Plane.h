@@ -20,6 +20,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr PlaneIdeal bulk() const noexcept;
 
+        [[nodiscard]] constexpr Plane reverse() const noexcept;
+
+        [[nodiscard]] constexpr Plane antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr PlaneIdeal toPlaneIdealUnsafe() const noexcept;
     };

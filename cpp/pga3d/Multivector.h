@@ -32,6 +32,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Multivector bulk() const noexcept;
 
+        [[nodiscard]] constexpr Multivector reverse() const noexcept;
+
+        [[nodiscard]] constexpr Multivector antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Motor toMotorUnsafe() const noexcept;
         [[nodiscard]] constexpr Plane toPlaneUnsafe() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

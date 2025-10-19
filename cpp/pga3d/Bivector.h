@@ -22,6 +22,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr BivectorBulk bulk() const noexcept;
 
+        [[nodiscard]] constexpr Bivector reverse() const noexcept;
+
+        [[nodiscard]] constexpr Bivector antiReverse() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Quaternion toQuaternionUnsafe() const noexcept;

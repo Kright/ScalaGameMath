@@ -1,0 +1,33 @@
+package com.github.kright.pga3d.codegen.cpp.binops
+
+import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+
+class AntiReverseOpGenerator extends BinOpCodeGen {
+  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
+    val code = CppCodeGen()
+
+    code.pragmaOnce()
+    code.apply(s"#include \"${codeGen.Headers.types}\"")
+    code.apply("")
+    code.generatedBy(getClass.getName)
+
+    code.namespace(codeGen.namespace) {
+      for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
+        val result = cls.self.antiReverse
+        val target = CppSubclasses.findMatchingClass(result)
+        if (target != CppSubclasses.zeroCls) {
+          code(s"constexpr ${target.name} ${cls.name}::antiReverse() const noexcept { return ${target.makeBracesInit(result)}; }")
+        }
+      }
+    }
+
+    FileWriterTask(codeGen.directory.resolve("ops_antiReverse.h"), code.toString)
+  }
+
+  override def structCode(cls: CppSubclass): String = {
+    val result = cls.self.antiReverse
+    val target = CppSubclasses.findMatchingClass(result)
+    if (target == CppSubclasses.zeroCls) "" else s"[[nodiscard]] constexpr ${target.name} antiReverse() const noexcept;"
+  }
+}
