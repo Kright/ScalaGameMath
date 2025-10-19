@@ -75,8 +75,8 @@ For other variants see [https://jitpack.io/#Kright/ScalaGameMath](https://jitpac
 
 ## Library modules
 
-Initially, it was repo for simple math with matrices and vectors. I implemented physics for 3d on top of that math. During my development, I figured out that plane-based geometric algebra is a fantastic way to describe physics
-equations. So there a lot of quite experimental, but very promising code with geometric algebra, which includes math and physics
+Initially, it was a repo for simple math with matrices and vectors. I implemented physics for 3d on top of that math. During my development, I figured out that plane-based geometric algebra is a fantastic way to describe physics
+equations. So there is a code with geometric algebra, which includes math and physics.
 too.
 
 ### Simple modules
@@ -133,7 +133,7 @@ Change lib code, publish to local ivy repo:
 sbt publishLocal
 ```
 
-Or to local maven:
+Or to the local maven:
 
 ```bash
 sbt publishM2
