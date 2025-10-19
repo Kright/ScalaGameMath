@@ -26,6 +26,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 16;
 
+        [[nodiscard]] constexpr Multivector dual() const noexcept;
+
         [[nodiscard]] constexpr Motor toMotorUnsafe() const noexcept;
         [[nodiscard]] constexpr Plane toPlaneUnsafe() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

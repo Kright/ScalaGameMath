@@ -16,6 +16,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 6;
 
+        [[nodiscard]] constexpr Bivector dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Quaternion toQuaternionUnsafe() const noexcept;

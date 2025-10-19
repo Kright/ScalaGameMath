@@ -20,6 +20,8 @@ namespace pga3d {
         [[nodiscard]] constexpr double wxy() const noexcept { return 0.0; }
         [[nodiscard]] constexpr double xyz() const noexcept { return 1.0; }
 
+        [[nodiscard]] constexpr Plane dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Vector toVectorUnsafe() const noexcept;

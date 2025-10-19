@@ -16,6 +16,8 @@ namespace pga3d {
 
         [[nodiscard]] static constexpr Quaternion id() noexcept { return {.s = 1.0}; }
 
+        [[nodiscard]] constexpr Motor dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

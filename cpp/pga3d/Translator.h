@@ -15,6 +15,8 @@ namespace pga3d {
 
         [[nodiscard]] constexpr double s() const noexcept { return 1.0; }
 
+        [[nodiscard]] constexpr Motor dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

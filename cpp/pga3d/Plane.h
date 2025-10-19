@@ -14,6 +14,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 4;
 
+        [[nodiscard]] constexpr ProjectivePoint dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr PlaneIdeal toPlaneIdealUnsafe() const noexcept;
     };

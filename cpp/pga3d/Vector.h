@@ -19,6 +19,8 @@ namespace pga3d {
 
         [[nodiscard]] static constexpr Vector blade3(double wxy = 0.0, double wxz = 0.0, double wyz = 0.0) noexcept { return {.x = -wyz, .y = wxz, .z = -wxy}; }
 
+        [[nodiscard]] constexpr PlaneIdeal dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;

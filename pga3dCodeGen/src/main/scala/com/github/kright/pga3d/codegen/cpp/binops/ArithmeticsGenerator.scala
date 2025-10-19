@@ -15,9 +15,7 @@ class ArithmeticsGenerator extends BinOpCodeGen:
     code.generatedBy(getClass.getName)
 
     code.namespace(codeGen.namespace) {
-
       plusMinus(code)
-
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_arithmetic.h"), code.toString)

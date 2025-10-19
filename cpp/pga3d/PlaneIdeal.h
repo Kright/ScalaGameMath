@@ -13,6 +13,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 3;
 
+        [[nodiscard]] constexpr Vector dual() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Plane toPlane() const noexcept;
     };

@@ -14,7 +14,7 @@ class CppSubclass(name: String,
                   constantFields: Seq[(MultivectorField, Double)] = Seq(),
                   shouldBeGenerated: Boolean = true)(using pga3: PGA3) extends MultivectorSubClass(name, variableFields, constantFields, shouldBeGenerated) {
 
-  val self: MultiVector[Sym] = 
+  val self: MultiVector[Sym] =
     require(this != CppSubclasses.scalar)
     MultiVector[Sym](
       variableFields.map(f => f.basisBlade -> Sym(f.name).pipe(e => if (f.sign == Sign.Positive) e else -e)).toMap ++
@@ -30,6 +30,11 @@ class CppSubclass(name: String,
 
   def makeBracesInit(v: MultiVector[Sym]): String =
     val groupedResult = v.mapValues(_.groupMultipliers())
+
+    if (this == CppSubclasses.scalar) {
+      val expr = groupedResult.get(variableFields.head.basisBlade).getOrElse(Sym.zero)
+      return expr.toString
+    }
 
     this.variableFields.map { f =>
       val expr: Sym = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
