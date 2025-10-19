@@ -21,6 +21,8 @@ namespace pga3d {
         [[nodiscard]] static constexpr Motor id() noexcept { return {.s = 1.0}; }
         [[nodiscard]] static constexpr Motor addVector(const Vector& v) noexcept;
 
+        [[nodiscard]] inline Bivector log() const noexcept;
+
         [[nodiscard]] constexpr Motor dual() const noexcept;
 
         [[nodiscard]] constexpr Motor weight() const noexcept;

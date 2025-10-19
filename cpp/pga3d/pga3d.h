@@ -6,6 +6,8 @@
 
 #include "ops_constructors.h"
 #include "ops_Quaternion.h"
+#include "ops_Translator.h"
+#include "ops_Motor.h"
 #include "ops_dual.h"
 #include "ops_weight.h"
 #include "ops_bulk.h"

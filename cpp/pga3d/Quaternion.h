@@ -19,6 +19,8 @@ namespace pga3d {
         [[nodiscard]] static inline Quaternion rotation(const Vector& from, const Vector& to) noexcept;
         [[nodiscard]] static inline Quaternion rotation(const PlaneIdeal& from, const PlaneIdeal& to) noexcept;
 
+        [[nodiscard]] inline BivectorBulk log() const noexcept;
+
         [[nodiscard]] constexpr Motor dual() const noexcept;
 
         [[nodiscard]] constexpr Quaternion bulk() const noexcept;

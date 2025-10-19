@@ -3,7 +3,7 @@ package com.github.kright.pga3d.codegen.cpp.binops
 import com.github.kright.pga3d.codegen.common.FileWriterTask
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 
-class QuaternionConstructorGenerator extends BinOpCodeGen {
+class QuaternionOpsGenerator extends BinOpCodeGen {
 
   override def structCode(cls: CppSubclass): String = {
     val code = new CppCodeGen()
@@ -11,6 +11,8 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
     if (CppSubclasses.quaternion == cls) {
       code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept;")
       code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept;")
+      code("")
+      code(s"[[nodiscard]] inline ${CppSubclasses.bivectorBulk.name} log() const noexcept;")
     }
 
     code.toString
@@ -33,10 +35,10 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
         s"""[[nodiscard]] inline ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept {
            |    return rotation(from.dual(), to.dual());
            |}""".stripMargin)
-      code("")
 
       code(
-        s"""[[nodiscard]] inline ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept {
+        s"""
+           |[[nodiscard]] inline ${cls.name} ${cls.name}::rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept {
            |    const double norm = std::sqrt(from.normSquare() * to.normSquare());
            |    const Quaternion q2a = to.geometric(from) / norm;
            |    const double dot = q2a.s;
@@ -62,6 +64,29 @@ class QuaternionConstructorGenerator extends BinOpCodeGen {
            |
            |    return Quaternion(0, orthogonalPlane.z, -orthogonalPlane.y, orthogonalPlane.x).normalizedByNorm();
            |}""".stripMargin)
+
+      code(
+        s"""
+           |[[nodiscard]] inline ${CppSubclasses.bivectorBulk.name} ${cls.name}::log() const noexcept {
+           |    const double scalar = s;
+           |    if (s < 0.0) return (-(*this)).log();
+           |
+           |    const double lenXYZ = std::sqrt(xy * xy + xz * xz + yz * yz);
+           |    const double angle = std::atan2(lenXYZ, scalar);
+           |
+           |     // 1 / sin^2
+           |    const double a = 1.0 / (1.0 - scalar * scalar);
+           |
+           |    // angle / sin(angle)
+           |    const double b = (std::abs(angle) > 1e-5) ? angle * std::sqrt(a) : (1.0 + angle * angle / 6.0);
+           |
+           |    return ${CppSubclasses.bivectorBulk.name} {
+           |        .xy = b * xy,
+           |        .xz = b * xz,
+           |        .yz = b * yz,
+           |    };
+           |}
+           |""".stripMargin)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_Quaternion.h"), code.toString)
