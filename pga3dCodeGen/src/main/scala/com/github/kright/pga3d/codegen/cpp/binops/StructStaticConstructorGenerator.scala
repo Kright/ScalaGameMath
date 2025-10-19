@@ -31,6 +31,10 @@ class StructStaticConstructorGenerator extends BinOpCodeGen {
       code(s"[[nodiscard]] static constexpr ${cls.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
     }
 
+    if (CppSubclasses.motor == cls) {
+      code(s"[[nodiscard]] static constexpr ${cls.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
+    }
+
     code.toString()
 
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
@@ -41,8 +45,12 @@ class StructStaticConstructorGenerator extends BinOpCodeGen {
     code.generatedBy(getClass.getName)
 
     code.namespace(codeGen.namespace) {
-      val translator = CppSubclasses.translator
-      code(s"[[nodiscard]] constexpr ${translator.name} ${translator.name}::addVector(const ${CppSubclasses.vector.name}& v) noexcept { return {.wx = v.x, .wy = v.y, .wz = v.z}; }")
+      import CppSubclasses._
+
+      code(s"[[nodiscard]] constexpr ${translator.name} ${translator.name}::addVector(const ${vector.name}& v) noexcept { return {.wx = v.x, .wy = v.y, .wz = v.z}; }")
+      code("")
+      code(s"[[nodiscard]] constexpr ${motor.name} ${motor.name}::addVector(const ${vector.name}& v) noexcept { return {.s = 1.0, .wx = v.x, .wy = v.y, .wz = v.z}; }")
+      code("")
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_constructors.h"), code.toString)

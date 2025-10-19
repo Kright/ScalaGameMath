@@ -19,6 +19,7 @@ namespace pga3d {
         static constexpr int componentsCount = 8;
 
         [[nodiscard]] static constexpr Motor id() noexcept { return {.s = 1.0}; }
+        [[nodiscard]] static constexpr Motor addVector(const Vector& v) noexcept;
 
         [[nodiscard]] constexpr Motor dual() const noexcept;
 

@@ -5,4 +5,7 @@
 
 namespace pga3d {
     [[nodiscard]] constexpr Translator Translator::addVector(const Vector& v) noexcept { return {.wx = v.x, .wy = v.y, .wz = v.z}; }
+
+    [[nodiscard]] constexpr Motor Motor::addVector(const Vector& v) noexcept { return {.s = 1.0, .wx = v.x, .wy = v.y, .wz = v.z}; }
+
 }
