@@ -17,14 +17,13 @@ class ArithmeticsGenerator extends BinOpCodeGen:
     code.namespace(codeGen.namespace) {
       plusMinus(code)
       code("")
-      code("")
-      multiplyByScalar(code)
+      multiplyOrDivideByScalar(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_arithmetic.h"), code.toString)
   }
 
-  private def multiplyByScalar(code: CppCodeGen): Unit = {
+  private def multiplyOrDivideByScalar(code: CppCodeGen): Unit = {
     import com.github.kright.symbolic.Sym
 
     def mulRight(cls: CppSubclass): Unit = {
@@ -41,9 +40,17 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double a, const ${cls.name}& b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
     }
 
+    def divRight(cls: CppSubclass): Unit = {
+      val a = cls.makeSymbolic("a")
+      val result = a * Sym("b")
+      val resultCls = CppSubclasses.findMatchingClass(result)
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator/(const ${cls.name}& a, double b) noexcept { return a * (1.0 / b); }")
+    }
+
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
       mulRight(cls)
       mulLeft(cls)
+      divRight(cls)
       code("")
     }
   }

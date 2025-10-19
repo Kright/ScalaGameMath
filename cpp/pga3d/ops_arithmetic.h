@@ -73,44 +73,58 @@ namespace pga3d {
 
     [[nodiscard]] constexpr Multivector operator*(const Multivector& a, double b) noexcept { return {.s = a.s * b, .w = a.w * b, .x = a.x * b, .y = a.y * b, .z = a.z * b, .wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b, .xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b, .wxy = a.wxy * b, .wxz = a.wxz * b, .wyz = a.wyz * b, .xyz = a.xyz * b, .i = a.i * b}; }
     [[nodiscard]] constexpr Multivector operator*(double a, const Multivector& b) noexcept { return {.s = a * b.s, .w = a * b.w, .x = a * b.x, .y = a * b.y, .z = a * b.z, .wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz, .xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz, .wxy = a * b.wxy, .wxz = a * b.wxz, .wyz = a * b.wyz, .xyz = a * b.xyz, .i = a * b.i}; }
+    [[nodiscard]] constexpr Multivector operator/(const Multivector& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Motor operator*(const Motor& a, double b) noexcept { return {.s = a.s * b, .wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b, .xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b, .i = a.i * b}; }
     [[nodiscard]] constexpr Motor operator*(double a, const Motor& b) noexcept { return {.s = a * b.s, .wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz, .xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz, .i = a * b.i}; }
+    [[nodiscard]] constexpr Motor operator/(const Motor& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Plane operator*(const Plane& a, double b) noexcept { return {.x = a.x * b, .y = a.y * b, .z = a.z * b, .w = a.w * b}; }
     [[nodiscard]] constexpr Plane operator*(double a, const Plane& b) noexcept { return {.x = a * b.x, .y = a * b.y, .z = a * b.z, .w = a * b.w}; }
+    [[nodiscard]] constexpr Plane operator/(const Plane& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Bivector operator*(const Bivector& a, double b) noexcept { return {.wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b, .xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b}; }
     [[nodiscard]] constexpr Bivector operator*(double a, const Bivector& b) noexcept { return {.wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz, .xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz}; }
+    [[nodiscard]] constexpr Bivector operator/(const Bivector& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr ProjectivePoint operator*(const ProjectivePoint& a, double b) noexcept { return {.x = a.x * b, .y = a.y * b, .z = a.z * b, .w = a.w * b}; }
     [[nodiscard]] constexpr ProjectivePoint operator*(double a, const ProjectivePoint& b) noexcept { return {.x = a * b.x, .y = a * b.y, .z = a * b.z, .w = a * b.w}; }
+    [[nodiscard]] constexpr ProjectivePoint operator/(const ProjectivePoint& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Quaternion operator*(const Quaternion& a, double b) noexcept { return {.s = a.s * b, .xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b}; }
     [[nodiscard]] constexpr Quaternion operator*(double a, const Quaternion& b) noexcept { return {.s = a * b.s, .xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz}; }
+    [[nodiscard]] constexpr Quaternion operator/(const Quaternion& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Motor operator*(const Translator& a, double b) noexcept { return {.s = b, .wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b, .xy = 0.0, .xz = 0.0, .yz = 0.0, .i = 0.0}; }
     [[nodiscard]] constexpr Motor operator*(double a, const Translator& b) noexcept { return {.s = a, .wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz, .xy = 0.0, .xz = 0.0, .yz = 0.0, .i = 0.0}; }
+    [[nodiscard]] constexpr Motor operator/(const Translator& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr Vector operator*(const Vector& a, double b) noexcept { return {.x = a.x * b, .y = a.y * b, .z = a.z * b}; }
     [[nodiscard]] constexpr Vector operator*(double a, const Vector& b) noexcept { return {.x = a * b.x, .y = a * b.y, .z = a * b.z}; }
+    [[nodiscard]] constexpr Vector operator/(const Vector& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr ProjectivePoint operator*(const Point& a, double b) noexcept { return {.x = a.x * b, .y = a.y * b, .z = a.z * b, .w = b}; }
     [[nodiscard]] constexpr ProjectivePoint operator*(double a, const Point& b) noexcept { return {.x = a * b.x, .y = a * b.y, .z = a * b.z, .w = a}; }
+    [[nodiscard]] constexpr ProjectivePoint operator/(const Point& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr PlaneIdeal operator*(const PlaneIdeal& a, double b) noexcept { return {.x = a.x * b, .y = a.y * b, .z = a.z * b}; }
     [[nodiscard]] constexpr PlaneIdeal operator*(double a, const PlaneIdeal& b) noexcept { return {.x = a * b.x, .y = a * b.y, .z = a * b.z}; }
+    [[nodiscard]] constexpr PlaneIdeal operator/(const PlaneIdeal& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr BivectorBulk operator*(const BivectorBulk& a, double b) noexcept { return {.xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b}; }
     [[nodiscard]] constexpr BivectorBulk operator*(double a, const BivectorBulk& b) noexcept { return {.xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz}; }
+    [[nodiscard]] constexpr BivectorBulk operator/(const BivectorBulk& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr BivectorWeight operator*(const BivectorWeight& a, double b) noexcept { return {.wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b}; }
     [[nodiscard]] constexpr BivectorWeight operator*(double a, const BivectorWeight& b) noexcept { return {.wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz}; }
+    [[nodiscard]] constexpr BivectorWeight operator/(const BivectorWeight& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr PseudoScalar operator*(const PseudoScalar& a, double b) noexcept { return {.i = a.i * b}; }
     [[nodiscard]] constexpr PseudoScalar operator*(double a, const PseudoScalar& b) noexcept { return {.i = a * b.i}; }
+    [[nodiscard]] constexpr PseudoScalar operator/(const PseudoScalar& a, double b) noexcept { return a * (1.0 / b); }
 
     [[nodiscard]] constexpr ProjectivePoint operator*(const PointCenter& a, double b) noexcept { return {.x = 0.0, .y = 0.0, .z = 0.0, .w = b}; }
     [[nodiscard]] constexpr ProjectivePoint operator*(double a, const PointCenter& b) noexcept { return {.x = 0.0, .y = 0.0, .z = 0.0, .w = a}; }
+    [[nodiscard]] constexpr ProjectivePoint operator/(const PointCenter& a, double b) noexcept { return a * (1.0 / b); }
 
 }
