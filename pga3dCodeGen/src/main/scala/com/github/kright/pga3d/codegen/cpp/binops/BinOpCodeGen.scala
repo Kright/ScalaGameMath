@@ -8,5 +8,3 @@ trait BinOpCodeGen extends StructCodeGenerator:
 
   def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask
 
-
-

@@ -38,7 +38,15 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Multivector geometric(const Multivector& b) const noexcept;
 
+        [[nodiscard]] constexpr Multivector wedge(const Multivector& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector dot(const Multivector& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector antiGeometric(const Multivector& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector antiWedge(const Multivector& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector antiDot(const Multivector& b) const noexcept;
 
         [[nodiscard]] constexpr Motor toMotorUnsafe() const noexcept;
         [[nodiscard]] constexpr Plane toPlaneUnsafe() const noexcept;
