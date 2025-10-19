@@ -16,11 +16,38 @@ class ArithmeticsGenerator extends BinOpCodeGen:
 
     code.namespace(codeGen.namespace) {
       plusMinus(code)
+      code("")
+      code("")
+      multiplyByScalar(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_arithmetic.h"), code.toString)
   }
 
+  private def multiplyByScalar(code: CppCodeGen): Unit = {
+    import com.github.kright.symbolic.Sym
+
+    def mulRight(cls: CppSubclass): Unit = {
+      val a = cls.makeSymbolic("a")
+      val result = a * Sym("b")
+      val resultCls = CppSubclasses.findMatchingClass(result)
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(const ${cls.name}& a, double b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+    }
+
+    def mulLeft(cls: CppSubclass): Unit = {
+      val b = cls.makeSymbolic("b")
+      val result = b * Sym("a")
+      val resultCls = CppSubclasses.findMatchingClass(result)
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double a, const ${cls.name}& b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+    }
+
+    for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
+      mulRight(cls)
+      mulLeft(cls)
+      code("")
+    }
+  }
+  
   private def plusMinus(code: CppCodeGen): Unit = {
 
     def makeMethod(left: CppSubclass, right: CppSubclass, operatorName: String, op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]): Unit = {
