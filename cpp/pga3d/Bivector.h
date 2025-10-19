@@ -33,6 +33,8 @@ namespace pga3d {
         [[nodiscard]] constexpr BivectorBulk toBivectorBulkUnsafe() const noexcept;
         [[nodiscard]] constexpr BivectorWeight toBivectorWeightUnsafe() const noexcept;
 
+        [[nodiscard]] constexpr Bivector madd(const Bivector& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Bivector normalizedByNorm() const noexcept;

@@ -10,6 +10,7 @@ class ArithmeticsGenerator extends BinOpCodeGen:
     val code = CppCodeGen()
 
     code.pragmaOnce()
+    code.apply("#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
     code.apply("")
     code.generatedBy(getClass.getName)
@@ -21,6 +22,8 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       code("")
       code("")
       multiplyOrDivideByScalar(code)
+      code("")
+      madd(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_arithmetic.h"), code.toString)
@@ -105,4 +108,66 @@ class ArithmeticsGenerator extends BinOpCodeGen:
     }
   }
 
-  override def structCode(cls: CppSubclass): String = ""
+  private def madd(code: CppCodeGen): Unit = {
+    // Generate member method implementations using std::fma only when result type equals the class itself
+    for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
+      val selfMv = cls.self
+
+      // Case 1: same-type madd
+      val otherMvSame = cls.makeSymbolic("other")
+      val trialSame = selfMv + otherMvSame * Sym("mult")
+      val resultClsSame = CppSubclasses.findMatchingClass(trialSame)
+      if (resultClsSame == cls && cls.variableFields.nonEmpty) {
+        // Build initialization list with fma for each variable field
+        val selfGrouped = selfMv.mapValues(_.groupMultipliers())
+        val otherGrouped = otherMvSame.mapValues(_.groupMultipliers())
+        val fieldsInit = cls.variableFields.map { f =>
+          val selfExpr = selfGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
+          val otherExpr = otherGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
+          val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
+          val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
+          s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
+        }.mkString("{", ", ", "}")
+        code(s"constexpr ${cls.name} ${cls.name}::madd(const ${cls.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
+      }
+
+      // Case 2: Point + Vector * mult -> Point
+      if (cls == CppSubclasses.point && cls.variableFields.nonEmpty) {
+        val otherMvVec = CppSubclasses.vector.makeSymbolic("other")
+        val trialPV = selfMv + otherMvVec * Sym("mult")
+        val resultClsPV = CppSubclasses.findMatchingClass(trialPV)
+        if (resultClsPV == CppSubclasses.point) {
+          val selfGrouped = selfMv.mapValues(_.groupMultipliers())
+          val otherGrouped = otherMvVec.mapValues(_.groupMultipliers())
+          val fieldsInit = cls.variableFields.map { f =>
+            val selfExpr = selfGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
+            val otherExpr = otherGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
+            val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
+            val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
+            s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
+          }.mkString("{", ", ", "}")
+          code(s"constexpr ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
+        }
+      }
+    }
+  }
+
+  override def structCode(cls: CppSubclass): String = {
+    val a = cls.makeSymbolic("a")
+    val b = cls.makeSymbolic("b")
+    val trialSame = a + b * Sym("mult")
+    val resultClsSame = CppSubclasses.findMatchingClass(trialSame)
+
+    val sameTypeDecl = if (resultClsSame == cls && cls.variableFields.nonEmpty) s"[[nodiscard]] constexpr ${cls.name} madd(const ${cls.name}& other, double mult) const noexcept;" else ""
+
+    // Special overload for Point + Vector * mult -> Point
+    val pointVectorDecl =
+      if (cls == CppSubclasses.point && cls.variableFields.nonEmpty) {
+        val otherV = CppSubclasses.vector.makeSymbolic("b")
+        val trialPV = a + otherV * Sym("mult")
+        val resultPV = CppSubclasses.findMatchingClass(trialPV)
+        if (resultPV == CppSubclasses.point) s"[[nodiscard]] constexpr ${cls.name} madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept;" else ""
+      } else ""
+
+    Seq(sameTypeDecl, pointVectorDecl).filter(_.nonEmpty).mkString("\n")
+  }

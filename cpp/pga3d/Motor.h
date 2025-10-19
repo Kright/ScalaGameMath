@@ -37,6 +37,8 @@ namespace pga3d {
         [[nodiscard]] constexpr BivectorBulk toBivectorBulkUnsafe() const noexcept;
         [[nodiscard]] constexpr BivectorWeight toBivectorWeightUnsafe() const noexcept;
 
+        [[nodiscard]] constexpr Motor madd(const Motor& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Motor normalizedByNorm() const noexcept;

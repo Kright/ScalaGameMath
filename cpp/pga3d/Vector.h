@@ -31,6 +31,8 @@ namespace pga3d {
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;
 
+        [[nodiscard]] constexpr Vector madd(const Vector& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Vector normalizedByNorm() const noexcept;

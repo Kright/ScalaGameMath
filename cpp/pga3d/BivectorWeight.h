@@ -26,6 +26,8 @@ namespace pga3d {
         [[nodiscard]] constexpr Bivector toBivector() const noexcept;
         [[nodiscard]] constexpr Translator toTranslatorUnsafe() const noexcept;
 
+        [[nodiscard]] constexpr BivectorWeight madd(const BivectorWeight& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] BivectorWeight normalizedByNorm() const noexcept;

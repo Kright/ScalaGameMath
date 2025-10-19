@@ -24,6 +24,8 @@ namespace pga3d {
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Plane toPlane() const noexcept;
 
+        [[nodiscard]] constexpr PlaneIdeal madd(const PlaneIdeal& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] PlaneIdeal normalizedByNorm() const noexcept;

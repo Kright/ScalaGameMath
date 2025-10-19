@@ -29,6 +29,8 @@ namespace pga3d {
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;
         [[nodiscard]] constexpr BivectorBulk toBivectorBulkUnsafe() const noexcept;
 
+        [[nodiscard]] constexpr Quaternion madd(const Quaternion& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Quaternion normalizedByNorm() const noexcept;

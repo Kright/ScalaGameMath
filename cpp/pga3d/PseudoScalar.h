@@ -22,6 +22,8 @@ namespace pga3d {
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
 
+        [[nodiscard]] constexpr PseudoScalar madd(const PseudoScalar& other, double mult) const noexcept;
+
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] PseudoScalar normalizedByNorm() const noexcept;
