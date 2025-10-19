@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.scala
 
-class MatrixCodeGen extends CodeGenClass:
+class ScalaMatrixCodeGen extends ScalaCodeGenClass:
 
   override def name: String =
     "Pga3dMatrix"

@@ -15,7 +15,7 @@ import scala.util.chaining.scalaUtilChainingOps
 class ScalaMultivectorSubClass(name: String,
                                variableFields: Seq[MultivectorField],
                                constantFields: Seq[(MultivectorField, Double)] = Seq(),
-                               shouldBeGenerated: Boolean = true)(using pga3: PGA3) extends MultivectorSubClass(name, variableFields, constantFields, shouldBeGenerated) with CodeGenClass:
+                               shouldBeGenerated: Boolean = true)(using pga3: PGA3) extends MultivectorSubClass(name, variableFields, constantFields, shouldBeGenerated) with ScalaCodeGenClass:
 
   override def isObject: Boolean = variableFields.isEmpty
 
@@ -42,7 +42,7 @@ class ScalaMultivectorSubClass(name: String,
           constantFields.map((f, v) => f.basisBlade -> Sym(v).pipe(e => if (f.sign == Sign.Positive) e else -e))
       )
     }
-  
+
   def makeConstructor(value: MultiVector[Sym]): String =
     val groupedResult = value.mapValues(_.groupMultipliers())
     if (name == "Double") {

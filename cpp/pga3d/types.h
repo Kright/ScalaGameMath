@@ -1,0 +1,16 @@
+#pragma once
+
+#include "Multivector.h"
+#include "Motor.h"
+#include "Plane.h"
+#include "Bivector.h"
+#include "ProjectivePoint.h"
+#include "Quaternion.h"
+#include "Translator.h"
+#include "Vector.h"
+#include "Point.h"
+#include "PlaneIdeal.h"
+#include "BivectorBulk.h"
+#include "BivectorWeight.h"
+#include "PseudoScalar.h"
+#include "PointCenter.h"

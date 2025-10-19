@@ -1,21 +1,6 @@
 package com.github.kright.pga3d.codegen.scala
 
-class ScalaCodeGen:
-  private var pad: Int = 0
-  private val code = StringBuilder()
+import com.github.kright.pga3d.codegen.common.CodeGen
 
-  def block(addCode: => Unit): Unit = {
-    pad += 2
-    addCode
-    pad -= 2
-  }
-
-  def apply(lines: String): Unit = {
-    val prefix = " ".repeat(pad)
-    for (line <- lines.split("\n")) {
-      code.append(prefix).append(line).append("\n")
-    }
-  }
-
-  override def toString: String =
-    code.toString().split("\n").map(s => if (s.isBlank) "" else s).mkString("\n")
+class ScalaCodeGen extends CodeGen:
+  override val padding: String = " ".repeat(2)

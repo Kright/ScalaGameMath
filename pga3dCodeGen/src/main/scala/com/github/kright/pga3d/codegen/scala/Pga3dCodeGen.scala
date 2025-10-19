@@ -14,5 +14,5 @@ def main(): Unit = {
     cls.writeToFile(packageDir)
   }
 
-  MatrixCodeGen().writeToFile(packageDir)
+  ScalaMatrixCodeGen().writeToFile(packageDir)
 }

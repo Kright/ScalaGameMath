@@ -1,9 +1,11 @@
 package com.github.kright.pga3d.codegen.scala
 
+import com.github.kright.pga3d.codegen.common.FileWriter
+
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
-trait CodeGenClass:
+trait ScalaCodeGenClass:
   def name: String
 
   def isObject: Boolean
@@ -32,19 +34,9 @@ trait CodeGenClass:
          |/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
          |${generateCode()}""".stripMargin
 
-    // if file exists and content is identical, skip writing and report
-    if (Files.exists(clsPath)) {
-      val existing = Files.readString(clsPath, StandardCharsets.UTF_8)
-      if (existing == code) {
-        println(s"class is up-to-date = ${clsPath}, linesCount = ${code.lines().count()}")
-        return
-      }
+    val writeNew = FileWriter.writeToFile(clsPath, code)
+    if (!writeNew) {
+      println(s"class is up-to-date = ${clsPath}, linesCount = ${code.lines().count()}")
     }
-
-    Files.write(clsPath, code.getBytes(StandardCharsets.UTF_8),
-      StandardOpenOption.CREATE,
-      StandardOpenOption.WRITE,
-      StandardOpenOption.TRUNCATE_EXISTING,
-    )
 
     println(s"class generated = ${clsPath}, linesCount = ${code.lines().count()}")
