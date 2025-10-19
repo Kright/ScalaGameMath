@@ -93,6 +93,16 @@ namespace pga3d {
         [[nodiscard]] constexpr Vector antiDot(const BivectorWeight& b) const noexcept;
         [[nodiscard]] constexpr Vector antiDot(const PseudoScalar& b) const noexcept;
 
+        [[nodiscard]] constexpr Vector cross(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar cross(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const Point& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar cross(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Point toPointUnsafe() const noexcept;

@@ -105,6 +105,48 @@ namespace pga3d {
         [[nodiscard]] constexpr Vector antiDot(const BivectorWeight& b) const noexcept;
         [[nodiscard]] constexpr ProjectivePoint antiDot(const PseudoScalar& b) const noexcept;
 
+        [[nodiscard]] constexpr Motor sandwich(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Plane sandwich(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Bivector sandwich(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr ProjectivePoint sandwich(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Motor sandwich(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Translator sandwich(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Vector sandwich(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Point sandwich(const Point& b) const noexcept;
+        [[nodiscard]] constexpr Plane sandwich(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr Bivector sandwich(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight sandwich(const BivectorWeight& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar sandwich(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr Point sandwich(const PointCenter& b) const noexcept;
+
+        [[nodiscard]] constexpr Motor reverseSandwich(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Plane reverseSandwich(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Bivector reverseSandwich(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr ProjectivePoint reverseSandwich(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Motor reverseSandwich(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Translator reverseSandwich(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Vector reverseSandwich(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Point reverseSandwich(const Point& b) const noexcept;
+        [[nodiscard]] constexpr Plane reverseSandwich(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr Bivector reverseSandwich(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight reverseSandwich(const BivectorWeight& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar reverseSandwich(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr Point reverseSandwich(const PointCenter& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector cross(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar cross(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const Point& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar cross(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr Vector cross(const BivectorWeight& b) const noexcept;
+        [[nodiscard]] constexpr Plane cross(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight cross(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr ProjectivePoint toProjectivePoint() const noexcept;
         [[nodiscard]] constexpr Vector toVectorUnsafe() const noexcept;

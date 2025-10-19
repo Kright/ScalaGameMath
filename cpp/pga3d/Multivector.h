@@ -48,6 +48,12 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Multivector antiDot(const Multivector& b) const noexcept;
 
+        [[nodiscard]] constexpr Multivector sandwich(const Multivector& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector reverseSandwich(const Multivector& b) const noexcept;
+
+        [[nodiscard]] constexpr Multivector cross(const Multivector& b) const noexcept;
+
         [[nodiscard]] constexpr Motor toMotorUnsafe() const noexcept;
         [[nodiscard]] constexpr Plane toPlaneUnsafe() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;
