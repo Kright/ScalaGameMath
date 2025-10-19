@@ -3,7 +3,7 @@ package com.github.kright.pga3d.codegen.cpp.binops
 import com.github.kright.pga3d.codegen.common.FileWriterTask
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 
-class DualOpGenerator extends BinOpCodeGen {
+class WeightOpGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
     val code = CppCodeGen()
 
@@ -14,20 +14,21 @@ class DualOpGenerator extends BinOpCodeGen {
 
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
-        val result = cls.self.dual
+        val result = cls.self.weight
         val target = CppSubclasses.findMatchingClass(result)
         if (target != CppSubclasses.zeroCls) {
-          code(s"constexpr ${target.name} ${cls.name}::dual() const noexcept { return ${target.makeBracesInit(result)}; }")
+          code(s"constexpr ${target.name} ${cls.name}::weight() const noexcept { return ${target.makeBracesInit(result)}; }")
         }
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_dual.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("ops_weight.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {
-    val result = cls.self.dual
+    val result = cls.self.weight
     val target = CppSubclasses.findMatchingClass(result)
-    if (target == CppSubclasses.zeroCls) "" else s"[[nodiscard]] constexpr ${target.name} dual() const noexcept;"
+    if (target == CppSubclasses.zeroCls) ""
+    else s"[[nodiscard]] constexpr ${target.name} weight() const noexcept;"
   }
 }

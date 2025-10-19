@@ -71,6 +71,22 @@ namespace pga3d {
     [[nodiscard]] constexpr ProjectivePoint operator+(const PointCenter& a, const PointCenter& b) noexcept { return {.x = 0.0, .y = 0.0, .z = 0.0, .w = 2.0}; }
 
 
+    [[nodiscard]] constexpr Multivector operator-(const Multivector& a) noexcept { return {.s = -a.s, .w = -a.w, .x = -a.x, .y = -a.y, .z = -a.z, .wx = -a.wx, .wy = -a.wy, .wz = -a.wz, .xy = -a.xy, .xz = -a.xz, .yz = -a.yz, .wxy = -a.wxy, .wxz = -a.wxz, .wyz = -a.wyz, .xyz = -a.xyz, .i = -a.i}; }
+    [[nodiscard]] constexpr Motor operator-(const Motor& a) noexcept { return {.s = -a.s, .wx = -a.wx, .wy = -a.wy, .wz = -a.wz, .xy = -a.xy, .xz = -a.xz, .yz = -a.yz, .i = -a.i}; }
+    [[nodiscard]] constexpr Plane operator-(const Plane& a) noexcept { return {.x = -a.x, .y = -a.y, .z = -a.z, .w = -a.w}; }
+    [[nodiscard]] constexpr Bivector operator-(const Bivector& a) noexcept { return {.wx = -a.wx, .wy = -a.wy, .wz = -a.wz, .xy = -a.xy, .xz = -a.xz, .yz = -a.yz}; }
+    [[nodiscard]] constexpr ProjectivePoint operator-(const ProjectivePoint& a) noexcept { return {.x = -a.x, .y = -a.y, .z = -a.z, .w = -a.w}; }
+    [[nodiscard]] constexpr Quaternion operator-(const Quaternion& a) noexcept { return {.s = -a.s, .xy = -a.xy, .xz = -a.xz, .yz = -a.yz}; }
+    [[nodiscard]] constexpr Motor operator-(const Translator& a) noexcept { return {.s = -1.0, .wx = -a.wx, .wy = -a.wy, .wz = -a.wz, .xy = 0.0, .xz = 0.0, .yz = 0.0, .i = 0.0}; }
+    [[nodiscard]] constexpr Vector operator-(const Vector& a) noexcept { return {.x = -a.x, .y = -a.y, .z = -a.z}; }
+    [[nodiscard]] constexpr ProjectivePoint operator-(const Point& a) noexcept { return {.x = -a.x, .y = -a.y, .z = -a.z, .w = -1.0}; }
+    [[nodiscard]] constexpr PlaneIdeal operator-(const PlaneIdeal& a) noexcept { return {.x = -a.x, .y = -a.y, .z = -a.z}; }
+    [[nodiscard]] constexpr BivectorBulk operator-(const BivectorBulk& a) noexcept { return {.xy = -a.xy, .xz = -a.xz, .yz = -a.yz}; }
+    [[nodiscard]] constexpr BivectorWeight operator-(const BivectorWeight& a) noexcept { return {.wx = -a.wx, .wy = -a.wy, .wz = -a.wz}; }
+    [[nodiscard]] constexpr PseudoScalar operator-(const PseudoScalar& a) noexcept { return {.i = -a.i}; }
+    [[nodiscard]] constexpr ProjectivePoint operator-(const PointCenter& a) noexcept { return {.x = 0.0, .y = 0.0, .z = 0.0, .w = -1.0}; }
+
+
     [[nodiscard]] constexpr Multivector operator*(const Multivector& a, double b) noexcept { return {.s = a.s * b, .w = a.w * b, .x = a.x * b, .y = a.y * b, .z = a.z * b, .wx = a.wx * b, .wy = a.wy * b, .wz = a.wz * b, .xy = a.xy * b, .xz = a.xz * b, .yz = a.yz * b, .wxy = a.wxy * b, .wxz = a.wxz * b, .wyz = a.wyz * b, .xyz = a.xyz * b, .i = a.i * b}; }
     [[nodiscard]] constexpr Multivector operator*(double a, const Multivector& b) noexcept { return {.s = a * b.s, .w = a * b.w, .x = a * b.x, .y = a * b.y, .z = a * b.z, .wx = a * b.wx, .wy = a * b.wy, .wz = a * b.wz, .xy = a * b.xy, .xz = a * b.xz, .yz = a * b.yz, .wxy = a * b.wxy, .wxz = a * b.wxz, .wyz = a * b.wyz, .xyz = a * b.xyz, .i = a * b.i}; }
     [[nodiscard]] constexpr Multivector operator/(const Multivector& a, double b) noexcept { return a * (1.0 / b); }

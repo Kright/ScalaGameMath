@@ -17,6 +17,9 @@ class ArithmeticsGenerator extends BinOpCodeGen:
     code.namespace(codeGen.namespace) {
       plusMinus(code)
       code("")
+      unaryMinus(code)
+      code("")
+      code("")
       multiplyOrDivideByScalar(code)
     }
 
@@ -52,6 +55,17 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       mulLeft(cls)
       divRight(cls)
       code("")
+    }
+  }
+  
+  private def unaryMinus(code: CppCodeGen): Unit = {
+    for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
+      val a = cls.makeSymbolic("a")
+      val result = -a
+      val resultCls = CppSubclasses.findMatchingClass(result)
+      if (resultCls != CppSubclasses.zeroCls) {
+        code(s"[[nodiscard]] constexpr ${resultCls.name} operator-(const ${cls.name}& a) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+      }
     }
   }
   

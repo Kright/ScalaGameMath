@@ -13,6 +13,8 @@ namespace pga3d {
 
         [[nodiscard]] constexpr double dual() const noexcept;
 
+        [[nodiscard]] constexpr PseudoScalar weight() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr Motor toMotor() const noexcept;
     };

@@ -28,6 +28,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Multivector dual() const noexcept;
 
+        [[nodiscard]] constexpr Multivector weight() const noexcept;
+
+        [[nodiscard]] constexpr Multivector bulk() const noexcept;
+
         [[nodiscard]] constexpr Motor toMotorUnsafe() const noexcept;
         [[nodiscard]] constexpr Plane toPlaneUnsafe() const noexcept;
         [[nodiscard]] constexpr Bivector toBivectorUnsafe() const noexcept;

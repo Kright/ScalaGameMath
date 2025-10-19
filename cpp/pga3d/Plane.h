@@ -16,6 +16,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr ProjectivePoint dual() const noexcept;
 
+        [[nodiscard]] constexpr Plane weight() const noexcept;
+
+        [[nodiscard]] constexpr PlaneIdeal bulk() const noexcept;
+
         [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
         [[nodiscard]] constexpr PlaneIdeal toPlaneIdealUnsafe() const noexcept;
     };
