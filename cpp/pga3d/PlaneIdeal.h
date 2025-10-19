@@ -27,6 +27,9 @@ namespace pga3d {
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] PlaneIdeal normalizedByNorm() const noexcept;
+        [[nodiscard]] constexpr double bulkNormSquare() const noexcept;
+        [[nodiscard]] double bulkNorm() const noexcept;
+        [[nodiscard]] PlaneIdeal normalizedByBulk() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<PlaneIdeal>);

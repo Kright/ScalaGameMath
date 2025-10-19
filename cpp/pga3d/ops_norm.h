@@ -10,56 +10,144 @@ namespace pga3d {
     double Multivector::norm() const noexcept { return std::sqrt(normSquare()); }
     Multivector Multivector::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double Multivector::bulkNormSquare() const noexcept { return (s * s + x * x + xy * xy + xyz * xyz + xz * xz + y * y + yz * yz + z * z); }
+    double Multivector::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Multivector Multivector::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Multivector::weightNormSquare() const noexcept { return (i * i + w * w + wx * wx + wxy * wxy + wxz * wxz + wy * wy + wyz * wyz + wz * wz); }
+    double Multivector::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Multivector Multivector::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double Motor::normSquare() const noexcept { return (i * i + s * s + wx * wx + wy * wy + wz * wz + xy * xy + xz * xz + yz * yz); }
     double Motor::norm() const noexcept { return std::sqrt(normSquare()); }
     Motor Motor::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double Motor::bulkNormSquare() const noexcept { return (s * s + xy * xy + xz * xz + yz * yz); }
+    double Motor::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Motor Motor::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Motor::weightNormSquare() const noexcept { return (i * i + wx * wx + wy * wy + wz * wz); }
+    double Motor::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Motor Motor::normalizedByWeight() const noexcept { return *this / weightNorm(); }
 
     constexpr double Plane::normSquare() const noexcept { return (w * w + x * x + y * y + z * z); }
     double Plane::norm() const noexcept { return std::sqrt(normSquare()); }
     Plane Plane::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double Plane::bulkNormSquare() const noexcept { return (x * x + y * y + z * z); }
+    double Plane::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Plane Plane::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Plane::weightNormSquare() const noexcept { return w * w; }
+    double Plane::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Plane Plane::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double Bivector::normSquare() const noexcept { return (wx * wx + wy * wy + wz * wz + xy * xy + xz * xz + yz * yz); }
     double Bivector::norm() const noexcept { return std::sqrt(normSquare()); }
     Bivector Bivector::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double Bivector::bulkNormSquare() const noexcept { return (xy * xy + xz * xz + yz * yz); }
+    double Bivector::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Bivector Bivector::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Bivector::weightNormSquare() const noexcept { return (wx * wx + wy * wy + wz * wz); }
+    double Bivector::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Bivector Bivector::normalizedByWeight() const noexcept { return *this / weightNorm(); }
 
     constexpr double ProjectivePoint::normSquare() const noexcept { return (w * w + x * x + y * y + z * z); }
     double ProjectivePoint::norm() const noexcept { return std::sqrt(normSquare()); }
     ProjectivePoint ProjectivePoint::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double ProjectivePoint::bulkNormSquare() const noexcept { return w * w; }
+    double ProjectivePoint::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    ProjectivePoint ProjectivePoint::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double ProjectivePoint::weightNormSquare() const noexcept { return (x * x + y * y + z * z); }
+    double ProjectivePoint::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    ProjectivePoint ProjectivePoint::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double Quaternion::normSquare() const noexcept { return (s * s + xy * xy + xz * xz + yz * yz); }
     double Quaternion::norm() const noexcept { return std::sqrt(normSquare()); }
     Quaternion Quaternion::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double Quaternion::bulkNormSquare() const noexcept { return (s * s + xy * xy + xz * xz + yz * yz); }
+    double Quaternion::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Quaternion Quaternion::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
 
     constexpr double Translator::normSquare() const noexcept { return (1.0 + wx * wx + wy * wy + wz * wz); }
     double Translator::norm() const noexcept { return std::sqrt(normSquare()); }
     Motor Translator::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double Translator::bulkNormSquare() const noexcept { return 1.0; }
+    double Translator::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    Motor Translator::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Translator::weightNormSquare() const noexcept { return (wx * wx + wy * wy + wz * wz); }
+    double Translator::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Motor Translator::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double Vector::normSquare() const noexcept { return (x * x + y * y + z * z); }
     double Vector::norm() const noexcept { return std::sqrt(normSquare()); }
     Vector Vector::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double Vector::weightNormSquare() const noexcept { return (x * x + y * y + z * z); }
+    double Vector::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    Vector Vector::normalizedByWeight() const noexcept { return *this / weightNorm(); }
 
     constexpr double Point::normSquare() const noexcept { return (1.0 + x * x + y * y + z * z); }
     double Point::norm() const noexcept { return std::sqrt(normSquare()); }
     ProjectivePoint Point::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double Point::bulkNormSquare() const noexcept { return 1.0; }
+    double Point::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    ProjectivePoint Point::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double Point::weightNormSquare() const noexcept { return (x * x + y * y + z * z); }
+    double Point::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    ProjectivePoint Point::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double PlaneIdeal::normSquare() const noexcept { return (x * x + y * y + z * z); }
     double PlaneIdeal::norm() const noexcept { return std::sqrt(normSquare()); }
     PlaneIdeal PlaneIdeal::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double PlaneIdeal::bulkNormSquare() const noexcept { return (x * x + y * y + z * z); }
+    double PlaneIdeal::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    PlaneIdeal PlaneIdeal::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
 
     constexpr double BivectorBulk::normSquare() const noexcept { return (xy * xy + xz * xz + yz * yz); }
     double BivectorBulk::norm() const noexcept { return std::sqrt(normSquare()); }
     BivectorBulk BivectorBulk::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double BivectorBulk::bulkNormSquare() const noexcept { return (xy * xy + xz * xz + yz * yz); }
+    double BivectorBulk::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    BivectorBulk BivectorBulk::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
     constexpr double BivectorWeight::normSquare() const noexcept { return (wx * wx + wy * wy + wz * wz); }
     double BivectorWeight::norm() const noexcept { return std::sqrt(normSquare()); }
     BivectorWeight BivectorWeight::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double BivectorWeight::weightNormSquare() const noexcept { return (wx * wx + wy * wy + wz * wz); }
+    double BivectorWeight::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    BivectorWeight BivectorWeight::normalizedByWeight() const noexcept { return *this / weightNorm(); }
 
     constexpr double PseudoScalar::normSquare() const noexcept { return i * i; }
     double PseudoScalar::norm() const noexcept { return std::sqrt(normSquare()); }
     PseudoScalar PseudoScalar::normalizedByNorm() const noexcept { return *this / norm(); }
 
+    constexpr double PseudoScalar::weightNormSquare() const noexcept { return i * i; }
+    double PseudoScalar::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    PseudoScalar PseudoScalar::normalizedByWeight() const noexcept { return *this / weightNorm(); }
+
     constexpr double PointCenter::normSquare() const noexcept { return 1.0; }
     double PointCenter::norm() const noexcept { return std::sqrt(normSquare()); }
     ProjectivePoint PointCenter::normalizedByNorm() const noexcept { return *this / norm(); }
+
+    constexpr double PointCenter::bulkNormSquare() const noexcept { return 1.0; }
+    double PointCenter::bulkNorm() const noexcept { return std::sqrt(bulkNormSquare()); }
+    ProjectivePoint PointCenter::normalizedByBulk() const noexcept { return *this / bulkNorm(); }
+
+    constexpr double PointCenter::weightNormSquare() const noexcept { return 0.0; }
+    double PointCenter::weightNorm() const noexcept { return std::sqrt(weightNormSquare()); }
+    ProjectivePoint PointCenter::normalizedByWeight() const noexcept { return *this / weightNorm(); }
 
 }

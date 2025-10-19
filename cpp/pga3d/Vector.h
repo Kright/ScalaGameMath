@@ -34,6 +34,9 @@ namespace pga3d {
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Vector normalizedByNorm() const noexcept;
+        [[nodiscard]] constexpr double weightNormSquare() const noexcept;
+        [[nodiscard]] double weightNorm() const noexcept;
+        [[nodiscard]] Vector normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Vector>);

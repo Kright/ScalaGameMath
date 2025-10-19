@@ -30,6 +30,12 @@ namespace pga3d {
         [[nodiscard]] constexpr double normSquare() const noexcept;
         [[nodiscard]] double norm() const noexcept;
         [[nodiscard]] Plane normalizedByNorm() const noexcept;
+        [[nodiscard]] constexpr double bulkNormSquare() const noexcept;
+        [[nodiscard]] double bulkNorm() const noexcept;
+        [[nodiscard]] Plane normalizedByBulk() const noexcept;
+        [[nodiscard]] constexpr double weightNormSquare() const noexcept;
+        [[nodiscard]] double weightNorm() const noexcept;
+        [[nodiscard]] Plane normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Plane>);
