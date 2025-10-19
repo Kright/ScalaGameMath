@@ -19,10 +19,10 @@ class Pga3dCodeGenCpp(val directory: Path,
 
   private val structCodeGenerators = Seq(
     new StructFieldsGenerator,
-    new StructStaticConstructorGenerator,
   )
 
   private val binopCodeGenerators = Seq(
+    new StructStaticConstructorGenerator,
     new DualOpGenerator,
     new WeightOpGenerator,
     new BulkOpGenerator,
