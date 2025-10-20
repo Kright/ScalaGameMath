@@ -37,6 +37,18 @@ namespace pga3d {
         };
     }
 
+    [[nodiscard]] constexpr std::pair<Quaternion, Translator> Motor::toQuaternionAndTranslator() const noexcept {
+        const Quaternion q = toQuaternionUnsafe();
+        const Motor t = q.reverse().geometric(*this);
+        return { q, t.toTranslatorUnsafe() };
+    }
+
+    [[nodiscard]] constexpr std::pair<Translator, Quaternion> Motor::toTranslatorAndQuaternion() const noexcept {
+        const Quaternion q = toQuaternionUnsafe();
+        const Motor t = geometric(q.reverse());
+        return { t.toTranslatorUnsafe(), q };
+    }
+
     [[nodiscard]] constexpr Vector Motor::axisX() const noexcept { return toQuaternionUnsafe().axisX(); }
     [[nodiscard]] constexpr Vector Motor::axisY() const noexcept { return toQuaternionUnsafe().axisY(); }
     [[nodiscard]] constexpr Vector Motor::axisZ() const noexcept { return toQuaternionUnsafe().axisZ(); }

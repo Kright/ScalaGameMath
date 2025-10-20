@@ -22,6 +22,11 @@ namespace pga3d {
         [[nodiscard]] static constexpr Motor addVector(const Vector& v) noexcept;
 
         [[nodiscard]] inline Bivector log() const noexcept;
+
+        [[nodiscard]] inline Vector toVector() const noexcept;
+
+        [[nodiscard]] constexpr std::pair<Quaternion, Translator> toQuaternionAndTranslator() const noexcept;
+        [[nodiscard]] constexpr std::pair<Translator, Quaternion> toTranslatorAndQuaternion() const noexcept;
         [[nodiscard]] constexpr Vector axisX() const noexcept;
         [[nodiscard]] constexpr Vector axisY() const noexcept;
         [[nodiscard]] constexpr Vector axisZ() const noexcept;
