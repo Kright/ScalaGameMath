@@ -17,7 +17,7 @@ class BivectorBulkOpsGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code.apply("#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply("#include \"ops_norm.h\"")
+    code.apply("#include \"opsNorm.h\"")
     code.apply("")
     code.generatedBy(getClass.getName)
 
@@ -42,6 +42,6 @@ class BivectorBulkOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_BivectorBulk.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsBivectorBulk.h"), code.toString)
   }
 }

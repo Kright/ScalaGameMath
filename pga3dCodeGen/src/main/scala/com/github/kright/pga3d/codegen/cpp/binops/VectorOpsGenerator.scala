@@ -51,6 +51,6 @@ class VectorOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Vector.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsVector.h"), code.toString)
   }
 }

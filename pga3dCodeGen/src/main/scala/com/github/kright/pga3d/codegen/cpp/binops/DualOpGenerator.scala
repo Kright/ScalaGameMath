@@ -22,7 +22,7 @@ class DualOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_dual.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsDual.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

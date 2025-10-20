@@ -32,6 +32,6 @@ class BivectorWeightOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_BivectorWeight.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsBivectorWeight.h"), code.toString)
   }
 }

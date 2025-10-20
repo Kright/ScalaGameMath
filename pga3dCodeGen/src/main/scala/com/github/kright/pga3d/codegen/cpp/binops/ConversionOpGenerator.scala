@@ -55,5 +55,5 @@ class ConversionOpGenerator extends BinOpCodeGen:
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_to.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsTo.h"), code.toString)
   }

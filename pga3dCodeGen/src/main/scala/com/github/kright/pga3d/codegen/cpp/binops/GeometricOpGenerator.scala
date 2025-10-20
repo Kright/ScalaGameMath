@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class GeometricOpGenerator extends BinaryMethodCodeGen(
   methodName = "geometric",
-  fileName = "ops_geometric.h",
+  fileName = "opsGeometric.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.geometric(b)
 )

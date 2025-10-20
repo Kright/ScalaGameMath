@@ -37,8 +37,8 @@ class ProjectionOpsGenerator extends BinOpCodeGen:
 
     code.pragmaOnce()
     code(s"#include \"${codeGen.Headers.types}\"")
-    code(s"#include \"ops_geometric.h\"")
-    code(s"#include \"ops_dot.h\"")
+    code(s"#include \"opsGeometric.h\"")
+    code(s"#include \"opsDot.h\"")
     code("")
     code.generatedBy(getClass.getName)
 
@@ -56,5 +56,5 @@ class ProjectionOpsGenerator extends BinOpCodeGen:
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_project.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsProject.h"), code.toString)
   }

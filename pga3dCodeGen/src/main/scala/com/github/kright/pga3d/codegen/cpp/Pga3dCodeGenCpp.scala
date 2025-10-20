@@ -12,7 +12,7 @@ class Pga3dCodeGenCpp(val directory: Path,
   assert(Files.exists(directory))
 
   object Headers {
-    val typesForward = "types_forward.h"
+    val typesForward = "typesForward.h"
     val types = "types.h"
     val pga3d = "pga3d.h"
   }
@@ -116,7 +116,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     codeGen.pragmaOnce()
 
     val includes: Seq[String] =
-      (Seq("<type_traits>", "\"types_forward.h\"") ++ (structCodeGenerators ++ binopCodeGenerators).flatMap(_.includes(cls)))
+      (Seq("<type_traits>", "\"typesForward.h\"") ++ (structCodeGenerators ++ binopCodeGenerators).flatMap(_.includes(cls)))
         .distinct.sorted.sortBy(s => if (s.startsWith("\"")) 1 else 0)
 
     includes.foreach(incl => codeGen("#include " + incl))

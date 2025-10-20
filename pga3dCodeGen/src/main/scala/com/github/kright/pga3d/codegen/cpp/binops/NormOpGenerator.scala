@@ -12,7 +12,7 @@ class NormOpGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code("#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"ops_arithmetic.h\"")
+    code.apply(s"#include \"opsArithmetic.h\"")
 
     code.apply("")
     code.generatedBy(getClass.getName)
@@ -62,7 +62,7 @@ class NormOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_norm.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsNorm.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

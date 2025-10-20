@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class AntiWedgeOpGenerator extends BinaryMethodCodeGen(
   methodName = "antiWedge",
-  fileName = "ops_antiWedge.h",
+  fileName = "opsAntiWedge.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.antiWedge(b)
 )

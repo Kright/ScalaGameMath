@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class ReverseSandwichOpGenerator extends BinaryMethodCodeGen(
   methodName = "reverseSandwich",
-  fileName = "ops_reverseSandwich.h",
+  fileName = "opsReverseSandwich.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.reverse.sandwich(b)
 )

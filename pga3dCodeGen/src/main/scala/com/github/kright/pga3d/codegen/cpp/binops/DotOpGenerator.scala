@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class DotOpGenerator extends BinaryMethodCodeGen(
   methodName = "dot",
-  fileName = "ops_dot.h",
+  fileName = "opsDot.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.dot(b)
 )

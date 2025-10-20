@@ -53,6 +53,6 @@ class StructStaticConstructorGenerator extends BinOpCodeGen {
       code("")
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_constructors.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsConstructors.h"), code.toString)
   }
 }

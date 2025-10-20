@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class AntiDotOpGenerator extends BinaryMethodCodeGen(
   methodName = "antiDot",
-  fileName = "ops_antiDot.h",
+  fileName = "opsAntiDot.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.antiDot(b)
 )

@@ -40,7 +40,7 @@ class MotorOpsGenerator extends BinOpCodeGen {
     // Keep includes minimal; types aggregation is enough for method declarations/definitions
     code.apply(s"#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"ops_arithmetic.h\"")
+    code.apply(s"#include \"opsArithmetic.h\"")
     code.apply("")
     code.generatedBy(getClass.getName)
 
@@ -124,6 +124,6 @@ class MotorOpsGenerator extends BinOpCodeGen {
       QuaternionAndMotorAxes.makeForMotor(code)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Motor.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsMotor.h"), code.toString)
   }
 }

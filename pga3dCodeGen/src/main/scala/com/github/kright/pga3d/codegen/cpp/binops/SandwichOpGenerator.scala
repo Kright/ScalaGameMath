@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class SandwichOpGenerator extends BinaryMethodCodeGen(
   methodName = "sandwich",
-  fileName = "ops_sandwich.h",
+  fileName = "opsSandwich.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.sandwich(b)
 )

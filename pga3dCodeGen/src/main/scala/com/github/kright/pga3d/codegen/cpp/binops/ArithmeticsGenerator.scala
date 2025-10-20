@@ -26,7 +26,7 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       madd(code)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_arithmetic.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsArithmetic.h"), code.toString)
   }
 
   private def multiplyOrDivideByScalar(code: CppCodeGen): Unit = {

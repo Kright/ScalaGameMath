@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class CrossOpGenerator extends BinaryMethodCodeGen(
   methodName = "cross",
-  fileName = "ops_cross.h",
+  fileName = "opsCross.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.crossX2(b) * Sym(0.5)
 )

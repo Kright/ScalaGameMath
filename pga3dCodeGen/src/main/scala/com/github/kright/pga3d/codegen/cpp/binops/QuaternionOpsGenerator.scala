@@ -30,9 +30,9 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code("#include <cmath>")
     code(s"#include \"${codeGen.Headers.types}\"")
-    code("#include \"ops_norm.h\"")
-    code("#include \"ops_arithmetic.h\"")
-    code("#include \"ops_geometric.h\"")
+    code("#include \"opsNorm.h\"")
+    code("#include \"opsArithmetic.h\"")
+    code("#include \"opsGeometric.h\"")
     code("")
     code.generatedBy(getClass.getName)
 
@@ -116,7 +116,7 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       QuaternionAndMotorAxes.makeForQuaternion(code)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Quaternion.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsQuaternion.h"), code.toString)
   }
 }
 

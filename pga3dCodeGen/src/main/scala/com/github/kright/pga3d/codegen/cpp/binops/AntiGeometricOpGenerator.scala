@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class AntiGeometricOpGenerator extends BinaryMethodCodeGen(
   methodName = "antiGeometric",
-  fileName = "ops_antiGeometric.h",
+  fileName = "opsAntiGeometric.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.antiGeometric(b)
 )

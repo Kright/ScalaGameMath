@@ -22,7 +22,7 @@ class BulkOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_bulk.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsBulk.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

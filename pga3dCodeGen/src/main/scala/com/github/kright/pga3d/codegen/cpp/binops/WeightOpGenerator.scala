@@ -22,7 +22,7 @@ class WeightOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_weight.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsWeight.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

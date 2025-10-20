@@ -11,8 +11,8 @@ class BivectorOpsGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code.apply(s"#include <cmath>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"ops_arithmetic.h\"")
-    code.apply(s"#include \"ops_norm.h\"")
+    code.apply(s"#include \"opsArithmetic.h\"")
+    code.apply(s"#include \"opsNorm.h\"")
     code.apply("")
     code.generatedBy(getClass.getName)
 
@@ -69,7 +69,7 @@ class BivectorOpsGenerator extends BinOpCodeGen {
       )
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Bivector.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsBivector.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

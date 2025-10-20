@@ -22,7 +22,7 @@ class AntiReverseOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_antiReverse.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsAntiReverse.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

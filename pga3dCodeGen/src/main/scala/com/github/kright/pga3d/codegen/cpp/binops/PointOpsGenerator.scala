@@ -21,8 +21,8 @@ class PointOpsGenerator extends BinOpCodeGen {
     code.pragmaOnce()
     code.apply("#include <algorithm>")
     code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply("#include \"ops_arithmetic.h\"")
-    code.apply("#include \"ops_norm.h\"")
+    code.apply("#include \"opsArithmetic.h\"")
+    code.apply("#include \"opsNorm.h\"")
     code.apply("")
     code.generatedBy(getClass.getName)
 
@@ -59,6 +59,6 @@ class PointOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Point.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsPoint.h"), code.toString)
   }
 }

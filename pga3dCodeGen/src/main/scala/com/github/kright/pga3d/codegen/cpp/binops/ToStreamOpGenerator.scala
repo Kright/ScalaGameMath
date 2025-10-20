@@ -25,7 +25,7 @@ class ToStreamOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_str.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsStr.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = ""

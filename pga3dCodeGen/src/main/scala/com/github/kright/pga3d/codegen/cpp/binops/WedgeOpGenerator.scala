@@ -5,6 +5,6 @@ import com.github.kright.symbolic.Sym
 
 class WedgeOpGenerator extends BinaryMethodCodeGen(
   methodName = "wedge",
-  fileName = "ops_wedge.h",
+  fileName = "opsWedge.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.wedge(b)
 )

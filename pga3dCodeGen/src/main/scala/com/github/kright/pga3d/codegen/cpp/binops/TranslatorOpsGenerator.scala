@@ -37,6 +37,6 @@ class TranslatorOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("ops_Translator.h"), code.toString)
+    FileWriterTask(codeGen.directory.resolve("opsTranslator.h"), code.toString)
   }
 }
