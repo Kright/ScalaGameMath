@@ -36,4 +36,8 @@ namespace pga3d {
             .yz = b * yz,
         };
     }
+
+    [[nodiscard]] constexpr Vector Motor::axisX() const noexcept { return toQuaternionUnsafe().axisX(); }
+    [[nodiscard]] constexpr Vector Motor::axisY() const noexcept { return toQuaternionUnsafe().axisY(); }
+    [[nodiscard]] constexpr Vector Motor::axisZ() const noexcept { return toQuaternionUnsafe().axisZ(); }
 }

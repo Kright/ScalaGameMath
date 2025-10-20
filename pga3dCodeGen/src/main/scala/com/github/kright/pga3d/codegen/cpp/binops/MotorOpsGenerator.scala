@@ -7,9 +7,14 @@ class MotorOpsGenerator extends BinOpCodeGen {
 
   // No declarations yet. Ready to add methods in the future.
   override def structCode(cls: CppSubclass): String = {
-    if (cls == CppSubclasses.motor) {
-      s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;"
-    } else ""
+    if (cls != CppSubclasses.motor) return ""
+
+    val code = new CppCodeGen()
+
+    code(s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;")
+    QuaternionAndMotorAxes.makeDeclaration(code, cls)
+
+    code.toString
   }
 
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
@@ -58,6 +63,8 @@ class MotorOpsGenerator extends BinOpCodeGen {
           |}
           |""".stripMargin)
 
+      code("")
+      QuaternionAndMotorAxes.makeForMotor(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_Motor.h"), code.toString)
