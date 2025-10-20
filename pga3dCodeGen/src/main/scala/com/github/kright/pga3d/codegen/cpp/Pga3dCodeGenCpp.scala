@@ -51,6 +51,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     new ArithmeticsGenerator,
     new NormOpGenerator,
     new ToStreamOpGenerator,
+    new ProjectionOpsGenerator,
   )
 
   def generateAll(): Unit = {

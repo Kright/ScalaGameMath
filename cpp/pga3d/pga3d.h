@@ -31,3 +31,4 @@
 #include "ops_arithmetic.h"
 #include "ops_norm.h"
 #include "ops_str.h"
+#include "ops_project.h"

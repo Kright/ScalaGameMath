@@ -164,6 +164,9 @@ namespace pga3d {
         [[nodiscard]] constexpr double weightNormSquare() const noexcept;
         [[nodiscard]] inline double weightNorm() const noexcept;
         [[nodiscard]] inline Bivector normalizedByWeight() const noexcept;
+
+        [[nodiscard]] constexpr Bivector projectOntoPlane(const Plane& plane) const noexcept;
+        [[nodiscard]] constexpr Bivector projectOntoPlane(const PlaneIdeal& plane) const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Bivector>);

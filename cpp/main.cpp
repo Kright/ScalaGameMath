@@ -7,6 +7,12 @@ int main() {
     constexpr auto point = pga3d::Point(1, 2, 3);
     constexpr auto projectivePoint = pga3d::ProjectivePoint(3, 4, 5, 6);
 
+    constexpr pga3d::Plane plane{1, 2, 3, 4};
+    constexpr pga3d::Bivector line{5, 7, 8, 9, 0, 1};
+
+    constexpr auto result = plane.dot(line).geometric(plane);
+    std::cout << result << std::endl;
+
     pga3d::Point p{.z = 2};
     std::cout << p << std::endl;
     std::cout << projectivePoint << std::endl;

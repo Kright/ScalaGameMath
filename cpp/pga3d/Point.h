@@ -171,6 +171,10 @@ namespace pga3d {
         [[nodiscard]] constexpr double weightNormSquare() const noexcept;
         [[nodiscard]] inline double weightNorm() const noexcept;
         [[nodiscard]] inline ProjectivePoint normalizedByWeight() const noexcept;
+
+        [[nodiscard]] constexpr ProjectivePoint projectOntoPlane(const Plane& plane) const noexcept;
+        [[nodiscard]] constexpr ProjectivePoint projectOntoPlane(const PlaneIdeal& plane) const noexcept;
+        [[nodiscard]] constexpr ProjectivePoint projectOntoLine(const Bivector& line) const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<Point>);
