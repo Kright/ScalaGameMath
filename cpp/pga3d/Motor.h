@@ -27,6 +27,9 @@ namespace pga3d {
 
         [[nodiscard]] constexpr std::pair<Quaternion, Translator> toQuaternionAndTranslator() const noexcept;
         [[nodiscard]] constexpr std::pair<Translator, Quaternion> toTranslatorAndQuaternion() const noexcept;
+
+        [[nodiscard]] inline Motor renormalized() const noexcept;
+
         [[nodiscard]] constexpr Vector axisX() const noexcept;
         [[nodiscard]] constexpr Vector axisY() const noexcept;
         [[nodiscard]] constexpr Vector axisZ() const noexcept;

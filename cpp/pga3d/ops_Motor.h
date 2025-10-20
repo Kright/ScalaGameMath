@@ -49,6 +49,26 @@ namespace pga3d {
         return { t.toTranslatorUnsafe(), q };
     }
 
+    /**
+     * see [[https://arxiv.org/abs/2206.07496]], page 14
+     * and [[https://https://bivector.net/PGAdyn.pdf.net/PGAdyn.pdf]], page 42
+     */
+    [[nodiscard]] inline Motor Motor::renormalized() const noexcept {
+        const double a2 = 1.0 / (s * s + xy * xy + xz * xz + yz * yz);
+        const double a = std::sqrt(a2);
+        const double b = (s * i - wx * yz + wy * xz - wz * xy) * a * a2;
+        return Motor {
+            .s = a * s,
+            .wx = a * wx + b * yz,
+            .wy = a * wy - b * xz,
+            .wz = a * wz + b * xy,
+            .xy = a * xy,
+            .xz = a * xz,
+            .yz = a * yz,
+            .i = a * i - b * s,
+        };
+    }
+
     [[nodiscard]] constexpr Vector Motor::axisX() const noexcept { return toQuaternionUnsafe().axisX(); }
     [[nodiscard]] constexpr Vector Motor::axisY() const noexcept { return toQuaternionUnsafe().axisY(); }
     [[nodiscard]] constexpr Vector Motor::axisZ() const noexcept { return toQuaternionUnsafe().axisZ(); }

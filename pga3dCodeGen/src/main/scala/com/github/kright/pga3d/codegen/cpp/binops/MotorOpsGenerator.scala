@@ -25,6 +25,9 @@ class MotorOpsGenerator extends BinOpCodeGen {
     code("")
     code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.quaternion.name}, ${CppSubclasses.translator.name}> toQuaternionAndTranslator() const noexcept;")
     code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.translator.name}, ${CppSubclasses.quaternion.name}> toTranslatorAndQuaternion() const noexcept;")
+    code("")
+    code(s"[[nodiscard]] inline ${CppSubclasses.motor.name} renormalized() const noexcept;")
+    code("")
     QuaternionAndMotorAxes.makeDeclaration(code, cls)
 
     code.toString
@@ -91,6 +94,29 @@ class MotorOpsGenerator extends BinOpCodeGen {
            |    const Quaternion q = toQuaternionUnsafe();
            |    const Motor t = geometric(q.reverse());
            |    return { t.toTranslatorUnsafe(), q };
+           |}
+           |""".stripMargin)
+
+      code(
+        s"""
+           |/**
+           | * see [[https://arxiv.org/abs/2206.07496]], page 14
+           | * and [[https://https://bivector.net/PGAdyn.pdf.net/PGAdyn.pdf]], page 42
+           | */
+           |[[nodiscard]] inline ${CppSubclasses.motor.name} ${CppSubclasses.motor.name}::renormalized() const noexcept {
+           |    const double a2 = 1.0 / (s * s + xy * xy + xz * xz + yz * yz);
+           |    const double a = std::sqrt(a2);
+           |    const double b = (s * i - wx * yz + wy * xz - wz * xy) * a * a2;
+           |    return ${CppSubclasses.motor.name} {
+           |        .s = a * s,
+           |        .wx = a * wx + b * yz,
+           |        .wy = a * wy - b * xz,
+           |        .wz = a * wz + b * xy,
+           |        .xy = a * xy,
+           |        .xz = a * xz,
+           |        .yz = a * yz,
+           |        .i = a * i - b * s,
+           |    };
            |}
            |""".stripMargin)
 
