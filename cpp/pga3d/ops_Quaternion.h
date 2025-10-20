@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include "types.h"
 #include "ops_norm.h"
 #include "ops_arithmetic.h"
 
@@ -57,4 +58,8 @@ namespace pga3d {
             .yz = b * yz,
         };
     }
+
+    [[nodiscard]] constexpr Vector Quaternion::axisX() const noexcept { return {.x = (s * s + yz * yz - xy * xy - xz * xz), .y = 2.0 * (-s * xy - xz * yz), .z = (-2.0 * s * xz + 2.0 * xy * yz)}; }
+    [[nodiscard]] constexpr Vector Quaternion::axisY() const noexcept { return {.x = (-2.0 * xz * yz + 2.0 * s * xy), .y = (s * s + xz * xz - xy * xy - yz * yz), .z = (-2.0 * s * yz - 2.0 * xy * xz)}; }
+    [[nodiscard]] constexpr Vector Quaternion::axisZ() const noexcept { return {.x = (2.0 * s * xz + 2.0 * xy * yz), .y = 2.0 * (s * yz - xy * xz), .z = (s * s + xy * xy - xz * xz - yz * yz)}; }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "types.h"
 #include "ops_arithmetic.h"
 #include "ops_norm.h"
@@ -10,5 +11,29 @@ namespace pga3d {
 
     [[nodiscard]] inline double Point::distanceTo(const Point& other) const noexcept {
         return ((*this) - other).norm();
+    }
+
+    [[nodiscard]] inline Point Point::min(const Point& other) const noexcept {
+        return Point{
+            .x = std::min(x, other.x),
+            .y = std::min(y, other.y),
+            .z = std::min(z, other.z),
+        };
+    }
+
+    [[nodiscard]] inline Point Point::max(const Point& other) const noexcept {
+        return Point{
+            .x = std::max(x, other.x),
+            .y = std::max(y, other.y),
+            .z = std::max(z, other.z),
+        };
+    }
+
+    [[nodiscard]] inline Point Point::clamp(const Point& minV, const Point& maxV) const noexcept {
+        return Point{
+            .x = std::clamp(x, minV.x, maxV.x),
+            .y = std::clamp(y, minV.y, maxV.y),
+            .z = std::clamp(z, minV.z, maxV.z),
+        };
     }
 }

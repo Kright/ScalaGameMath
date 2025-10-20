@@ -27,6 +27,10 @@ namespace pga3d {
 
         [[nodiscard]] inline double distanceTo(const Point& other) const noexcept;
 
+        [[nodiscard]] inline Point min(const Point& other) const noexcept;
+        [[nodiscard]] inline Point max(const Point& other) const noexcept;
+        [[nodiscard]] inline Point clamp(const Point& minV, const Point& maxV) const noexcept;
+
         [[nodiscard]] constexpr Plane dual() const noexcept;
 
         [[nodiscard]] constexpr Vector weight() const noexcept;

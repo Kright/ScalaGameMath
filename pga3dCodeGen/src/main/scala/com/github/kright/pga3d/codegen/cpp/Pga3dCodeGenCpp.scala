@@ -31,6 +31,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     new BivectorBulkOpsGenerator,
     new BivectorWeightOpsGenerator,
     new PointOpsGenerator,
+    new VectorOpsGenerator,
     
     new DualOpGenerator,
     new WeightOpGenerator,

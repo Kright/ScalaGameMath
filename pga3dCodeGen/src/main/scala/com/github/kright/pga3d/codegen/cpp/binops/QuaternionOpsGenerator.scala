@@ -2,6 +2,7 @@ package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileWriterTask
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.symbolic.Sym
 
 class QuaternionOpsGenerator extends BinOpCodeGen {
 
@@ -13,6 +14,8 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept;")
       code("")
       code(s"[[nodiscard]] inline ${CppSubclasses.bivectorBulk.name} log() const noexcept;")
+      code("")
+      QuaternionAndMotorAxes.makeDeclaration(code, cls)
     }
 
     code.toString
@@ -23,6 +26,7 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
 
     code.pragmaOnce()
     code("#include <cmath>")
+    code(s"#include \"${codeGen.Headers.types}\"")
     code("#include \"ops_norm.h\"")
     code("#include \"ops_arithmetic.h\"")
     code("")
@@ -87,8 +91,13 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
            |    };
            |}
            |""".stripMargin)
+
+      code("")
+      QuaternionAndMotorAxes.makeForQuaternion(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("ops_Quaternion.h"), code.toString)
   }
 }
+
+

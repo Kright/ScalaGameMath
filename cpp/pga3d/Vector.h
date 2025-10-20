@@ -22,6 +22,10 @@ namespace pga3d {
         [[nodiscard]] static constexpr Vector mid(const Vector& a, const Vector& b) noexcept { return {.x = 0.5 * (a.x + b.x), .y = 0.5 * (a.y + b.y), .z = 0.5 * (a.z + b.z)}; }
         [[nodiscard]] static constexpr Vector mid(const Vector& a, const Vector& b, const Vector& c) noexcept { return {.x = (1.0 / 3.0) * (a.x + b.x + c.x), .y = (1.0 / 3.0) * (a.y + b.y + c.y), .z = (1.0 / 3.0) * (a.z + b.z + c.z)}; }
 
+        [[nodiscard]] inline Vector min(const Vector& other) const noexcept;
+        [[nodiscard]] inline Vector max(const Vector& other) const noexcept;
+        [[nodiscard]] inline Vector clamp(const Vector& minV, const Vector& maxV) const noexcept;
+
         [[nodiscard]] constexpr PlaneIdeal dual() const noexcept;
 
         [[nodiscard]] constexpr Vector weight() const noexcept;

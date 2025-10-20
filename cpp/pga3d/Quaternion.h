@@ -21,6 +21,10 @@ namespace pga3d {
 
         [[nodiscard]] inline BivectorBulk log() const noexcept;
 
+        [[nodiscard]] constexpr Vector axisX() const noexcept;
+        [[nodiscard]] constexpr Vector axisY() const noexcept;
+        [[nodiscard]] constexpr Vector axisZ() const noexcept;
+
         [[nodiscard]] constexpr Motor dual() const noexcept;
 
         [[nodiscard]] constexpr Quaternion bulk() const noexcept;
