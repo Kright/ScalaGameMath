@@ -15,6 +15,9 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       code("")
       code(s"[[nodiscard]] inline ${CppSubclasses.bivectorBulk.name} log() const noexcept;")
       code("")
+      code(s"[[nodiscard]] inline ${CppSubclasses.quaternion.name} projectToRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept;")
+      code(s"[[nodiscard]] inline double restoreRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept;")
+      code("")
       QuaternionAndMotorAxes.makeDeclaration(code, cls)
     }
 
@@ -29,6 +32,7 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
     code(s"#include \"${codeGen.Headers.types}\"")
     code("#include \"ops_norm.h\"")
     code("#include \"ops_arithmetic.h\"")
+    code("#include \"ops_geometric.h\"")
     code("")
     code.generatedBy(getClass.getName)
 
@@ -89,6 +93,22 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
            |        .xz = b * xz,
            |        .yz = b * yz,
            |    };
+           |}
+           |""".stripMargin)
+
+      code(
+        s"""
+           |[[nodiscard]] inline ${CppSubclasses.quaternion.name} ${CppSubclasses.quaternion.name}::projectToRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept {
+           |    const ${CppSubclasses.quaternion.name} q = normalizedByNorm();
+           |    const ${CppSubclasses.quaternion.name} qPart = ${CppSubclasses.quaternion.name}::rotation(q.sandwich(plane), plane);
+           |    return qPart.geometric(q);
+           |}
+           |
+           |[[nodiscard]] inline double ${CppSubclasses.quaternion.name}::restoreRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept {
+           |    const ${CppSubclasses.quaternion.name} q0 = projectToRotationInPlane(plane);
+           |    const ${CppSubclasses.bivectorWeight.name} logDual = q0.log().dual();
+           |    const double currentAngle = 2.0 * (logDual.wx * plane.x + logDual.wy * plane.y + logDual.wz * plane.z) / plane.norm();
+           |    return currentAngle;
            |}
            |""".stripMargin)
 

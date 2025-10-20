@@ -21,6 +21,9 @@ namespace pga3d {
 
         [[nodiscard]] inline BivectorBulk log() const noexcept;
 
+        [[nodiscard]] inline Quaternion projectToRotationInPlane(const PlaneIdeal& plane) const noexcept;
+        [[nodiscard]] inline double restoreRotationInPlane(const PlaneIdeal& plane) const noexcept;
+
         [[nodiscard]] constexpr Vector axisX() const noexcept;
         [[nodiscard]] constexpr Vector axisY() const noexcept;
         [[nodiscard]] constexpr Vector axisZ() const noexcept;
