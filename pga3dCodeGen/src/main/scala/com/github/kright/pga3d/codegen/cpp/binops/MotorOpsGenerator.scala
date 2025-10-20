@@ -18,7 +18,10 @@ class MotorOpsGenerator extends BinOpCodeGen {
     if (cls != CppSubclasses.motor) return ""
 
     val code = new CppCodeGen()
-
+    code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} id() noexcept { return { .s = 1.0 }; };")
+    code("")
+    code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
+    code("")
     code(s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;")
     code("")
     code(s"[[nodiscard]] inline ${CppSubclasses.vector.name} toVector() const noexcept;")
@@ -46,6 +49,9 @@ class MotorOpsGenerator extends BinOpCodeGen {
 
     code.namespace(codeGen.namespace) {
       // Intentionally left empty. This header is reserved for future Motor methods implementations.
+      code(
+        s"""
+           |[[nodiscard]] constexpr ${CppSubclasses.motor.name} ${CppSubclasses.motor.name}::addVector(const ${CppSubclasses.vector.name}& v) noexcept { return {.s = 1.0, .wx = v.x, .wy = v.y, .wz = v.z}; }""".stripMargin)
 
       code(
         s"""

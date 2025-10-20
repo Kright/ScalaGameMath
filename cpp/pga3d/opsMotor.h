@@ -8,6 +8,8 @@
 
 namespace pga3d {
 
+    [[nodiscard]] constexpr Motor Motor::addVector(const Vector& v) noexcept { return {.s = 1.0, .wx = v.x, .wy = v.y, .wz = v.z}; }
+
     [[nodiscard]] inline Bivector Motor::log() const noexcept {
         const double scalar = s;
         if (s < 0.0) return (-(*this)).log();

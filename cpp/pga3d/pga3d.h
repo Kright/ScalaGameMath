@@ -4,7 +4,6 @@
 
 #include "types.h"
 
-#include "opsConstructors.h"
 #include "opsQuaternion.h"
 #include "opsTranslator.h"
 #include "opsMotor.h"

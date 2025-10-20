@@ -6,6 +6,8 @@
 
 namespace pga3d {
 
+    [[nodiscard]] constexpr Translator Translator::addVector(const Vector& v) noexcept { return {.wx = v.x, .wy = v.y, .wz = v.z}; }
+
     [[nodiscard]] constexpr BivectorWeight Translator::log() const noexcept {
         return BivectorWeight {
             .wx = wx,
