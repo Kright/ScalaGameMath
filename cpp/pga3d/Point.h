@@ -25,6 +25,8 @@ namespace pga3d {
         [[nodiscard]] static constexpr Point mid(const Point& a, const Point& b) noexcept { return {.x = 0.5 * (a.x + b.x), .y = 0.5 * (a.y + b.y), .z = 0.5 * (a.z + b.z)}; }
         [[nodiscard]] static constexpr Point mid(const Point& a, const Point& b, const Point& c) noexcept { return {.x = (1.0 / 3.0) * (a.x + b.x + c.x), .y = (1.0 / 3.0) * (a.y + b.y + c.y), .z = (1.0 / 3.0) * (a.z + b.z + c.z)}; }
 
+        [[nodiscard]] inline double distanceTo(const Point& other) const noexcept;
+
         [[nodiscard]] constexpr Plane dual() const noexcept;
 
         [[nodiscard]] constexpr Vector weight() const noexcept;
