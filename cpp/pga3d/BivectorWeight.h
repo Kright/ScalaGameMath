@@ -13,6 +13,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 3;
 
+        [[nodiscard]] inline Translator exp() const noexcept;
+
         [[nodiscard]] constexpr BivectorBulk dual() const noexcept;
 
         [[nodiscard]] constexpr BivectorWeight weight() const noexcept;

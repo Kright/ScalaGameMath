@@ -13,6 +13,8 @@ namespace pga3d {
 
         static constexpr int componentsCount = 3;
 
+        [[nodiscard]] inline Quaternion exp() const noexcept;
+
         [[nodiscard]] constexpr BivectorWeight dual() const noexcept;
 
         [[nodiscard]] constexpr BivectorBulk bulk() const noexcept;
