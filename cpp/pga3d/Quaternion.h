@@ -156,5 +156,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<Quaternion>);
-    static_assert(sizeof(Quaternion) == 8 * 4, "ProjectivePoint must be exactly 32 bytes");
+    static_assert(sizeof(Quaternion) == 8 * Quaternion::componentsCount, "Quaternion must be exactly 32 bytes");
 }

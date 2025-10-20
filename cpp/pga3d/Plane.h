@@ -156,5 +156,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<Plane>);
-    static_assert(sizeof(Plane) == 8 * 4, "ProjectivePoint must be exactly 32 bytes");
+    static_assert(sizeof(Plane) == 8 * Plane::componentsCount, "Plane must be exactly 32 bytes");
 }

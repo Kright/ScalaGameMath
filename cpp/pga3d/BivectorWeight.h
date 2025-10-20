@@ -108,5 +108,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<BivectorWeight>);
-    static_assert(sizeof(BivectorWeight) == 8 * 3, "ProjectivePoint must be exactly 24 bytes");
+    static_assert(sizeof(BivectorWeight) == 8 * BivectorWeight::componentsCount, "BivectorWeight must be exactly 24 bytes");
 }

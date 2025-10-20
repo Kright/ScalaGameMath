@@ -179,5 +179,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<Motor>);
-    static_assert(sizeof(Motor) == 8 * 8, "ProjectivePoint must be exactly 64 bytes");
+    static_assert(sizeof(Motor) == 8 * Motor::componentsCount, "Motor must be exactly 64 bytes");
 }

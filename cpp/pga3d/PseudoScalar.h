@@ -107,5 +107,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<PseudoScalar>);
-    static_assert(sizeof(PseudoScalar) == 8 * 1, "ProjectivePoint must be exactly 8 bytes");
+    static_assert(sizeof(PseudoScalar) == 8 * PseudoScalar::componentsCount, "PseudoScalar must be exactly 8 bytes");
 }

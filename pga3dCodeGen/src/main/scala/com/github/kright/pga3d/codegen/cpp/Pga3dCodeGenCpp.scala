@@ -126,7 +126,7 @@ class Pga3dCodeGenCpp(val directory: Path,
       codeGen(s"static_assert(std::is_trivially_copyable_v<${cls.name}>);")
 
       if (cls.variableFields.nonEmpty) {
-        codeGen(s"static_assert(sizeof(${cls.name}) == 8 * ${cls.variableFields.size}, \"ProjectivePoint must be exactly ${8 * cls.variableFields.size} bytes\");")
+        codeGen(s"static_assert(sizeof(${cls.name}) == 8 * ${cls.name}::componentsCount, \"${cls.name} must be exactly ${8 * cls.variableFields.size} bytes\");")
       }
     }
 

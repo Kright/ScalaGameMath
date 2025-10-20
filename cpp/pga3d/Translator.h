@@ -164,5 +164,5 @@ namespace pga3d {
     };
 
     static_assert(std::is_trivially_copyable_v<Translator>);
-    static_assert(sizeof(Translator) == 8 * 3, "ProjectivePoint must be exactly 24 bytes");
+    static_assert(sizeof(Translator) == 8 * Translator::componentsCount, "Translator must be exactly 24 bytes");
 }
