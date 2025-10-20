@@ -27,6 +27,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     new QuaternionOpsGenerator,
     new TranslatorOpsGenerator,
     new MotorOpsGenerator,
+    new BivectorOpsGenerator,
     
     new DualOpGenerator,
     new WeightOpGenerator,
@@ -107,15 +108,15 @@ class Pga3dCodeGenCpp(val directory: Path,
   private def generateStructHeader(cls: CppSubclass): String = {
     val codeGen = new CppCodeGen()
 
-    codeGen(
-      """#pragma once
-        |
-        |#include <type_traits>
-        |#include "types_forward.h"
-        |
-        |// This code is generated, see com.github.kright.pga3d.codegen.cpp.CppCodeGen
-        |""".stripMargin)
+    codeGen.pragmaOnce()
+
+    val includes: Seq[String] =
+      (Seq("<type_traits>", "\"types_forward.h\"") ++ (structCodeGenerators ++ binopCodeGenerators).flatMap(_.includes(cls)))
+        .distinct.sorted.sortBy(s => if (s.startsWith("\"")) 1 else 0)
+
+    includes.foreach(incl => codeGen("#include " + incl))
     codeGen("")
+    codeGen.generatedBy(getClass.getName)
 
     codeGen.namespace(namespace) {
       codeGen.struct(cls.name) {
