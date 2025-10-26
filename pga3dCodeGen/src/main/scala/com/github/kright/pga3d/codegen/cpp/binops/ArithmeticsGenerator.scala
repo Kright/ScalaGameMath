@@ -32,35 +32,23 @@ class ArithmeticsGenerator extends BinOpCodeGen:
   private def multiplyOrDivideByScalar(code: CppCodeGen): Unit = {
     import com.github.kright.symbolic.Sym
 
-    def mulRight(cls: CppSubclass): Unit = {
-      val a = cls.makeSymbolic("a")
-      val result = a * Sym("b")
-      val resultCls = CppSubclasses.findMatchingClass(result)
-      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(const ${cls.name}& a, double b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
-    }
-
-    def mulLeft(cls: CppSubclass): Unit = {
-      val b = cls.makeSymbolic("b")
-      val result = b * Sym("a")
-      val resultCls = CppSubclasses.findMatchingClass(result)
-      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double a, const ${cls.name}& b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
-    }
-
-    def divRight(cls: CppSubclass): Unit = {
-      val a = cls.makeSymbolic("a")
-      val result = a * Sym("b")
-      val resultCls = CppSubclasses.findMatchingClass(result)
-      code(s"[[nodiscard]] constexpr ${resultCls.name} operator/(const ${cls.name}& a, double b) noexcept { return a * (1.0 / b); }")
-    }
-
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
-      mulRight(cls)
-      mulLeft(cls)
-      divRight(cls)
+      val a = cls.makeSymbolic("a")
+      val result = a * Sym("d")
+      val resultCls = CppSubclasses.findMatchingClass(result)
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(const ${cls.name}& a, double d) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double d, const ${cls.name}& a) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator/(const ${cls.name}& a, double d) noexcept { return a * (1.0 / d); }")
+
+      if (resultCls == cls) {
+        code(s"constexpr ${resultCls.name}& operator*=(${cls.name}& a, double d) noexcept { a = a * d; return a; }")
+        code(s"constexpr ${resultCls.name}& operator/=(${cls.name}& a, double d) noexcept { a = a / d; return a; }")
+      }
+
       code("")
     }
   }
-  
+
   private def unaryMinus(code: CppCodeGen): Unit = {
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
       val a = cls.makeSymbolic("a")
@@ -71,7 +59,7 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       }
     }
   }
-  
+
   private def plusMinus(code: CppCodeGen): Unit = {
 
     def makeMethod(left: CppSubclass, right: CppSubclass, operatorName: String, op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]): Unit = {
@@ -81,6 +69,9 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       val resultCls = CppSubclasses.findMatchingClass(result)
       if (resultCls != CppSubclasses.zeroCls) {
         code(s"[[nodiscard]] constexpr ${resultCls.name} operator${operatorName}(const ${left.name}& a, const ${right.name}& b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+      }
+      if (resultCls == left) {
+        code(s"constexpr ${resultCls.name}& operator${operatorName}=(${left.name}& a, const ${right.name}& b) noexcept { a = a ${operatorName} b; return a; }")
       }
     }
 
