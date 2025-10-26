@@ -18,7 +18,7 @@ class VectorOpsGenerator extends BinOpCodeGen {
 
     code.pragmaOnce()
     code.apply("#include <algorithm>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
+    code.apply(s"#include \"Vector.h\"")
     code.apply("")
     code.generatedBy(getClass.getName)
 
