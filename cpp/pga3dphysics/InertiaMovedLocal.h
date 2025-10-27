@@ -1,0 +1,39 @@
+#pragma once
+
+#include "pga3d/Motor.h"
+#include "pga3d/opsReverseSandwich.h"
+#include "pga3d/opsSandwich.h"
+
+#include "InertiaLocal.h"
+
+namespace pga3dphysics {
+    struct InertiaMovedLocal {
+        pga3d::Motor localToGlobal;
+        InertiaLocal localInertia;
+
+        [[nodiscard]] constexpr Bivector operator ()(const Bivector& globalB) const noexcept {
+            const Bivector localB = localToGlobal.reverseSandwich(globalB);
+            const Bivector localI = localInertia(localB);
+            return localToGlobal.sandwich(localI);
+        }
+
+        [[nodiscard]] constexpr Bivector invert(const Bivector& globalI) const noexcept {
+            const Bivector localI = localToGlobal.reverseSandwich(globalI);
+            const Bivector localB = localInertia.invert(localI);
+            return localToGlobal.sandwich(localB);
+        }
+
+        [[nodiscard]] constexpr Bivector getLocalAcceleration(const Bivector &globalB,
+                                                              const Bivector &globalForque) const noexcept {
+            const Bivector localB = localToGlobal.reverseSandwich(globalB);
+            const Bivector localF = localToGlobal.reverseSandwich(globalForque);
+            return localInertia.getAcceleration(localB, localF);
+        }
+
+        [[nodiscard]] constexpr Bivector getAcceleration(const Bivector &globalB,
+                                                         const Bivector &globalForque) const noexcept {
+            const Bivector localA = getLocalAcceleration(globalB, globalForque);
+            return localToGlobal.sandwich(localA);
+        }
+    };
+}

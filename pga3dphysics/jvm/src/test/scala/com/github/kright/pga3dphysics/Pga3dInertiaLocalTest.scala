@@ -24,7 +24,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
   }
 
   test("performance compare with C++") {
-//    assume(false, "skip test")
+    assume(false, "skip test")
     for (i <- FastRange(100)) {
       val system = Pga3dPhysicsSystemForTest(
         state = Seq(0.0, 1e-2, 1e-1, 1.0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6).map { d =>
@@ -42,7 +42,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
       }
       val end = System.nanoTime()
 
-      println(s"${end - start} ns for ${stepsCount} steps, error = ${system.getError()}")
+//      println(s"${end - start} ns for ${stepsCount} steps, error = ${system.getError()}")
     }
   }
 

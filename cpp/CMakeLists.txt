@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 include_directories(.)
 include_directories(pga3d)
+include_directories(pga3dphysics)
+
+add_compile_options(-O3)
+#add_compile_options(-ffast-math -fno-math-errno)
 
 add_executable(cpp
         main.cpp
@@ -24,4 +28,13 @@ add_executable(cpp
         pga3d/types.h
         pga3d/typesForward.h
         pga3d/Vector.h
+        pga3dphysics/InertiaLocal.h
+        pga3dphysics/InertiaMovedLocal.h
+        pga3dphysics/PhysicsBody.h
+        pga3dphysics/pga3dphysics.h
+        pga3dphysics/PhysicsSolverRK4.h
+        pga3dphysics/BodyState.h
+        pga3dphysics/Forque.h
+        pga3dphysics/InertiaSummable.h
+        pga3dphysics/InertiaLocalSphere.h
 )
