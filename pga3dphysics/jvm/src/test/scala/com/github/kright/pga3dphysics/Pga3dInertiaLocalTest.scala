@@ -1,6 +1,6 @@
 package com.github.kright.pga3dphysics
 
-import com.github.kright.math.EqualityEps
+import com.github.kright.math.{EqualityEps, FastRange}
 import com.github.kright.pga3d.*
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.funsuite.AnyFunSuiteLike
@@ -23,21 +23,46 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     }
   }
 
+  test("performance compare with C++") {
+//    assume(false, "skip test")
+    for (i <- FastRange(100)) {
+      val system = Pga3dPhysicsSystemForTest(
+        state = Seq(0.0, 1e-2, 1e-1, 1.0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6).map { d =>
+          Pga3dPhysicsSystemForTest.simpleBody(Pga3dTranslator.addVector(Pga3dVector(d, d, d)).toMotor)
+        }.toArray,
+        solver = Pga3dPhysicsSolverRK4
+      )
+
+      val stepsCount = 1000
+      val dt = 0.01
+
+      val start = System.nanoTime()
+      for (step <- FastRange(stepsCount)) {
+        system.doStep(dt, _ => ())
+      }
+      val end = System.nanoTime()
+
+      println(s"${end - start} ns for ${stepsCount} steps, error = ${system.getError()}")
+    }
+  }
+
   test("calculate free rotation body precession for RK4 for different centers") {
     // Up to 1'000 everything is ok, but for higher distance precision is decreasing
 
-    val centersAndErrors = Seq[(Pga3dPoint, ErrorOfEnergyAndMomentum)](
-      (Pga3dPoint(0, 0, 0), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
-      (Pga3dPoint(1, 1, 1), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
-      (Pga3dPoint(1e1, 1e1, 1e1), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
-      (Pga3dPoint(1e2, 1e2, 1e2), ErrorOfEnergyAndMomentum(6e-11, 1e-9)),
-      (Pga3dPoint(1e3, 1e3, 1e3), ErrorOfEnergyAndMomentum(4e-10, 2e-9)),
-      (Pga3dPoint(1e4, 1e4, 1e4), ErrorOfEnergyAndMomentum(3e-8, 4e-8)),
-      (Pga3dPoint(1e5, 1e5, 1e5), ErrorOfEnergyAndMomentum(4e-6, 4e-6)),
-      (Pga3dPoint(1e6, 1e6, 1e6), ErrorOfEnergyAndMomentum(4e-4, 4e-4)),
+    val expectedMaxError = ErrorOfEnergyAndMomentum(6.0E-11,2.0E-9)
+
+    val centersAndErrors = Seq[Pga3dPoint](
+      Pga3dPoint(0, 0, 0),
+      Pga3dPoint(1, 1, 1),
+      Pga3dPoint(1e1, 1e1, 1e1),
+      Pga3dPoint(1e2, 1e2, 1e2),
+      Pga3dPoint(1e3, 1e3, 1e3),
+      Pga3dPoint(1e4, 1e4, 1e4),
+      Pga3dPoint(1e5, 1e5, 1e5),
+      Pga3dPoint(1e6, 1e6, 1e6),
     )
 
-    for ((center, expectedMaxError) <- centersAndErrors) {
+    for (center <- centersAndErrors) {
       val stepsCount = 1000
       val dt = 0.01
       val system = Pga3dPhysicsSystemForTest(Array(Pga3dPhysicsSystemForTest.simpleBody(Pga3dTranslator.addVector(center.toVectorUnsafe).toMotor)), Pga3dPhysicsSolverRK4)
@@ -52,6 +77,7 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
         }
 
       val maxError = errors.reduce(_ max _)
+      println(s"center = $center, maxError = $maxError")
 
       assert(maxError < expectedMaxError, s"center = $center, maxError = $maxError, but expected $expectedMaxError")
     }
