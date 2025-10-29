@@ -12,6 +12,7 @@
 
 namespace pga3dphysics {
     using pga3d::Bivector;
+    using pga3d::Point;
 
     struct PhysicsBody {
         InertiaMovedLocal inertia;
@@ -53,6 +54,18 @@ namespace pga3dphysics {
 
         [[nodiscard]] constexpr Bivector getL() const noexcept {
             return state.motor.sandwich(inertia(state.localB));
+        }
+
+        [[nodiscard]] constexpr Point localPosToGlobal(const Point& localPos) const noexcept {
+            return state.motor.sandwich(localPos).toPointUnsafe();
+        }
+
+        [[nodiscard]] constexpr Point getGlobalCenter() const noexcept {
+            return localPosToGlobal(inertia.centerOfMassPoint());
+        }
+
+        [[nodiscard]] constexpr Vector getGlobalVelocityForLocalPos(const Point& localPos) const noexcept {
+            return state.motor.sandwich(localPos.cross(state.localB));
         }
     };
 }

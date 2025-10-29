@@ -11,6 +11,14 @@ namespace pga3dphysics {
         pga3d::Motor localToGlobal;
         InertiaLocal localInertia;
 
+        [[nodiscard]] constexpr double mass() const noexcept {
+            return localInertia.mass;
+        }
+
+        [[nodiscard]] constexpr Point centerOfMassPoint() const noexcept {
+            return localToGlobal.sandwich(pga3d::PointCenter{}).toPointUnsafe();
+        }
+
         [[nodiscard]] constexpr Bivector operator ()(const Bivector& globalB) const noexcept {
             const Bivector localB = localToGlobal.reverseSandwich(globalB);
             const Bivector localI = localInertia(localB);

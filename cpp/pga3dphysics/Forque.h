@@ -55,7 +55,7 @@ namespace pga3dphysics {
             }
         }
 
-        [[nodiscard]] static constexpr Bivector spring(const Point &current, const Point &another, double k, double springLength) noexcept {
+        [[nodiscard]] static Bivector spring(const Point &current, const Point &another, double k, double springLength) noexcept {
             const Vector dir = another - current;
             const double dirDist = dir.norm();
             return force(current, dir * (k * (dirDist - springLength) / (dirDist + 1e-100)));

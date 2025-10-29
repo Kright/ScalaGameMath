@@ -7,3 +7,4 @@
 #include "BodyState.h"
 #include "PhysicsBody.h"
 #include "PhysicsSolverRK4.h"
+#include "Friction.h"

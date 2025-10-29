@@ -33,7 +33,7 @@ namespace pga3dphysics {
             };
         }
 
-        [[nodiscard]] constexpr BodyState renormalized() const noexcept {
+        [[nodiscard]] BodyState renormalized() const noexcept {
             return {
                 .motor = motor.renormalized(),
                 .localB = localB,
