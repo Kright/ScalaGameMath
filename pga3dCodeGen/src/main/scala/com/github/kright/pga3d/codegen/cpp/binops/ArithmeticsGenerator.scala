@@ -24,6 +24,9 @@ class ArithmeticsGenerator extends BinOpCodeGen:
       multiplyOrDivideByScalar(code)
       code("")
       madd(code)
+      code("")
+      code("")
+      equality(code)
     }
 
     FileWriterTask(codeGen.directory.resolve("opsArithmetic.h"), code.toString)
@@ -139,6 +142,15 @@ class ArithmeticsGenerator extends BinOpCodeGen:
           }.mkString("{", ", ", "}")
           code(s"constexpr ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
         }
+      }
+    }
+  }
+
+  private def equality(code: CppCodeGen): Unit = {
+    for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
+      if (cls.variableFields.nonEmpty) {
+        val equalityExpr = cls.variableFields.map(_.name).map(name => s"a.$name == b.$name").mkString(" && ")
+        code(s"[[nodiscard]] constexpr bool operator==(const ${cls.name}& a, const ${cls.name}& b) noexcept { return $equalityExpr; }")
       }
     }
   }

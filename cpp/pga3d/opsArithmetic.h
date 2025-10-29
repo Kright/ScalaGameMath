@@ -211,4 +211,19 @@ namespace pga3d {
     constexpr BivectorBulk BivectorBulk::madd(const BivectorBulk& other, double mult) const noexcept { return {.xy = std::fma(other.xy, mult, xy), .xz = std::fma(other.xz, mult, xz), .yz = std::fma(other.yz, mult, yz)}; }
     constexpr BivectorWeight BivectorWeight::madd(const BivectorWeight& other, double mult) const noexcept { return {.wx = std::fma(other.wx, mult, wx), .wy = std::fma(other.wy, mult, wy), .wz = std::fma(other.wz, mult, wz)}; }
     constexpr PseudoScalar PseudoScalar::madd(const PseudoScalar& other, double mult) const noexcept { return {.i = std::fma(other.i, mult, i)}; }
+
+
+    [[nodiscard]] constexpr bool operator==(const Multivector& a, const Multivector& b) noexcept { return a.s == b.s && a.w == b.w && a.x == b.x && a.y == b.y && a.z == b.z && a.wx == b.wx && a.wy == b.wy && a.wz == b.wz && a.xy == b.xy && a.xz == b.xz && a.yz == b.yz && a.wxy == b.wxy && a.wxz == b.wxz && a.wyz == b.wyz && a.xyz == b.xyz && a.i == b.i; }
+    [[nodiscard]] constexpr bool operator==(const Motor& a, const Motor& b) noexcept { return a.s == b.s && a.wx == b.wx && a.wy == b.wy && a.wz == b.wz && a.xy == b.xy && a.xz == b.xz && a.yz == b.yz && a.i == b.i; }
+    [[nodiscard]] constexpr bool operator==(const Plane& a, const Plane& b) noexcept { return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w; }
+    [[nodiscard]] constexpr bool operator==(const Bivector& a, const Bivector& b) noexcept { return a.wx == b.wx && a.wy == b.wy && a.wz == b.wz && a.xy == b.xy && a.xz == b.xz && a.yz == b.yz; }
+    [[nodiscard]] constexpr bool operator==(const ProjectivePoint& a, const ProjectivePoint& b) noexcept { return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w; }
+    [[nodiscard]] constexpr bool operator==(const Quaternion& a, const Quaternion& b) noexcept { return a.s == b.s && a.xy == b.xy && a.xz == b.xz && a.yz == b.yz; }
+    [[nodiscard]] constexpr bool operator==(const Translator& a, const Translator& b) noexcept { return a.wx == b.wx && a.wy == b.wy && a.wz == b.wz; }
+    [[nodiscard]] constexpr bool operator==(const Vector& a, const Vector& b) noexcept { return a.x == b.x && a.y == b.y && a.z == b.z; }
+    [[nodiscard]] constexpr bool operator==(const Point& a, const Point& b) noexcept { return a.x == b.x && a.y == b.y && a.z == b.z; }
+    [[nodiscard]] constexpr bool operator==(const PlaneIdeal& a, const PlaneIdeal& b) noexcept { return a.x == b.x && a.y == b.y && a.z == b.z; }
+    [[nodiscard]] constexpr bool operator==(const BivectorBulk& a, const BivectorBulk& b) noexcept { return a.xy == b.xy && a.xz == b.xz && a.yz == b.yz; }
+    [[nodiscard]] constexpr bool operator==(const BivectorWeight& a, const BivectorWeight& b) noexcept { return a.wx == b.wx && a.wy == b.wy && a.wz == b.wz; }
+    [[nodiscard]] constexpr bool operator==(const PseudoScalar& a, const PseudoScalar& b) noexcept { return a.i == b.i; }
 }
