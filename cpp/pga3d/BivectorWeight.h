@@ -23,6 +23,20 @@ namespace pga3d {
 
         [[nodiscard]] constexpr BivectorWeight antiReverse() const noexcept;
 
+        [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
+        [[nodiscard]] constexpr Motor toMotor() const noexcept;
+        [[nodiscard]] constexpr Bivector toBivector() const noexcept;
+        [[nodiscard]] constexpr Translator toTranslatorUnsafe() const noexcept;
+
+        [[nodiscard]] constexpr BivectorWeight madd(const BivectorWeight& other, double mult) const noexcept;
+
+        [[nodiscard]] constexpr double normSquare() const noexcept;
+        [[nodiscard]] inline double norm() const noexcept;
+        [[nodiscard]] inline BivectorWeight normalizedByNorm() const noexcept;
+        [[nodiscard]] constexpr double weightNormSquare() const noexcept;
+        [[nodiscard]] inline double weightNorm() const noexcept;
+        [[nodiscard]] inline BivectorWeight normalizedByWeight() const noexcept;
+
         [[nodiscard]] constexpr Motor geometric(const Motor& b) const noexcept;
         [[nodiscard]] constexpr Multivector geometric(const Plane& b) const noexcept;
         [[nodiscard]] constexpr Motor geometric(const Bivector& b) const noexcept;
@@ -33,20 +47,6 @@ namespace pga3d {
         [[nodiscard]] constexpr Multivector geometric(const PlaneIdeal& b) const noexcept;
         [[nodiscard]] constexpr Motor geometric(const BivectorBulk& b) const noexcept;
         [[nodiscard]] constexpr Vector geometric(const PointCenter& b) const noexcept;
-
-        [[nodiscard]] constexpr Motor wedge(const Motor& b) const noexcept;
-        [[nodiscard]] constexpr Vector wedge(const Plane& b) const noexcept;
-        [[nodiscard]] constexpr PseudoScalar wedge(const Bivector& b) const noexcept;
-        [[nodiscard]] constexpr Motor wedge(const Quaternion& b) const noexcept;
-        [[nodiscard]] constexpr BivectorWeight wedge(const Translator& b) const noexcept;
-        [[nodiscard]] constexpr Vector wedge(const PlaneIdeal& b) const noexcept;
-        [[nodiscard]] constexpr PseudoScalar wedge(const BivectorBulk& b) const noexcept;
-
-        [[nodiscard]] constexpr BivectorWeight dot(const Motor& b) const noexcept;
-        [[nodiscard]] constexpr Plane dot(const Plane& b) const noexcept;
-        [[nodiscard]] constexpr BivectorWeight dot(const Quaternion& b) const noexcept;
-        [[nodiscard]] constexpr BivectorWeight dot(const Translator& b) const noexcept;
-        [[nodiscard]] constexpr Plane dot(const PlaneIdeal& b) const noexcept;
 
         [[nodiscard]] constexpr Motor antiGeometric(const Motor& b) const noexcept;
         [[nodiscard]] constexpr Multivector antiGeometric(const Plane& b) const noexcept;
@@ -62,15 +62,11 @@ namespace pga3d {
         [[nodiscard]] constexpr BivectorWeight antiGeometric(const PseudoScalar& b) const noexcept;
         [[nodiscard]] constexpr PlaneIdeal antiGeometric(const PointCenter& b) const noexcept;
 
-        [[nodiscard]] constexpr Motor antiWedge(const Motor& b) const noexcept;
-        [[nodiscard]] constexpr double antiWedge(const Bivector& b) const noexcept;
-        [[nodiscard]] constexpr Plane antiWedge(const ProjectivePoint& b) const noexcept;
-        [[nodiscard]] constexpr double antiWedge(const Quaternion& b) const noexcept;
-        [[nodiscard]] constexpr Plane antiWedge(const Vector& b) const noexcept;
-        [[nodiscard]] constexpr Plane antiWedge(const Point& b) const noexcept;
-        [[nodiscard]] constexpr double antiWedge(const BivectorBulk& b) const noexcept;
-        [[nodiscard]] constexpr BivectorWeight antiWedge(const PseudoScalar& b) const noexcept;
-        [[nodiscard]] constexpr PlaneIdeal antiWedge(const PointCenter& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight dot(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight dot(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight dot(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Plane dot(const PlaneIdeal& b) const noexcept;
 
         [[nodiscard]] constexpr Motor antiDot(const Motor& b) const noexcept;
         [[nodiscard]] constexpr ProjectivePoint antiDot(const Plane& b) const noexcept;
@@ -84,6 +80,24 @@ namespace pga3d {
         [[nodiscard]] constexpr PseudoScalar antiDot(const BivectorWeight& b) const noexcept;
         [[nodiscard]] constexpr BivectorWeight antiDot(const PseudoScalar& b) const noexcept;
 
+        [[nodiscard]] constexpr Motor wedge(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr Vector wedge(const Plane& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar wedge(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr Motor wedge(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight wedge(const Translator& b) const noexcept;
+        [[nodiscard]] constexpr Vector wedge(const PlaneIdeal& b) const noexcept;
+        [[nodiscard]] constexpr PseudoScalar wedge(const BivectorBulk& b) const noexcept;
+
+        [[nodiscard]] constexpr Motor antiWedge(const Motor& b) const noexcept;
+        [[nodiscard]] constexpr double antiWedge(const Bivector& b) const noexcept;
+        [[nodiscard]] constexpr Plane antiWedge(const ProjectivePoint& b) const noexcept;
+        [[nodiscard]] constexpr double antiWedge(const Quaternion& b) const noexcept;
+        [[nodiscard]] constexpr Plane antiWedge(const Vector& b) const noexcept;
+        [[nodiscard]] constexpr Plane antiWedge(const Point& b) const noexcept;
+        [[nodiscard]] constexpr double antiWedge(const BivectorBulk& b) const noexcept;
+        [[nodiscard]] constexpr BivectorWeight antiWedge(const PseudoScalar& b) const noexcept;
+        [[nodiscard]] constexpr PlaneIdeal antiWedge(const PointCenter& b) const noexcept;
+
         [[nodiscard]] constexpr BivectorWeight cross(const Motor& b) const noexcept;
         [[nodiscard]] constexpr Plane cross(const Plane& b) const noexcept;
         [[nodiscard]] constexpr BivectorWeight cross(const Bivector& b) const noexcept;
@@ -93,20 +107,6 @@ namespace pga3d {
         [[nodiscard]] constexpr Plane cross(const PlaneIdeal& b) const noexcept;
         [[nodiscard]] constexpr BivectorWeight cross(const BivectorBulk& b) const noexcept;
         [[nodiscard]] constexpr Vector cross(const PointCenter& b) const noexcept;
-
-        [[nodiscard]] constexpr Multivector toMultivector() const noexcept;
-        [[nodiscard]] constexpr Motor toMotor() const noexcept;
-        [[nodiscard]] constexpr Bivector toBivector() const noexcept;
-        [[nodiscard]] constexpr Translator toTranslatorUnsafe() const noexcept;
-
-        [[nodiscard]] constexpr BivectorWeight madd(const BivectorWeight& other, double mult) const noexcept;
-
-        [[nodiscard]] constexpr double normSquare() const noexcept;
-        [[nodiscard]] inline double norm() const noexcept;
-        [[nodiscard]] inline BivectorWeight normalizedByNorm() const noexcept;
-        [[nodiscard]] constexpr double weightNormSquare() const noexcept;
-        [[nodiscard]] inline double weightNorm() const noexcept;
-        [[nodiscard]] inline BivectorWeight normalizedByWeight() const noexcept;
     };
 
     static_assert(std::is_trivially_copyable_v<BivectorWeight>);

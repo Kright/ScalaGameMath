@@ -47,21 +47,12 @@ class Pga3dCodeGenCpp(val directory: Path,
     new BulkOpGenerator,
     new ReverseOpGenerator,
     new AntiReverseOpGenerator,
-    new GeometricOpGenerator,
-    new WedgeOpGenerator,
-    new DotOpGenerator,
-    new AntiGeometricOpGenerator,
-    new AntiWedgeOpGenerator,
-    new AntiDotOpGenerator,
-    new SandwichOpGenerator,
-    new ReverseSandwichOpGenerator,
-    new CrossOpGenerator,
     new ConversionOpGenerator,
     new ArithmeticsGenerator,
     new NormOpGenerator,
     new ToStreamOpGenerator,
     new ProjectionOpsGenerator,
-  )
+  ) ++ GeometricOpsGenerators.all
 
   def generateAll(): Unit = {
     generateStructForwardDeclarations().write()
