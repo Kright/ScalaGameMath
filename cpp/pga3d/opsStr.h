@@ -3,46 +3,46 @@
 #include <ostream>
 
 namespace pga3d {
-    constexpr std::ostream &operator<<(std::ostream &os, const Multivector &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Multivector &v) {
         return os << "Multivector{" << ".s = " << v.s << ", "".w = " << v.w << ", "".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << ", "".wx = " << v.wx << ", "".wy = " << v.wy << ", "".wz = " << v.wz << ", "".xy = " << v.xy << ", "".xz = " << v.xz << ", "".yz = " << v.yz << ", "".wxy = " << v.wxy << ", "".wxz = " << v.wxz << ", "".wyz = " << v.wyz << ", "".xyz = " << v.xyz << ", "".i = " << v.i << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Motor &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Motor &v) {
         return os << "Motor{" << ".s = " << v.s << ", "".wx = " << v.wx << ", "".wy = " << v.wy << ", "".wz = " << v.wz << ", "".xy = " << v.xy << ", "".xz = " << v.xz << ", "".yz = " << v.yz << ", "".i = " << v.i << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Plane &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Plane &v) {
         return os << "Plane{" << ".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << ", "".w = " << v.w << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Bivector &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Bivector &v) {
         return os << "Bivector{" << ".wx = " << v.wx << ", "".wy = " << v.wy << ", "".wz = " << v.wz << ", "".xy = " << v.xy << ", "".xz = " << v.xz << ", "".yz = " << v.yz << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const ProjectivePoint &v) {
+    inline std::ostream &operator<<(std::ostream &os, const ProjectivePoint &v) {
         return os << "ProjectivePoint{" << ".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << ", "".w = " << v.w << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Quaternion &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Quaternion &v) {
         return os << "Quaternion{" << ".s = " << v.s << ", "".xy = " << v.xy << ", "".xz = " << v.xz << ", "".yz = " << v.yz << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Translator &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Translator &v) {
         return os << "Translator{" << ".wx = " << v.wx << ", "".wy = " << v.wy << ", "".wz = " << v.wz << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Vector &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Vector &v) {
         return os << "Vector{" << ".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const Point &v) {
+    inline std::ostream &operator<<(std::ostream &os, const Point &v) {
         return os << "Point{" << ".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const PlaneIdeal &v) {
+    inline std::ostream &operator<<(std::ostream &os, const PlaneIdeal &v) {
         return os << "PlaneIdeal{" << ".x = " << v.x << ", "".y = " << v.y << ", "".z = " << v.z << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const BivectorBulk &v) {
+    inline std::ostream &operator<<(std::ostream &os, const BivectorBulk &v) {
         return os << "BivectorBulk{" << ".xy = " << v.xy << ", "".xz = " << v.xz << ", "".yz = " << v.yz << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const BivectorWeight &v) {
+    inline std::ostream &operator<<(std::ostream &os, const BivectorWeight &v) {
         return os << "BivectorWeight{" << ".wx = " << v.wx << ", "".wy = " << v.wy << ", "".wz = " << v.wz << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const PseudoScalar &v) {
+    inline std::ostream &operator<<(std::ostream &os, const PseudoScalar &v) {
         return os << "PseudoScalar{" << ".i = " << v.i << "}";
     }
-    constexpr std::ostream &operator<<(std::ostream &os, const PointCenter &v) {
+    inline std::ostream &operator<<(std::ostream &os, const PointCenter &v) {
         return os << "PointCenter{}";
     }
 }

@@ -7,6 +7,16 @@ import com.github.kright.pga3d.codegen.cpp.struct.*
 import java.nio.file.{Files, Path}
 
 
+@main
+def main(): Unit = {
+  new Pga3dCodeGenCpp(
+    directory = Path.of("cpp/pga3d"),
+    namespace = "pga3d",
+  ).generateAll()
+}
+
+
+
 class Pga3dCodeGenCpp(val directory: Path,
                       val namespace: String) {
   assert(Files.exists(directory))
@@ -137,13 +147,4 @@ class Pga3dCodeGenCpp(val directory: Path,
 
     codeGen.toString()
   }
-}
-
-
-@main
-def main(): Unit = {
-  new Pga3dCodeGenCpp(
-    directory = Path.of("cpp/pga3d"),
-    namespace = "pga3d",
-  ).generateAll()
 }

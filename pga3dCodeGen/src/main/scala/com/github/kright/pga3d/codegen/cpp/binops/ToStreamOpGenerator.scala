@@ -13,7 +13,7 @@ class ToStreamOpGenerator extends BinOpCodeGen {
     code("")
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
-        code(s"constexpr std::ostream &operator<<(std::ostream &os, const ${cls.name} &v) {")
+        code(s"inline std::ostream &operator<<(std::ostream &os, const ${cls.name} &v) {")
         code.block {
           if (cls.variableFields.nonEmpty) {
             code(s"return os << \"${cls.name}{\" << ${cls.variableFields.map(f => s"\".${f.name} = \" << v.${f.name}").mkString(" << \", \"")} << \"}\";")
