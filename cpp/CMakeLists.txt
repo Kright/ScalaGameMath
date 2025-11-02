@@ -38,4 +38,5 @@ add_executable(cpp
         pga3dphysics/InertiaSummable.h
         pga3dphysics/InertiaLocalSphere.h
         pga3dphysics/Friction.h
+        pga3dphysics/Velocity.h
 )

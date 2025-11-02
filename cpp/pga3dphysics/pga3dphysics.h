@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Forque.h"
+#include "Velocity.h"
 #include "InertiaLocal.h"
 #include "InertiaLocalSphere.h"
 #include "InertiaMovedLocal.h"
