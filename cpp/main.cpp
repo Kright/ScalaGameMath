@@ -7,10 +7,6 @@
 
 using pga3dphysics::PhysicsSolverRK4;
 
-namespace {
-
-}
-
 
 template<class T>
 struct Id {
@@ -92,7 +88,7 @@ struct GravitySystem {
     void addForques(std::vector<pga3dphysics::PhysicsBody>& bodies) const noexcept {
         if (gravity != pga3d::Vector{}) {
             for (auto &body: bodies) {
-                body.addGlobalForque(pga3dphysics::Forque::force( body.globalCenter(), body.inertia.mass() * gravity));
+                body.addGlobalForque(pga3dphysics::Forque::force(body.globalCenter(), body.inertia.mass() * gravity));
             }
         }
     }

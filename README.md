@@ -3,6 +3,7 @@
 ## Introduction
 
 ScalaGameMath library consists of several independent modules in Scala for 3d applications: math and physics simulation.
+And here is experimental C++ code too.
 
 It contains some basic classes like vectors, quaternion, matrices, and rigid body physics built on top of them. 
 All of this is implemented from scratch and doesn't depend on other libraries. 
@@ -17,6 +18,7 @@ Library is under MIT license. Contributions are welcome, feel free to send a pul
 - [Library modules](#Library-modules)
   - [Simple modules](#simple-modules)
   - [Advanced modules with geometric algebra](#advanced-modules-with-geometric-algebra)
+  - [C++](#c-code)
 - [Tests](#tests)
 - [How to change this library and try changes locally in other project](#how-to-change-this-library-and-try-changes-locally-in-other-project)
 
@@ -109,10 +111,16 @@ I rewrote physics equations in PGA, it looks like PGA is a better way of describ
   generated methods for each case it's possible to know at compile time that, for example, dot product of two bivectors
   is a scalar or geometric product of two planes is a motor.
 * [**pga3dCodeGen**](pga3dCodeGen/README.md): hand-made code generator for pga3d module. It does operations in symbolic form, and searches the
-  most narrow subclass of multivector for the result.
+  most narrow subclass of multivector for the result. Generates both Scala and C++ code.
 * [**pga3dPhysics**](pga3dphysics/README.md): some helper classes for implementing physics engine - body inertia, physics solvers, etc. Under active development now.
 * [**pga3dgeom**](pga3dgeom/README.md): classes for geometry - edges, triangles, axis-aligned bounding boxes
 
+### C++ code
+
+* [**cpp**](cpp/README.md): some code as in pga3d and pga3dphysics in Scala, but for C++.
+
+The current implementation is very experimental and may be changed in the future.
+I use C++ 20 because of Unreal Engine 5 requirements.
 
 ## Tests
 
