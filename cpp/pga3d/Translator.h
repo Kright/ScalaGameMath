@@ -19,6 +19,7 @@ namespace pga3d {
         [[nodiscard]] static constexpr Translator addVector(const Vector& v) noexcept;
 
         [[nodiscard]] constexpr BivectorWeight log() const noexcept;
+        [[nodiscard]] constexpr Translator pow(double p) const noexcept;
 
         [[nodiscard]] constexpr Motor dual() const noexcept;
 

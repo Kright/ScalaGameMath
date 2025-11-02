@@ -17,6 +17,7 @@ class TranslatorOpsGenerator extends BinOpCodeGen {
     code(s"[[nodiscard]] static constexpr ${cls.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
     code(s"")
     code(s"[[nodiscard]] constexpr ${CppSubclasses.bivectorWeight.name} log() const noexcept;")
+    code(s"[[nodiscard]] constexpr ${CppSubclasses.translator.name} pow(double p) const noexcept;")
 
     code.toString()
   }
@@ -45,6 +46,13 @@ class TranslatorOpsGenerator extends BinOpCodeGen {
            |        .wy = wy,
            |        .wz = wz,
            |    };
+           |}
+           |""".stripMargin)
+
+      code(
+        s"""
+           |[[nodiscard]] constexpr ${CppSubclasses.translator.name} ${CppSubclasses.translator.name}::pow(double p) const noexcept {
+           |   return (log() * p).exp();
            |}
            |""".stripMargin)
     }

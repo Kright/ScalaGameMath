@@ -20,6 +20,7 @@ namespace pga3d {
         [[nodiscard]] static inline Quaternion rotation(const PlaneIdeal& from, const PlaneIdeal& to) noexcept;
 
         [[nodiscard]] inline BivectorBulk log() const noexcept;
+        [[nodiscard]] inline Quaternion pow(double p) const noexcept;
 
         [[nodiscard]] inline Quaternion projectToRotationInPlane(const PlaneIdeal& plane) const noexcept;
         [[nodiscard]] inline double restoreRotationInPlane(const PlaneIdeal& plane) const noexcept;

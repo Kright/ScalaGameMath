@@ -60,6 +60,10 @@ namespace pga3d {
         };
     }
 
+    [[nodiscard]] inline Quaternion Quaternion::pow(double p) const noexcept {
+       return (log() * p).exp();
+    }
+
     [[nodiscard]] inline Quaternion Quaternion::projectToRotationInPlane(const PlaneIdeal& plane) const noexcept {
         const Quaternion q = normalizedByNorm();
         const Quaternion qPart = Quaternion::rotation(q.sandwich(plane), plane);

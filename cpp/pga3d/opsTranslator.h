@@ -15,4 +15,8 @@ namespace pga3d {
             .wz = wz,
         };
     }
+
+    [[nodiscard]] constexpr Translator Translator::pow(double p) const noexcept {
+       return (log() * p).exp();
+    }
 }

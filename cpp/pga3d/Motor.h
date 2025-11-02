@@ -23,6 +23,7 @@ namespace pga3d {
         [[nodiscard]] static constexpr Motor addVector(const Vector& v) noexcept;
 
         [[nodiscard]] inline Bivector log() const noexcept;
+        [[nodiscard]] inline Motor pow(double p) const noexcept;
 
         [[nodiscard]] inline Vector toVector() const noexcept;
 

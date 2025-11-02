@@ -14,6 +14,7 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.planeIdeal.name}& from, const ${CppSubclasses.planeIdeal.name}& to) noexcept;")
       code("")
       code(s"[[nodiscard]] inline ${CppSubclasses.bivectorBulk.name} log() const noexcept;")
+      code(s"[[nodiscard]] inline ${CppSubclasses.quaternion.name} pow(double p) const noexcept;")
       code("")
       code(s"[[nodiscard]] inline ${CppSubclasses.quaternion.name} projectToRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept;")
       code(s"[[nodiscard]] inline double restoreRotationInPlane(const ${CppSubclasses.planeIdeal.name}& plane) const noexcept;")
@@ -93,6 +94,13 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
            |        .xz = b * xz,
            |        .yz = b * yz,
            |    };
+           |}
+           |""".stripMargin)
+
+      code(
+        s"""
+           |[[nodiscard]] inline ${CppSubclasses.quaternion.name} ${CppSubclasses.quaternion.name}::pow(double p) const noexcept {
+           |   return (log() * p).exp();
            |}
            |""".stripMargin)
 

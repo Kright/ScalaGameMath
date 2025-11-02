@@ -39,6 +39,10 @@ namespace pga3d {
         };
     }
 
+    [[nodiscard]] inline Motor Motor::pow(double p) const noexcept {
+       return (log() * p).exp();
+    }
+
     [[nodiscard]] constexpr std::pair<Quaternion, Translator> Motor::toQuaternionAndTranslator() const noexcept {
         const Quaternion q = toQuaternionUnsafe();
         const Motor t = q.reverse().geometric(*this);

@@ -23,6 +23,7 @@ class MotorOpsGenerator extends BinOpCodeGen {
     code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
     code("")
     code(s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;")
+    code(s"[[nodiscard]] inline ${CppSubclasses.motor.name} pow(double p) const noexcept;")
     code("")
     code(s"[[nodiscard]] inline ${CppSubclasses.vector.name} toVector() const noexcept;")
     code("")
@@ -82,6 +83,13 @@ class MotorOpsGenerator extends BinOpCodeGen {
            |        .xz = b * xz,
            |        .yz = b * yz,
            |    };
+           |}
+           |""".stripMargin)
+
+      code(
+        s"""
+           |[[nodiscard]] inline ${CppSubclasses.motor.name} ${CppSubclasses.motor.name}::pow(double p) const noexcept {
+           |   return (log() * p).exp();
            |}
            |""".stripMargin)
 
