@@ -2,14 +2,14 @@
 
 #include <algorithm>
 
-#include "Forque.h"
 #include "pga3d/Vector.h"
+#include "Forque.h"
 //
 // Created by lgor on 10/29/25.
 //
 
 namespace pga3dphysics {
-    struct Friction {
+    struct VelocityFriction {
         double linearK = 0.0;
         double quadraticK = 0.0;
         double maxForce = 0.0;
@@ -32,20 +32,52 @@ namespace pga3dphysics {
             );
         }
 
-        [[nodiscard]] constexpr static Friction zero() noexcept {
-            return {0.0, 0.0, 0.0};
-        }
-
-        [[nodiscard]] constexpr static Friction linear(double k, double maxForce) noexcept {
+        [[nodiscard]] constexpr static VelocityFriction linear(const double k, const double maxForce) noexcept {
             return {k, 0.0, maxForce};
         }
 
-        [[nodiscard]] constexpr static Friction quadratic(double k2, double maxForce) noexcept {
+        [[nodiscard]] constexpr static VelocityFriction quadratic(const double k2, const double maxForce) noexcept {
             return {0.0, k2, maxForce};
         }
 
-        [[nodiscard]] constexpr static Friction constant(double maxForce, double minVelocity) noexcept {
+        [[nodiscard]] constexpr static VelocityFriction constant(const double maxForce, const double minVelocity) noexcept {
             return {maxForce / minVelocity, 0.0, maxForce};
+        }
+    };
+
+
+    struct PositionFriction {
+        double linearK = 0.0;
+        double maxDelta = 0.0;
+        double boundPosition = 0.0;
+
+        [[nodiscard]] constexpr double getMaxForce() const noexcept {
+            return maxDelta * linearK;
+        }
+
+        constexpr void setMaxForce(const double maxForce, const double newMaxDelta) noexcept {
+            linearK = maxForce / newMaxDelta;
+            maxDelta = newMaxDelta;
+        }
+
+        [[nodiscard]] constexpr bool isZero() const noexcept {
+            return linearK == 0.0;
+        }
+
+        [[nodiscard]] constexpr double operator()(const double position) const noexcept {
+            return std::clamp(boundPosition - position, -maxDelta, maxDelta) * linearK;
+        }
+
+        constexpr void correctBoundPosition(const double position) noexcept {
+            boundPosition = std::clamp(boundPosition, position - maxDelta, position + maxDelta);
+        }
+
+        [[nodiscard]] constexpr static PositionFriction create(const double maxForce, const double maxDetla) noexcept {
+            return {
+                .linearK = maxForce / maxDetla,
+                .maxDelta = maxDetla,
+                .boundPosition = 0.0
+            };
         }
     };
 }

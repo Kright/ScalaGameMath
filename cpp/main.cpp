@@ -37,7 +37,8 @@ struct SpringConfig {
     double targetR = 0.0;
     bool noPush = false;
     bool noPull = false;
-    pga3dphysics::Friction friction;
+    pga3dphysics::VelocityFriction velocityFriction{};
+    pga3dphysics::PositionFriction positionFriction{};
 };
 
 struct Spring {
@@ -56,20 +57,61 @@ struct Spring {
             if (config.noPull) return;
         }
 
-        double frictionForce = 0.0;
         const double r = std::sqrt(r2);
-        if (!config.friction.isZero()) {
+
+        double frictionForce = 0.0;
+        if (!config.velocityFriction.isZero()) {
             const pga3d::Vector velocity1 = first.getGlobalPosVelocity(firstBody);
             const pga3d::Vector velocity2 = second.getGlobalPosVelocity(secondBody);
             const pga3d::Vector dv = velocity2 - velocity1;
             const double sign = dPos.antiDot(dv).i;
-            frictionForce = config.friction(sign * dv.norm());
+            frictionForce += config.velocityFriction(sign * dv.norm());
         }
+        frictionForce += config.positionFriction(r);
 
         const double mult = (config.k * (r - config.targetR) - frictionForce) / (r + 1e-100);
         const pga3d::Bivector forque = pos1.antiWedge(dPos) * mult;
 
         firstBody.addGlobalForquePaired(forque, secondBody);
+    }
+
+    void afterStep(const pga3dphysics::PhysicsBody& firstBody, const pga3dphysics::PhysicsBody& secondBody) noexcept {
+        const pga3d::Point pos1 = first.getGlobalPos(firstBody);
+        const pga3d::Point pos2 = second.getGlobalPos(secondBody);
+        const pga3d::Vector dPos = pos2 - pos1;
+        const double r = dPos.normSquare();
+        config.positionFriction.correctBoundPosition(r);
+    }
+};
+
+
+
+struct GravitySystem {
+    pga3d::Vector gravity{};
+
+    void addForques(std::vector<pga3dphysics::PhysicsBody>& bodies) const noexcept {
+        if (gravity != pga3d::Vector{}) {
+            for (auto &body: bodies) {
+                body.addGlobalForque(pga3dphysics::Forque::force( body.globalCenter(), body.inertia.mass() * gravity));
+            }
+        }
+    }
+};
+
+
+struct SpringSystem {
+    std::vector<Spring> springs;
+
+    void addForques(std::vector<pga3dphysics::PhysicsBody>& bodies) const noexcept {
+        for (const Spring &spring: springs) {
+            spring.addForque(bodies[spring.first.id.value], bodies[spring.second.id.value]);
+        }
+    }
+
+    void afterStep(const std::vector<pga3dphysics::PhysicsBody>& bodies) {
+        for (Spring &spring: springs) {
+            spring.afterStep(bodies[spring.first.id.value], bodies[spring.second.id.value]);
+        }
     }
 };
 
@@ -79,30 +121,26 @@ public:
     double dt = 0.01;
     double time = 0.0;
     std::vector<pga3dphysics::PhysicsBody> bodies;
-    std::vector<Spring> springs;
-    pga3d::Vector gravity{};
     PhysicsSolverRK4 solver;
+
+    GravitySystem gravity;
+    SpringSystem springs;
 
     void doStep() {
         solver.doStepRk4(bodies, dt, [&](double _) {
-            if (gravity != pga3d::Vector{}) {
-                for (auto &body: bodies) {
-                    body.addGlobalForque(pga3dphysics::Forque::force( body.getGlobalCenter(), body.inertia.mass() * gravity));
-                }
-            }
-
-            for (const Spring &spring: springs) {
-                spring.addForque(bodies[spring.first.id.value], bodies[spring.second.id.value]);
-            }
+            gravity.addForques(bodies);
+            springs.addForques(bodies);
         });
 
         time += dt;
+
+        springs.afterStep(bodies);
     }
 
     [[nodiscard]] constexpr double getKineticEnergy() const  {
         double sum = 0.0;
         for (const auto &body: bodies) {
-            sum += body.getKineticEnergy();
+            sum += body.kineticEnergy();
         }
         return sum;
     }
@@ -127,6 +165,8 @@ int main() {
                 },
             });
         }
+
+        // system.gravity.gravity = pga3d::Vector{0.0, -9.81, 0.0};
 
         const double initialEnergy = system.getKineticEnergy();
 

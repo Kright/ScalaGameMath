@@ -25,13 +25,13 @@ namespace pga3dphysics {
             return Bivector{.wx = torque.x, .wy = torque.y, .wz = torque.z, .xy = 0.0, .xz = 0.0, .yz = 0.0};
         }
 
-        [[nodiscard]] static constexpr Vector getLinearForce(const Bivector &forque) noexcept {
+        [[nodiscard]] static constexpr Vector extractLinearForce(const Bivector &forque) noexcept {
             const Bivector fd = forque.dual();
             return {.x = fd.wx, .y = fd.wy, .z = fd.wz};
         }
 
         [[nodiscard]] static constexpr Point getCenter(const Bivector &forque) noexcept {
-            const Vector v = getLinearForce(forque);
+            const Vector v = extractLinearForce(forque);
             const double vNormSquare = v.normSquare();
 
             if (vNormSquare > 1e-100) {
@@ -44,8 +44,8 @@ namespace pga3dphysics {
             }
         }
 
-        [[nodiscard]] static constexpr Vector getTorqueAroundCenter(const Bivector &forque) noexcept {
-            const Vector v = getLinearForce(forque);
+        [[nodiscard]] static constexpr Vector extractTorqueAroundCenter(const Bivector &forque) noexcept {
+            const Vector v = extractLinearForce(forque);
             const double vNormSquare = v.normSquare();
             if (vNormSquare > 1e-100) {
                 const double inv = 1.0 / std::sqrt(vNormSquare);

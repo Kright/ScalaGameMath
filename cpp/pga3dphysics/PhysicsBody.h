@@ -19,12 +19,12 @@ namespace pga3dphysics {
         BodyState state;
         Bivector globalForqueAccumulator = {};
 
-        [[nodiscard]] constexpr Bivector getGlobalForque() const noexcept {
+        [[nodiscard]] constexpr Bivector globalForque() const noexcept {
             return globalForqueAccumulator;
         }
 
-        [[nodiscard]] constexpr Bivector getLocalForque() const noexcept {
-            return state.motor.reverseSandwich(getGlobalForque());
+        [[nodiscard]] constexpr Bivector localForque() const noexcept {
+            return state.motor.reverseSandwich(globalForque());
         }
 
         constexpr void resetForqueAccum() noexcept {
@@ -41,18 +41,18 @@ namespace pga3dphysics {
             other.globalForqueAccumulator -= globalForque;
         }
 
-        [[nodiscard]] constexpr BodyState getStateDerivative() const noexcept {
+        [[nodiscard]] constexpr BodyState stateDerivative() const noexcept {
             return BodyState{
                 .motor = state.motor.geometric(state.localB) * -0.5,
-                .localB = inertia.getAcceleration(state.localB, getLocalForque())
+                .localB = inertia.getAcceleration(state.localB, localForque())
             };
         }
 
-        [[nodiscard]] constexpr double getKineticEnergy() const noexcept {
+        [[nodiscard]] constexpr double kineticEnergy() const noexcept {
             return state.localB.antiWedge(inertia(state.localB)) * 0.5;
         }
 
-        [[nodiscard]] constexpr Bivector getL() const noexcept {
+        [[nodiscard]] constexpr Bivector impulse() const noexcept {
             return state.motor.sandwich(inertia(state.localB));
         }
 
@@ -60,7 +60,7 @@ namespace pga3dphysics {
             return state.motor.sandwich(localPos).toPointUnsafe();
         }
 
-        [[nodiscard]] constexpr Point getGlobalCenter() const noexcept {
+        [[nodiscard]] constexpr Point globalCenter() const noexcept {
             return localPosToGlobal(inertia.centerOfMassPoint());
         }
 

@@ -31,7 +31,7 @@ namespace pga3dphysics {
           void computeDerivativeInto(std::vector<BodyState> &result, const std::span<PhysicsBody>& dynamicBodies) {
                const size_t size = dynamicBodies.size();
                for (size_t pos = 0; pos < size; ++pos) {
-                    result[pos] = dynamicBodies[pos].getStateDerivative();
+                    result[pos] = dynamicBodies[pos].stateDerivative();
                }
           }
 

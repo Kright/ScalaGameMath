@@ -7,8 +7,12 @@
 #include "InertiaLocal.h"
 
 namespace pga3dphysics {
+    using pga3d::Motor;
+    using pga3d::Bivector;
+    using pga3d::Point;
+
     struct InertiaMovedLocal {
-        pga3d::Motor localToGlobal;
+        Motor localToGlobal;
         InertiaLocal localInertia;
 
         [[nodiscard]] constexpr double mass() const noexcept {
