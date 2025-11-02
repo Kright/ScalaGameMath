@@ -1,12 +1,12 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
-import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 import com.github.kright.symbolic.Sym
 import scala.math.Numeric.Implicits.infixNumericOps
 
 class NormOpGenerator extends BinOpCodeGen {
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
+  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
     code.pragmaOnce()
@@ -62,7 +62,7 @@ class NormOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileWriterTask(codeGen.directory.resolve("opsNorm.h"), code.toString)
+    FileContent(codeGen.directory.resolve("opsNorm.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

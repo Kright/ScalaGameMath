@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
-import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 
 class BivectorWeightOpsGenerator extends BinOpCodeGen {
@@ -11,7 +11,7 @@ class BivectorWeightOpsGenerator extends BinOpCodeGen {
     } else ""
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
+  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
     code.pragmaOnce()
@@ -32,6 +32,6 @@ class BivectorWeightOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileWriterTask(codeGen.directory.resolve("opsBivectorWeight.h"), code.toString)
+    FileContent(codeGen.directory.resolve("opsBivectorWeight.h"), code.toString)
   }
 }

@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.cpp
 
-import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.binops.*
 import com.github.kright.pga3d.codegen.cpp.struct.*
 
@@ -68,7 +68,7 @@ class Pga3dCodeGenCpp(val directory: Path,
     generatePga3d(ops).write()
   }
 
-  private def generateStructForwardDeclarations(): FileWriterTask = {
+  private def generateStructForwardDeclarations(): FileContent = {
     val codeGen = new CppCodeGen()
 
     codeGen("#pragma once")
@@ -79,10 +79,10 @@ class Pga3dCodeGenCpp(val directory: Path,
       }
     }
 
-    FileWriterTask(directory.resolve(Headers.typesForward), codeGen.toString)
+    FileContent(directory.resolve(Headers.typesForward), codeGen.toString)
   }
 
-  private def generatePga3d(ops: Seq[FileWriterTask]): FileWriterTask = {
+  private def generatePga3d(ops: Seq[FileContent]): FileContent = {
     val code = new CppCodeGen()
 
     code.pragmaOnce()
@@ -94,10 +94,10 @@ class Pga3dCodeGenCpp(val directory: Path,
     }
     code("")
 
-    FileWriterTask(directory.resolve(Headers.pga3d), code.toString)
+    FileContent(directory.resolve(Headers.pga3d), code.toString)
   }
 
-  private def generateStructHeadersAggregation(): FileWriterTask = {
+  private def generateStructHeadersAggregation(): FileContent = {
     val codeGen = new CppCodeGen()
 
     codeGen("#pragma once")
@@ -107,7 +107,7 @@ class Pga3dCodeGenCpp(val directory: Path,
       codeGen(s"#include \"${cls.name}.h\"")
     }
 
-    FileWriterTask(directory.resolve(Headers.types), codeGen.toString)
+    FileContent(directory.resolve(Headers.types), codeGen.toString)
   }
 
   private def generateStructHeader(cls: CppSubclass): String = {

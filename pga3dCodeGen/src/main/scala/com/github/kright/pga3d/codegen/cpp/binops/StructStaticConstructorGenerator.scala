@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
-import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.struct.StructCodeGenerator
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 

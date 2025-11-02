@@ -1,11 +1,11 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
-import com.github.kright.pga3d.codegen.common.FileWriterTask
+import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 
 class BivectorOpsGenerator extends BinOpCodeGen {
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileWriterTask = {
+  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
     code.pragmaOnce()
@@ -69,7 +69,7 @@ class BivectorOpsGenerator extends BinOpCodeGen {
       )
     }
 
-    FileWriterTask(codeGen.directory.resolve("opsBivector.h"), code.toString)
+    FileContent(codeGen.directory.resolve("opsBivector.h"), code.toString)
   }
 
   override def structCode(cls: CppSubclass): String = {

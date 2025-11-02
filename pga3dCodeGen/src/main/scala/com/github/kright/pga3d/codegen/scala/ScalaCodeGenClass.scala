@@ -2,8 +2,7 @@ package com.github.kright.pga3d.codegen.scala
 
 import com.github.kright.pga3d.codegen.common.FileWriter
 
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Path, StandardOpenOption}
+import java.nio.file.{Files, Path}
 
 trait ScalaCodeGenClass:
   def name: String
@@ -34,7 +33,7 @@ trait ScalaCodeGenClass:
          |/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
          |${generateCode()}""".stripMargin
 
-    val writeNew = FileWriter.writeToFile(clsPath, code)
+    val writeNew = FileWriter.writeToFile(clsPath, code, createDirs = true)
     if (!writeNew) {
       println(s"class is up-to-date = ${clsPath}, linesCount = ${code.lines().count()}")
     }
