@@ -25,8 +25,6 @@ class MotorOpsGenerator extends BinOpCodeGen {
     code(s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;")
     code(s"[[nodiscard]] inline ${CppSubclasses.motor.name} pow(double p) const noexcept;")
     code("")
-    code(s"[[nodiscard]] inline ${CppSubclasses.vector.name} toVector() const noexcept;")
-    code("")
     code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.quaternion.name}, ${CppSubclasses.translator.name}> toQuaternionAndTranslator() const noexcept;")
     code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.translator.name}, ${CppSubclasses.quaternion.name}> toTranslatorAndQuaternion() const noexcept;")
     code("")
@@ -40,16 +38,16 @@ class MotorOpsGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
-    code.pragmaOnce()
-    // Keep includes minimal; types aggregation is enough for method declarations/definitions
-    code.apply(s"#include <cmath>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"opsArithmetic.h\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        s"#include <cmath>",
+        s"#include \"${codeGen.Headers.types}\"",
+        s"#include \"opsArithmetic.h\"",
+      ), 
+      getClass.getName
+    )
 
     code.namespace(codeGen.namespace) {
-      // Intentionally left empty. This header is reserved for future Motor methods implementations.
       code(
         s"""
            |[[nodiscard]] constexpr ${CppSubclasses.motor.name} ${CppSubclasses.motor.name}::addVector(const ${CppSubclasses.vector.name}& v) noexcept { return {.s = 1.0, .wx = v.x, .wy = v.y, .wz = v.z}; }""".stripMargin)

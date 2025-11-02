@@ -8,13 +8,15 @@ class BivectorOpsGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
-    code.pragmaOnce()
-    code.apply(s"#include <cmath>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"opsArithmetic.h\"")
-    code.apply(s"#include \"opsNorm.h\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        "#include <cmath>",
+        s"#include \"${codeGen.Headers.types}\"",
+        s"#include \"opsArithmetic.h\"",
+        s"#include \"opsNorm.h\""
+      ),
+      getClass.getName
+    )
 
     code.namespace(codeGen.namespace) {
       val bivector = CppSubclasses.bivector

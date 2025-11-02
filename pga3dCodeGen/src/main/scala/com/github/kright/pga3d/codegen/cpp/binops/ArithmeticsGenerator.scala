@@ -9,11 +9,13 @@ class ArithmeticsGenerator extends BinOpCodeGen:
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
-    code.pragmaOnce()
-    code.apply("#include <cmath>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        "#include <cmath>",
+        s"#include \"${codeGen.Headers.types}\""
+      ), 
+      getClass.getName
+    )
 
     code.namespace(codeGen.namespace) {
       plusMinus(code)

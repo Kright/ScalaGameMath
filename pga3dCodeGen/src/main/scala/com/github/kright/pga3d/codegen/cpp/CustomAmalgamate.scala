@@ -6,14 +6,15 @@ import java.nio.file.{Files, Path}
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.*
 
-@main
-def mergeFiles(): Unit = {
-  CustomAmalgamate.fuse()
-}
 
 private class CustomAmalgamate(val files: Map[String, FileContent]) {
   val result = new StringBuilder()
   val includedFiles = new mutable.HashSet[String]()
+
+  val ignoredLines = Set[String](
+    "// Copyright (c) 2025 Igor Slobodskov",
+    "// SPDX-License-Identifier: MIT",
+  )
 
   def getStdIncludes(code: Seq[String]): Seq[String] = {
     code
@@ -25,9 +26,10 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
   def fuse(text: String): String = {
     val includes = getStdIncludes(Seq(text) ++ files.values.map(_.content))
 
-    result.append("#pragma once\n\n")
-    for (include <- includes) {
-      result.append(include).append("\n")
+    {
+      val code = CppCodeGen()
+      code.myHeader(includes, getClass.getName)
+      result.append(code).append("\n")
     }
 
     fuse(text, None, 0)
@@ -37,7 +39,16 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
       require(missedFiles.isEmpty, missedFiles.mkString(", "))
     }
 
-    result.toString()
+    removeRepeatingEmptyLines(result.toString())
+  }
+
+  private def removeRepeatingEmptyLines(text: String): String = {
+    val lines = text.strip().split("\n")
+
+    lines.zip(Seq("") ++ lines)
+      .filterNot((cur, prev) => cur.isBlank && prev.isBlank)
+      .map((cur, prev) => cur)
+      .mkString("\n")
   }
 
   private def fuse(text: String, fileName: Option[String], level: Int): Unit = {
@@ -75,21 +86,23 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
           printedName = true
         }
 
-        result.append(line).append("\n")
+        if (!ignoredLines.contains(line) &&
+          !(i > 0 && line.isBlank && ignoredLines.contains(lines(i - 1)))) {
+          result.append(line).append("\n")
+        }
       }
     }
   }
 }
 
-private object CustomAmalgamate {
+object CustomAmalgamate:
   def fuse(): Unit = {
     val initial =
       """
         |#include "pga3d.h"
         |#include "pga3dphysics.h"""".stripMargin
     val amalgamate = new CustomAmalgamate(getFiles())
-    amalgamate.fuse(initial)
-    val code = amalgamate.result.toString
+    val code = amalgamate.fuse(initial)
     FileContent(Path.of("cpp/fused/pga3dphysics.h"), code).write()
   }
 
@@ -104,4 +117,3 @@ private object CustomAmalgamate {
 
     files.map(FileContent.load).map(f => f.path.getFileName.toString -> f).toMap
   }
-}

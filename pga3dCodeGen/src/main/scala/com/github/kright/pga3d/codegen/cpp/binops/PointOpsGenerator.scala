@@ -18,13 +18,15 @@ class PointOpsGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
-    code.pragmaOnce()
-    code.apply("#include <algorithm>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply("#include \"opsArithmetic.h\"")
-    code.apply("#include \"opsNorm.h\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        "#include <algorithm>",
+        s"#include \"${codeGen.Headers.types}\"",
+        "#include \"opsArithmetic.h\"",
+        "#include \"opsNorm.h\"",
+      ),
+      getClass.getName
+    )
 
     code.namespace(codeGen.namespace) {
       code(

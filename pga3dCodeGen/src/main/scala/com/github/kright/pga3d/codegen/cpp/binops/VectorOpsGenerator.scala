@@ -16,11 +16,12 @@ class VectorOpsGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
-    code.pragmaOnce()
-    code.apply("#include <algorithm>")
-    code.apply(s"#include \"Vector.h\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        "#include <algorithm>",
+        s"#include \"Vector.h\"",
+      ),
+      getClass.getName)
 
     code.namespace(codeGen.namespace) {
       code(

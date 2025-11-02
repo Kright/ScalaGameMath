@@ -7,10 +7,7 @@ class WeightOpGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
-    code.pragmaOnce()
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
 
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {

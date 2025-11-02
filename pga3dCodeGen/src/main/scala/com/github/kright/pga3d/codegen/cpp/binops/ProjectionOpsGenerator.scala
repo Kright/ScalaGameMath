@@ -35,19 +35,21 @@ class ProjectionOpsGenerator extends BinOpCodeGen:
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
-    code.pragmaOnce()
-    code(s"#include \"${codeGen.Headers.types}\"")
-    code(s"#include \"opsGeometric.h\"")
-    code(s"#include \"opsDot.h\"")
-    code("")
-    code.generatedBy(getClass.getName)
+    code.myHeader(
+      Seq(
+        s"#include \"${codeGen.Headers.types}\"",
+        s"#include \"opsGeometric.h\"",
+        s"#include \"opsDot.h\"",
+      ),
+      getClass.getName,
+    )
 
     code.namespace(codeGen.namespace) {
       for (planeClass <- Seq(CppSubclasses.plane, CppSubclasses.planeIdeal)) {
         code(s"[[nodiscard]] constexpr ${CppSubclasses.bivector.name} ${CppSubclasses.bivector.name}::projectOntoPlane(const ${planeClass.name}& plane) const noexcept { return -plane.dot(*this).geometric(plane).toBivectorUnsafe(); }")
       }
 
-      for(pointClass <- pointClasses) {
+      for (pointClass <- pointClasses) {
         for (planeClass <- Seq(CppSubclasses.plane, CppSubclasses.planeIdeal)) {
           code(s"[[nodiscard]] constexpr ${CppSubclasses.projectivePoint.name} ${pointClass.name}::projectOntoPlane(const ${planeClass.name}& plane) const noexcept { return plane.dot(*this).geometric(plane).toProjectivePointUnsafe(); };")
         }

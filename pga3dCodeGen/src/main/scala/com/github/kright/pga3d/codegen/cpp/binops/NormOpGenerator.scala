@@ -9,14 +9,15 @@ class NormOpGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
-    code.pragmaOnce()
-    code("#include <cmath>")
-    code.apply(s"#include \"${codeGen.Headers.types}\"")
-    code.apply(s"#include \"opsArithmetic.h\"")
-
-    code.apply("")
-    code.generatedBy(getClass.getName)
-
+    code.myHeader(
+      Seq(
+        "#include <cmath>",
+        s"#include \"${codeGen.Headers.types}\"",
+        s"#include \"opsArithmetic.h\"",
+      ),
+      getClass.getName,
+    )
+    
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
         // Common result type for normalization by scalar

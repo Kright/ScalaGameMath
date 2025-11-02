@@ -8,9 +8,8 @@ class ToStreamOpGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = CppCodeGen()
 
-    code.pragmaOnce()
-    code("#include <ostream>")
-    code("")
+    code.myHeader(Seq("#include <ostream>"), getClass.getName)
+    
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
         code(s"inline std::ostream &operator<<(std::ostream &os, const ${cls.name} &v) {")

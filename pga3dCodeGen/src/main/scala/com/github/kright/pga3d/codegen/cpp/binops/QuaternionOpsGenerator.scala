@@ -28,15 +28,17 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
   override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
     val code = new CppCodeGen()
 
-    code.pragmaOnce()
-    code("#include <cmath>")
-    code(s"#include \"${codeGen.Headers.types}\"")
-    code("#include \"opsNorm.h\"")
-    code("#include \"opsArithmetic.h\"")
-    code("#include \"opsGeometric.h\"")
-    code("")
-    code.generatedBy(getClass.getName)
-
+    code.myHeader(
+      Seq(
+        "#include <cmath>",
+        s"#include \"${codeGen.Headers.types}\"",
+        "#include \"opsNorm.h\"",
+        "#include \"opsArithmetic.h\"",
+        "#include \"opsGeometric.h\"",
+      ),
+      getClass.getName
+    )
+    
     val cls = CppSubclasses.quaternion
 
     code.namespace(codeGen.namespace) {
