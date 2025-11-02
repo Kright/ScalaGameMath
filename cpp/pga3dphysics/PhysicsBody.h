@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Igor Slobodskov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 #include "pga3d/Motor.h"

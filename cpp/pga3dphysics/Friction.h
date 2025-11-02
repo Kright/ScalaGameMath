@@ -1,12 +1,12 @@
+// Copyright (c) 2025 Igor Slobodskov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 #include <algorithm>
 
 #include "pga3d/Vector.h"
 #include "Forque.h"
-//
-// Created by lgor on 10/29/25.
-//
 
 namespace pga3dphysics {
     struct VelocityFriction {
