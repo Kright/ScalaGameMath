@@ -73,8 +73,8 @@ class Pga3dCodeGenCpp(val directory: Path,
   private def generateStructForwardDeclarations(): FileContent = {
     val codeGen = new CppCodeGen()
 
-    codeGen("#pragma once")
-    codeGen("")
+    codeGen.myHeader(Seq(), getClass.getName)
+
     codeGen.namespace(namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
         codeGen(s"struct ${cls.name};")
@@ -96,12 +96,11 @@ class Pga3dCodeGenCpp(val directory: Path,
   private def generateStructHeadersAggregation(): FileContent = {
     val codeGen = new CppCodeGen()
 
-    codeGen("#pragma once")
-    codeGen("")
+    val includes =
+      for (cls <- CppSubclasses.all if cls.shouldBeGenerated)
+        yield s"#include \"${cls.name}.h\""
 
-    for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
-      codeGen(s"#include \"${cls.name}.h\"")
-    }
+    codeGen.myHeader(includes, getClass.getName)
 
     FileContent(directory.resolve(Headers.types), codeGen.toString)
   }

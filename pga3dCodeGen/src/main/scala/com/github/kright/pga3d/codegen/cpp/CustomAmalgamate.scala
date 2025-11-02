@@ -115,5 +115,12 @@ object CustomAmalgamate:
 
     require(files.map(_.getFileName.toString).toSet.size == files.size)
 
-    files.map(FileContent.load).map(f => f.path.getFileName.toString -> f).toMap
+    val loadedFiles = files.map(FileContent.load)
+
+    {
+      val invalidFiles = loadedFiles.filterNot(_.content.startsWith("// Copyright (c) 2025 Igor Slobodskov\n// SPDX-License-Identifier: MIT"))
+      invalidFiles.foreach(f => println("WARNING: " + f.path.getFileName + " has no license!"))
+    }
+
+    loadedFiles.map(f => f.path.getFileName.toString -> f).toMap
   }
