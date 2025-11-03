@@ -3,13 +3,21 @@
 
 #pragma once
 
+#include "Edge.h"
+#include "Triangle.h"
+#include "Cylinder.h"
+#include "Sphere.h"
+#include "AABB.h"
+
 #include "Forque.h"
 #include "Velocity.h"
+
 #include "InertiaLocal.h"
 #include "InertiaLocalSphere.h"
 #include "InertiaMovedLocal.h"
 #include "InertiaSummable.h"
+
+#include "Friction.h"
 #include "BodyState.h"
 #include "PhysicsBody.h"
 #include "PhysicsSolverRK4.h"
-#include "Friction.h"

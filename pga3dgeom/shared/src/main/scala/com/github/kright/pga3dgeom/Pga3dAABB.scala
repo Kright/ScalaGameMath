@@ -67,7 +67,6 @@ case class Pga3dAABB(min: Pga3dPoint,
     val clampedPoint = clamp(p)
     (clampedPoint - p).norm
 
-
   def union(a: Pga3dAABB): Pga3dAABB =
     Pga3dAABB(
       min = this.min min a.min,

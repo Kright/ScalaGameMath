@@ -39,4 +39,9 @@ add_executable(cpp
         pga3dphysics/InertiaLocalSphere.h
         pga3dphysics/Friction.h
         pga3dphysics/Velocity.h
+        pga3dphysics/AABB.h
+        pga3dphysics/Edge.h
+        pga3dphysics/Triangle.h
+        pga3dphysics/Sphere.h
+        pga3dphysics/Cylinder.h
 )
