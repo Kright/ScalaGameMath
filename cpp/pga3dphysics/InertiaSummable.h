@@ -3,12 +3,22 @@
 
 #pragma once
 
-#include "Point.h"
-#include "ProjectivePoint.h"
+#include "pga3d/Point.h"
+#include "pga3d/ProjectivePoint.h"
+#include "pga3d/Quaternion.h"
+#include "pga3d/Translator.h"
+#include "pga3d/Motor.h"
+
+#include "InertiaLocalSphere.h"
+#include "InertiaLocal.h"
+#include "InertiaMovedLocal.h"
 
 namespace pga3dphysics {
     using pga3d::Point;
     using pga3d::ProjectivePoint;
+    using pga3d::Motor;
+    using pga3d::Translator;
+    using pga3d::Quaternion;
 
     struct InertiaSummable {
         double ww = 0.0;
@@ -32,11 +42,61 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr ProjectivePoint centerOfMassProjective() const noexcept {
-            return {.x = wx , .y= wy , .z = wz, .w= ww};
+            return {.x = wx , .y = wy , .z = wz, .w = ww};
         }
 
         [[nodiscard]] constexpr double normSquare() const noexcept {
             return ww * ww + wx * wx + wy * wy + wz * wz + xx * xx + yy * yy + zz * zz + xy * xy + yz * yz + xz * xz;
+        }
+
+        [[nodiscard]] constexpr Bivector operator()(const Bivector& b) const noexcept {
+            return {
+                .wx = +(yy + zz) * b.yz + xy * b.xz - xz * b.xy - wz * b.wy + wy * b.wz,
+                .wy = -xy * b.yz - (xx + zz) * b.xz - yz * b.xy - wx * b.wz + wz * b.wx,
+                .wz = -xz * b.yz + yz * b.xz + (xx + yy) * b.xy + wx * b.wy - wy * b.wx,
+                .xy = ww * b.wz + wx * b.xz + wy * b.yz,
+                .xz = -ww * b.wy - wx * b.xy + wz * b.yz,
+                .yz = ww * b.wx - wy * b.xy - wz * b.xz,
+            };
+        }
+
+    private:
+        [[nodiscard]] constexpr InertiaSummable movedByImpl(auto mapProjectivePoint) const noexcept {
+            const ProjectivePoint cx = mapProjectivePoint(ProjectivePoint{xx, xy , xz, wx});
+            const ProjectivePoint cy = mapProjectivePoint(ProjectivePoint{xy, yy, yz, wy});
+            const ProjectivePoint cz = mapProjectivePoint(ProjectivePoint{xz, yz, zz, wz});
+            const ProjectivePoint cw = mapProjectivePoint(ProjectivePoint{wx, wy, wz, ww});
+
+            const ProjectivePoint rx = mapProjectivePoint(ProjectivePoint{cx.x, cy.x, cz.x, cw.x});
+            const ProjectivePoint ry = mapProjectivePoint(ProjectivePoint{cx.y, cy.y, cz.y, cw.y});
+            const ProjectivePoint rz = mapProjectivePoint(ProjectivePoint{cx.z, cy.z, cz.z, cw.z});
+            const ProjectivePoint rw = mapProjectivePoint(ProjectivePoint{cx.w, cy.w, cz.w, cw.w});
+
+            return {
+                .ww = rw.w,
+                .wx = rw.x,
+                .wy = rw.y,
+                .wz = rw.z,
+                .xx = rx.x,
+                .yy = ry.y,
+                .zz = rz.z,
+                .xy = rx.y,
+                .yz = ry.z,
+                .xz = rx.z
+            };
+        }
+    public:
+
+        [[nodiscard]] constexpr InertiaSummable movedBy(const Motor& m) const noexcept {
+            return movedByImpl([&](const ProjectivePoint& p) { return m.sandwich(p); });
+        }
+
+        [[nodiscard]] constexpr InertiaSummable movedBy(const Translator& m) const noexcept {
+            return movedByImpl([&](const ProjectivePoint& p) { return m.sandwich(p); });
+        }
+
+        [[nodiscard]] constexpr InertiaSummable movedBy(const Quaternion& m) const noexcept {
+            return movedByImpl([&](const ProjectivePoint& p) { return m.sandwich(p); });
         }
 
         [[nodiscard]] static constexpr InertiaSummable point(const Point& p, double mass) noexcept {
@@ -53,6 +113,46 @@ namespace pga3dphysics {
                 .yz = p.y * p.z * mass,
                 .xz = p.x * p.z * mass,
             };
+        }
+
+        [[nodiscard]] static constexpr InertiaSummable from(const InertiaLocalSphere& inertia) noexcept {
+            return {
+                .ww = inertia.mass,
+                .wx = 0.0,
+                .wy = 0.0,
+                .wz = 0.0,
+                .xx = inertia.mr2 * 0.5,
+                .yy = inertia.mr2 * 0.5,
+                .zz = inertia.mr2 * 0.5,
+                .xy = 0.0,
+                .yz = 0.0,
+                .xz = 0.0,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaSummable from(const InertiaLocal& inertia) noexcept {
+            const double mrxyz2 = (inertia.mrxy + inertia.mrxz + inertia.mryz) * 0.5;
+
+            const double mrx2 = mrxyz2 - inertia.mryz;
+            const double mry2 = mrxyz2 - inertia.mrxz;
+            const double mrz2 = mrxyz2 - inertia.mrxy;
+
+            return {
+                .ww = inertia.mass,
+                .wx = 0.0,
+                .wy = 0.0,
+                .wz = 0.0,
+                .xx = mrx2,
+                .yy = mry2,
+                .zz = mrz2,
+                .xy = 0.0,
+                .yz = 0.0,
+                .xz = 0.0
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaSummable from(const InertiaMovedLocal& inertia) noexcept {
+            return from(inertia.localInertia).movedBy(inertia.localToGlobal);
         }
     };
 

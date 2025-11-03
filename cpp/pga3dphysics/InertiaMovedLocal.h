@@ -11,6 +11,8 @@
 
 namespace pga3dphysics {
     using pga3d::Motor;
+    using pga3d::Translator;
+    using pga3d::Quaternion;
     using pga3d::Bivector;
     using pga3d::Point;
 
@@ -38,17 +40,43 @@ namespace pga3dphysics {
             return localToGlobal.sandwich(localB);
         }
 
-        [[nodiscard]] constexpr Bivector getLocalAcceleration(const Bivector &globalB,
+        [[nodiscard]] constexpr Bivector getLocalAcceleration(const Bivector &globalVelocity,
                                                               const Bivector &globalForque) const noexcept {
-            const Bivector localB = localToGlobal.reverseSandwich(globalB);
+            const Bivector localB = localToGlobal.reverseSandwich(globalVelocity);
             const Bivector localF = localToGlobal.reverseSandwich(globalForque);
             return localInertia.getAcceleration(localB, localF);
         }
 
-        [[nodiscard]] constexpr Bivector getAcceleration(const Bivector &globalB,
+        [[nodiscard]] constexpr Bivector getAcceleration(const Bivector &globalVelocity,
                                                          const Bivector &globalForque) const noexcept {
-            const Bivector localA = getLocalAcceleration(globalB, globalForque);
+            const Bivector localA = getLocalAcceleration(globalVelocity, globalForque);
             return localToGlobal.sandwich(localA);
+        }
+
+        [[nodiscard]] constexpr double getKineticEnergy(const Bivector &globalVelocity) const noexcept {
+            const Bivector localB = localToGlobal.reverseSandwich(globalVelocity);
+            return localInertia.getKineticEnergy(localB);
+        }
+
+        [[nodiscard]] constexpr InertiaMovedLocal movedBy(const Motor& m) const noexcept {
+            return {
+                .localToGlobal = m.geometric(localToGlobal),
+                .localInertia = localInertia,
+            };
+        }
+
+        [[nodiscard]] constexpr InertiaMovedLocal movedBy(const Translator& m) const noexcept {
+            return {
+                .localToGlobal = m.geometric(localToGlobal),
+                .localInertia = localInertia,
+            };
+        }
+
+        [[nodiscard]] constexpr InertiaMovedLocal movedBy(const Quaternion& m) const noexcept {
+            return {
+                .localToGlobal = m.geometric(localToGlobal),
+                .localInertia = localInertia,
+            };
         }
     };
 }

@@ -14,14 +14,14 @@ namespace pga3dphysics {
         double mrxz = 0.0;
         double mrxy = 0.0;
 
-        [[nodiscard]] constexpr Bivector operator()(const Bivector& localB) const noexcept {
+        [[nodiscard]] constexpr Bivector operator()(const Bivector& velocity) const noexcept {
             return Bivector {
-              .wx = localB.yz * mryz,
-              .wy = -localB.xz * mrxz,
-              .wz = localB.xy * mrxy,
-              .xy = localB.wz * mass,
-              .xz = -localB.wy * mass,
-              .yz = localB.wx * mass,
+              .wx = velocity.yz * mryz,
+              .wy = -velocity.xz * mrxz,
+              .wz = velocity.xy * mrxy,
+              .xy = velocity.wz * mass,
+              .xz = -velocity.wy * mass,
+              .yz = velocity.wx * mass,
             };
         }
 
@@ -48,6 +48,10 @@ namespace pga3dphysics {
               .xz = (-localForque.wy + localB.xy * localB.yz * (mryz - mrxy)) / mrxz,
               .yz = (localForque.wx + localB.xy * localB.xz * (mrxy - mrxz)) / mryz,
             };
+        }
+
+        [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
+            return velocity.antiWedge(operator()(velocity)) * 0.5;
         }
     };
 }
