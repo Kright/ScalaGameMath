@@ -3631,7 +3631,7 @@ namespace pga3d {
     constexpr Vector ProjectivePoint::toVectorUnsafe() const noexcept { return {.x = x, .y = y, .z = z}; }
     constexpr Point ProjectivePoint::toPointUnsafe() const noexcept { return {.x = x, .y = y, .z = z}; }
 
-    [[nodiscard]] constexpr Point ProjectivePoint::toPoint() const noexcept { return { .x = x / w, .y = y / w, .z = z / w }; }
+    constexpr Point ProjectivePoint::toPoint() const noexcept { const double inv = 1.0 / w; return { .x = x * inv, .y = y * inv, .z = z * inv }; }
     constexpr Multivector Quaternion::toMultivector() const noexcept { return {.s = s, .w = 0.0, .x = 0.0, .y = 0.0, .z = 0.0, .wx = 0.0, .wy = 0.0, .wz = 0.0, .xy = xy, .xz = xz, .yz = yz, .wxy = 0.0, .wxz = 0.0, .wyz = 0.0, .xyz = 0.0, .i = 0.0}; }
     constexpr Motor Quaternion::toMotor() const noexcept { return {.s = s, .wx = 0.0, .wy = 0.0, .wz = 0.0, .xy = xy, .xz = xz, .yz = yz, .i = 0.0}; }
     constexpr Bivector Quaternion::toBivectorUnsafe() const noexcept { return {.wx = 0.0, .wy = 0.0, .wz = 0.0, .xy = xy, .xz = xz, .yz = yz}; }

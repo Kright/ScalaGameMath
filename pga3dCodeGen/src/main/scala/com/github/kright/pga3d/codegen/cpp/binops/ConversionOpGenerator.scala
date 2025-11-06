@@ -47,7 +47,7 @@ class ConversionOpGenerator extends BinOpCodeGen:
 
         if (cls == CppSubclasses.projectivePoint) {
           val point = CppSubclasses.point
-          code(s"[[nodiscard]] constexpr ${point.name} ${cls.name}::to${point.name}() const noexcept { return { .x = x / w, .y = y / w, .z = z / w }; }")
+          code(s"constexpr ${point.name} ${cls.name}::to${point.name}() const noexcept { const double inv = 1.0 / w; return { .x = x * inv, .y = y * inv, .z = z * inv }; }")
         }
       }
     }
