@@ -1,21 +1,23 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class PointOpsGenerator extends BinOpCodeGen {
+class PointOpsGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     if (cls == CppSubclasses.point) {
-      s"""[[nodiscard]] inline double distanceTo(const ${CppSubclasses.point.name}& other) const noexcept;
-         |
-         |[[nodiscard]] inline ${CppSubclasses.point.name} min(const ${CppSubclasses.point.name}& other) const noexcept;
-         |[[nodiscard]] inline ${CppSubclasses.point.name} max(const ${CppSubclasses.point.name}& other) const noexcept;
-         |[[nodiscard]] inline ${CppSubclasses.point.name} clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept;""".stripMargin
-    } else ""
+      structBodyPart(
+        s"""[[nodiscard]] inline double distanceTo(const ${CppSubclasses.point.name}& other) const noexcept;
+           |
+           |[[nodiscard]] inline ${CppSubclasses.point.name} min(const ${CppSubclasses.point.name}& other) const noexcept;
+           |[[nodiscard]] inline ${CppSubclasses.point.name} max(const ${CppSubclasses.point.name}& other) const noexcept;
+           |[[nodiscard]] inline ${CppSubclasses.point.name} clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept;""".stripMargin
+      )
+    } else Seq()
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(
@@ -61,6 +63,6 @@ class PointOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileContent(codeGen.directory.resolve("opsPoint.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsPoint.h"), code.toString))
   }
 }

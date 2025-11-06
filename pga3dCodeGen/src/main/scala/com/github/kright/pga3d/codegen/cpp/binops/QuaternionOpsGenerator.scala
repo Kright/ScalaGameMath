@@ -1,12 +1,12 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 
-class QuaternionOpsGenerator extends BinOpCodeGen {
+class QuaternionOpsGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     val code = new CppCodeGen()
 
     if (CppSubclasses.quaternion == cls) {
@@ -22,10 +22,10 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       QuaternionAndMotorAxes.makeDeclaration(code, cls)
     }
 
-    code.toString
+    structBodyPart(code.toString)
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(
@@ -126,7 +126,7 @@ class QuaternionOpsGenerator extends BinOpCodeGen {
       QuaternionAndMotorAxes.makeForQuaternion(code)
     }
 
-    FileContent(codeGen.directory.resolve("opsQuaternion.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsQuaternion.h"), code.toString))
   }
 }
 

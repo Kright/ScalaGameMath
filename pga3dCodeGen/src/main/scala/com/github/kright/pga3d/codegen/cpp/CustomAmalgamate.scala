@@ -21,6 +21,7 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
       .flatMap(_.strip().split("\n"))
       .filter(_.startsWith("#include <"))
       .distinct
+      .sorted
   }
 
   def fuse(text: String): String = {
@@ -103,7 +104,7 @@ object CustomAmalgamate:
         |#include "pga3dphysics.h"""".stripMargin
     val amalgamate = new CustomAmalgamate(getFiles())
     val code = amalgamate.fuse(initial)
-    FileContent(Path.of("cpp/fused/pga3dphysics.h"), code).write()
+    FileContent(Path.of("cpp/fused/pga3dphysics.h"), code).writeWithLogging()
   }
 
   private def getFiles(): Map[String, FileContent] = {

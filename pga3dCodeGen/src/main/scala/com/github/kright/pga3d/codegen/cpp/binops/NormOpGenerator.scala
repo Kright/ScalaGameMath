@@ -1,12 +1,12 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 import scala.math.Numeric.Implicits.infixNumericOps
 
-class NormOpGenerator extends BinOpCodeGen {
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+class NormOpGenerator extends CppCodeGenerator {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
     code.myHeader(
@@ -63,10 +63,10 @@ class NormOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileContent(codeGen.directory.resolve("opsNorm.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsNorm.h"), code.toString))
   }
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     val a = cls.makeSymbolic("a")
     val scaled = a * Sym("b")
     val resultCls = CppSubclasses.findMatchingClass(scaled)
@@ -97,6 +97,6 @@ class NormOpGenerator extends BinOpCodeGen {
       normalizedByWeightDecl
     ).filter(_.nonEmpty)
 
-    parts.mkString("\n")
+    structBodyPart(parts.mkString("\n"))
   }
 }

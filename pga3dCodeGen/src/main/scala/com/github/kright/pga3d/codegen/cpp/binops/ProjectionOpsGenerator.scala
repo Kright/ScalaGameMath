@@ -1,16 +1,16 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class ProjectionOpsGenerator extends BinOpCodeGen:
+class ProjectionOpsGenerator extends CppCodeGenerator:
   private val pointClasses = Set(
     CppSubclasses.projectivePoint,
     CppSubclasses.point,
     CppSubclasses.pointCenter,
   )
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     val code = CppCodeGen()
 
     if (cls == CppSubclasses.bivector) {
@@ -29,10 +29,10 @@ class ProjectionOpsGenerator extends BinOpCodeGen:
       code(s"[[nodiscard]] constexpr ${CppSubclasses.projectivePoint.name} projectOntoLine(const ${CppSubclasses.bivector.name}& line) const noexcept;")
     }
 
-    code.toString
+    structBodyPart(code.toString)
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
     code.myHeader(
@@ -58,5 +58,5 @@ class ProjectionOpsGenerator extends BinOpCodeGen:
       }
     }
 
-    FileContent(codeGen.directory.resolve("opsProject.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsProject.h"), code.toString))
   }

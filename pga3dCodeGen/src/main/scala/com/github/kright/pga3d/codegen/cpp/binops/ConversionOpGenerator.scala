@@ -1,10 +1,10 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class ConversionOpGenerator extends BinOpCodeGen:
-  override def structCode(cls: CppSubclass): String = {
+class ConversionOpGenerator extends CppCodeGenerator:
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     val code = CppCodeGen()
 
     for (target <- CppSubclasses.all if cls != target && target.shouldBeGenerated && target != CppSubclasses.pseudoScalar) {
@@ -23,10 +23,10 @@ class ConversionOpGenerator extends BinOpCodeGen:
       code(s"[[nodiscard]] constexpr ${point.name} to${point.name}() const noexcept;")
     }
 
-    code.toString
+    structBodyPart(code.toString)
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
@@ -52,5 +52,5 @@ class ConversionOpGenerator extends BinOpCodeGen:
       }
     }
 
-    FileContent(codeGen.directory.resolve("opsTo.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsTo.h"), code.toString))
   }

@@ -1,15 +1,15 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
 /**
  * Generates simple operations for Translator similar to QuaternionOpsGenerator but only log().
  */
-class TranslatorOpsGenerator extends BinOpCodeGen {
+class TranslatorOpsGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String = {
-    if (cls != CppSubclasses.translator) return ""
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
+    if (cls != CppSubclasses.translator) return Seq()
 
     val code = new CppCodeGen()
 
@@ -19,10 +19,10 @@ class TranslatorOpsGenerator extends BinOpCodeGen {
     code(s"[[nodiscard]] constexpr ${CppSubclasses.bivectorWeight.name} log() const noexcept;")
     code(s"[[nodiscard]] constexpr ${CppSubclasses.translator.name} pow(double p) const noexcept;")
 
-    code.toString()
+    structBodyPart(code.toString())
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
@@ -54,6 +54,6 @@ class TranslatorOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileContent(codeGen.directory.resolve("opsTranslator.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsTranslator.h"), code.toString))
   }
 }

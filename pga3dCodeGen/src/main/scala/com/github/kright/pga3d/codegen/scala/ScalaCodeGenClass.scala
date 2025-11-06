@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.scala
 
-import com.github.kright.pga3d.codegen.common.FileWriter
+import com.github.kright.pga3d.codegen.common.{FileContent, FileWriter}
 
 import java.nio.file.{Files, Path}
 
@@ -33,9 +33,4 @@ trait ScalaCodeGenClass:
          |/** this code is generated, see com.github.kright.pga3d.codegen.CodeGenClass */
          |${generateCode()}""".stripMargin
 
-    val writeNew = FileWriter.writeToFile(clsPath, code, createDirs = true)
-    if (!writeNew) {
-      println(s"class is up-to-date = ${clsPath}, linesCount = ${code.lines().count()}")
-    }
-
-    println(s"class generated = ${clsPath}, linesCount = ${code.lines().count()}")
+    FileContent(clsPath, code).writeWithLogging()

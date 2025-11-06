@@ -1,21 +1,16 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class MotorOpsGenerator extends BinOpCodeGen {
-
-  override def includes(cls: CppSubclass): Seq[String] = {
-    if (cls == CppSubclasses.bivector) {
-      Seq("<utility>")
-    } else {
-      Seq()
-    }
-  }
-
+class MotorOpsGenerator extends CppCodeGenerator {
   // No declarations yet. Ready to add methods in the future.
-  override def structCode(cls: CppSubclass): String = {
-    if (cls != CppSubclasses.motor) return ""
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
+    if (cls != CppSubclasses.motor) return Seq()
+
+    val includes =
+      if (cls == CppSubclasses.bivector) Seq("<utility>")
+      else Seq()
 
     val code = new CppCodeGen()
     code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} id() noexcept { return { .s = 1.0 }; };")
@@ -32,10 +27,10 @@ class MotorOpsGenerator extends BinOpCodeGen {
     code("")
     QuaternionAndMotorAxes.makeDeclaration(code, cls)
 
-    code.toString
+    structBodyPart(code.toString, includes)
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(
@@ -43,7 +38,7 @@ class MotorOpsGenerator extends BinOpCodeGen {
         s"#include <cmath>",
         s"#include \"${codeGen.Headers.types}\"",
         s"#include \"opsArithmetic.h\"",
-      ), 
+      ),
       getClass.getName
     )
 
@@ -136,6 +131,6 @@ class MotorOpsGenerator extends BinOpCodeGen {
       QuaternionAndMotorAxes.makeForMotor(code)
     }
 
-    FileContent(codeGen.directory.resolve("opsMotor.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsMotor.h"), code.toString))
   }
 }

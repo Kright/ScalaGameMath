@@ -1,10 +1,10 @@
 package com.github.kright.pga3d.codegen.cpp.struct
 
 import com.github.kright.pga3d.codegen.cpp.Pga3dProvider.pga3
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, StructBodyPart}
 
-class StructFieldsGenerator extends StructCodeGenerator:
-  override def structCode(cls: CppSubclass): String =
+class StructFieldsGenerator extends CppCodeGenerator:
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =
     val code = new CppCodeGen()
 
     cls.variableFields.foreach { field =>
@@ -31,4 +31,17 @@ class StructFieldsGenerator extends StructCodeGenerator:
       }
     }
 
-    code.toString()
+    if (cls.variableFields.nonEmpty) {
+      code("")
+      code(s"[[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { ${cls.variableFields.map(_.name).mkString(", ")} }; }")
+      code(s"[[nodiscard]] static constexpr ${cls.name} from(const std::span<double, componentsCount>& values) noexcept { return { ${cls.variableFields.zipWithIndex.map((f, i) => s".${f.name} = values[$i]").mkString(", ")} }; }")
+    }
+
+    val includes =
+      if (cls.variableFields.nonEmpty) Seq("<array>", "<span>")
+      else Seq()
+
+    structBodyPart(
+      code.toString,
+      includes,
+    )

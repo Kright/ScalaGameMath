@@ -1,17 +1,17 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class BivectorWeightOpsGenerator extends BinOpCodeGen {
+class BivectorWeightOpsGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     if (cls == CppSubclasses.bivectorWeight) {
-      s"""[[nodiscard]] inline ${CppSubclasses.translator.name} exp() const noexcept;"""
-    } else ""
+      structBodyPart(s"""[[nodiscard]] inline ${CppSubclasses.translator.name} exp() const noexcept;""")
+    } else Seq()
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
@@ -29,6 +29,6 @@ class BivectorWeightOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileContent(codeGen.directory.resolve("opsBivectorWeight.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsBivectorWeight.h"), code.toString))
   }
 }

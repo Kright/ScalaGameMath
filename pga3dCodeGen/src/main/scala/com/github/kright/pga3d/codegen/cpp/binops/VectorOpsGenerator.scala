@@ -1,19 +1,21 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class VectorOpsGenerator extends BinOpCodeGen {
+class VectorOpsGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     if (cls == CppSubclasses.vector) {
-      s"""[[nodiscard]] inline ${CppSubclasses.vector.name} min(const ${CppSubclasses.vector.name}& other) const noexcept;
-         |[[nodiscard]] inline ${CppSubclasses.vector.name} max(const ${CppSubclasses.vector.name}& other) const noexcept;
-         |[[nodiscard]] inline ${CppSubclasses.vector.name} clamp(const ${CppSubclasses.vector.name}& minV, const ${CppSubclasses.vector.name}& maxV) const noexcept;""".stripMargin
-    } else ""
+      structBodyPart(
+        s"""[[nodiscard]] inline ${CppSubclasses.vector.name} min(const ${CppSubclasses.vector.name}& other) const noexcept;
+           |[[nodiscard]] inline ${CppSubclasses.vector.name} max(const ${CppSubclasses.vector.name}& other) const noexcept;
+           |[[nodiscard]] inline ${CppSubclasses.vector.name} clamp(const ${CppSubclasses.vector.name}& minV, const ${CppSubclasses.vector.name}& maxV) const noexcept;""".stripMargin
+      )
+    } else Seq()
   }
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(
@@ -52,6 +54,6 @@ class VectorOpsGenerator extends BinOpCodeGen {
            |""".stripMargin)
     }
 
-    FileContent(codeGen.directory.resolve("opsVector.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsVector.h"), code.toString))
   }
 }

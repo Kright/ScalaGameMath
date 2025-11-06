@@ -2,7 +2,7 @@ package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.ga.MultiVector
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 
 /**
@@ -15,13 +15,11 @@ import com.github.kright.symbolic.Sym
  *  - No X op Multivector for X != Multivector
  *  - Skip emission when result resolves to Zero class
  */
-class BinaryMethodCodeGen(
-  val methodName: String,
-  val fileName: String,
-  val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]
-) extends BinOpCodeGen:
+class BinaryMethodCodeGen(val methodName: String,
+                          val fileName: String,
+                          val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]) extends CppCodeGenerator:
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent =
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] =
     val code = CppCodeGen()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
@@ -46,9 +44,9 @@ class BinaryMethodCodeGen(
       }
     }
 
-    FileContent(codeGen.directory.resolve(fileName), code.toString)
+    Seq(FileContent(codeGen.directory.resolve(fileName), code.toString))
 
-  override def structCode(cls: CppSubclass): String =
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =
     val decls =
       for
         right <- CppSubclasses.all
@@ -61,4 +59,6 @@ class BinaryMethodCodeGen(
         if target == CppSubclasses.zeroCls then ""
         else s"[[nodiscard]] constexpr ${target.name} ${methodName}(const ${right.name}& b) const noexcept;"
 
-    decls.filter(_.nonEmpty).mkString("\n")
+    val result = decls.filter(_.nonEmpty).mkString("\n")
+
+    structBodyPart(result)

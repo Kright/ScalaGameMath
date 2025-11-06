@@ -1,11 +1,11 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class BivectorOpsGenerator extends BinOpCodeGen {
+class BivectorOpsGenerator extends CppCodeGenerator {
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = new CppCodeGen()
 
     code.myHeader(
@@ -71,22 +71,22 @@ class BivectorOpsGenerator extends BinOpCodeGen {
       )
     }
 
-    FileContent(codeGen.directory.resolve("opsBivector.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsBivector.h"), code.toString))
   }
 
-  override def structCode(cls: CppSubclass): String = {
-    if (cls == CppSubclasses.bivector) {
-      s"""[[nodiscard]] inline std::pair<${cls.name}, ${CppSubclasses.bivectorWeight.name}> split() const noexcept;
-         |
-         |[[nodiscard]] inline ${CppSubclasses.motor.name} exp() const noexcept;""".stripMargin
-    } else ""
-  }
-
-  override def includes(cls: CppSubclass): Seq[String] = {
-    if (cls == CppSubclasses.bivector) {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
+    val includes = if (cls == CppSubclasses.bivector) {
       Seq("<utility>")
     } else {
       Seq()
     }
+
+    val code = if (cls == CppSubclasses.bivector) {
+      s"""[[nodiscard]] inline std::pair<${cls.name}, ${CppSubclasses.bivectorWeight.name}> split() const noexcept;
+         |
+         |[[nodiscard]] inline ${CppSubclasses.motor.name} exp() const noexcept;""".stripMargin
+    } else ""
+    
+    structBodyPart(code, includes)
   }
 }

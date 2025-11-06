@@ -42,7 +42,7 @@ struct Spring {
     BodyPoint second;
     SpringConfig config;
 
-    void addForque(pga3dphysics::PhysicsBody& firstBody, pga3dphysics::PhysicsBody& secondBody) const noexcept {
+    void addForque(pga3dphysics::PhysicsBody &firstBody, pga3dphysics::PhysicsBody &secondBody) const noexcept {
         const pga3d::Point pos1 = first.getGlobalPos(firstBody);
         const pga3d::Point pos2 = second.getGlobalPos(secondBody);
         const pga3d::Vector dPos = pos2 - pos1;
@@ -133,7 +133,7 @@ public:
         springs.afterStep(bodies);
     }
 
-    [[nodiscard]] constexpr double getKineticEnergy() const  {
+    [[nodiscard]] constexpr double getKineticEnergy() const {
         double sum = 0.0;
         for (const auto &body: bodies) {
             sum += body.kineticEnergy();
@@ -162,11 +162,26 @@ int main() {
             });
         }
 
+        for (int body_no = 0; body_no < system.bodies.size(); ++body_no) {
+            for (int j = 0; j < 3; ++j) {
+                // dummy spring connects body to itself
+                system.springs.springs.push_back(Spring{
+                    .first = {.id = {body_no}, .localPoint = {0.0, 0.0, 0.0}},
+                    .second = {.id = {body_no}, .localPoint = {0.0, 0.0, 1.0}},
+                    .config = SpringConfig{
+                        .k = 2.0, .targetR = 2.0, .noPush = false, .noPull = false,
+                        .velocityFriction = {.linearK = 2.0, .quadraticK = 1.0, .maxForce = 1000.0},
+                        .positionFriction = {.linearK = 2.0, .maxDelta = 0.001, .boundPosition = 0.0},
+                    },
+                });
+            }
+        }
+
         // system.gravity.gravity = pga3d::Vector{0.0, -9.81, 0.0};
 
         const double initialEnergy = system.getKineticEnergy();
 
-        constexpr int stepsCount = 1000;
+        constexpr int stepsCount = 2000;
         auto start = std::chrono::high_resolution_clock::now();
 
         for (int j = 0; j < stepsCount; ++j) {
@@ -176,7 +191,7 @@ int main() {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
-        std::cout <<  duration.count() << " ns for " << stepsCount << " steps, dE = " << system.getKineticEnergy() - initialEnergy << std::endl;
+        std::cout << duration.count() << " ns for " << stepsCount << " steps, dE = " << system.getKineticEnergy() - initialEnergy << ", " << duration.count() / stepsCount << " ns per step" << std::endl;
     }
 
     return 0;

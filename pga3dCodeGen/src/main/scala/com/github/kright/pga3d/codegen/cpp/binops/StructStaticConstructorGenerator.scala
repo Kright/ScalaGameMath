@@ -1,12 +1,11 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.struct.StructCodeGenerator
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class StructStaticConstructorGenerator extends StructCodeGenerator {
+class StructStaticConstructorGenerator extends CppCodeGenerator {
 
-  override def structCode(cls: CppSubclass): String =
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =
     val code = new CppCodeGen()
 
     if (Set(CppSubclasses.quaternion).contains(cls)) {
@@ -27,5 +26,5 @@ class StructStaticConstructorGenerator extends StructCodeGenerator {
       code(s"[[nodiscard]] static constexpr ${cls.name} mid(const ${cls.name}& a, const ${cls.name}& b, const ${cls.name}& c) noexcept { return {.x = (1.0 / 3.0) * (a.x + b.x + c.x), .y = (1.0 / 3.0) * (a.y + b.y + c.y), .z = (1.0 / 3.0) * (a.z + b.z + c.z)}; }")
     }
 
-    code.toString()
+    structBodyPart(code.toString())
 }

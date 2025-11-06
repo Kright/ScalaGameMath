@@ -1,11 +1,11 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
 
-class ToStreamOpGenerator extends BinOpCodeGen {
+class ToStreamOpGenerator extends CppCodeGenerator {
 
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
     code.myHeader(Seq("#include <ostream>"), getClass.getName)
@@ -24,8 +24,6 @@ class ToStreamOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileContent(codeGen.directory.resolve("opsStr.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsStr.h"), code.toString))
   }
-
-  override def structCode(cls: CppSubclass): String = ""
 }

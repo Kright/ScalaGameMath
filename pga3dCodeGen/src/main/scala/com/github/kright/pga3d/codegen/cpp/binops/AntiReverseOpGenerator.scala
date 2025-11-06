@@ -1,10 +1,10 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses, Pga3dCodeGenCpp}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class AntiReverseOpGenerator extends BinOpCodeGen {
-  override def generateBinopCode(codeGen: Pga3dCodeGenCpp): FileContent = {
+class AntiReverseOpGenerator extends CppCodeGenerator {
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
@@ -19,12 +19,16 @@ class AntiReverseOpGenerator extends BinOpCodeGen {
       }
     }
 
-    FileContent(codeGen.directory.resolve("opsAntiReverse.h"), code.toString)
+    Seq(FileContent(codeGen.directory.resolve("opsAntiReverse.h"), code.toString))
   }
 
-  override def structCode(cls: CppSubclass): String = {
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     val result = cls.self.antiReverse
     val target = CppSubclasses.findMatchingClass(result)
-    if (target == CppSubclasses.zeroCls) "" else s"[[nodiscard]] constexpr ${target.name} antiReverse() const noexcept;"
+    val code =
+      if (target == CppSubclasses.zeroCls) ""
+      else s"[[nodiscard]] constexpr ${target.name} antiReverse() const noexcept;"
+
+    structBodyPart(code)
   }
 }

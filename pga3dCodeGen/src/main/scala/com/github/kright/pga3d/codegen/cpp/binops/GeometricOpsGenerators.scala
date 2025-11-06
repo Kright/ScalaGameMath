@@ -1,16 +1,18 @@
 package com.github.kright.pga3d.codegen.cpp.binops
 
 import com.github.kright.ga.MultiVector
+import com.github.kright.pga3d.codegen.cpp.CppCodeGeneratorSum
 import com.github.kright.symbolic.Sym
 
-object GeometricOpsGenerators {
-  def all = Seq(
+
+class GeometricOpsGenerator extends CppCodeGeneratorSum(
+  Seq(
     new GeometricOpGenerator(),
     new AntiGeometricOpGenerator(),
 
     new DotOpGenerator(),
     new AntiDotOpGenerator(),
-    
+
     new WedgeOpGenerator(),
     new AntiWedgeOpGenerator(),
 
@@ -19,7 +21,7 @@ object GeometricOpsGenerators {
 
     new CrossOpGenerator(),
   )
-}
+)
 
 
 class GeometricOpGenerator extends BinaryMethodCodeGen(
