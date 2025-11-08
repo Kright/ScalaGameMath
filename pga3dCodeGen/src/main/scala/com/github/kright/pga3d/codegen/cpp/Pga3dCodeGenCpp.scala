@@ -17,7 +17,7 @@ def runCppCodeGen(): Unit = {
 }
 
 
-class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
+class Pga3dCodeGenCpp(val directory: Path,
                       val namespace: String) {
   assert(Files.exists(directory))
 
