@@ -53,7 +53,7 @@ class ScalaMultivectorSubClass(name: String,
       return name
     }
 
-    val code = ScalaCodeGen()
+    val code = ScalaCodeBuilder()
     code(name + "(")
     code.block {
       for (f <- variableFields) {
@@ -81,7 +81,7 @@ class ScalaMultivectorSubClass(name: String,
   override def generateCode(): String =
     generateCode(unaryOperations, binaryOperations)
 
-  private def generateConstructorCode(code: ScalaCodeGen): Unit = {
+  private def generateConstructorCode(code: ScalaCodeBuilder): Unit = {
     if (isObject) {
       code(s"object ${name}:")
     } else {
@@ -100,7 +100,7 @@ class ScalaMultivectorSubClass(name: String,
 
   private def generateCode(unaryOps: Seq[MultivectorUnaryOp],
                            binaryOps: Seq[MultivectorBinaryOp]): String = {
-    val code = ScalaCodeGen()
+    val code = ScalaCodeBuilder()
 
     generateConstructorCode(code)
 
@@ -176,7 +176,7 @@ class ScalaMultivectorSubClass(name: String,
   }
   
   def makeConstructorOptimized(result: MultiVector[Sym], resultCls: ScalaMultivectorSubClass): String = {
-    val code = ScalaCodeGen()
+    val code = ScalaCodeBuilder()
 
     val simplifications: Seq[(Sym, Sym)] =
       (for ((fx, i) <- variableFields.zipWithIndex;

@@ -1,13 +1,13 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 
 class QuaternionOpsGenerator extends CppCodeGenerator {
 
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     if (CppSubclasses.quaternion == cls) {
       code(s"[[nodiscard]] static inline ${cls.name} rotation(const ${CppSubclasses.vector.name}& from, const ${CppSubclasses.vector.name}& to) noexcept;")
@@ -26,7 +26,7 @@ class QuaternionOpsGenerator extends CppCodeGenerator {
   }
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     code.myHeader(
       Seq(

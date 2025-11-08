@@ -1,7 +1,7 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
 class ProjectionOpsGenerator extends CppCodeGenerator:
   private val pointClasses = Set(
@@ -11,7 +11,7 @@ class ProjectionOpsGenerator extends CppCodeGenerator:
   )
 
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
     if (cls == CppSubclasses.bivector) {
       val line = cls.self
@@ -33,7 +33,7 @@ class ProjectionOpsGenerator extends CppCodeGenerator:
   }
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
     code.myHeader(
       Seq(

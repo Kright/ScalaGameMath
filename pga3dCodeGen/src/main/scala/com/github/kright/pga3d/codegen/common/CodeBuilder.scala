@@ -1,6 +1,6 @@
 package com.github.kright.pga3d.codegen.common
 
-trait CodeGen:
+trait CodeBuilder:
   protected var level: Int = 0
   protected val code = StringBuilder()
   val padding: String

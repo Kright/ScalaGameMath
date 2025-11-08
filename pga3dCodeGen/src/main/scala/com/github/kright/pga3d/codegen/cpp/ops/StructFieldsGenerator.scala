@@ -5,7 +5,7 @@ import com.github.kright.pga3d.codegen.cpp.*
 
 class StructFieldsGenerator extends CppCodeGenerator:
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     cls.variableFields.foreach { field =>
       code(s"double ${field.name} = 0.0;")

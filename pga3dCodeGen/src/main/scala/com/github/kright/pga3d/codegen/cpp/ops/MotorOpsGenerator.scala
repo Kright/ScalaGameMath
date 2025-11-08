@@ -1,7 +1,7 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import TranslatorWithQuaternionGenerator.quaternionWithTranslator
 import TranslatorWithQuaternionGenerator.translatorWithQuaternion
 
@@ -14,7 +14,7 @@ class MotorOpsGenerator extends CppCodeGenerator {
       if (cls == CppSubclasses.bivector) Seq("<utility>")
       else Seq()
 
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
     code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} id() noexcept { return { .s = 1.0 }; };")
     code("")
     code(s"[[nodiscard]] static constexpr ${CppSubclasses.motor.name} addVector(const ${CppSubclasses.vector.name}& v) noexcept;")
@@ -33,7 +33,7 @@ class MotorOpsGenerator extends CppCodeGenerator {
   }
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     code.myHeader(
       Seq(

@@ -1,13 +1,13 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 import scala.math.Numeric.Implicits.infixNumericOps
 
 class NormOpGenerator extends CppCodeGenerator {
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
     code.myHeader(
       Seq(

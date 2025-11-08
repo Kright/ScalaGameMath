@@ -1,16 +1,16 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppSubclass, CppSubclasses}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppSubclass, CppSubclasses}
 import com.github.kright.symbolic.Sym
 
 object QuaternionAndMotorAxes {
-  def makeDeclaration(code: CppCodeGen, cls: CppSubclass): Unit = {
+  def makeDeclaration(code: CppCodeBuilder, cls: CppSubclass): Unit = {
     for (methodName <- Seq("axisX", "axisY", "axisZ")) {
       code(s"[[nodiscard]] constexpr ${CppSubclasses.vector.name} ${methodName}() const noexcept;")
     }
   }
 
-  def makeForQuaternion(code: CppCodeGen): Unit = {
+  def makeForQuaternion(code: CppCodeBuilder): Unit = {
     val self = CppSubclasses.quaternion.self
     val vec = CppSubclasses.vector.self
     val axes = vec.values.keys.toSeq.sortBy(_.bits).reverse.map(blade => vec.filter((b, _) => b == blade))
@@ -30,7 +30,7 @@ object QuaternionAndMotorAxes {
     }
   }
 
-  def makeForMotor(code: CppCodeGen): Unit = {
+  def makeForMotor(code: CppCodeBuilder): Unit = {
     val self = CppSubclasses.quaternion.self
     val vec = CppSubclasses.vector.self
     val axes = vec.values.keys.toSeq.sortBy(_.bits).reverse.map(blade => vec.filter((b, _) => b == blade))

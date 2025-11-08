@@ -4,8 +4,8 @@ import com.github.kright.ga.MultiVector
 import com.github.kright.symbolic.Sym
 
 object GeneratedCode:
-  def apply(f: ScalaCodeGen => Unit): Option[String] = {
-    val codeGen = ScalaCodeGen()
+  def apply(f: ScalaCodeBuilder => Unit): Option[String] = {
+    val codeGen = ScalaCodeBuilder()
     f(codeGen)
     Option(codeGen.toString).filter(_ != "")
   }

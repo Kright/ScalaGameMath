@@ -28,7 +28,7 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
     val includes = getStdIncludes(Seq(text) ++ files.values.map(_.content))
 
     {
-      val code = CppCodeGen()
+      val code = CppCodeBuilder()
       code.myHeader(includes, getClass.getName)
       result.append(code).append("\n")
     }

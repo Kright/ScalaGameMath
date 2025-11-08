@@ -2,11 +2,11 @@ package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.ops.TranslatorWithQuaternionGenerator.{quaternionWithTranslator, translatorWithQuaternion}
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
 class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
     code.myHeader(
       Seq(
@@ -17,7 +17,7 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
       getClass.getName)
 
 
-    val impl = CppCodeGen()
+    val impl = CppCodeBuilder()
 
     code.namespace(codeGen.namespace) {
       for (translatorFirst <- Seq(true, false)) {
@@ -69,7 +69,7 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     if (cls != CppSubclasses.motor) return Seq()
 
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
 
     structBodyPart(code.toString)

@@ -71,7 +71,7 @@ class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
   }
 
   private def generateStructForwardDeclarations(): FileContent = {
-    val codeGen = new CppCodeGen()
+    val codeGen = new CppCodeBuilder()
 
     codeGen.myHeader(Seq(), getClass.getName)
 
@@ -87,7 +87,7 @@ class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
   }
 
   private def generatePga3d(ops: Seq[FileContent]): FileContent = {
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     val includes = Seq("#include \"types.h\"") ++ ops.map { op => s"#include \"${op.path.getFileName}\"" }
     code.myHeader(includes, getClass.getName)
@@ -96,7 +96,7 @@ class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
   }
 
   private def generateStructHeadersAggregation(): FileContent = {
-    val codeGen = new CppCodeGen()
+    val codeGen = new CppCodeBuilder()
 
     val includes =
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated)
@@ -110,7 +110,7 @@ class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
   }
 
   private def generateStructHeader(cls: CppSubclass): String = {
-    val codeGen = new CppCodeGen()
+    val codeGen = new CppCodeBuilder()
 
     val structBodyParts = codeGenerators.flatMap(_.generateStructBody(cls))
 

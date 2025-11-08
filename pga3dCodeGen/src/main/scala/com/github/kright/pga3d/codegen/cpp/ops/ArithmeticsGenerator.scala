@@ -2,12 +2,12 @@ package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.ga.MultiVector
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 import com.github.kright.symbolic.Sym
 
 class ArithmeticsGenerator extends CppCodeGenerator:
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
-    val code = CppCodeGen()
+    val code = CppCodeBuilder()
 
     code.myHeader(
       Seq(
@@ -34,7 +34,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     Seq(FileContent(codeGen.directory.resolve("opsArithmetic.h"), code.toString))
   }
 
-  private def multiplyOrDivideByScalar(code: CppCodeGen): Unit = {
+  private def multiplyOrDivideByScalar(code: CppCodeBuilder): Unit = {
     import com.github.kright.symbolic.Sym
 
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
@@ -54,7 +54,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     }
   }
 
-  private def unaryMinus(code: CppCodeGen): Unit = {
+  private def unaryMinus(code: CppCodeBuilder): Unit = {
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
       val a = cls.makeSymbolic("a")
       val result = -a
@@ -65,7 +65,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     }
   }
 
-  private def plusMinus(code: CppCodeGen): Unit = {
+  private def plusMinus(code: CppCodeBuilder): Unit = {
 
     def makeMethod(left: CppSubclass, right: CppSubclass, operatorName: String, op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]): Unit = {
       val a = left.makeSymbolic("a")
@@ -104,7 +104,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     }
   }
 
-  private def madd(code: CppCodeGen): Unit = {
+  private def madd(code: CppCodeBuilder): Unit = {
     // Generate member method implementations using std::fma only when result type equals the class itself
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
       val selfMv = cls.self
@@ -148,7 +148,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     }
   }
 
-  private def equality(code: CppCodeGen): Unit = {
+  private def equality(code: CppCodeBuilder): Unit = {
     for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
       if (cls.variableFields.nonEmpty) {
         val equalityExpr = cls.variableFields.map(_.name).map(name => s"a.$name == b.$name").mkString(" && ")

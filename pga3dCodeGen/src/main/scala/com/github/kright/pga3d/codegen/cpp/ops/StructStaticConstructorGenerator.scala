@@ -1,12 +1,12 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.{CppCodeBuilder, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
 class StructStaticConstructorGenerator extends CppCodeGenerator {
 
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =
-    val code = new CppCodeGen()
+    val code = new CppCodeBuilder()
 
     if (Set(CppSubclasses.quaternion).contains(cls)) {
       code(s"[[nodiscard]] static constexpr ${cls.name} id() noexcept { return {.s = 1.0}; }")
