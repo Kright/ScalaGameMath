@@ -194,5 +194,10 @@ int main() {
         std::cout << duration.count() << " ns for " << stepsCount << " steps, dE = " << system.getKineticEnergy() - initialEnergy << ", " << duration.count() / stepsCount << " ns per step" << std::endl;
     }
 
+    const pga3d::Motor motor = pga3d::Translator::addVector({1.0, 2.0, 3.0}).geometric(pga3d::Quaternion::rotation(pga3d::Vector{0, 0, 1}, pga3d::Vector{1, 1, 0.0}));
+    const auto linear = pga3dphysics::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint& p){ return motor.sandwich(p); });
+
+    std::cout << linear << std::endl;
+
     return 0;
 }

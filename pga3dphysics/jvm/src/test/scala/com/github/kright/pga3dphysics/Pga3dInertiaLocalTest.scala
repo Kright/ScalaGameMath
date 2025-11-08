@@ -121,7 +121,6 @@ class Pga3dInertiaLocalTest extends AnyFunSuiteLike with ScalaCheckPropertyCheck
     val accNaive = body.inertia.invert(localB.cross(body.inertia(localB)) + localForque)
     val err = (acc - accNaive).norm
     assert(err < 2e-16)
-    assert(err == 0.0) // It could be higher, but test fixes current behavior
   }
 
   test("calculate performance") {

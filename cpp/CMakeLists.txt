@@ -44,4 +44,5 @@ add_executable(cpp
         pga3dphysics/Triangle.h
         pga3dphysics/Sphere.h
         pga3dphysics/Cylinder.h
+        pga3dphysics/LinearOperator.h
 )

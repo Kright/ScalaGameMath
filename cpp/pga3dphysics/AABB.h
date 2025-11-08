@@ -40,7 +40,7 @@ namespace pga3dphysics {
             return point.clamp(min, max);
         }
 
-        [[nodiscard]] constexpr double distanceTo(const Point& point) const noexcept {
+        [[nodiscard]] inline double distanceTo(const Point& point) const noexcept {
             const Point clamped = clamp(point);
             return clamped.distanceTo(point);
         }
@@ -55,14 +55,14 @@ namespace pga3dphysics {
             return contains(aabb.min) && contains(aabb.max);
         }
 
-        [[nodiscard]] AABB expanded(const Vector& eps) const noexcept {
+        [[nodiscard]] constexpr AABB expanded(const Vector& eps) const noexcept {
             return {
                 .min = min - eps,
                 .max = max + eps
             };
         }
 
-        [[nodiscard]] AABB expanded(const double eps) const noexcept {
+        [[nodiscard]] constexpr AABB expanded(const double eps) const noexcept {
             return expanded(Vector{eps, eps, eps});
         }
 

@@ -17,6 +17,7 @@
 #include "InertiaMovedLocal.h"
 #include "InertiaSummable.h"
 
+#include "LinearOperator.h"
 #include "Friction.h"
 #include "BodyState.h"
 #include "PhysicsBody.h"

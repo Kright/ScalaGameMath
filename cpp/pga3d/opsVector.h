@@ -10,7 +10,7 @@
 
 namespace pga3d {
 
-    [[nodiscard]] inline Vector Vector::min(const Vector& other) const noexcept {
+    [[nodiscard]] constexpr Vector Vector::min(const Vector& other) const noexcept {
         return Vector{
             .x = std::min(x, other.x),
             .y = std::min(y, other.y),
@@ -18,7 +18,7 @@ namespace pga3d {
         };
     }
 
-    [[nodiscard]] inline Vector Vector::max(const Vector& other) const noexcept {
+    [[nodiscard]] constexpr Vector Vector::max(const Vector& other) const noexcept {
         return Vector{
             .x = std::max(x, other.x),
             .y = std::max(y, other.y),
@@ -26,7 +26,7 @@ namespace pga3d {
         };
     }
 
-    [[nodiscard]] inline Vector Vector::clamp(const Vector& minV, const Vector& maxV) const noexcept {
+    [[nodiscard]] constexpr Vector Vector::clamp(const Vector& minV, const Vector& maxV) const noexcept {
         return Vector{
             .x = std::clamp(x, minV.x, maxV.x),
             .y = std::clamp(y, minV.y, maxV.y),

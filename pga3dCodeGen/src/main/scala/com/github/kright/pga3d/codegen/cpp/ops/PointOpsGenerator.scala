@@ -10,9 +10,9 @@ class PointOpsGenerator extends CppCodeGenerator {
       structBodyPart(
         s"""[[nodiscard]] inline double distanceTo(const ${CppSubclasses.point.name}& other) const noexcept;
            |
-           |[[nodiscard]] inline ${CppSubclasses.point.name} min(const ${CppSubclasses.point.name}& other) const noexcept;
-           |[[nodiscard]] inline ${CppSubclasses.point.name} max(const ${CppSubclasses.point.name}& other) const noexcept;
-           |[[nodiscard]] inline ${CppSubclasses.point.name} clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept;""".stripMargin
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} min(const ${CppSubclasses.point.name}& other) const noexcept;
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} max(const ${CppSubclasses.point.name}& other) const noexcept;
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept;""".stripMargin
       )
     } else Seq()
   }
@@ -37,7 +37,7 @@ class PointOpsGenerator extends CppCodeGenerator {
            |    return ((*this) - other).norm();
            |}
            |
-           |[[nodiscard]] inline ${CppSubclasses.point.name} ${CppSubclasses.point.name}::min(const ${CppSubclasses.point.name}& other) const noexcept {
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} ${CppSubclasses.point.name}::min(const ${CppSubclasses.point.name}& other) const noexcept {
            |    return ${CppSubclasses.point.name}{
            |        .x = std::min(x, other.x),
            |        .y = std::min(y, other.y),
@@ -45,7 +45,7 @@ class PointOpsGenerator extends CppCodeGenerator {
            |    };
            |}
            |
-           |[[nodiscard]] inline ${CppSubclasses.point.name} ${CppSubclasses.point.name}::max(const ${CppSubclasses.point.name}& other) const noexcept {
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} ${CppSubclasses.point.name}::max(const ${CppSubclasses.point.name}& other) const noexcept {
            |    return ${CppSubclasses.point.name}{
            |        .x = std::max(x, other.x),
            |        .y = std::max(y, other.y),
@@ -53,7 +53,7 @@ class PointOpsGenerator extends CppCodeGenerator {
            |    };
            |}
            |
-           |[[nodiscard]] inline ${CppSubclasses.point.name} ${CppSubclasses.point.name}::clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept {
+           |[[nodiscard]] constexpr ${CppSubclasses.point.name} ${CppSubclasses.point.name}::clamp(const ${CppSubclasses.point.name}& minV, const ${CppSubclasses.point.name}& maxV) const noexcept {
            |    return ${CppSubclasses.point.name}{
            |        .x = std::clamp(x, minV.x, maxV.x),
            |        .y = std::clamp(y, minV.y, maxV.y),
