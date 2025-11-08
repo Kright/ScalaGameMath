@@ -1,4 +1,4 @@
-package com.github.kright.pga3d.codegen.cpp.binops
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
@@ -21,6 +21,11 @@ class ConversionOpGenerator extends CppCodeGenerator:
     if (cls == CppSubclasses.projectivePoint) {
       val point = CppSubclasses.point
       code(s"[[nodiscard]] constexpr ${point.name} to${point.name}() const noexcept;")
+    }
+
+    if (cls == CppSubclasses.projectiveTranslator) {
+      val translator = CppSubclasses.translator
+      code(s"[[nodiscard]] constexpr ${translator.name} to${translator.name}() const noexcept;")
     }
 
     structBodyPart(code.toString)
@@ -48,6 +53,11 @@ class ConversionOpGenerator extends CppCodeGenerator:
         if (cls == CppSubclasses.projectivePoint) {
           val point = CppSubclasses.point
           code(s"constexpr ${point.name} ${cls.name}::to${point.name}() const noexcept { const double inv = 1.0 / w; return { .x = x * inv, .y = y * inv, .z = z * inv }; }")
+        }
+
+        if (cls == CppSubclasses.projectiveTranslator) {
+          val translator = CppSubclasses.translator
+          code(s"constexpr ${translator.name} ${CppSubclasses.projectiveTranslator.name}::to${translator.name}() const noexcept { const double inv = 1.0 / s; return Translator{ .wx = wx * inv, .wy = wy * inv, .wz = wz * inv }; }")
         }
       }
     }

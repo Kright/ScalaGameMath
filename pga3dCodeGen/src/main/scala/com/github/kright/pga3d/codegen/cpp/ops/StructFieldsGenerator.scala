@@ -1,7 +1,7 @@
-package com.github.kright.pga3d.codegen.cpp.struct
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.cpp.Pga3dProvider.pga3
-import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, StructBodyPart}
+import com.github.kright.pga3d.codegen.cpp.*
 
 class StructFieldsGenerator extends CppCodeGenerator:
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] =

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "types.h"
+#include "TranslatorWithQuaternion.h"
 #include "opsQuaternion.h"
 #include "opsTranslator.h"
 #include "opsMotor.h"

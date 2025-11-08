@@ -1,8 +1,7 @@
 package com.github.kright.pga3d.codegen.cpp
 
 import com.github.kright.pga3d.codegen.common.FileContent
-import com.github.kright.pga3d.codegen.cpp.binops.*
-import com.github.kright.pga3d.codegen.cpp.struct.*
+import com.github.kright.pga3d.codegen.cpp.ops.*
 
 import java.nio.file.{Files, Path}
 
@@ -18,7 +17,7 @@ def runCppCodeGen(): Unit = {
 }
 
 
-class Pga3dCodeGenCpp(val directory: Path,
+class Pga3dCodeGenCpp(val directory: Path, // todo allow relative path to it
                       val namespace: String) {
   assert(Files.exists(directory))
 
@@ -31,6 +30,8 @@ class Pga3dCodeGenCpp(val directory: Path,
   private val codeGenerators = Seq(
     new StructFieldsGenerator,
     new StructStaticConstructorGenerator,
+
+    new TranslatorWithQuaternionGenerator,
 
     new QuaternionOpsGenerator,
     new TranslatorOpsGenerator,
@@ -78,6 +79,8 @@ class Pga3dCodeGenCpp(val directory: Path,
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
         codeGen(s"struct ${cls.name};")
       }
+      codeGen(s"struct ${TranslatorWithQuaternionGenerator.quaternionWithTranslator};")
+      codeGen(s"struct ${TranslatorWithQuaternionGenerator.translatorWithQuaternion};")
     }
 
     FileContent(directory.resolve(Headers.typesForward), codeGen.toString)
@@ -99,7 +102,9 @@ class Pga3dCodeGenCpp(val directory: Path,
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated)
         yield s"#include \"${cls.name}.h\""
 
-    codeGen.myHeader(includes, getClass.getName)
+    val additionalIncludes = s"#include \"${TranslatorWithQuaternionGenerator.translatorWithQuaternion}.h\""
+
+    codeGen.myHeader(includes :+ additionalIncludes, getClass.getName)
 
     FileContent(directory.resolve(Headers.types), codeGen.toString)
   }

@@ -1,7 +1,9 @@
-package com.github.kright.pga3d.codegen.cpp.binops
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
+import TranslatorWithQuaternionGenerator.quaternionWithTranslator
+import TranslatorWithQuaternionGenerator.translatorWithQuaternion
 
 class MotorOpsGenerator extends CppCodeGenerator {
   // No declarations yet. Ready to add methods in the future.
@@ -20,8 +22,8 @@ class MotorOpsGenerator extends CppCodeGenerator {
     code(s"[[nodiscard]] inline ${CppSubclasses.bivector.name} log() const noexcept;")
     code(s"[[nodiscard]] inline ${CppSubclasses.motor.name} pow(double p) const noexcept;")
     code("")
-    code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.quaternion.name}, ${CppSubclasses.translator.name}> toQuaternionAndTranslator() const noexcept;")
-    code(s"[[nodiscard]] constexpr std::pair<${CppSubclasses.translator.name}, ${CppSubclasses.quaternion.name}> toTranslatorAndQuaternion() const noexcept;")
+    code(s"[[nodiscard]] constexpr ${quaternionWithTranslator} to${quaternionWithTranslator}() const noexcept;")
+    code(s"[[nodiscard]] constexpr ${translatorWithQuaternion} to${translatorWithQuaternion}() const noexcept;")
     code("")
     code(s"[[nodiscard]] inline ${CppSubclasses.motor.name} renormalized() const noexcept;")
     code("")
@@ -88,19 +90,18 @@ class MotorOpsGenerator extends CppCodeGenerator {
 
       code(
         s"""
-           |[[nodiscard]] constexpr std::pair<${CppSubclasses.quaternion.name}, ${CppSubclasses.translator.name}> ${CppSubclasses.motor.name}::toQuaternionAndTranslator() const noexcept {
-           |    const Quaternion q = toQuaternionUnsafe();
-           |    const Motor t = q.reverse().geometric(*this);
-           |    return { q, t.toTranslatorUnsafe() };
+           |[[nodiscard]] constexpr ${quaternionWithTranslator} ${CppSubclasses.motor.name}::to${quaternionWithTranslator}() const noexcept {
+           |    return to${translatorWithQuaternion}().to${quaternionWithTranslator}();
            |}
            |""".stripMargin)
 
       code(
         s"""
-           |[[nodiscard]] constexpr std::pair<${CppSubclasses.translator.name}, ${CppSubclasses.quaternion.name}> ${CppSubclasses.motor.name}::toTranslatorAndQuaternion() const noexcept {
+           |[[nodiscard]] constexpr ${translatorWithQuaternion} ${CppSubclasses.motor.name}::to${translatorWithQuaternion}() const noexcept {
            |    const Quaternion q = toQuaternionUnsafe();
-           |    const Motor t = geometric(q.reverse());
-           |    return { t.toTranslatorUnsafe(), q };
+           |    const Vector shift = sandwich(PointCenter{}).toPoint().toVectorUnsafe();
+           |    const Translator t = Translator::addVector(shift);
+           |    return { t, q };
            |}
            |""".stripMargin)
 

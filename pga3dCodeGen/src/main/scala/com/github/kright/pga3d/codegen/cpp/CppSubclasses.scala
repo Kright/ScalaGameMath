@@ -31,6 +31,7 @@ object CppSubclasses:
   val quaternion = CppSubclass("Quaternion", motor.variableFields.filter(f => !f.basisBlade.contains(genW)))
   //  val quaternionDual = CppSubclass("QuaternionDual", motor.variableFields.filter(f => f.basisBlade.contains(genW)))
   val translator = CppSubclass("Translator", motor.variableFields.filter(f => f.basisBlade.grade == 2 && f.basisBlade.contains(genW)), Seq(scalar.variableFields.head -> 1.0))
+  val projectiveTranslator = CppSubclass("ProjectiveTranslator", motor.variableFields.filter(f => f.basisBlade.grade == 0 || f.basisBlade.grade == 2 && f.basisBlade.contains(genW)))
 
   val vector = CppSubclass("Vector", projectivePoint.variableFields.filter(f => f.basisBlade.contains(genW)))
   val planeIdeal = CppSubclass("PlaneIdeal", plane.variableFields.filter(f => !f.basisBlade.contains(genW)))
@@ -55,6 +56,7 @@ object CppSubclasses:
 
     quaternion,
     //    quaternionDual,
+    projectiveTranslator,
     translator,
 
     vector,

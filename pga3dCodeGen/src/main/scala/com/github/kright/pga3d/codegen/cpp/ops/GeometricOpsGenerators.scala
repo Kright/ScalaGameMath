@@ -1,4 +1,4 @@
-package com.github.kright.pga3d.codegen.cpp.binops
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.ga.MultiVector
 import com.github.kright.pga3d.codegen.cpp.CppCodeGeneratorSum
@@ -22,6 +22,8 @@ class GeometricOpsGenerator extends CppCodeGeneratorSum(
     new CrossOpGenerator(),
   )
 )
+
+// todo try to map into geometric(a, b) and other functions and look how Clion support it
 
 
 class GeometricOpGenerator extends BinaryMethodCodeGen(

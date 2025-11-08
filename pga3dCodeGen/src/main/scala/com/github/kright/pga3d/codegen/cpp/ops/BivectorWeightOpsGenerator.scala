@@ -1,4 +1,4 @@
-package com.github.kright.pga3d.codegen.cpp.binops
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
@@ -7,7 +7,7 @@ class BivectorWeightOpsGenerator extends CppCodeGenerator {
 
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
     if (cls == CppSubclasses.bivectorWeight) {
-      structBodyPart(s"""[[nodiscard]] inline ${CppSubclasses.translator.name} exp() const noexcept;""")
+      structBodyPart(s"""[[nodiscard]] constexpr ${CppSubclasses.translator.name} exp() const noexcept;""")
     } else Seq()
   }
 
@@ -19,7 +19,7 @@ class BivectorWeightOpsGenerator extends CppCodeGenerator {
     code.namespace(codeGen.namespace) {
       code(
         s"""
-           |[[nodiscard]] inline ${CppSubclasses.translator.name} ${CppSubclasses.bivectorWeight.name}::exp() const noexcept {
+           |[[nodiscard]] constexpr ${CppSubclasses.translator.name} ${CppSubclasses.bivectorWeight.name}::exp() const noexcept {
            |    return ${CppSubclasses.translator.name}{
            |        .wx = wx,
            |        .wy = wy,

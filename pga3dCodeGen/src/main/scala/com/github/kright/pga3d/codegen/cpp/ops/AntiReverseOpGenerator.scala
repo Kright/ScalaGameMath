@@ -1,9 +1,9 @@
-package com.github.kright.pga3d.codegen.cpp.binops
+package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.{CppCodeGen, CppCodeGenerator, CppSubclass, CppSubclasses, Pga3dCodeGenCpp, StructBodyPart}
 
-class WeightOpGenerator extends CppCodeGenerator {
+class AntiReverseOpGenerator extends CppCodeGenerator {
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
     val code = CppCodeGen()
 
@@ -11,21 +11,24 @@ class WeightOpGenerator extends CppCodeGenerator {
 
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
-        val result = cls.self.weight
+        val result = cls.self.antiReverse
         val target = CppSubclasses.findMatchingClass(result)
         if (target != CppSubclasses.zeroCls) {
-          code(s"constexpr ${target.name} ${cls.name}::weight() const noexcept { return ${target.makeBracesInit(result)}; }")
+          code(s"constexpr ${target.name} ${cls.name}::antiReverse() const noexcept { return ${target.makeBracesInit(result)}; }")
         }
       }
     }
 
-    Seq(FileContent(codeGen.directory.resolve("opsWeight.h"), code.toString))
+    Seq(FileContent(codeGen.directory.resolve("opsAntiReverse.h"), code.toString))
   }
 
   override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
-    val result = cls.self.weight
+    val result = cls.self.antiReverse
     val target = CppSubclasses.findMatchingClass(result)
-    if (target == CppSubclasses.zeroCls) Seq()
-    else structBodyPart(s"[[nodiscard]] constexpr ${target.name} weight() const noexcept;")
+    val code =
+      if (target == CppSubclasses.zeroCls) ""
+      else s"[[nodiscard]] constexpr ${target.name} antiReverse() const noexcept;"
+
+    structBodyPart(code)
   }
 }

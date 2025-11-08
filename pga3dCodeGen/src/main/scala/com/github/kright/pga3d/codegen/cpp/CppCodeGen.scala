@@ -2,7 +2,7 @@ package com.github.kright.pga3d.codegen.cpp
 
 import com.github.kright.pga3d.codegen.common.CodeGen
 
-class CppCodeGen extends CodeGen:
+class CppCodeGen extends CodeGen: // todo rename to CodeBuilder
   override val padding: String = " ".repeat(4)
 
   def pragmaOnce(): Unit = {
