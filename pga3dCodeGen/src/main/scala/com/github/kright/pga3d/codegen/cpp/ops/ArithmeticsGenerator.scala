@@ -41,8 +41,8 @@ class ArithmeticsGenerator extends CppCodeGenerator:
       val a = cls.makeSymbolic("a")
       val result = a * Sym("d")
       val resultCls = CppSubclasses.findMatchingClass(result)
-      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(const ${cls.name}& a, double d) noexcept { return ${resultCls.makeBracesInit(result)}; }")
-      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double d, const ${cls.name}& a) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(const ${cls.name}& a, double d) noexcept { return ${resultCls.makeBracesInit(result, multiline = true)}; }")
+      code(s"[[nodiscard]] constexpr ${resultCls.name} operator*(double d, const ${cls.name}& a) noexcept { return a * d; }")
       code(s"[[nodiscard]] constexpr ${resultCls.name} operator/(const ${cls.name}& a, double d) noexcept { return a * (1.0 / d); }")
 
       if (resultCls == cls) {
@@ -73,7 +73,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
       val result = op(a, b)
       val resultCls = CppSubclasses.findMatchingClass(result)
       if (resultCls != CppSubclasses.zeroCls) {
-        code(s"[[nodiscard]] constexpr ${resultCls.name} operator${operatorName}(const ${left.name}& a, const ${right.name}& b) noexcept { return ${resultCls.makeBracesInit(result)}; }")
+        code(s"[[nodiscard]] constexpr ${resultCls.name} operator${operatorName}(const ${left.name}& a, const ${right.name}& b) noexcept { return ${resultCls.makeBracesInit(result, multiline = true)}; }")
       }
       if (resultCls == left) {
         code(s"constexpr ${resultCls.name}& operator${operatorName}=(${left.name}& a, const ${right.name}& b) noexcept { a = a ${operatorName} b; return a; }")
@@ -113,6 +113,9 @@ class ArithmeticsGenerator extends CppCodeGenerator:
       val otherMvSame = cls.makeSymbolic("other")
       val trialSame = selfMv + otherMvSame * Sym("mult")
       val resultClsSame = CppSubclasses.findMatchingClass(trialSame)
+
+      val pad = " " * 4
+
       if (resultClsSame == cls && cls.variableFields.nonEmpty) {
         // Build initialization list with fma for each variable field
         val selfGrouped = selfMv.mapValues(_.groupMultipliers())
@@ -123,7 +126,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
           val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
           val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
           s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
-        }.mkString("{", ", ", "}")
+        }.mkString(s"{\n$pad", s",\n$pad", "\n}")
         code(s"constexpr ${cls.name} ${cls.name}::madd(const ${cls.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
       }
 
@@ -141,7 +144,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
             val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
             val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
             s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
-          }.mkString("{", ", ", "}")
+          }.mkString(s"{\n$pad", s",\n$pad", "\n}")
           code(s"constexpr ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
         }
       }

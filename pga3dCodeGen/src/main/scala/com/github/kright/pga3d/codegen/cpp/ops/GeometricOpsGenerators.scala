@@ -119,7 +119,7 @@ private class BinaryMethodCodeGen(val methodName: String,
               val result = op(left.self, right.makeSymbolic("b"))
               val target = CppSubclasses.findMatchingClass(result)
               if target != CppSubclasses.zeroCls then
-                code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept { return ${target.makeBracesInit(result)}; }")
+                code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept { return ${target.makeBracesInit(result, multiline = true)}; }")
         }
         code("")
       }
