@@ -1566,9 +1566,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.w * (i * yz + s * wx + wy * xy + wz * xz) + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (v.w * (-i * yz - s * wx - wy * xy - wz * xz) + v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.w * (i * xz + wx * xy - s * wy - wz * yz) + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.w * (i * xy + s * wz - wx * xz - wy * yz) + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      z = (2.0 * (v.w * (wx * xz + wy * yz - i * xy - s * wz) + v.x * (xyMyz - sMxz) + v.y * (-sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
@@ -1644,9 +1644,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      x = -(2.0 * (v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      z = (2.0 * (v.x * (xyMyz - sMxz) + v.y * (-sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
   infix def sandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -1661,9 +1661,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (i * yz + s * wx + v.y * (xzMyz - sMxy) + v.z * (-sMxz - xyMyz) + wy * xy + wz * xz) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (v.y * (sMxy - xzMyz) + v.z * (sMxz + xyMyz) - i * yz - s * wx - wy * xy - wz * xz) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (i * xz + v.x * (-sMxy - xzMyz) + v.z * (sMyz - xyMxz) + wx * xy - s * wy - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (i * xy + s * wz + v.x * (sMxz - xyMyz) + v.y * (sMyz + xyMxz) - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      z = (2.0 * (v.x * (xyMyz - sMxz) + v.y * (-sMyz - xyMxz) + wx * xz + wy * yz - i * xy - s * wz) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
       w = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
@@ -1745,9 +1745,9 @@ final case class Pga3dMotor(s: Double = 0.0,
 
   infix def sandwich(v: Pga3dPointCenter.type): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
-      x = (-2.0 * i * yz - 2.0 * s * wx - 2.0 * wy * xy - 2.0 * wz * xz),
+      x = 2.0 * (-i * yz - s * wx - wy * xy - wz * xz),
       y = 2.0 * (i * xz + wx * xy - s * wy - wz * yz),
-      z = (-2.0 * i * xy - 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
+      z = 2.0 * (wx * xz + wy * yz - i * xy - s * wz),
       w = (s * s + xy * xy + xz * xz + yz * yz),
     )
 
@@ -1855,9 +1855,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.w * (wy * xy + wz * xz - i * yz - s * wx) + v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (v.w * (i * yz + s * wx - wy * xy - wz * xz) + v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.w * (s * wy + wx * xy - i * xz - wz * yz) + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = (sMs * v.z + v.z * xyMxy - 2.0 * v.y * xyMxz - v.z * xzMxz - v.z * yzMyz + 2.0 * sMxz * v.x + 2.0 * sMyz * v.y + 2.0 * v.x * xyMyz + 2.0 * i * v.w * xy + 2.0 * s * v.w * wz + 2.0 * v.w * wx * xz + 2.0 * v.w * wy * yz),
+      z = (2.0 * (v.w * (i * xy + s * wz + wx * xz + wy * yz) + v.x * (sMxz + xyMyz) + v.y * (sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
       w = v.w * (sMs + xyMxy + xzMxz + yzMyz),
     )
 
@@ -1933,9 +1933,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      x = -(2.0 * (v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz)) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz)) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz)) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz)) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      z = (2.0 * (v.x * (sMxz + xyMyz) + v.y * (sMyz - xyMxz)) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
     )
 
   infix def reverseSandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -1950,9 +1950,9 @@ final case class Pga3dMotor(s: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * (sMxy + xzMyz) + v.z * (sMxz - xyMyz) + wy * xy + wz * xz - i * yz - s * wx) + v.x * (xyMxy + xzMxz - sMs - yzMyz)),
+      x = (2.0 * (i * yz + s * wx + v.y * (-sMxy - xzMyz) + v.z * (xyMyz - sMxz) - wy * xy - wz * xz) + v.x * (sMs + yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (s * wy + v.x * (sMxy - xzMyz) + v.z * (-sMyz - xyMxz) + wx * xy - i * xz - wz * yz) + v.y * (sMs + xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.x * (-sMxz - xyMyz) + v.y * (xyMxz - sMyz) - i * xy - s * wz - wx * xz - wy * yz) + v.z * (xzMxz + yzMyz - sMs - xyMxy)),
+      z = (2.0 * (i * xy + s * wz + v.x * (sMxz + xyMyz) + v.y * (sMyz - xyMxz) + wx * xz + wy * yz) + v.z * (sMs + xyMxy - xzMxz - yzMyz)),
       w = (sMs + xyMxy + xzMxz + yzMyz),
     )
 
@@ -2034,9 +2034,9 @@ final case class Pga3dMotor(s: Double = 0.0,
 
   infix def reverseSandwich(v: Pga3dPointCenter.type): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
-      x = (-2.0 * wy * xy - 2.0 * wz * xz + 2.0 * i * yz + 2.0 * s * wx),
+      x = 2.0 * (i * yz + s * wx - wy * xy - wz * xz),
       y = 2.0 * (s * wy + wx * xy - i * xz - wz * yz),
-      z = (2.0 * i * xy + 2.0 * s * wz + 2.0 * wx * xz + 2.0 * wy * yz),
+      z = 2.0 * (i * xy + s * wz + wx * xz + wy * yz),
       w = (s * s + xy * xy + xz * xz + yz * yz),
     )
 

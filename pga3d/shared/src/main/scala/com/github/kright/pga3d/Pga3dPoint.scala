@@ -225,9 +225,9 @@ final case class Pga3dPoint(x: Double = 0.0,
   /** fused plane.dot(point).geometric(plane) */
   def projectOntoPlane(plane: Pga3dPlane): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
-      x = -(plane.x * (plane.w + plane.y * y + plane.z * z) + x * (-plane.y * plane.y - plane.z * plane.z)),
+      x = (plane.x * (-plane.w - plane.y * y - plane.z * z) + x * (plane.y * plane.y + plane.z * plane.z)),
       y = (plane.y * (-plane.w - plane.x * x - plane.z * z) + y * (plane.x * plane.x + plane.z * plane.z)),
-      z = -(plane.z * (plane.w + plane.x * x + plane.y * y) + z * (-plane.x * plane.x - plane.y * plane.y)),
+      z = (plane.z * (-plane.w - plane.x * x - plane.y * y) + z * (plane.x * plane.x + plane.y * plane.y)),
       w = (plane.x * plane.x + plane.y * plane.y + plane.z * plane.z),
     )
 
@@ -256,9 +256,9 @@ final case class Pga3dPoint(x: Double = 0.0,
    */
   def projectOntoLine(line: Pga3dBivector): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
-      x = (-line.wy * line.xy - line.wz * line.xz + line.xy * line.yz * z + line.yz * line.yz * x - line.xz * line.yz * y),
+      x = (line.yz * (line.xy * z + line.yz * x - line.xz * y) - line.wy * line.xy - line.wz * line.xz),
       y = (line.wx * line.xy + line.xz * (line.xz * y - line.xy * z - line.yz * x) - line.wz * line.yz),
-      z = (line.wx * line.xz + line.wy * line.yz + line.xy * line.xy * z + line.xy * line.yz * x - line.xy * line.xz * y),
+      z = (line.wx * line.xz + line.wy * line.yz + line.xy * (line.xy * z + line.yz * x - line.xz * y)),
       w = (line.xy * line.xy + line.xz * line.xz + line.yz * line.yz),
     )
 

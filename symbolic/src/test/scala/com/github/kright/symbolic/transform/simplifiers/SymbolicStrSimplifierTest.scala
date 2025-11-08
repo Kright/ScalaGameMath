@@ -1,7 +1,7 @@
 package com.github.kright.symbolic.transform.simplifiers
 
 import com.github.kright.symbolic.SymbolicStr.{*, given}
-import com.github.kright.symbolic.{Symbolic, SymbolicStr}
+import com.github.kright.symbolic.{Sym, Symbolic, SymbolicStr}
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.math.Numeric.Implicits.infixNumericOps
@@ -15,6 +15,9 @@ class SymbolicStrSimplifierTest extends AnyFunSuiteLike:
     val logger = LoggingListener()
     val simplified = simplifier.withListener(logger).transform(expr)
     assert(simplified == expected, s"${logger.log}")
+
+  private def assertSimplified(expr: Sym, expected: Sym): Unit =
+    assertSimplified(expr.symbol, expected.symbol)
 
   test("don't touch primitives") {
     val primitives = Seq(SymbolicStr("x"), SymbolicStr(1.0), SymbolicStr(0.0))
@@ -57,4 +60,18 @@ class SymbolicStrSimplifierTest extends AnyFunSuiteLike:
   test("Constant should be first in product") {
     val x = SymbolicStr("x")
     assertSimplified(x * SymbolicStr(-1.0), SymbolicStr(-1.0) * x)
+  }
+
+  test("--x") {
+    val x = SymbolicStr("x")
+    val mX = -x
+    val mmX = -mX
+    assertSimplified(mmX, x)
+  }
+
+  test("- (-x/w)") {
+    val x = Sym(SymbolicStr("x"))
+    val w = Sym(SymbolicStr("w"))
+
+    assertSimplified(-((-x) / w), x / w)
   }

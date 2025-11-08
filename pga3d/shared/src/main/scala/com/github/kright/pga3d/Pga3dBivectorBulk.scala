@@ -829,9 +829,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
       w = v.w * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -875,9 +875,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def sandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -888,9 +888,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
       w = (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1002,9 +1002,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
       w = v.w * (xyMxy + xzMxz + yzMyz),
     )
 
@@ -1048,9 +1048,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dVector(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
     )
 
   infix def reverseSandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -1061,9 +1061,9 @@ final case class Pga3dBivectorBulk(xy: Double = 0.0,
     val xzMyz = xz * yz
     val yzMyz = yz * yz
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xzMyz - v.z * xyMyz) + v.x * (xyMxy + xzMxz - yzMyz)),
+      x = (2.0 * (v.z * xyMyz - v.y * xzMyz) + v.x * (yzMyz - xyMxy - xzMxz)),
       y = (2.0 * (-v.x * xzMyz - v.z * xyMxz) + v.y * (xzMxz - xyMxy - yzMyz)),
-      z = -(2.0 * (v.y * xyMxz - v.x * xyMyz) + v.z * (xzMxz + yzMyz - xyMxy)),
+      z = (2.0 * (v.x * xyMyz - v.y * xyMxz) + v.z * (xyMxy - xzMxz - yzMyz)),
       w = (xyMxy + xzMxz + yzMyz),
     )
 

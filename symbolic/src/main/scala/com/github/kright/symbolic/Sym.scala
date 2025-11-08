@@ -1,5 +1,6 @@
 package com.github.kright.symbolic
 
+import com.github.kright.symbolic.Symbolic.Func
 import com.github.kright.symbolic.SymbolicStr.{size, symbolicStrNumeric}
 import com.github.kright.symbolic.transform.PartialTransform
 import com.github.kright.symbolic.transform.simplifiers.{GroupMultipliersInSumOfProducts, ProductFlattener, SymbolicStrSimplifier}
@@ -21,6 +22,9 @@ case class Sym(symbol: SymbolicStr):
   def groupMultipliers(): Sym =
     map(Sym.groupMultipliers)
 
+  def /(other: Sym): Sym =
+    Sym(Func("/", Seq(symbol, other.symbol)) )
+
 
 
 object Sym:
@@ -30,8 +34,9 @@ object Sym:
   val zero: Sym = Sym(0.0)
   val one: Sym = Sym(1.0)
 
-  def apply(symbol: SymbolicStr): Sym =
+  def apply(symbol: SymbolicStr): Sym = {
     new Sym(Sym.simplifier.transform(symbol))
+  }
 
   def apply(name: String): Sym =
     Sym(SymbolicStr(name))

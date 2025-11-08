@@ -1,7 +1,7 @@
 package com.github.kright.pga3d.codegen.scala.ops
 
 import com.github.kright.ga.PGA3
-import com.github.kright.pga3d.codegen.scala.{GeneratedCode, ScalaMultivectorSubClass, MultivectorUnaryOp}
+import com.github.kright.pga3d.codegen.scala.{GeneratedCode, MultivectorUnaryOp, ScalaMultivectorSubClass}
 import com.github.kright.symbolic.Sym
 
 object DefConvertTo:
@@ -29,7 +29,7 @@ object DefConvertTo:
           val target = ScalaMultivectorSubClass.point
           val xyzBlade = pga3.representation.basisBladeWithSign("xyz").basisBlade
           val xyz = cls.self("xyz")
-          val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => Sym(s"${s} / ${xyz}"))
+          val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => s / xyz)
           code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
           code.block {
             code(target.makeConstructor(r))

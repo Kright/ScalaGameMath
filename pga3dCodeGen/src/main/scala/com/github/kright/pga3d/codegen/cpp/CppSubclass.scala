@@ -6,7 +6,6 @@ import com.github.kright.pga3d.codegen.common.{MultivectorField, MultivectorSubC
 import com.github.kright.symbolic.Sym
 
 import scala.math.Numeric.Implicits.infixNumericOps
-import scala.util.Try
 import scala.util.chaining.scalaUtilChainingOps
 
 class CppSubclass(name: String,
@@ -28,7 +27,7 @@ class CppSubclass(name: String,
         constantFields.map((f, v) => f.basisBlade -> Sym(v).pipe(e => if (f.sign == Sign.Positive) e else -e))
     )
 
-  def makeBracesInit(v: MultiVector[Sym]): String =
+  def makeBracesInit(v: MultiVector[Sym], multiline: Boolean = false): String =
     val groupedResult = v.mapValues(_.groupMultipliers())
 
     if (this == CppSubclasses.scalar) {
@@ -36,21 +35,22 @@ class CppSubclass(name: String,
       return expr.toString
     }
 
-    this.variableFields.map { f =>
+    val elems = this.variableFields.map { f =>
       val expr: Sym = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
 
-      var exprString: String =
-        if (f.sign == Sign.Positive) {
-          expr.toString
-        } else {
-          // todo fix exception
-          Try((-expr).toString).getOrElse(s"-$expr")
-        }
+      val exprString: String =
+        if (f.sign == Sign.Positive) expr.toString
+        else (-expr).groupMultipliers().toString
 
-      if (exprString.startsWith("--")) {
-        exprString = exprString.drop(2)
-      }
+      require(!exprString.startsWith("--"))
 
       s".${f.name} = ${exprString}"
-    }.mkString("{", ", ", "}")
+    }
+
+    if (multiline) {
+      val pad = " " * 4
+      elems.mkString("{\n" + pad, s",\n$pad", "\n}")
+    } else {
+      elems.mkString("{", ", ", "}")
+    }
 }

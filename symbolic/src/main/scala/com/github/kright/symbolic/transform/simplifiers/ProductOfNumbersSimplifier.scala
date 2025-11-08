@@ -6,13 +6,15 @@ import com.github.kright.symbolic.transform.simplifiers.ProductOfNumbersSimplifi
 import com.github.kright.symbolic.{Symbolic, SymbolicStr}
 
 class ProductOfNumbersSimplifier extends SymbolicStrTransformDepthFirst({
-  case Symbolic.Func("*", elems) => trySimplify(elems)
+  case Symbolic.Func("*", elems) =>
+    if (elems.size == 1) Option(elems.head)
+    else trySimplify(elems)
   case _ => None
 })
 
 object ProductOfNumbersSimplifier:
   private def trySimplify(elems: Seq[SymbolicStr]): Option[SymbolicStr] = {
-    require(elems.size >= 2)
+    require(elems.size >= 2, elems)
 
     val (numbers, others) = elems.partitionMap {
       case Number(v) => Left(v)
@@ -31,7 +33,7 @@ object ProductOfNumbersSimplifier:
     }
 
     if (numbers.size == 1) {
-      if (numbers.head == 1.0) return Option(makeProductOrSimplify(others.toSeq))
+      if (numbers.head == 1.0) return Option(makeProductOrSimplify(others))
       if (!isNumber(elems.head)) return Option(makeProductOrSimplify(Seq(SymbolicStr(numbers.head)) ++ others))
       return None
     }
@@ -42,12 +44,7 @@ object ProductOfNumbersSimplifier:
       if (product != 1.0)
         makeProductOrSimplify(Seq(SymbolicStr(product)) ++ others)
       else {
-        makeProductOrSimplify(others.toSeq)
+        makeProductOrSimplify(others)
       }
     }
   }
-
-  private def makeProductOrSimplify(elems: Seq[SymbolicStr]): SymbolicStr =
-    require(elems.nonEmpty)
-    if (elems.size == 1) return elems.head
-    Func("*", elems)

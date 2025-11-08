@@ -18,7 +18,7 @@ object SymbolicStrSimplifier:
     ).repeat(maxRepeatCount)
 
   def sortArgs(commutativeFuncs: Set[String] = Set("+", "*"),
-               knownFuncs: Set[String] = Set()): ArgsSorter =
+               knownFuncs: Set[String] = Set("/")): ArgsSorter =
     new ArgsSorter(
       SymbolicStr.ordering,
       isCommutative = commutativeFuncs.contains,

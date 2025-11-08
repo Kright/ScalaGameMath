@@ -59,17 +59,11 @@ class ScalaMultivectorSubClass(name: String,
       for (f <- variableFields) {
         val expr: Sym = groupedResult.get(f.basisBlade).getOrElse(Sym.zero)
 
-        var exprString: String =
-          if (f.sign == Sign.Positive) {
-            expr.toString
-          } else {
-            // todo fix exception
-            Try((-expr).toString).getOrElse(s"-$expr")
-          }
+        val exprString: String =
+          if (f.sign == Sign.Positive) expr.toString
+          else (-expr).groupMultipliers().toString
 
-        if (exprString.startsWith("--")) {
-          exprString = exprString.drop(2)
-        }
+        require(!exprString.startsWith("--"), s"expString = '${exprString}',\n-expr = ${(-expr).symbol},\nexpr = ${expr.symbol}")
 
         code(s"${f.name} = ${exprString},")
       }
@@ -194,7 +188,8 @@ class ScalaMultivectorSubClass(name: String,
       }
     }
 
-    code(resultCls.makeConstructor(rr.mapValues(_.map(Sym.argsSorter))))
+    val constructorCode = resultCls.makeConstructor(rr)
+    code(constructorCode)
     code.toString
   }
 

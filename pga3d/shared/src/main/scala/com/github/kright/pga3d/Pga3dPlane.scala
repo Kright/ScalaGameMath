@@ -975,9 +975,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xMy + v.z * xMz + v.w * w * x) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz - v.w * w * x) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz - v.w * w * y) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz + v.w * w * z) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz - v.w * w * z) + v.z * (xMx + yMy - zMz)),
       w = v.w * (xMx + yMy + zMz),
     )
 
@@ -1028,9 +1028,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dVector(
-      x = -(2.0 * (v.y * xMy + v.z * xMz) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz) + v.z * (xMx + yMy - zMz)),
     )
 
   infix def sandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -1041,9 +1041,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xMy + v.z * xMz + w * x) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz - w * x) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz - w * y) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz + w * z) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz - w * z) + v.z * (xMx + yMy - zMz)),
       w = (xMx + yMy + zMz),
     )
 
@@ -1168,9 +1168,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xMy + v.z * xMz + v.w * w * x) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz - v.w * w * x) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz - v.w * w * y) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz + v.w * w * z) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz - v.w * w * z) + v.z * (xMx + yMy - zMz)),
       w = v.w * (xMx + yMy + zMz),
     )
 
@@ -1221,9 +1221,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dVector(
-      x = -(2.0 * (v.y * xMy + v.z * xMz) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz) + v.z * (xMx + yMy - zMz)),
     )
 
   infix def reverseSandwich(v: Pga3dPoint): Pga3dProjectivePoint =
@@ -1234,9 +1234,9 @@ final case class Pga3dPlane(x: Double = 0.0,
     val yMz = y * z
     val zMz = z * z
     Pga3dProjectivePoint(
-      x = -(2.0 * (v.y * xMy + v.z * xMz + w * x) + v.x * (xMx - yMy - zMz)),
+      x = (2.0 * (-v.y * xMy - v.z * xMz - w * x) + v.x * (yMy + zMz - xMx)),
       y = (2.0 * (-v.x * xMy - v.z * yMz - w * y) + v.y * (xMx + zMz - yMy)),
-      z = -(2.0 * (v.x * xMz + v.y * yMz + w * z) + v.z * (zMz - xMx - yMy)),
+      z = (2.0 * (-v.x * xMz - v.y * yMz - w * z) + v.z * (xMx + yMy - zMz)),
       w = (xMx + yMy + zMz),
     )
 
