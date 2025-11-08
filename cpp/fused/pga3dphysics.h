@@ -64,7 +64,7 @@ namespace pga3d {
         double xyz = 0.0;
         double i = 0.0;
 
-        static constexpr int componentsCount = 16;
+        static constexpr size_t componentsCount = 16;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, w, x, y, z, wx, wy, wz, xy, xz, yz, wxy, wxz, wyz, xyz, i }; }
         [[nodiscard]] static constexpr Multivector from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .w = values[1], .x = values[2], .y = values[3], .z = values[4], .wx = values[5], .wy = values[6], .wz = values[7], .xy = values[8], .xz = values[9], .yz = values[10], .wxy = values[11], .wxz = values[12], .wyz = values[13], .xyz = values[14], .i = values[15] }; }
@@ -179,7 +179,7 @@ namespace pga3d {
         double yz = 0.0;
         double i = 0.0;
 
-        static constexpr int componentsCount = 8;
+        static constexpr size_t componentsCount = 8;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, wx, wy, wz, xy, xz, yz, i }; }
         [[nodiscard]] static constexpr Motor from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .wx = values[1], .wy = values[2], .wz = values[3], .xy = values[4], .xz = values[5], .yz = values[6], .i = values[7] }; }
@@ -419,7 +419,7 @@ namespace pga3d {
         double z = 0.0;
         double w = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { x, y, z, w }; }
         [[nodiscard]] static constexpr Plane from(const std::array<double, componentsCount>& values) noexcept { return { .x = values[0], .y = values[1], .z = values[2], .w = values[3] }; }
@@ -627,7 +627,7 @@ namespace pga3d {
         double xz = 0.0;
         double yz = 0.0;
 
-        static constexpr int componentsCount = 6;
+        static constexpr size_t componentsCount = 6;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { wx, wy, wz, xy, xz, yz }; }
         [[nodiscard]] static constexpr Bivector from(const std::array<double, componentsCount>& values) noexcept { return { .wx = values[0], .wy = values[1], .wz = values[2], .xy = values[3], .xz = values[4], .yz = values[5] }; }
@@ -850,7 +850,7 @@ namespace pga3d {
         double z = 0.0;
         double w = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr double wyz() const noexcept { return -x; }
         [[nodiscard]] constexpr double wxz() const noexcept { return y; }
@@ -1077,7 +1077,7 @@ namespace pga3d {
         double xz = 0.0;
         double yz = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, xy, xz, yz }; }
         [[nodiscard]] static constexpr Quaternion from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .xy = values[1], .xz = values[2], .yz = values[3] }; }
@@ -1295,7 +1295,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, wx, wy, wz }; }
         [[nodiscard]] static constexpr ProjectiveTranslator from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .wx = values[1], .wy = values[2], .wz = values[3] }; }
@@ -1505,7 +1505,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr double s() const noexcept { return 1.0; }
 
@@ -1720,7 +1720,7 @@ namespace pga3d {
         double y = 0.0;
         double z = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr double wyz() const noexcept { return -x; }
         [[nodiscard]] constexpr double wxz() const noexcept { return y; }
@@ -1891,7 +1891,7 @@ namespace pga3d {
         double y = 0.0;
         double z = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr double w() const noexcept { return 1.0; }
 
@@ -2126,7 +2126,7 @@ namespace pga3d {
         double y = 0.0;
         double z = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { x, y, z }; }
         [[nodiscard]] static constexpr PlaneIdeal from(const std::array<double, componentsCount>& values) noexcept { return { .x = values[0], .y = values[1], .z = values[2] }; }
@@ -2315,7 +2315,7 @@ namespace pga3d {
         double xz = 0.0;
         double yz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { xy, xz, yz }; }
         [[nodiscard]] static constexpr BivectorBulk from(const std::array<double, componentsCount>& values) noexcept { return { .xy = values[0], .xz = values[1], .yz = values[2] }; }
@@ -2504,7 +2504,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { wx, wy, wz }; }
         [[nodiscard]] static constexpr BivectorWeight from(const std::array<double, componentsCount>& values) noexcept { return { .wx = values[0], .wy = values[1], .wz = values[2] }; }
@@ -2656,7 +2656,7 @@ namespace pga3d {
 
         double i = 0.0;
 
-        static constexpr int componentsCount = 1;
+        static constexpr size_t componentsCount = 1;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { i }; }
         [[nodiscard]] static constexpr PseudoScalar from(const std::array<double, componentsCount>& values) noexcept { return { .i = values[0] }; }
@@ -2803,7 +2803,7 @@ namespace pga3d {
     struct PointCenter {
         // generated by com.github.kright.pga3d.codegen.cpp.ops.StructFieldsGenerator
 
-        static constexpr int componentsCount = 0;
+        static constexpr size_t componentsCount = 0;
 
         [[nodiscard]] constexpr double x() const noexcept { return 0.0; }
         [[nodiscard]] constexpr double y() const noexcept { return 0.0; }
@@ -16747,18 +16747,18 @@ namespace pga3dphysics {
     }
 }
 
-// LinearOp.h
+// LinearOperator.h
 
 namespace pga3dphysics {
     template<typename T>
-    concept SupportsFromSpan = requires(T obj)
+    concept PgaElem = requires(T obj)
     {
         { T::componentsCount } -> std::convertible_to<std::size_t>;
         { obj.toArray() } -> std::same_as<std::array<double, T::componentsCount>>;
         { T::from(std::array<double, T::componentsCount>{}) } -> std::same_as<T>;
     };
 
-    template<SupportsFromSpan T>
+    template<PgaElem T>
     struct LinearOperator {
         static constexpr size_t size = T::componentsCount;
         static constexpr size_t squaredSize = size * size;

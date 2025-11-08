@@ -19,7 +19,7 @@ namespace pga3d {
         double xz = 0.0;
         double yz = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, xy, xz, yz }; }
         [[nodiscard]] static constexpr Quaternion from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .xy = values[1], .xz = values[2], .yz = values[3] }; }

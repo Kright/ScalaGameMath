@@ -18,7 +18,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr double s() const noexcept { return 1.0; }
 

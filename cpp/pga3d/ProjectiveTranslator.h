@@ -19,7 +19,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, wx, wy, wz }; }
         [[nodiscard]] static constexpr ProjectiveTranslator from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .wx = values[1], .wy = values[2], .wz = values[3] }; }

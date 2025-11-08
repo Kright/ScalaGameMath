@@ -12,7 +12,7 @@ class StructFieldsGenerator extends CppCodeGenerator:
     }
 
     code("")
-    code(s"static constexpr int componentsCount = ${cls.variableFields.size};")
+    code(s"static constexpr size_t componentsCount = ${cls.variableFields.size};")
 
     if (cls.constantFields.nonEmpty) {
       code("")

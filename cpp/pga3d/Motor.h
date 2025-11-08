@@ -23,7 +23,7 @@ namespace pga3d {
         double yz = 0.0;
         double i = 0.0;
 
-        static constexpr int componentsCount = 8;
+        static constexpr size_t componentsCount = 8;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, wx, wy, wz, xy, xz, yz, i }; }
         [[nodiscard]] static constexpr Motor from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .wx = values[1], .wy = values[2], .wz = values[3], .xy = values[4], .xz = values[5], .yz = values[6], .i = values[7] }; }

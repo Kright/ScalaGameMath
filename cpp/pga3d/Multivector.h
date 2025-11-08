@@ -31,7 +31,7 @@ namespace pga3d {
         double xyz = 0.0;
         double i = 0.0;
 
-        static constexpr int componentsCount = 16;
+        static constexpr size_t componentsCount = 16;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { s, w, x, y, z, wx, wy, wz, xy, xz, yz, wxy, wxz, wyz, xyz, i }; }
         [[nodiscard]] static constexpr Multivector from(const std::array<double, componentsCount>& values) noexcept { return { .s = values[0], .w = values[1], .x = values[2], .y = values[3], .z = values[4], .wx = values[5], .wy = values[6], .wz = values[7], .xy = values[8], .xz = values[9], .yz = values[10], .wxy = values[11], .wxz = values[12], .wyz = values[13], .xyz = values[14], .i = values[15] }; }

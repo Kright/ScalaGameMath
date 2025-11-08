@@ -18,7 +18,7 @@ namespace pga3d {
         double y = 0.0;
         double z = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { x, y, z }; }
         [[nodiscard]] static constexpr PlaneIdeal from(const std::array<double, componentsCount>& values) noexcept { return { .x = values[0], .y = values[1], .z = values[2] }; }

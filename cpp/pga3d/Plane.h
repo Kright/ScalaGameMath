@@ -19,7 +19,7 @@ namespace pga3d {
         double z = 0.0;
         double w = 0.0;
 
-        static constexpr int componentsCount = 4;
+        static constexpr size_t componentsCount = 4;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { x, y, z, w }; }
         [[nodiscard]] static constexpr Plane from(const std::array<double, componentsCount>& values) noexcept { return { .x = values[0], .y = values[1], .z = values[2], .w = values[3] }; }

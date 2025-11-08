@@ -18,7 +18,7 @@ namespace pga3d {
         double xz = 0.0;
         double yz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { xy, xz, yz }; }
         [[nodiscard]] static constexpr BivectorBulk from(const std::array<double, componentsCount>& values) noexcept { return { .xy = values[0], .xz = values[1], .yz = values[2] }; }

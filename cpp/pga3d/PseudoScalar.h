@@ -16,7 +16,7 @@ namespace pga3d {
 
         double i = 0.0;
 
-        static constexpr int componentsCount = 1;
+        static constexpr size_t componentsCount = 1;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { i }; }
         [[nodiscard]] static constexpr PseudoScalar from(const std::array<double, componentsCount>& values) noexcept { return { .i = values[0] }; }

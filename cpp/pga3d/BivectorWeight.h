@@ -18,7 +18,7 @@ namespace pga3d {
         double wy = 0.0;
         double wz = 0.0;
 
-        static constexpr int componentsCount = 3;
+        static constexpr size_t componentsCount = 3;
 
         [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { wx, wy, wz }; }
         [[nodiscard]] static constexpr BivectorWeight from(const std::array<double, componentsCount>& values) noexcept { return { .wx = values[0], .wy = values[1], .wz = values[2] }; }
