@@ -31,7 +31,7 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
             else Seq(CppSubclasses.quaternion, CppSubclasses.translator)
 
           for (field <- fieldClasses) {
-            code(s"${field.name} ${field.name.toLowerCase};")
+            code(s"${field.name} ${field.name.toLowerCase}{};")
           }
 
           code("")

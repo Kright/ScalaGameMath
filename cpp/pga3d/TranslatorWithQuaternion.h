@@ -12,8 +12,8 @@
 namespace pga3d {
 
     struct TranslatorWithQuaternion {
-        Translator translator;
-        Quaternion quaternion;
+        Translator translator{};
+        Quaternion quaternion{};
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return translator.geometric(quaternion); }
 
@@ -25,8 +25,8 @@ namespace pga3d {
     };
 
     struct QuaternionWithTranslator {
-        Quaternion quaternion;
-        Translator translator;
+        Quaternion quaternion{};
+        Translator translator{};
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return quaternion.geometric(translator); }
 
