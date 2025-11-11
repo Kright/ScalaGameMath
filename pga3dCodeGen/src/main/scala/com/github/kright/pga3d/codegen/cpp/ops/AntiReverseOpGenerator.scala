@@ -14,7 +14,7 @@ class AntiReverseOpGenerator extends CppCodeGenerator {
         val result = cls.self.antiReverse
         val target = CppSubclasses.findMatchingClass(result)
         if (target != CppSubclasses.zeroCls) {
-          code(s"constexpr ${target.name} ${cls.name}::antiReverse() const noexcept { return ${target.makeBracesInit(result)}; }")
+          code(s"constexpr ${target.name} ${cls.name}::antiReversed() const noexcept { return ${target.makeBracesInit(result)}; }")
         }
       }
     }
@@ -27,7 +27,7 @@ class AntiReverseOpGenerator extends CppCodeGenerator {
     val target = CppSubclasses.findMatchingClass(result)
     val code =
       if (target == CppSubclasses.zeroCls) ""
-      else s"[[nodiscard]] constexpr ${target.name} antiReverse() const noexcept;"
+      else s"[[nodiscard]] constexpr ${target.name} antiReversed() const noexcept;"
 
     structBodyPart(code)
   }

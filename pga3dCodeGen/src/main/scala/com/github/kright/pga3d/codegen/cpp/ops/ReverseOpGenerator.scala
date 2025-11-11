@@ -14,7 +14,7 @@ class ReverseOpGenerator extends CppCodeGenerator {
         val result = cls.self.reverse
         val target = CppSubclasses.findMatchingClass(result)
         if (target != CppSubclasses.zeroCls) {
-          code(s"constexpr ${target.name} ${cls.name}::reverse() const noexcept { return ${target.makeBracesInit(result)}; }")
+          code(s"constexpr ${target.name} ${cls.name}::reversed() const noexcept { return ${target.makeBracesInit(result)}; }")
         }
       }
     }
@@ -26,6 +26,6 @@ class ReverseOpGenerator extends CppCodeGenerator {
     val result = cls.self.reverse
     val target = CppSubclasses.findMatchingClass(result)
     if (target == CppSubclasses.zeroCls) Seq() 
-    else structBodyPart(s"[[nodiscard]] constexpr ${target.name} reverse() const noexcept;")
+    else structBodyPart(s"[[nodiscard]] constexpr ${target.name} reversed() const noexcept;")
   }
 }

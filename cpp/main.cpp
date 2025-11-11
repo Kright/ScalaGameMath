@@ -152,12 +152,12 @@ int main() {
 
             system.bodies.push_back(pga3dphysics::PhysicsBody{
                 .inertia = pga3dphysics::InertiaMovedLocal{
-                    .localToGlobal = motor.reverse(),
+                    .localToGlobal = motor.reversed(),
                     .localInertia = pga3dphysics::InertiaLocal(1.0, 3.0, 2.0, 1.0),
                 },
                 .state = pga3dphysics::BodyState{
                     .motor = motor,
-                    .localB = motor.reverse().sandwich(pga3d::Bivector{0, 0, 0, 1.0, 1.0, -1.0}),
+                    .localB = motor.reversed().sandwich(pga3d::Bivector{0, 0, 0, 1.0, 1.0, -1.0}),
                 },
             });
         }

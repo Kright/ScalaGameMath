@@ -27,7 +27,7 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr Bivector localForque() const noexcept {
-            return state.motor.reverse().sandwich(globalForque());
+            return state.motor.reversed().sandwich(globalForque());
         }
 
         constexpr void resetForqueAccum() noexcept {

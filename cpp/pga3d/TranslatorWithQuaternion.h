@@ -17,7 +17,7 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return translator.geometric(quaternion); }
 
-        [[nodiscard]] constexpr QuaternionWithTranslator reverse() const noexcept;
+        [[nodiscard]] constexpr QuaternionWithTranslator reversed() const noexcept;
 
         [[nodiscard]] constexpr QuaternionWithTranslator toQuaternionWithTranslator() const noexcept;
 
@@ -30,15 +30,15 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return quaternion.geometric(translator); }
 
-        [[nodiscard]] constexpr TranslatorWithQuaternion reverse() const noexcept;
+        [[nodiscard]] constexpr TranslatorWithQuaternion reversed() const noexcept;
 
         [[nodiscard]] constexpr TranslatorWithQuaternion toTranslatorWithQuaternion() const noexcept;
 
         [[nodiscard]] static constexpr QuaternionWithTranslator id() noexcept { return { .quaternion = Quaternion::id(), .translator = Translator::id() }; }
     };
 
-    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::reverse() const noexcept { return { .quaternion = quaternion.reverse(), .translator = translator.reverse() }; }
-    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::toQuaternionWithTranslator() const noexcept { return { .quaternion = quaternion, .translator = quaternion.reverse().sandwich(translator).toTranslator() }; };
-    [[nodiscard]] constexpr TranslatorWithQuaternion QuaternionWithTranslator::reverse() const noexcept { return { .translator = translator.reverse(), .quaternion = quaternion.reverse() }; }
+    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::reversed() const noexcept { return { .quaternion = quaternion.reversed(), .translator = translator.reversed() }; }
+    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::toQuaternionWithTranslator() const noexcept { return { .quaternion = quaternion, .translator = quaternion.reversed().sandwich(translator).toTranslator() }; };
+    [[nodiscard]] constexpr TranslatorWithQuaternion QuaternionWithTranslator::reversed() const noexcept { return { .translator = translator.reversed(), .quaternion = quaternion.reversed() }; }
     [[nodiscard]] constexpr TranslatorWithQuaternion QuaternionWithTranslator::toTranslatorWithQuaternion() const noexcept { return { .translator = quaternion.sandwich(translator).toTranslator(), .quaternion = quaternion }; };
 }

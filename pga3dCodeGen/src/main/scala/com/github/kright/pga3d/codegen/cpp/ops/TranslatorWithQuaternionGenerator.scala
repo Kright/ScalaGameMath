@@ -38,15 +38,15 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
           code(s"[[nodiscard]] constexpr ${CppSubclasses.motor.name} to${CppSubclasses.motor.name}() const noexcept { return ${fieldClasses.head.name.toLowerCase}.geometric(${fieldClasses.last.name.toLowerCase}); }")
 
           code("")
-          code(s"[[nodiscard]] constexpr ${if (translatorFirst) quaternionWithTranslator else translatorWithQuaternion} reverse() const noexcept;")
-          impl(s"[[nodiscard]] constexpr ${otherName} ${structName}::reverse() const noexcept { return { ${
-            fieldClasses.reverse.map(f => s".${f.name.toLowerCase()} = ${f.name.toLowerCase()}.reverse()").mkString(", ")
+          code(s"[[nodiscard]] constexpr ${if (translatorFirst) quaternionWithTranslator else translatorWithQuaternion} reversed() const noexcept;")
+          impl(s"[[nodiscard]] constexpr ${otherName} ${structName}::reversed() const noexcept { return { ${
+            fieldClasses.reverse.map(f => s".${f.name.toLowerCase()} = ${f.name.toLowerCase()}.reversed()").mkString(", ")
           } }; }")
 
           code("")
           code(s"[[nodiscard]] constexpr $otherName to${otherName}() const noexcept;")
           impl(s"[[nodiscard]] constexpr ${otherName} ${structName}::to${otherName}() const noexcept { return ${
-            if (translatorFirst) s"{ .quaternion = quaternion, .translator = quaternion.reverse().sandwich(translator).toTranslator() }"
+            if (translatorFirst) s"{ .quaternion = quaternion, .translator = quaternion.reversed().sandwich(translator).toTranslator() }"
             else s"{ .translator = quaternion.sandwich(translator).toTranslator(), .quaternion = quaternion }"
           }; };")
 
