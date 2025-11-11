@@ -1,10 +1,13 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.ga.MultiVector
+import com.github.kright.math.Sign
+import com.github.kright.math.Sign.Positive
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.*
 import com.github.kright.symbolic.Sym
 
+import scala.+:
 
 
 class GeometricOpsGenerator extends CppCodeGeneratorSum(
@@ -19,6 +22,7 @@ class GeometricOpsGenerator extends CppCodeGeneratorSum(
     new AntiWedgeOpGenerator(),
 
     new SandwichOpGenerator(),
+    new SandwichAsMatrix(),
     new ReverseSandwichOpGenerator(),
 
     new CrossOpGenerator(),
@@ -85,7 +89,6 @@ class CrossOpGenerator extends BinaryMethodCodeGen(
 )
 
 
-
 /**
  * Generalized binary-method code generator for PGA3D C++ bindings.
  * Reuses the same emission pattern for methods like geometric and dot.
@@ -97,8 +100,8 @@ class CrossOpGenerator extends BinaryMethodCodeGen(
  *  - Skip emission when result resolves to Zero class
  */
 private class BinaryMethodCodeGen(val methodName: String,
-                          val fileName: String,
-                          val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]) extends CppCodeGenerator:
+                                  val fileName: String,
+                                  val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]) extends CppCodeGenerator:
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] =
     val code = CppCodeBuilder()
@@ -143,3 +146,92 @@ private class BinaryMethodCodeGen(val methodName: String,
     val result = decls.filter(_.nonEmpty).mkString("\n")
 
     structBodyPart(result)
+
+
+class SandwichAsMatrix extends CppCodeGenerator {
+
+  private def motorClasses: Seq[CppSubclass] =
+    Seq(CppSubclasses.motor, CppSubclasses.quaternion)
+
+  private def elemClasses: Seq[CppSubclass] =
+    Seq(CppSubclasses.projectivePoint, CppSubclasses.vector, CppSubclasses.bivector, CppSubclasses.plane)
+
+  private def generateCode(anyMotor: CppSubclass, element: CppSubclass): DeclarationWithImplementation = {
+    val decl = CppCodeBuilder()
+    val impl = CppCodeBuilder()
+
+    val result = anyMotor.self.sandwich(element.self)
+    val resultType = CppSubclasses.findMatchingClass(result)
+    require(resultType == element)
+
+    val size = element.variableFields.size
+    val matrixSize = size * size
+
+    import Pga3dProvider.pga3
+
+    val probes = element.variableFields.map { f =>
+      MultiVector[Sym](
+        Seq(
+          (f.basisBlade, if (f.sign == Positive) Sym(1) else Sym(-1))
+        )
+      )
+    }
+
+    val mappedProbes = probes.map { p => anyMotor.self.sandwich(p) }
+
+    val arrayElements = element.variableFields.flatMap { f =>
+      mappedProbes.map { p =>
+        p.get(f.basisBladeWithSign).getOrElse(Sym(0.0))
+      }
+    }
+
+    decl(s"[[nodiscard]] constexpr std::array<double, $matrixSize> sandwichAsMatrixFor${element.name}() const noexcept;")
+    impl(
+      s"""constexpr std::array<double, $matrixSize> ${anyMotor.name}::sandwichAsMatrixFor${element.name}() const noexcept {
+         |    return {
+         |        ${arrayElements.grouped(size).map(_.mkString(", ")).mkString(",\n" + " " * 8)}
+         |    };
+         |}
+         |""".stripMargin)
+
+    DeclarationWithImplementation(decl.toString, impl.toString)
+  }
+
+  override def generateStructBody(cls: CppSubclass): Seq[StructBodyPart] = {
+    if (!Set(CppSubclasses.motor, CppSubclasses.quaternion).contains(cls)) return Seq()
+
+    val code = CppCodeBuilder()
+
+    for (elem <- elemClasses) {
+      code(generateCode(cls, elem).declaration)
+    }
+
+    structBodyPart(code.toString, includes = Seq("<array>"))
+  }
+
+  override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] = {
+    val code = CppCodeBuilder()
+
+    code.myHeader(
+      Seq(
+        s"\"${CppSubclasses.motor.name}.h\"",
+        s"\"${CppSubclasses.quaternion.name}.h\"",
+      ),
+      this.getClass.getName
+    )
+
+    code.namespace(codeGen.namespace) {
+      val impls = motorClasses.flatMap { motor =>
+        elemClasses.map { elem =>
+          generateCode(motor, elem).implementation
+        }
+      }
+
+      code(impls.mkString("\n\n"))
+    }
+
+    Seq(FileContent(codeGen.directory.resolve("opsSandwichAsMatrix.h"), code.toString))
+  }
+}
+
+private class DeclarationWithImplementation(val declaration: String, val implementation: String)

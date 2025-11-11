@@ -30,6 +30,7 @@
 #include "opsWedge.h"
 #include "opsAntiWedge.h"
 #include "opsSandwich.h"
+#include "opsSandwichAsMatrix.h"
 #include "opsReverseSandwich.h"
 #include "opsCross.h"
 

@@ -198,6 +198,7 @@ int main() {
     const auto linear = pga3dphysics::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint& p){ return motor.sandwich(p); });
 
     std::cout << linear << std::endl;
+    std::cout << pga3dphysics::linearOperatorForSandwichForProjectivePoint(motor) << std::endl;
 
     return 0;
 }

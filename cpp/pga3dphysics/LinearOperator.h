@@ -75,4 +75,11 @@ namespace pga3dphysics {
         }
     };
 
+    constexpr  LinearOperator<ProjectivePoint> linearOperatorForSandwichForProjectivePoint(const Motor& motor) {
+        return LinearOperator<ProjectivePoint>{ motor.sandwichAsMatrixForProjectivePoint() };
+    }
+
+    constexpr  LinearOperator<ProjectivePoint> linearOperatorForSandwichForProjectivePoint(const Quaternion& q) {
+        return LinearOperator<ProjectivePoint>{ q.sandwichAsMatrixForProjectivePoint() };
+    }
 }
