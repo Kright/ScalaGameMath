@@ -157,7 +157,7 @@ int main() {
                 },
                 .state = pga3dphysics::BodyState{
                     .motor = motor,
-                    .localB = motor.reverseSandwich(pga3d::Bivector{0, 0, 0, 1.0, 1.0, -1.0}),
+                    .localB = motor.reverse().sandwich(pga3d::Bivector{0, 0, 0, 1.0, 1.0, -1.0}),
                 },
             });
         }

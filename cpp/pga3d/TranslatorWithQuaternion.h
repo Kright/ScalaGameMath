@@ -38,7 +38,7 @@ namespace pga3d {
     };
 
     [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::reverse() const noexcept { return { .quaternion = quaternion.reverse(), .translator = translator.reverse() }; }
-    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::toQuaternionWithTranslator() const noexcept { return { .quaternion = quaternion, .translator = quaternion.reverseSandwich(translator).toTranslator() }; };
+    [[nodiscard]] constexpr QuaternionWithTranslator TranslatorWithQuaternion::toQuaternionWithTranslator() const noexcept { return { .quaternion = quaternion, .translator = quaternion.reverse().sandwich(translator).toTranslator() }; };
     [[nodiscard]] constexpr TranslatorWithQuaternion QuaternionWithTranslator::reverse() const noexcept { return { .translator = translator.reverse(), .quaternion = quaternion.reverse() }; }
     [[nodiscard]] constexpr TranslatorWithQuaternion QuaternionWithTranslator::toTranslatorWithQuaternion() const noexcept { return { .translator = quaternion.sandwich(translator).toTranslator(), .quaternion = quaternion }; };
 }

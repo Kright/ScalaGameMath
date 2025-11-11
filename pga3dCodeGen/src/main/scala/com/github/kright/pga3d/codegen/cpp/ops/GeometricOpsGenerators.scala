@@ -1,14 +1,10 @@
 package com.github.kright.pga3d.codegen.cpp.ops
 
 import com.github.kright.ga.MultiVector
-import com.github.kright.math.Sign
 import com.github.kright.math.Sign.Positive
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.*
 import com.github.kright.symbolic.Sym
-
-import scala.+:
-
 
 class GeometricOpsGenerator extends CppCodeGeneratorSum(
   Seq(
@@ -23,7 +19,6 @@ class GeometricOpsGenerator extends CppCodeGeneratorSum(
 
     new SandwichOpGenerator(),
     new SandwichAsMatrix(),
-    new ReverseSandwichOpGenerator(),
 
     new CrossOpGenerator(),
   )
@@ -73,12 +68,6 @@ class SandwichOpGenerator extends BinaryMethodCodeGen(
   methodName = "sandwich",
   fileName = "opsSandwich.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.sandwich(b)
-)
-
-class ReverseSandwichOpGenerator extends BinaryMethodCodeGen(
-  methodName = "reverseSandwich",
-  fileName = "opsReverseSandwich.h",
-  op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.reverse.sandwich(b)
 )
 
 

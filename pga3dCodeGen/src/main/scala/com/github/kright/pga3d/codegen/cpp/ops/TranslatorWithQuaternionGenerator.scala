@@ -46,7 +46,7 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
           code("")
           code(s"[[nodiscard]] constexpr $otherName to${otherName}() const noexcept;")
           impl(s"[[nodiscard]] constexpr ${otherName} ${structName}::to${otherName}() const noexcept { return ${
-            if (translatorFirst) s"{ .quaternion = quaternion, .translator = quaternion.reverseSandwich(translator).toTranslator() }"
+            if (translatorFirst) s"{ .quaternion = quaternion, .translator = quaternion.reverse().sandwich(translator).toTranslator() }"
             else s"{ .translator = quaternion.sandwich(translator).toTranslator(), .quaternion = quaternion }"
           }; };")
 

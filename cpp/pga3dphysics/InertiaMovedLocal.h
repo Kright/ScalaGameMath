@@ -4,7 +4,6 @@
 #pragma once
 
 #include "pga3d/Motor.h"
-#include "pga3d/opsReverseSandwich.h"
 #include "pga3d/opsSandwich.h"
 
 #include "InertiaLocal.h"
@@ -29,21 +28,21 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr Bivector operator ()(const Bivector& globalB) const noexcept {
-            const Bivector localB = localToGlobal.reverseSandwich(globalB);
+            const Bivector localB = localToGlobal.reverse().sandwich(globalB);
             const Bivector localI = localInertia(localB);
             return localToGlobal.sandwich(localI);
         }
 
         [[nodiscard]] constexpr Bivector invert(const Bivector& globalI) const noexcept {
-            const Bivector localI = localToGlobal.reverseSandwich(globalI);
+            const Bivector localI = localToGlobal.reverse().sandwich(globalI);
             const Bivector localB = localInertia.invert(localI);
             return localToGlobal.sandwich(localB);
         }
 
         [[nodiscard]] constexpr Bivector getLocalAcceleration(const Bivector &globalVelocity,
                                                               const Bivector &globalForque) const noexcept {
-            const Bivector localB = localToGlobal.reverseSandwich(globalVelocity);
-            const Bivector localF = localToGlobal.reverseSandwich(globalForque);
+            const Bivector localB = localToGlobal.reverse().sandwich(globalVelocity);
+            const Bivector localF = localToGlobal.reverse().sandwich(globalForque);
             return localInertia.getAcceleration(localB, localF);
         }
 
@@ -54,7 +53,7 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr double getKineticEnergy(const Bivector &globalVelocity) const noexcept {
-            const Bivector localB = localToGlobal.reverseSandwich(globalVelocity);
+            const Bivector localB = localToGlobal.reverse().sandwich(globalVelocity);
             return localInertia.getKineticEnergy(localB);
         }
 
