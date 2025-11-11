@@ -53,4 +53,11 @@ namespace pga3d {
     inline std::ostream &operator<<(std::ostream &os, const PointCenter &v) {
         return os << "PointCenter{}";
     }
+    inline std::ostream &operator<<(std::ostream &os, const QuaternionWithTranslator &v) {
+       return os << "QuaternionWithTranslator{" << v.quaternion << ", " << v.translator << "}";
+    }
+    inline std::ostream &operator<<(std::ostream &os, const TranslatorWithQuaternion &v) {
+        return os << "TranslatorWithQuaternion{" << v.translator << ", " << v.quaternion << "}";
+    }
+
 }

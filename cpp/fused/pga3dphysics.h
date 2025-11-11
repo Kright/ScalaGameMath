@@ -6321,6 +6321,13 @@ namespace pga3d {
     inline std::ostream &operator<<(std::ostream &os, const PointCenter &v) {
         return os << "PointCenter{}";
     }
+    inline std::ostream &operator<<(std::ostream &os, const QuaternionWithTranslator &v) {
+       return os << "QuaternionWithTranslator{" << v.quaternion << ", " << v.translator << "}";
+    }
+    inline std::ostream &operator<<(std::ostream &os, const TranslatorWithQuaternion &v) {
+        return os << "TranslatorWithQuaternion{" << v.translator << ", " << v.quaternion << "}";
+    }
+
 }
 
 // opsDot.h
@@ -15377,21 +15384,21 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr Bivector operator ()(const Bivector& globalB) const noexcept {
-            const Bivector localB = localToGlobal.reverse().sandwich(globalB);
+            const Bivector localB = localToGlobal.reversed().sandwich(globalB);
             const Bivector localI = localInertia(localB);
             return localToGlobal.sandwich(localI);
         }
 
         [[nodiscard]] constexpr Bivector invert(const Bivector& globalI) const noexcept {
-            const Bivector localI = localToGlobal.reverse().sandwich(globalI);
+            const Bivector localI = localToGlobal.reversed().sandwich(globalI);
             const Bivector localB = localInertia.invert(localI);
             return localToGlobal.sandwich(localB);
         }
 
         [[nodiscard]] constexpr Bivector getLocalAcceleration(const Bivector &globalVelocity,
                                                               const Bivector &globalForque) const noexcept {
-            const Bivector localB = localToGlobal.reverse().sandwich(globalVelocity);
-            const Bivector localF = localToGlobal.reverse().sandwich(globalForque);
+            const Bivector localB = localToGlobal.reversed().sandwich(globalVelocity);
+            const Bivector localF = localToGlobal.reversed().sandwich(globalForque);
             return localInertia.getAcceleration(localB, localF);
         }
 
@@ -15402,7 +15409,7 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr double getKineticEnergy(const Bivector &globalVelocity) const noexcept {
-            const Bivector localB = localToGlobal.reverse().sandwich(globalVelocity);
+            const Bivector localB = localToGlobal.reversed().sandwich(globalVelocity);
             return localInertia.getKineticEnergy(localB);
         }
 
@@ -15889,7 +15896,7 @@ namespace pga3dphysics {
         }
 
         [[nodiscard]] constexpr Bivector localForque() const noexcept {
-            return state.motor.reverse().sandwich(globalForque());
+            return state.motor.reversed().sandwich(globalForque());
         }
 
         constexpr void resetForqueAccum() noexcept {

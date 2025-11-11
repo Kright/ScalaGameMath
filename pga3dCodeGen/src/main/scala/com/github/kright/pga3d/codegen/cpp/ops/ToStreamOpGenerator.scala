@@ -9,7 +9,7 @@ class ToStreamOpGenerator extends CppCodeGenerator {
     val code = CppCodeBuilder()
 
     code.myHeader(Seq("#include <ostream>"), getClass.getName)
-    
+
     code.namespace(codeGen.namespace) {
       for (cls <- CppSubclasses.all if cls.shouldBeGenerated) {
         code(s"inline std::ostream &operator<<(std::ostream &os, const ${cls.name} &v) {")
@@ -22,6 +22,21 @@ class ToStreamOpGenerator extends CppCodeGenerator {
         }
         code.apply("}")
       }
+
+      import TranslatorWithQuaternionGenerator.quaternionWithTranslator as qt
+      import TranslatorWithQuaternionGenerator.translatorWithQuaternion as tq
+      val q = CppSubclasses.quaternion.name.toLowerCase
+      val t = CppSubclasses.translator.name.toLowerCase
+
+      code(
+        s"""inline std::ostream &operator<<(std::ostream &os, const ${qt} &v) {
+           |   return os << "${qt}{" << v.${q} << ", " << v.${t} << "}";
+           |}
+           |inline std::ostream &operator<<(std::ostream &os, const ${tq} &v) {
+           |    return os << "${tq}{" << v.${t} << ", " << v.${q} << "}";
+           |}
+           |""".stripMargin)
+      code(s"""""")
     }
 
     Seq(FileContent(codeGen.directory.resolve("opsStr.h"), code.toString))
