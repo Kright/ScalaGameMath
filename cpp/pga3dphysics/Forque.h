@@ -13,12 +13,7 @@
 #include "pga3d/opsAntiWedge.h"
 
 
-namespace pga3dphysics {
-    using pga3d::Vector;
-    using pga3d::Point;
-    using pga3d::Bivector;
-    using pga3d::BivectorWeight;
-
+namespace pga3d {
     struct Forque {
         [[nodiscard]] static constexpr Bivector force(const Point& point, const Vector& force) noexcept{
             return point.antiWedge(force);

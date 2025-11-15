@@ -8,16 +8,10 @@
 
 #include "InertiaLocal.h"
 
-namespace pga3dphysics {
-    using pga3d::Motor;
-    using pga3d::Translator;
-    using pga3d::Quaternion;
-    using pga3d::Bivector;
-    using pga3d::Point;
-
+namespace pga3d {
     struct InertiaMovedLocal {
-        Motor localToGlobal;
-        InertiaLocal localInertia;
+        Motor localToGlobal = {};
+        InertiaLocal localInertia = {};
 
         [[nodiscard]] constexpr double mass() const noexcept {
             return localInertia.mass;

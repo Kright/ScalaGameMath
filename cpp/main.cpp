@@ -5,7 +5,7 @@
 #include "pga3d/pga3d.h"
 #include "pga3dphysics/pga3dphysics.h"
 
-using pga3dphysics::PhysicsSolverRK4;
+using pga3d::PhysicsSolverRK4;
 
 
 template<class T>
@@ -15,14 +15,14 @@ struct Id {
 
 
 struct BodyPoint {
-    Id<pga3dphysics::PhysicsBody> id{};
+    Id<pga3d::PhysicsBody> id{};
     pga3d::Point localPoint;
 
-    [[nodiscard]] constexpr pga3d::Point getGlobalPos(const pga3dphysics::PhysicsBody& body) const noexcept {
+    [[nodiscard]] constexpr pga3d::Point getGlobalPos(const pga3d::PhysicsBody& body) const noexcept {
         return body.localPosToGlobal(localPoint);
     }
 
-    [[nodiscard]] constexpr pga3d::Vector getGlobalPosVelocity(const pga3dphysics::PhysicsBody& body) const noexcept {
+    [[nodiscard]] constexpr pga3d::Vector getGlobalPosVelocity(const pga3d::PhysicsBody& body) const noexcept {
         return body.getGlobalVelocityForLocalPos(localPoint);
     }
 };
@@ -33,8 +33,8 @@ struct SpringConfig {
     double targetR = 0.0;
     bool noPush = false;
     bool noPull = false;
-    pga3dphysics::VelocityFriction velocityFriction{};
-    pga3dphysics::PositionFriction positionFriction{};
+    pga3d::VelocityFriction velocityFriction{};
+    pga3d::PositionFriction positionFriction{};
 };
 
 struct Spring {
@@ -42,7 +42,7 @@ struct Spring {
     BodyPoint second;
     SpringConfig config;
 
-    void addForque(pga3dphysics::PhysicsBody &firstBody, pga3dphysics::PhysicsBody &secondBody) const noexcept {
+    void addForque(pga3d::PhysicsBody &firstBody, pga3d::PhysicsBody &secondBody) const noexcept {
         const pga3d::Point pos1 = first.getGlobalPos(firstBody);
         const pga3d::Point pos2 = second.getGlobalPos(secondBody);
         const pga3d::Vector dPos = pos2 - pos1;
@@ -71,7 +71,7 @@ struct Spring {
         firstBody.addGlobalForquePaired(forque, secondBody);
     }
 
-    void afterStep(const pga3dphysics::PhysicsBody& firstBody, const pga3dphysics::PhysicsBody& secondBody) noexcept {
+    void afterStep(const pga3d::PhysicsBody& firstBody, const pga3d::PhysicsBody& secondBody) noexcept {
         const pga3d::Point pos1 = first.getGlobalPos(firstBody);
         const pga3d::Point pos2 = second.getGlobalPos(secondBody);
         const pga3d::Vector dPos = pos2 - pos1;
@@ -85,10 +85,10 @@ struct Spring {
 struct GravitySystem {
     pga3d::Vector gravity{};
 
-    void addForques(std::vector<pga3dphysics::PhysicsBody>& bodies) const noexcept {
+    void addForques(std::vector<pga3d::PhysicsBody>& bodies) const noexcept {
         if (gravity != pga3d::Vector{}) {
             for (auto &body: bodies) {
-                body.addGlobalForque(pga3dphysics::Forque::force(body.globalCenter(), body.inertia.mass() * gravity));
+                body.addGlobalForque(pga3d::Forque::force(body.globalCenter(), body.inertia.mass() * gravity));
             }
         }
     }
@@ -98,13 +98,13 @@ struct GravitySystem {
 struct SpringSystem {
     std::vector<Spring> springs;
 
-    void addForques(std::vector<pga3dphysics::PhysicsBody>& bodies) const noexcept {
+    void addForques(std::vector<pga3d::PhysicsBody>& bodies) const noexcept {
         for (const Spring &spring: springs) {
             spring.addForque(bodies[spring.first.id.value], bodies[spring.second.id.value]);
         }
     }
 
-    void afterStep(const std::vector<pga3dphysics::PhysicsBody>& bodies) {
+    void afterStep(const std::vector<pga3d::PhysicsBody>& bodies) {
         for (Spring &spring: springs) {
             spring.afterStep(bodies[spring.first.id.value], bodies[spring.second.id.value]);
         }
@@ -116,7 +116,7 @@ class PhysicsSystem {
 public:
     double dt = 0.01;
     double time = 0.0;
-    std::vector<pga3dphysics::PhysicsBody> bodies;
+    std::vector<pga3d::PhysicsBody> bodies;
     PhysicsSolverRK4 solver;
 
     GravitySystem gravity;
@@ -150,12 +150,12 @@ int main() {
         for (double shift: {0.0, 1e-2, 1e-1, 1.0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6}) {
             const pga3d::Motor motor = pga3d::Motor::addVector({shift, shift, shift});
 
-            system.bodies.push_back(pga3dphysics::PhysicsBody{
-                .inertia = pga3dphysics::InertiaMovedLocal{
+            system.bodies.push_back(pga3d::PhysicsBody{
+                .inertia = pga3d::InertiaMovedLocal{
                     .localToGlobal = motor.reversed(),
-                    .localInertia = pga3dphysics::InertiaLocal(1.0, 3.0, 2.0, 1.0),
+                    .localInertia = pga3d::InertiaLocal(1.0, 3.0, 2.0, 1.0),
                 },
-                .state = pga3dphysics::BodyState{
+                .state = pga3d::BodyState{
                     .motor = motor,
                     .localB = motor.reversed().sandwich(pga3d::Bivector{0, 0, 0, 1.0, 1.0, -1.0}),
                 },
@@ -195,10 +195,10 @@ int main() {
     }
 
     const pga3d::Motor motor = pga3d::Translator::addVector({1.0, 2.0, 3.0}).geometric(pga3d::Quaternion::rotation(pga3d::Vector{0, 0, 1}, pga3d::Vector{1, 1, 0.0}));
-    const auto linear = pga3dphysics::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint& p){ return motor.sandwich(p); });
+    const auto linear = pga3d::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint& p){ return motor.sandwich(p); });
 
     std::cout << linear << std::endl;
-    std::cout << pga3dphysics::linearOperatorForSandwichForProjectivePoint(motor) << std::endl;
+    std::cout << pga3d::linearOperatorForSandwichForProjectivePoint(motor) << std::endl;
 
     return 0;
 }

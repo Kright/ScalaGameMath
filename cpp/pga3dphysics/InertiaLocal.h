@@ -5,9 +5,7 @@
 
 #include "pga3d/Bivector.h"
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct InertiaLocal {
         double mass = 0.0;
         double mryz = 0.0;

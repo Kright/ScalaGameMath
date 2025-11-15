@@ -13,13 +13,10 @@
 #include "BodyState.h"
 
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-    using pga3d::Point;
-
+namespace pga3d {
     struct PhysicsBody {
-        InertiaMovedLocal inertia;
-        BodyState state;
+        InertiaMovedLocal inertia = {};
+        BodyState state = {};
         Bivector globalForqueAccumulator = {};
 
         [[nodiscard]] constexpr Bivector globalForque() const noexcept {

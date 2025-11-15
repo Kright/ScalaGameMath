@@ -5,9 +5,7 @@
 
 #include "pga3d/Bivector.h"
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-
+namespace pga3d {
     /**
      * Fully symmetrical tensor of inertia (for example, for cube or sphere).
      * It has no precession, and computations are simpler and faster

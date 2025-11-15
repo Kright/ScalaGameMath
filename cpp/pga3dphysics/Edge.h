@@ -9,11 +9,7 @@
 #include "pga3d/opsArithmetic.h"
 #include "pga3d/opsAntiWedge.h"
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct Edge {
         Point a = {};
         Point b = {};

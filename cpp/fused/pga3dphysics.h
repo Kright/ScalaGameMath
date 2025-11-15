@@ -14946,11 +14946,7 @@ namespace pga3d {
 
 // Edge.h
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct Edge {
         Point a = {};
         Point b = {};
@@ -14992,12 +14988,7 @@ namespace pga3dphysics {
 
 // Triangle.h
 
-namespace pga3dphysics {
-
-    using pga3d::Point;
-    using pga3d::Vector;
-    using pga3d::Plane;
-
+namespace pga3d {
     struct Triangle {
         Point a = {};
         Point b = {};
@@ -15027,15 +15018,11 @@ namespace pga3dphysics {
 
 // Cylinder.h
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct Cylinder {
         Point a = {};
         Point b = {};
-        double r = {0.0};
+        double r = 0.0;
 
         [[nodiscard]] constexpr Point center() const noexcept {
             return Point::mid(a, b);
@@ -15053,9 +15040,7 @@ namespace pga3dphysics {
 
 // Sphere.h
 
-namespace pga3dphysics {
-    using pga3d::Point;
-
+namespace pga3d {
     struct Sphere {
         Point center = {};
         double radius = 0.0;
@@ -15064,10 +15049,7 @@ namespace pga3dphysics {
 
 // AABB.h
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-
+namespace pga3d {
     struct AABB {
         Point min = {};
         Point max = {};
@@ -15158,12 +15140,7 @@ namespace pga3dphysics {
 
 // Forque.h
 
-namespace pga3dphysics {
-    using pga3d::Vector;
-    using pga3d::Point;
-    using pga3d::Bivector;
-    using pga3d::BivectorWeight;
-
+namespace pga3d {
     struct Forque {
         [[nodiscard]] static constexpr Bivector force(const Point& point, const Vector& force) noexcept{
             return point.antiWedge(force);
@@ -15213,13 +15190,7 @@ namespace pga3dphysics {
 
 // Velocity.h
 
-namespace pga3dphysics {
-    using pga3d::Vector;
-    using pga3d::Point;
-    using pga3d::Bivector;
-    using pga3d::BivectorWeight;
-    using pga3d::BivectorBulk;
-
+namespace pga3d {
     class Velocity {
         [[nodiscard]] static constexpr BivectorWeight linear(const Vector& v) noexcept {
             return {.wx = v.x, .wy = v.y, .wz = v.z};
@@ -15249,9 +15220,7 @@ namespace pga3dphysics {
 
 // InertiaLocal.h
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct InertiaLocal {
         double mass = 0.0;
         double mryz = 0.0;
@@ -15302,9 +15271,7 @@ namespace pga3dphysics {
 
 // InertiaLocalSphere.h
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-
+namespace pga3d {
     /**
      * Fully symmetrical tensor of inertia (for example, for cube or sphere).
      * It has no precession, and computations are simpler and faster
@@ -15364,16 +15331,10 @@ namespace pga3dphysics {
 
 // InertiaMovedLocal.h
 
-namespace pga3dphysics {
-    using pga3d::Motor;
-    using pga3d::Translator;
-    using pga3d::Quaternion;
-    using pga3d::Bivector;
-    using pga3d::Point;
-
+namespace pga3d {
     struct InertiaMovedLocal {
-        Motor localToGlobal;
-        InertiaLocal localInertia;
+        Motor localToGlobal = {};
+        InertiaLocal localInertia = {};
 
         [[nodiscard]] constexpr double mass() const noexcept {
             return localInertia.mass;
@@ -15438,13 +15399,7 @@ namespace pga3dphysics {
 
 // InertiaSummable.h
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::ProjectivePoint;
-    using pga3d::Motor;
-    using pga3d::Translator;
-    using pga3d::Quaternion;
-
+namespace pga3d {
     struct InertiaSummable {
         double ww = 0.0;
         double wx = 0.0;
@@ -15648,7 +15603,7 @@ namespace pga3dphysics {
 
 // LinearOperator.h
 
-namespace pga3dphysics {
+namespace pga3d {
     template<typename T>
     concept PgaElem = requires(T obj)
     {
@@ -15727,7 +15682,7 @@ namespace pga3dphysics {
 
 // Friction.h
 
-namespace pga3dphysics {
+namespace pga3d {
     struct VelocityFriction {
         double linearK = 0.0;
         double quadraticK = 0.0;
@@ -15802,13 +15757,10 @@ namespace pga3dphysics {
 
 // BodyState.h
 
-namespace pga3dphysics {
-    using pga3d::Motor;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct BodyState {
-        Motor motor;
-        Bivector localB;
+        Motor motor = {};
+        Bivector localB = {};
 
         static constexpr BodyState id() noexcept {
             return {
@@ -15882,13 +15834,10 @@ namespace pga3dphysics {
 
 // PhysicsBody.h
 
-namespace pga3dphysics {
-    using pga3d::Bivector;
-    using pga3d::Point;
-
+namespace pga3d {
     struct PhysicsBody {
-        InertiaMovedLocal inertia;
-        BodyState state;
+        InertiaMovedLocal inertia = {};
+        BodyState state = {};
         Bivector globalForqueAccumulator = {};
 
         [[nodiscard]] constexpr Bivector globalForque() const noexcept {
@@ -15944,7 +15893,7 @@ namespace pga3dphysics {
 
 // PhysicsSolverRK4.h
 
-namespace pga3dphysics {
+namespace pga3d {
      class PhysicsSolverRK4 {
      private:
           std::vector<BodyState> initialStates;

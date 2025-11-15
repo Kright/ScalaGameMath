@@ -8,7 +8,7 @@
 #include "pga3d/Vector.h"
 #include "Forque.h"
 
-namespace pga3dphysics {
+namespace pga3d {
     struct VelocityFriction {
         double linearK = 0.0;
         double quadraticK = 0.0;

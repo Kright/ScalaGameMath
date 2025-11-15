@@ -7,13 +7,10 @@
 #include "pga3d/Bivector.h"
 #include "pga3d/opsArithmetic.h"
 
-namespace pga3dphysics {
-    using pga3d::Motor;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct BodyState {
-        Motor motor;
-        Bivector localB;
+        Motor motor = {};
+        Bivector localB = {};
 
         static constexpr BodyState id() noexcept {
             return {

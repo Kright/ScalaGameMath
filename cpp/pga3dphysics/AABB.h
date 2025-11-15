@@ -6,10 +6,7 @@
 #include "pga3d/Vector.h"
 #include "pga3d/opsArithmetic.h"
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-
+namespace pga3d {
     struct AABB {
         Point min = {};
         Point max = {};

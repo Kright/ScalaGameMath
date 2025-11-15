@@ -7,7 +7,7 @@
 #include <concepts>
 
 
-namespace pga3dphysics {
+namespace pga3d {
     template<typename T>
     concept PgaElem = requires(T obj)
     {

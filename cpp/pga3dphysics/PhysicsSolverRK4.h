@@ -8,7 +8,7 @@
 #include "PhysicsBody.h"
 #include "BodyState.h"
 
-namespace pga3dphysics {
+namespace pga3d {
      class PhysicsSolverRK4 {
      private:
           std::vector<BodyState> initialStates;

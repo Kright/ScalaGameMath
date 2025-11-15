@@ -9,15 +9,11 @@
 #include "pga3d/opsArithmetic.h"
 #include "pga3d/opsAntiWedge.h"
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::Vector;
-    using pga3d::Bivector;
-
+namespace pga3d {
     struct Cylinder {
         Point a = {};
         Point b = {};
-        double r = {0.0};
+        double r = 0.0;
 
         [[nodiscard]] constexpr Point center() const noexcept {
             return Point::mid(a, b);

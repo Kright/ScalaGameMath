@@ -13,13 +13,7 @@
 #include "InertiaLocal.h"
 #include "InertiaMovedLocal.h"
 
-namespace pga3dphysics {
-    using pga3d::Point;
-    using pga3d::ProjectivePoint;
-    using pga3d::Motor;
-    using pga3d::Translator;
-    using pga3d::Quaternion;
-
+namespace pga3d {
     struct InertiaSummable {
         double ww = 0.0;
         double wx = 0.0;

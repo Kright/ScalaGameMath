@@ -10,13 +10,7 @@
 #include "pga3d/BivectorBulk.h"
 #include "pga3d/opsArithmetic.h"
 
-namespace pga3dphysics {
-    using pga3d::Vector;
-    using pga3d::Point;
-    using pga3d::Bivector;
-    using pga3d::BivectorWeight;
-    using pga3d::BivectorBulk;
-
+namespace pga3d {
     class Velocity {
         [[nodiscard]] static constexpr BivectorWeight linear(const Vector& v) noexcept {
             return {.wx = v.x, .wy = v.y, .wz = v.z};

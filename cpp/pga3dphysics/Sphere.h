@@ -4,9 +4,7 @@
 #pragma once
 #include "pga3d/Point.h"
 
-namespace pga3dphysics {
-    using pga3d::Point;
-
+namespace pga3d {
     struct Sphere {
         Point center = {};
         double radius = 0.0;
