@@ -37,7 +37,10 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
 
     {
       val missedFiles = files.keySet -- includedFiles
-      require(missedFiles.isEmpty, missedFiles.mkString(", "))
+      require(missedFiles.isEmpty,
+        s"""
+           |missedFiles = ${missedFiles.toSeq.sorted.mkString(", ")}
+           |existingFiles = ${files.keys.toSeq.sorted.mkString(", ")}""".stripMargin)
     }
 
     removeRepeatingEmptyLines(result.toString())
@@ -97,21 +100,37 @@ private class CustomAmalgamate(val files: Map[String, FileContent]) {
 }
 
 object CustomAmalgamate:
-  def fuse(): Unit = {
-    val initial =
-      """
-        |#include "pga3d.h"
-        |#include "pga3dphysics.h"""".stripMargin
-    val amalgamate = new CustomAmalgamate(getFiles())
-    val code = amalgamate.fuse(initial)
-    FileContent(Path.of("cpp/fused/pga3dphysics.h"), code).writeWithLogging()
+  private val pga3d = Path.of("cpp/pga3d")
+  private val pga3dphysics = Path.of("cpp/pga3dphysics")
+
+  def fuse(dirs: Seq[Path], includes: String, output: Path): Unit = {
+    val amalgamate = new CustomAmalgamate(getFiles(dirs))
+    val code = amalgamate.fuse(includes)
+    FileContent(output, code).writeWithLogging()
   }
 
-  private def getFiles(): Map[String, FileContent] = {
-    val dirs = Seq(
-      Path.of("cpp/pga3d"),
-      Path.of("cpp/pga3dphysics"),
+  def fuseMath(): Unit = {
+    fuse(
+      Seq(pga3d),
+      """
+        |#include "pga3d.h"
+        |""".stripMargin,
+      Path.of("cpp/fused/pga3d.h")
     )
+  }
+
+  def fusePhysicsWithMath(): Unit = {
+    fuse(
+      Seq(pga3d, pga3dphysics),
+      """
+        |#include "pga3d.h"
+        |#include "pga3dphysics.h"
+        |""".stripMargin,
+      Path.of("cpp/fused/pga3dphysics.h")
+    )
+  }
+
+  private def getFiles(dirs: Seq[Path]): Map[String, FileContent] = {
     val files = dirs.flatMap(dir => Files.list(dir).iterator().asScala)
 
     require(files.map(_.getFileName.toString).toSet.size == files.size)

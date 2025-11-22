@@ -27,6 +27,7 @@ namespace pga3d {
         .i = (2.0 * (b.s * (i * s + wxy * z + wy * xz + wyz * x - w * xyz - wx * yz - wxz * y - wz * xy) + b.w * (x * yz + xy * z - s * xyz - xz * y) + b.x * (i * x + s * wyz + wxz * xy + wz * y - w * yz - wx * xyz - wxy * xz - wy * z) + b.y * (i * y + w * xz + wx * z + wyz * xy - s * wxz - wxy * yz - wy * xyz - wz * x) + b.z * (i * z + s * wxy + wy * x + wyz * xz - w * xy - wx * y - wxz * yz - wz * xyz)) + b.i * (s * s + xy * xy + xz * xz + yz * yz - x * x - xyz * xyz - y * y - z * z))
     }; }
 
+
     constexpr Motor Motor::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
         .wx = (2.0 * (s * (-b.xy * wy - b.xz * wz - b.yz * i) + xy * (b.wy * s + b.wz * yz + b.xy * wx + b.xz * i - b.yz * wz) + xz * (b.wz * s + b.xz * wx + b.yz * wy - b.wy * yz - b.xy * i) + yz * (b.xy * wz + b.yz * wx - b.xz * wy)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
@@ -37,12 +38,14 @@ namespace pga3d {
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz)),
         .i = (b.i * (s * s + xy * xy + xz * xz + yz * yz) + 2.0 * b.s * (i * s + wy * xz - wx * yz - wz * xy))
     }; }
+
     constexpr Plane Motor::sandwich(const Plane& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = (2.0 * (b.x * (i * yz + s * wx - wy * xy - wz * xz) + b.y * (s * wy + wx * xy - i * xz - wz * yz) + b.z * (i * xy + s * wz + wx * xz + wy * yz)) + b.w * (s * s + xy * xy + xz * xz + yz * yz))
     }; }
+
     constexpr Bivector Motor::sandwich(const Bivector& b) const noexcept { return {
         .wx = (2.0 * (s * (-b.xy * wy - b.xz * wz - b.yz * i) + xy * (b.wy * s + b.wz * yz + b.xy * wx + b.xz * i - b.yz * wz) + xz * (b.wz * s + b.xz * wx + b.yz * wy - b.wy * yz - b.xy * i) + yz * (b.xy * wz + b.yz * wx - b.xz * wy)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (s * (b.wz * yz + b.xy * wx + b.xz * i - b.wx * xy - b.yz * wz) + xy * (b.xy * wy + b.xz * wz + b.yz * i) + xz * (b.xz * wy - b.wx * yz - b.wz * xy - b.xy * wz - b.yz * wx) + yz * (b.xz * wx + b.yz * wy - b.xy * i)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
@@ -51,12 +54,14 @@ namespace pga3d {
         .xz = (2.0 * (b.xy * (xy * xz - s * yz) + b.yz * (s * xy + xz * yz)) + b.xz * (s * s + xz * xz - xy * xy - yz * yz)),
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz))
     }; }
+
     constexpr ProjectivePoint Motor::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (2.0 * (b.w * (-i * yz - s * wx - wy * xy - wz * xz) + b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.w * (i * xz + wx * xy - s * wy - wz * yz) + b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.w * (wx * xz + wy * yz - i * xy - s * wz) + b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = b.w * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Motor Motor::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
         .wx = 2.0 * (b.xy * (wx * xy + wz * yz - i * xz - s * wy) + b.xz * (i * xy + wx * xz - s * wz - wy * yz) + b.yz * (wx * yz + wy * xz - i * s - wz * xy)),
@@ -67,6 +72,7 @@ namespace pga3d {
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz)),
         .i = 2.0 * b.s * (i * s + wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Motor Motor::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
@@ -77,6 +83,7 @@ namespace pga3d {
         .yz = 0.0,
         .i = 2.0 * b.s * (i * s + wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Motor Motor::sandwich(const Translator& b) const noexcept { return {
         .s = (s * s + xy * xy + xz * xz + yz * yz),
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
@@ -87,23 +94,27 @@ namespace pga3d {
         .yz = 0.0,
         .i = 2.0 * (i * s + wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Vector Motor::sandwich(const Vector& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr ProjectivePoint Motor::sandwich(const Point& b) const noexcept { return {
         .x = (2.0 * (s * (-wx + b.y * xy + b.z * xz) + yz * (-i + b.z * xy - b.y * xz) - wy * xy - wz * xz) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (s * (-wy + b.z * yz - b.x * xy) + wx * xy + xz * (i - b.x * yz - b.z * xy) - wz * yz) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (s * (-wz - b.x * xz - b.y * yz) + wx * xz + wy * yz + xy * (-i + b.x * yz - b.y * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Plane Motor::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = 2.0 * (b.x * (i * yz + s * wx - wy * xy - wz * xz) + b.y * (s * wy + wx * xy - i * xz - wz * yz) + b.z * (i * xy + s * wz + wx * xz + wy * yz))
     }; }
+
     constexpr Bivector Motor::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * (b.xy * (wx * xy + wz * yz - i * xz - s * wy) + b.xz * (i * xy + wx * xz - s * wz - wy * yz) + b.yz * (wx * yz + wy * xz - i * s - wz * xy)),
         .wy = 2.0 * (b.xy * (s * wx + wy * xy - i * yz - wz * xz) + b.xz * (i * s + wx * yz + wy * xz + wz * xy) + b.yz * (i * xy + wy * yz - s * wz - wx * xz)),
@@ -112,20 +123,24 @@ namespace pga3d {
         .xz = (2.0 * (b.xy * (xy * xz - s * yz) + b.yz * (s * xy + xz * yz)) + b.xz * (s * s + xz * xz - xy * xy - yz * yz)),
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz))
     }; }
+
     constexpr BivectorWeight Motor::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.wx * (-s * xy - xz * yz) + b.wz * (s * yz - xy * xz)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
         .wz = (2.0 * (b.wx * (xy * yz - s * xz) + b.wy * (-s * yz - xy * xz)) + b.wz * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr PseudoScalar Motor::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr ProjectivePoint Motor::sandwich(const PointCenter& b) const noexcept { return {
         .x = 2.0 * (-i * yz - s * wx - wy * xy - wz * xz),
         .y = 2.0 * (i * xz + wx * xy - s * wy - wz * yz),
         .z = 2.0 * (wx * xz + wy * yz - i * xy - s * wz),
         .w = (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
 
     constexpr Motor Plane::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
@@ -137,12 +152,14 @@ namespace pga3d {
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y)),
         .i = b.i * (-x * x - y * y - z * z)
     }; }
+
     constexpr Plane Plane::sandwich(const Plane& b) const noexcept { return {
         .x = (b.x * (x * x - y * y - z * z) + 2.0 * x * (b.y * y + b.z * z)),
         .y = (b.y * (y * y - x * x - z * z) + 2.0 * y * (b.x * x + b.z * z)),
         .z = (b.z * (z * z - x * x - y * y) + 2.0 * z * (b.x * x + b.y * y)),
         .w = (b.w * (-x * x - y * y - z * z) + 2.0 * w * (b.x * x + b.y * y + b.z * z))
     }; }
+
     constexpr Bivector Plane::sandwich(const Bivector& b) const noexcept { return {
         .wx = (2.0 * (w * (b.xy * y + b.xz * z) + x * (-b.wy * y - b.wz * z)) + b.wx * (y * y + z * z - x * x)),
         .wy = (2.0 * (x * (-b.wx * y - b.xy * w) + z * (b.yz * w - b.wz * y)) + b.wy * (x * x + z * z - y * y)),
@@ -151,12 +168,14 @@ namespace pga3d {
         .xz = (b.xz * (y * y - x * x - z * z) + 2.0 * y * (-b.xy * z - b.yz * x)),
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y))
     }; }
+
     constexpr ProjectivePoint Plane::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (b.x * (y * y + z * z) + x * (2.0 * (-b.w * w - b.y * y - b.z * z) - b.x * x)),
         .y = (b.y * (x * x + z * z) + y * (2.0 * (-b.w * w - b.x * x - b.z * z) - b.y * y)),
         .z = (b.z * (x * x + y * y) + z * (2.0 * (-b.w * w - b.x * x - b.y * y) - b.z * z)),
         .w = b.w * (x * x + y * y + z * z)
     }; }
+
     constexpr Motor Plane::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
         .wx = 2.0 * w * (b.xy * y + b.xz * z),
@@ -167,35 +186,41 @@ namespace pga3d {
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y)),
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator Plane::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr ProjectiveTranslator Plane::sandwich(const Translator& b) const noexcept { return {
         .s = (x * x + y * y + z * z),
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr Vector Plane::sandwich(const Vector& b) const noexcept { return {
         .x = (b.x * (y * y + z * z - x * x) + 2.0 * x * (-b.y * y - b.z * z)),
         .y = (b.y * (x * x + z * z - y * y) + 2.0 * y * (-b.x * x - b.z * z)),
         .z = (b.z * (x * x + y * y - z * z) + 2.0 * z * (-b.x * x - b.y * y))
     }; }
+
     constexpr ProjectivePoint Plane::sandwich(const Point& b) const noexcept { return {
         .x = (b.x * (y * y + z * z) + x * (2.0 * (-w - b.y * y - b.z * z) - b.x * x)),
         .y = (b.y * (x * x + z * z) + y * (2.0 * (-w - b.x * x - b.z * z) - b.y * y)),
         .z = (b.z * (x * x + y * y) + z * (2.0 * (-w - b.x * x - b.y * y) - b.z * z)),
         .w = (x * x + y * y + z * z)
     }; }
+
     constexpr Plane Plane::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (b.x * (x * x - y * y - z * z) + 2.0 * x * (b.y * y + b.z * z)),
         .y = (b.y * (y * y - x * x - z * z) + 2.0 * y * (b.x * x + b.z * z)),
         .z = (b.z * (z * z - x * x - y * y) + 2.0 * z * (b.x * x + b.y * y)),
         .w = 2.0 * w * (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr Bivector Plane::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * w * (b.xy * y + b.xz * z),
         .wy = 2.0 * w * (b.yz * z - b.xy * x),
@@ -204,20 +229,24 @@ namespace pga3d {
         .xz = (b.xz * (y * y - x * x - z * z) + 2.0 * y * (-b.xy * z - b.yz * x)),
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y))
     }; }
+
     constexpr BivectorWeight Plane::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr PseudoScalar Plane::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (-x * x - y * y - z * z)
     }; }
+
     constexpr ProjectivePoint Plane::sandwich(const PointCenter& b) const noexcept { return {
         .x = -2.0 * w * x,
         .y = -2.0 * w * y,
         .z = -2.0 * w * z,
         .w = (x * x + y * y + z * z)
     }; }
+
 
     constexpr Motor Bivector::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
@@ -229,12 +258,14 @@ namespace pga3d {
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz)),
         .i = (b.i * (xy * xy + xz * xz + yz * yz) + 2.0 * b.s * (wy * xz - wx * yz - wz * xy))
     }; }
+
     constexpr Plane Bivector::sandwich(const Plane& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz)),
         .w = (2.0 * (b.x * (-wy * xy - wz * xz) + b.y * (wx * xy - wz * yz) + b.z * (wx * xz + wy * yz)) + b.w * (xy * xy + xz * xz + yz * yz))
     }; }
+
     constexpr Bivector Bivector::sandwich(const Bivector& b) const noexcept { return {
         .wx = (2.0 * (b.yz * (wy * xz - wz * xy) + wx * (b.xy * xy + b.xz * xz) + yz * (b.wz * xy + b.xy * wz + b.yz * wx - b.wy * xz - b.xz * wy)) + b.wx * (yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.xz * (wx * yz + wz * xy) + wy * (b.xy * xy + b.yz * yz) + xz * (b.xz * wy - b.wx * yz - b.wz * xy - b.xy * wz - b.yz * wx)) + b.wy * (xz * xz - xy * xy - yz * yz)),
@@ -243,12 +274,14 @@ namespace pga3d {
         .xz = (b.xz * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (b.xy * xy + b.yz * yz)),
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz))
     }; }
+
     constexpr ProjectivePoint Bivector::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (2.0 * (b.w * (-wy * xy - wz * xz) + yz * (b.z * xy - b.y * xz)) + b.x * (yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.w * (wx * xy - wz * yz) + xz * (-b.x * yz - b.z * xy)) + b.y * (xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.w * (wx * xz + wy * yz) + xy * (b.x * yz - b.y * xz)) + b.z * (xy * xy - xz * xz - yz * yz)),
         .w = b.w * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Motor Bivector::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
         .wx = 2.0 * (b.yz * (wy * xz - wz * xy) + wx * (b.xy * xy + b.xz * xz) + yz * (b.xy * wz + b.yz * wx - b.xz * wy)),
@@ -259,6 +292,7 @@ namespace pga3d {
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz)),
         .i = 2.0 * b.s * (wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Motor Bivector::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
@@ -269,6 +303,7 @@ namespace pga3d {
         .yz = 0.0,
         .i = 2.0 * b.s * (wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Motor Bivector::sandwich(const Translator& b) const noexcept { return {
         .s = (xy * xy + xz * xz + yz * yz),
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
@@ -279,23 +314,27 @@ namespace pga3d {
         .yz = 0.0,
         .i = 2.0 * (wy * xz - wx * yz - wz * xy)
     }; }
+
     constexpr Vector Bivector::sandwich(const Vector& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz))
     }; }
+
     constexpr ProjectivePoint Bivector::sandwich(const Point& b) const noexcept { return {
         .x = (2.0 * (xy * (-wy + b.z * yz) + xz * (-wz - b.y * yz)) + b.x * (yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (xy * (wx - b.z * xz) + yz * (-wz - b.x * xz)) + b.y * (xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (xz * (wx - b.y * xy) + yz * (wy + b.x * xy)) + b.z * (xy * xy - xz * xz - yz * yz)),
         .w = (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Plane Bivector::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz)),
         .w = 2.0 * (b.x * (-wy * xy - wz * xz) + b.y * (wx * xy - wz * yz) + b.z * (wx * xz + wy * yz))
     }; }
+
     constexpr Bivector Bivector::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * (b.yz * (wy * xz - wz * xy) + wx * (b.xy * xy + b.xz * xz) + yz * (b.xy * wz + b.yz * wx - b.xz * wy)),
         .wy = 2.0 * (b.xz * (wx * yz + wz * xy) + wy * (b.xy * xy + b.yz * yz) + xz * (b.xz * wy - b.xy * wz - b.yz * wx)),
@@ -304,20 +343,24 @@ namespace pga3d {
         .xz = (b.xz * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (b.xy * xy + b.yz * yz)),
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz))
     }; }
+
     constexpr BivectorWeight Bivector::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
         .wy = (b.wy * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.wx * yz - b.wz * xy)),
         .wz = (b.wz * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.wx * yz - b.wy * xz))
     }; }
+
     constexpr PseudoScalar Bivector::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr ProjectivePoint Bivector::sandwich(const PointCenter& b) const noexcept { return {
         .x = 2.0 * (-wy * xy - wz * xz),
         .y = 2.0 * (wx * xy - wz * yz),
         .z = 2.0 * (wx * xz + wy * yz),
         .w = (xy * xy + xz * xz + yz * yz)
     }; }
+
 
     constexpr Motor ProjectivePoint::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * w * w,
@@ -329,12 +372,14 @@ namespace pga3d {
         .yz = b.yz * w * w,
         .i = -b.i * w * w
     }; }
+
     constexpr Plane ProjectivePoint::sandwich(const Plane& b) const noexcept { return {
         .x = b.x * w * w,
         .y = b.y * w * w,
         .z = b.z * w * w,
         .w = w * (2.0 * (-b.x * x - b.y * y - b.z * z) - b.w * w)
     }; }
+
     constexpr Bivector ProjectivePoint::sandwich(const Bivector& b) const noexcept { return {
         .wx = w * (2.0 * (b.xy * y + b.xz * z) - b.wx * w),
         .wy = w * (2.0 * (b.yz * z - b.xy * x) - b.wy * w),
@@ -343,12 +388,14 @@ namespace pga3d {
         .xz = b.xz * w * w,
         .yz = b.yz * w * w
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = w * (-b.x * w + 2.0 * b.w * x),
         .y = w * (-b.y * w + 2.0 * b.w * y),
         .z = w * (-b.z * w + 2.0 * b.w * z),
         .w = b.w * w * w
     }; }
+
     constexpr Motor ProjectivePoint::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * w * w,
         .wx = 2.0 * w * (b.xy * y + b.xz * z),
@@ -359,35 +406,41 @@ namespace pga3d {
         .yz = b.yz * w * w,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator ProjectivePoint::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * w * w,
         .wx = -b.wx * w * w,
         .wy = -b.wy * w * w,
         .wz = -b.wz * w * w
     }; }
+
     constexpr ProjectiveTranslator ProjectivePoint::sandwich(const Translator& b) const noexcept { return {
         .s = w * w,
         .wx = -b.wx * w * w,
         .wy = -b.wy * w * w,
         .wz = -b.wz * w * w
     }; }
+
     constexpr Vector ProjectivePoint::sandwich(const Vector& b) const noexcept { return {
         .x = -b.x * w * w,
         .y = -b.y * w * w,
         .z = -b.z * w * w
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::sandwich(const Point& b) const noexcept { return {
         .x = w * (2.0 * x - b.x * w),
         .y = w * (2.0 * y - b.y * w),
         .z = w * (2.0 * z - b.z * w),
         .w = w * w
     }; }
+
     constexpr Plane ProjectivePoint::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = b.x * w * w,
         .y = b.y * w * w,
         .z = b.z * w * w,
         .w = 2.0 * w * (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Bivector ProjectivePoint::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * w * (b.xy * y + b.xz * z),
         .wy = 2.0 * w * (b.yz * z - b.xy * x),
@@ -396,20 +449,24 @@ namespace pga3d {
         .xz = b.xz * w * w,
         .yz = b.yz * w * w
     }; }
+
     constexpr BivectorWeight ProjectivePoint::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = -b.wx * w * w,
         .wy = -b.wy * w * w,
         .wz = -b.wz * w * w
     }; }
+
     constexpr PseudoScalar ProjectivePoint::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = -b.i * w * w
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::sandwich(const PointCenter& b) const noexcept { return {
         .x = 2.0 * w * x,
         .y = 2.0 * w * y,
         .z = 2.0 * w * z,
         .w = w * w
     }; }
+
 
     constexpr Motor Quaternion::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
@@ -421,12 +478,14 @@ namespace pga3d {
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz)),
         .i = b.i * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Plane Quaternion::sandwich(const Plane& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = b.w * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Bivector Quaternion::sandwich(const Bivector& b) const noexcept { return {
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.wx * (-s * xy - xz * yz) + b.wz * (s * yz - xy * xz)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
@@ -435,65 +494,77 @@ namespace pga3d {
         .xz = (2.0 * (b.xy * (xy * xz - s * yz) + b.yz * (s * xy + xz * yz)) + b.xz * (s * s + xz * xz - xy * xy - yz * yz)),
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz))
     }; }
+
     constexpr ProjectivePoint Quaternion::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = b.w * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Quaternion Quaternion::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
         .xy = (2.0 * (b.xz * (s * yz + xy * xz) + b.yz * (xy * yz - s * xz)) + b.xy * (s * s + xy * xy - xz * xz - yz * yz)),
         .xz = (2.0 * (b.xy * (xy * xz - s * yz) + b.yz * (s * xy + xz * yz)) + b.xz * (s * s + xz * xz - xy * xy - yz * yz)),
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz))
     }; }
+
     constexpr ProjectiveTranslator Quaternion::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (s * s + xy * xy + xz * xz + yz * yz),
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.wx * (-s * xy - xz * yz) + b.wz * (s * yz - xy * xz)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
         .wz = (2.0 * (b.wx * (xy * yz - s * xz) + b.wy * (-s * yz - xy * xz)) + b.wz * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr ProjectiveTranslator Quaternion::sandwich(const Translator& b) const noexcept { return {
         .s = (s * s + xy * xy + xz * xz + yz * yz),
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.wx * (-s * xy - xz * yz) + b.wz * (s * yz - xy * xz)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
         .wz = (2.0 * (b.wx * (xy * yz - s * xz) + b.wy * (-s * yz - xy * xz)) + b.wz * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr Vector Quaternion::sandwich(const Vector& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr ProjectivePoint Quaternion::sandwich(const Point& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz)),
         .w = (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr PlaneIdeal Quaternion::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (2.0 * (b.y * (s * xy - xz * yz) + b.z * (s * xz + xy * yz)) + b.x * (s * s + yz * yz - xy * xy - xz * xz)),
         .y = (2.0 * (b.x * (-s * xy - xz * yz) + b.z * (s * yz - xy * xz)) + b.y * (s * s + xz * xz - xy * xy - yz * yz)),
         .z = (2.0 * (b.x * (xy * yz - s * xz) + b.y * (-s * yz - xy * xz)) + b.z * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr BivectorBulk Quaternion::sandwich(const BivectorBulk& b) const noexcept { return {
         .xy = (2.0 * (b.xz * (s * yz + xy * xz) + b.yz * (xy * yz - s * xz)) + b.xy * (s * s + xy * xy - xz * xz - yz * yz)),
         .xz = (2.0 * (b.xy * (xy * xz - s * yz) + b.yz * (s * xy + xz * yz)) + b.xz * (s * s + xz * xz - xy * xy - yz * yz)),
         .yz = (2.0 * (b.xy * (s * xz + xy * yz) + b.xz * (xz * yz - s * xy)) + b.yz * (s * s + yz * yz - xy * xy - xz * xz))
     }; }
+
     constexpr BivectorWeight Quaternion::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (2.0 * (b.wy * (s * xy - xz * yz) + b.wz * (s * xz + xy * yz)) + b.wx * (s * s + yz * yz - xy * xy - xz * xz)),
         .wy = (2.0 * (b.wx * (-s * xy - xz * yz) + b.wz * (s * yz - xy * xz)) + b.wy * (s * s + xz * xz - xy * xy - yz * yz)),
         .wz = (2.0 * (b.wx * (xy * yz - s * xz) + b.wy * (-s * yz - xy * xz)) + b.wz * (s * s + xy * xy - xz * xz - yz * yz))
     }; }
+
     constexpr PseudoScalar Quaternion::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr ProjectivePoint Quaternion::sandwich(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (s * s + xy * xy + xz * xz + yz * yz)
     }; }
+
 
     constexpr Motor ProjectiveTranslator::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * s * s,
@@ -505,12 +576,14 @@ namespace pga3d {
         .yz = b.yz * s * s,
         .i = b.i * s * s
     }; }
+
     constexpr Plane ProjectiveTranslator::sandwich(const Plane& b) const noexcept { return {
         .x = b.x * s * s,
         .y = b.y * s * s,
         .z = b.z * s * s,
         .w = s * (2.0 * (b.x * wx + b.y * wy + b.z * wz) + b.w * s)
     }; }
+
     constexpr Bivector ProjectiveTranslator::sandwich(const Bivector& b) const noexcept { return {
         .wx = s * (2.0 * (-b.xy * wy - b.xz * wz) + b.wx * s),
         .wy = s * (2.0 * (b.xy * wx - b.yz * wz) + b.wy * s),
@@ -519,12 +592,14 @@ namespace pga3d {
         .xz = b.xz * s * s,
         .yz = b.yz * s * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = s * (b.x * s - 2.0 * b.w * wx),
         .y = s * (b.y * s - 2.0 * b.w * wy),
         .z = s * (b.z * s - 2.0 * b.w * wz),
         .w = b.w * s * s
     }; }
+
     constexpr Motor ProjectiveTranslator::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * s * s,
         .wx = 2.0 * s * (-b.xy * wy - b.xz * wz),
@@ -535,35 +610,41 @@ namespace pga3d {
         .yz = b.yz * s * s,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator ProjectiveTranslator::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * s * s,
         .wx = b.wx * s * s,
         .wy = b.wy * s * s,
         .wz = b.wz * s * s
     }; }
+
     constexpr ProjectiveTranslator ProjectiveTranslator::sandwich(const Translator& b) const noexcept { return {
         .s = s * s,
         .wx = b.wx * s * s,
         .wy = b.wy * s * s,
         .wz = b.wz * s * s
     }; }
+
     constexpr Vector ProjectiveTranslator::sandwich(const Vector& b) const noexcept { return {
         .x = b.x * s * s,
         .y = b.y * s * s,
         .z = b.z * s * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::sandwich(const Point& b) const noexcept { return {
         .x = s * (b.x * s - 2.0 * wx),
         .y = s * (b.y * s - 2.0 * wy),
         .z = s * (b.z * s - 2.0 * wz),
         .w = s * s
     }; }
+
     constexpr Plane ProjectiveTranslator::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = b.x * s * s,
         .y = b.y * s * s,
         .z = b.z * s * s,
         .w = 2.0 * s * (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector ProjectiveTranslator::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * s * (-b.xy * wy - b.xz * wz),
         .wy = 2.0 * s * (b.xy * wx - b.yz * wz),
@@ -572,20 +653,24 @@ namespace pga3d {
         .xz = b.xz * s * s,
         .yz = b.yz * s * s
     }; }
+
     constexpr BivectorWeight ProjectiveTranslator::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx * s * s,
         .wy = b.wy * s * s,
         .wz = b.wz * s * s
     }; }
+
     constexpr PseudoScalar ProjectiveTranslator::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * s * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::sandwich(const PointCenter& b) const noexcept { return {
         .x = -2.0 * s * wx,
         .y = -2.0 * s * wy,
         .z = -2.0 * s * wz,
         .w = s * s
     }; }
+
 
     constexpr Motor Translator::sandwich(const Motor& b) const noexcept { return {
         .s = b.s,
@@ -597,12 +682,14 @@ namespace pga3d {
         .yz = b.yz,
         .i = b.i
     }; }
+
     constexpr Plane Translator::sandwich(const Plane& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = (b.w + 2.0 * b.x * wx + 2.0 * b.y * wy + 2.0 * b.z * wz)
     }; }
+
     constexpr Bivector Translator::sandwich(const Bivector& b) const noexcept { return {
         .wx = (b.wx - 2.0 * b.xy * wy - 2.0 * b.xz * wz),
         .wy = (b.wy - 2.0 * b.yz * wz + 2.0 * b.xy * wx),
@@ -611,12 +698,14 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr ProjectivePoint Translator::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (b.x - 2.0 * b.w * wx),
         .y = (b.y - 2.0 * b.w * wy),
         .z = (b.z - 2.0 * b.w * wz),
         .w = b.w
     }; }
+
     constexpr Motor Translator::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s,
         .wx = 2.0 * (-b.xy * wy - b.xz * wz),
@@ -627,33 +716,39 @@ namespace pga3d {
         .yz = b.yz,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator Translator::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s,
         .wx = b.wx,
         .wy = b.wy,
         .wz = b.wz
     }; }
+
     constexpr Translator Translator::sandwich(const Translator& b) const noexcept { return {
         .wx = b.wx,
         .wy = b.wy,
         .wz = b.wz
     }; }
+
     constexpr Vector Translator::sandwich(const Vector& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z
     }; }
+
     constexpr Point Translator::sandwich(const Point& b) const noexcept { return {
         .x = (b.x - 2.0 * wx),
         .y = (b.y - 2.0 * wy),
         .z = (b.z - 2.0 * wz)
     }; }
+
     constexpr Plane Translator::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = 2.0 * (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector Translator::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * (-b.xy * wy - b.xz * wz),
         .wy = 2.0 * (b.xy * wx - b.yz * wz),
@@ -662,19 +757,23 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr BivectorWeight Translator::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx,
         .wy = b.wy,
         .wz = b.wz
     }; }
+
     constexpr PseudoScalar Translator::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i
     }; }
+
     constexpr Point Translator::sandwich(const PointCenter& b) const noexcept { return {
         .x = -2.0 * wx,
         .y = -2.0 * wy,
         .z = -2.0 * wz
     }; }
+
 
 
     constexpr Motor Point::sandwich(const Motor& b) const noexcept { return {
@@ -687,12 +786,14 @@ namespace pga3d {
         .yz = b.yz,
         .i = -b.i
     }; }
+
     constexpr Plane Point::sandwich(const Plane& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = (-b.w + 2.0 * (-b.x * x - b.y * y - b.z * z))
     }; }
+
     constexpr Bivector Point::sandwich(const Bivector& b) const noexcept { return {
         .wx = (-b.wx + 2.0 * (b.xy * y + b.xz * z)),
         .wy = (-b.wy + 2.0 * (b.yz * z - b.xy * x)),
@@ -701,12 +802,14 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr ProjectivePoint Point::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (-b.x + 2.0 * b.w * x),
         .y = (-b.y + 2.0 * b.w * y),
         .z = (-b.z + 2.0 * b.w * z),
         .w = b.w
     }; }
+
     constexpr Motor Point::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s,
         .wx = 2.0 * (b.xy * y + b.xz * z),
@@ -717,33 +820,39 @@ namespace pga3d {
         .yz = b.yz,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator Point::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s,
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr Translator Point::sandwich(const Translator& b) const noexcept { return {
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr Vector Point::sandwich(const Vector& b) const noexcept { return {
         .x = -b.x,
         .y = -b.y,
         .z = -b.z
     }; }
+
     constexpr Point Point::sandwich(const Point& b) const noexcept { return {
         .x = (-b.x + 2.0 * x),
         .y = (-b.y + 2.0 * y),
         .z = (-b.z + 2.0 * z)
     }; }
+
     constexpr Plane Point::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = 2.0 * (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Bivector Point::sandwich(const BivectorBulk& b) const noexcept { return {
         .wx = 2.0 * (b.xy * y + b.xz * z),
         .wy = 2.0 * (b.yz * z - b.xy * x),
@@ -752,19 +861,23 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr BivectorWeight Point::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr PseudoScalar Point::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = -b.i
     }; }
+
     constexpr Point Point::sandwich(const PointCenter& b) const noexcept { return {
         .x = 2.0 * x,
         .y = 2.0 * y,
         .z = 2.0 * z
     }; }
+
 
     constexpr Motor PlaneIdeal::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
@@ -776,12 +889,14 @@ namespace pga3d {
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y)),
         .i = b.i * (-x * x - y * y - z * z)
     }; }
+
     constexpr Plane PlaneIdeal::sandwich(const Plane& b) const noexcept { return {
         .x = (b.x * (x * x - y * y - z * z) + 2.0 * x * (b.y * y + b.z * z)),
         .y = (b.y * (y * y - x * x - z * z) + 2.0 * y * (b.x * x + b.z * z)),
         .z = (b.z * (z * z - x * x - y * y) + 2.0 * z * (b.x * x + b.y * y)),
         .w = b.w * (-x * x - y * y - z * z)
     }; }
+
     constexpr Bivector PlaneIdeal::sandwich(const Bivector& b) const noexcept { return {
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
@@ -790,65 +905,77 @@ namespace pga3d {
         .xz = (b.xz * (y * y - x * x - z * z) + 2.0 * y * (-b.xy * z - b.yz * x)),
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y))
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (b.x * (y * y + z * z - x * x) + 2.0 * x * (-b.y * y - b.z * z)),
         .y = (b.y * (x * x + z * z - y * y) + 2.0 * y * (-b.x * x - b.z * z)),
         .z = (b.z * (x * x + y * y - z * z) + 2.0 * z * (-b.x * x - b.y * y)),
         .w = b.w * (x * x + y * y + z * z)
     }; }
+
     constexpr Quaternion PlaneIdeal::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
         .xy = (b.xy * (z * z - x * x - y * y) + 2.0 * z * (b.yz * x - b.xz * y)),
         .xz = (b.xz * (y * y - x * x - z * z) + 2.0 * y * (-b.xy * z - b.yz * x)),
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y))
     }; }
+
     constexpr ProjectiveTranslator PlaneIdeal::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (x * x + y * y + z * z),
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr ProjectiveTranslator PlaneIdeal::sandwich(const Translator& b) const noexcept { return {
         .s = (x * x + y * y + z * z),
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr Vector PlaneIdeal::sandwich(const Vector& b) const noexcept { return {
         .x = (b.x * (y * y + z * z - x * x) + 2.0 * x * (-b.y * y - b.z * z)),
         .y = (b.y * (x * x + z * z - y * y) + 2.0 * y * (-b.x * x - b.z * z)),
         .z = (b.z * (x * x + y * y - z * z) + 2.0 * z * (-b.x * x - b.y * y))
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::sandwich(const Point& b) const noexcept { return {
         .x = (b.x * (y * y + z * z - x * x) + 2.0 * x * (-b.y * y - b.z * z)),
         .y = (b.y * (x * x + z * z - y * y) + 2.0 * y * (-b.x * x - b.z * z)),
         .z = (b.z * (x * x + y * y - z * z) + 2.0 * z * (-b.x * x - b.y * y)),
         .w = (x * x + y * y + z * z)
     }; }
+
     constexpr PlaneIdeal PlaneIdeal::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (b.x * (x * x - y * y - z * z) + 2.0 * x * (b.y * y + b.z * z)),
         .y = (b.y * (y * y - x * x - z * z) + 2.0 * y * (b.x * x + b.z * z)),
         .z = (b.z * (z * z - x * x - y * y) + 2.0 * z * (b.x * x + b.y * y))
     }; }
+
     constexpr BivectorBulk PlaneIdeal::sandwich(const BivectorBulk& b) const noexcept { return {
         .xy = (b.xy * (z * z - x * x - y * y) + 2.0 * z * (b.yz * x - b.xz * y)),
         .xz = (b.xz * (y * y - x * x - z * z) + 2.0 * y * (-b.xy * z - b.yz * x)),
         .yz = (b.yz * (x * x - y * y - z * z) + 2.0 * x * (b.xy * z - b.xz * y))
     }; }
+
     constexpr BivectorWeight PlaneIdeal::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wx * (y * y + z * z - x * x) + 2.0 * x * (-b.wy * y - b.wz * z)),
         .wy = (b.wy * (x * x + z * z - y * y) + 2.0 * y * (-b.wx * x - b.wz * z)),
         .wz = (b.wz * (x * x + y * y - z * z) + 2.0 * z * (-b.wx * x - b.wy * y))
     }; }
+
     constexpr PseudoScalar PlaneIdeal::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (-x * x - y * y - z * z)
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::sandwich(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (x * x + y * y + z * z)
     }; }
+
 
     constexpr Motor BivectorBulk::sandwich(const Motor& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
@@ -860,12 +987,14 @@ namespace pga3d {
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz)),
         .i = b.i * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Plane BivectorBulk::sandwich(const Plane& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz)),
         .w = b.w * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Bivector BivectorBulk::sandwich(const Bivector& b) const noexcept { return {
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
         .wy = (b.wy * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.wx * yz - b.wz * xy)),
@@ -874,65 +1003,77 @@ namespace pga3d {
         .xz = (b.xz * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (b.xy * xy + b.yz * yz)),
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz))
     }; }
+
     constexpr ProjectivePoint BivectorBulk::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz)),
         .w = b.w * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr Quaternion BivectorBulk::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
         .xy = (b.xy * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.xz * xz + b.yz * yz)),
         .xz = (b.xz * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (b.xy * xy + b.yz * yz)),
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz))
     }; }
+
     constexpr ProjectiveTranslator BivectorBulk::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * (xy * xy + xz * xz + yz * yz),
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
         .wy = (b.wy * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.wx * yz - b.wz * xy)),
         .wz = (b.wz * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.wx * yz - b.wy * xz))
     }; }
+
     constexpr ProjectiveTranslator BivectorBulk::sandwich(const Translator& b) const noexcept { return {
         .s = (xy * xy + xz * xz + yz * yz),
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
         .wy = (b.wy * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.wx * yz - b.wz * xy)),
         .wz = (b.wz * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.wx * yz - b.wy * xz))
     }; }
+
     constexpr Vector BivectorBulk::sandwich(const Vector& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz))
     }; }
+
     constexpr ProjectivePoint BivectorBulk::sandwich(const Point& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz)),
         .w = (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr PlaneIdeal BivectorBulk::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = (b.x * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.z * xy - b.y * xz)),
         .y = (b.y * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.x * yz - b.z * xy)),
         .z = (b.z * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.x * yz - b.y * xz))
     }; }
+
     constexpr BivectorBulk BivectorBulk::sandwich(const BivectorBulk& b) const noexcept { return {
         .xy = (b.xy * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.xz * xz + b.yz * yz)),
         .xz = (b.xz * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (b.xy * xy + b.yz * yz)),
         .yz = (b.yz * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.xy * xy + b.xz * xz))
     }; }
+
     constexpr BivectorWeight BivectorBulk::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wx * (yz * yz - xy * xy - xz * xz) + 2.0 * yz * (b.wz * xy - b.wy * xz)),
         .wy = (b.wy * (xz * xz - xy * xy - yz * yz) + 2.0 * xz * (-b.wx * yz - b.wz * xy)),
         .wz = (b.wz * (xy * xy - xz * xz - yz * yz) + 2.0 * xy * (b.wx * yz - b.wy * xz))
     }; }
+
     constexpr PseudoScalar BivectorBulk::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = b.i * (xy * xy + xz * xz + yz * yz)
     }; }
+
     constexpr ProjectivePoint BivectorBulk::sandwich(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (xy * xy + xz * xz + yz * yz)
     }; }
+
 
 
 
@@ -946,12 +1087,14 @@ namespace pga3d {
         .yz = b.yz,
         .i = -b.i
     }; }
+
     constexpr Plane PointCenter::sandwich(const Plane& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = -b.w
     }; }
+
     constexpr Bivector PointCenter::sandwich(const Bivector& b) const noexcept { return {
         .wx = -b.wx,
         .wy = -b.wy,
@@ -960,59 +1103,71 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr ProjectivePoint PointCenter::sandwich(const ProjectivePoint& b) const noexcept { return {
         .x = -b.x,
         .y = -b.y,
         .z = -b.z,
         .w = b.w
     }; }
+
     constexpr Quaternion PointCenter::sandwich(const Quaternion& b) const noexcept { return {
         .s = b.s,
         .xy = b.xy,
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr ProjectiveTranslator PointCenter::sandwich(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s,
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr Translator PointCenter::sandwich(const Translator& b) const noexcept { return {
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr Vector PointCenter::sandwich(const Vector& b) const noexcept { return {
         .x = -b.x,
         .y = -b.y,
         .z = -b.z
     }; }
+
     constexpr Point PointCenter::sandwich(const Point& b) const noexcept { return {
         .x = -b.x,
         .y = -b.y,
         .z = -b.z
     }; }
+
     constexpr PlaneIdeal PointCenter::sandwich(const PlaneIdeal& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z
     }; }
+
     constexpr BivectorBulk PointCenter::sandwich(const BivectorBulk& b) const noexcept { return {
         .xy = b.xy,
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr BivectorWeight PointCenter::sandwich(const BivectorWeight& b) const noexcept { return {
         .wx = -b.wx,
         .wy = -b.wy,
         .wz = -b.wz
     }; }
+
     constexpr PseudoScalar PointCenter::sandwich(const PseudoScalar& b) const noexcept { return {
         .i = -b.i
     }; }
+
     constexpr PointCenter PointCenter::sandwich(const PointCenter& b) const noexcept { return {
 
     }; }
+
 
 }

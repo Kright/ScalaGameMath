@@ -55,6 +55,11 @@ In addition, it represents velocity and force.
 * [**Pga3dBivectorBulk**](shared/src/main/scala/com/github/kright/pga3d/Pga3dBivectorBulk.scala) - bivector with only 3 fields (xy, xz, yz).
 * [**Pga3dBivectorWeight**](shared/src/main/scala/com/github/kright/pga3d/Pga3dBivectorWeight.scala) - bivector with only 3 fields (xw, yw, zw).
 
+Sometimes it's easier to work with `wedge` and `antiWedge` as for `meet` and `join` operations.
+
+Joining points produce lines and planes (expanding the degrees of freedom).
+Meeting planes produce lines and points (contracting the degrees of freedom).
+
 ```scala
 // Creating a bivector
 val bivector = Pga3dBivector(xy, xz, yz, xw, yw, zw)
@@ -64,13 +69,16 @@ val bulkComponent = bivector.bulk
 val weightComponent = bivector.weight
 
 // creating line as intersection of two planes
-val line0 = plane1 ^ plane2
+val line0 = plane1 meet plane2
+val line0_ = plane1 ^ plane2
 
 // Creating a line from two points
-val line1 = point1 v point2
+val line1 = point1 join point2
+val line1_ = point1 v point2
 
 // Creating a line from a point and a vector
-val line2 = point v vector
+val line2 = point join vector
+val line2_ = point v vector
 
 // Splitting a bivector into a line and shift
 val (line, shift) = bivector.split()

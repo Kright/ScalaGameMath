@@ -402,6 +402,8 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dMotor): Pga3dMotor = wedge(v)
 
+  inline infix def meet(v: Pga3dMotor): Pga3dMotor = wedge(v)
+
   infix def wedge(v: Pga3dPlane): Pga3dVector =
     Pga3dVector(
       x = (v.y * wz - v.z * wy),
@@ -411,12 +413,16 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dPlane): Pga3dVector = wedge(v)
 
+  inline infix def meet(v: Pga3dPlane): Pga3dVector = wedge(v)
+
   infix def wedge(v: Pga3dBivector): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = (v.xy * wz + v.yz * wx - v.xz * wy),
     )
 
   inline infix def ^(v: Pga3dBivector): Pga3dPseudoScalar = wedge(v)
+
+  inline infix def meet(v: Pga3dBivector): Pga3dPseudoScalar = wedge(v)
 
   infix def wedge(v: Pga3dQuaternion): Pga3dMotor =
     Pga3dMotor(
@@ -432,6 +438,8 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dQuaternion): Pga3dMotor = wedge(v)
 
+  inline infix def meet(v: Pga3dQuaternion): Pga3dMotor = wedge(v)
+
   infix def wedge(v: Pga3dProjectiveTranslator): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
       wx = v.s * wx,
@@ -441,10 +449,14 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dProjectiveTranslator): Pga3dBivectorWeight = wedge(v)
 
+  inline infix def meet(v: Pga3dProjectiveTranslator): Pga3dBivectorWeight = wedge(v)
+
   infix def wedge(v: Pga3dTranslator): Pga3dBivectorWeight =
     this
 
   inline infix def ^(v: Pga3dTranslator): Pga3dBivectorWeight = wedge(v)
+
+  inline infix def meet(v: Pga3dTranslator): Pga3dBivectorWeight = wedge(v)
 
   infix def wedge(v: Pga3dPlaneIdeal): Pga3dVector =
     Pga3dVector(
@@ -455,12 +467,16 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def ^(v: Pga3dPlaneIdeal): Pga3dVector = wedge(v)
 
+  inline infix def meet(v: Pga3dPlaneIdeal): Pga3dVector = wedge(v)
+
   infix def wedge(v: Pga3dBivectorBulk): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = (v.xy * wz + v.yz * wx - v.xz * wy),
     )
 
   inline infix def ^(v: Pga3dBivectorBulk): Pga3dPseudoScalar = wedge(v)
+
+  inline infix def meet(v: Pga3dBivectorBulk): Pga3dPseudoScalar = wedge(v)
 
   infix def antiGeometric(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(
@@ -765,10 +781,14 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dMotor): Pga3dProjectiveTranslator = antiWedge(v)
 
+  inline infix def join(v: Pga3dMotor): Pga3dProjectiveTranslator = antiWedge(v)
+
   infix def antiWedge(v: Pga3dBivector): Double =
     (v.xy * wz + v.yz * wx - v.xz * wy)
 
   inline infix def v(v: Pga3dBivector): Double = antiWedge(v)
+
+  inline infix def join(v: Pga3dBivector): Double = antiWedge(v)
 
   infix def antiWedge(v: Pga3dProjectivePoint): Pga3dPlane =
     Pga3dPlane(
@@ -780,10 +800,14 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dProjectivePoint): Pga3dPlane = antiWedge(v)
 
+  inline infix def join(v: Pga3dProjectivePoint): Pga3dPlane = antiWedge(v)
+
   infix def antiWedge(v: Pga3dQuaternion): Double =
     (v.xy * wz + v.yz * wx - v.xz * wy)
 
   inline infix def v(v: Pga3dQuaternion): Double = antiWedge(v)
+
+  inline infix def join(v: Pga3dQuaternion): Double = antiWedge(v)
 
   infix def antiWedge(v: Pga3dVector): Pga3dPlane =
     Pga3dPlane(
@@ -795,6 +819,8 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dVector): Pga3dPlane = antiWedge(v)
 
+  inline infix def join(v: Pga3dVector): Pga3dPlane = antiWedge(v)
+
   infix def antiWedge(v: Pga3dPoint): Pga3dPlane =
     Pga3dPlane(
       x = -wx,
@@ -805,10 +831,14 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dPoint): Pga3dPlane = antiWedge(v)
 
+  inline infix def join(v: Pga3dPoint): Pga3dPlane = antiWedge(v)
+
   infix def antiWedge(v: Pga3dBivectorBulk): Double =
     (v.xy * wz + v.yz * wx - v.xz * wy)
 
   inline infix def v(v: Pga3dBivectorBulk): Double = antiWedge(v)
+
+  inline infix def join(v: Pga3dBivectorBulk): Double = antiWedge(v)
 
   infix def antiWedge(v: Pga3dPseudoScalar): Pga3dBivectorWeight =
     Pga3dBivectorWeight(
@@ -819,6 +849,8 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
 
   inline infix def v(v: Pga3dPseudoScalar): Pga3dBivectorWeight = antiWedge(v)
 
+  inline infix def join(v: Pga3dPseudoScalar): Pga3dBivectorWeight = antiWedge(v)
+
   infix def antiWedge(v: Pga3dPointCenter.type): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
       x = -wx,
@@ -827,6 +859,8 @@ final case class Pga3dBivectorWeight(wx: Double = 0.0,
     )
 
   inline infix def v(v: Pga3dPointCenter.type): Pga3dPlaneIdeal = antiWedge(v)
+
+  inline infix def join(v: Pga3dPointCenter.type): Pga3dPlaneIdeal = antiWedge(v)
 
   infix def cross(v: Pga3dMotor): Pga3dBivectorWeight =
     Pga3dBivectorWeight(

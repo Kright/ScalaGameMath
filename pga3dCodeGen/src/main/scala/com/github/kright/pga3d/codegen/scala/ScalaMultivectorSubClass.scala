@@ -307,12 +307,12 @@ object ScalaMultivectorSubClass:
   val binaryOperations = Seq(
     MultivectorBinaryOp(Seq("geometric"), pga3.operations.multiplication.geometric(_, _)),
     MultivectorBinaryOp(Seq("dot"), pga3.operations.multiplication.dot(_, _)),
-    MultivectorBinaryOp(Seq("wedge", "^"), pga3.operations.multiplication.wedge(_, _)),
+    MultivectorBinaryOp(Seq("wedge", "^", "meet"), pga3.operations.multiplication.wedge(_, _)),
 
     MultivectorBinaryOp(Seq("antiGeometric"), pga3.operations.anti.geometric(_, _)),
     MultivectorBinaryOp(Seq("antiDot"), pga3.operations.anti.dot(_, _)),
     MultivectorBinaryOp.option(Seq("antiDotI"), (a, b) => Option(pga3.operations.anti.dot(a, b).dual).filter(findMatchingClass(_) == scalar)),
-    MultivectorBinaryOp(Seq("antiWedge", "v"), pga3.operations.anti.wedge(_, _)),
+    MultivectorBinaryOp(Seq("antiWedge", "v", "join"), pga3.operations.anti.wedge(_, _)),
 
     MultivectorBinaryOp(Seq("sandwich"), (a, b) => a.sandwich(b)),
     MultivectorBinaryOp(Seq("reverseSandwich"), (a, b) => a.reverse.sandwich(b)),

@@ -45,4 +45,7 @@ add_executable(cpp
         pga3dphysics/Sphere.h
         pga3dphysics/Cylinder.h
         pga3dphysics/LinearOperator.h
+        pga3dphysics/BodyPoint.h
+        pga3dphysics/Spring.h
+        pga3dphysics/Gravity.h
 )

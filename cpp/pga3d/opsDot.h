@@ -27,6 +27,7 @@ namespace pga3d {
         .i = (b.i * s + b.s * i)
     }; }
 
+
     constexpr Motor Motor::dot(const Motor& b) const noexcept { return {
         .s = (b.s * s - b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = (b.s * wx + b.wx * s - b.i * yz - b.yz * i),
@@ -37,6 +38,7 @@ namespace pga3d {
         .yz = (b.s * yz + b.yz * s),
         .i = (b.i * s + b.s * i)
     }; }
+
     constexpr Multivector Motor::dot(const Plane& b) const noexcept { return {
         .s = 0.0,
         .w = (b.w * s + b.x * wx + b.y * wy + b.z * wz),
@@ -55,6 +57,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Motor Motor::dot(const Bivector& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = (b.wx * s - b.yz * i),
@@ -65,6 +68,7 @@ namespace pga3d {
         .yz = b.yz * s,
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::dot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * yz + b.z * xy - b.w * i - b.y * xz),
@@ -83,6 +87,7 @@ namespace pga3d {
         .xyz = b.w * s,
         .i = 0.0
     }; }
+
     constexpr Motor Motor::dot(const Quaternion& b) const noexcept { return {
         .s = (b.s * s - b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = (b.s * wx - b.yz * i),
@@ -93,6 +98,7 @@ namespace pga3d {
         .yz = (b.s * yz + b.yz * s),
         .i = b.s * i
     }; }
+
     constexpr Motor Motor::dot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * s,
         .wx = (b.s * wx + b.wx * s),
@@ -103,6 +109,7 @@ namespace pga3d {
         .yz = b.s * yz,
         .i = b.s * i
     }; }
+
     constexpr Motor Motor::dot(const Translator& b) const noexcept { return {
         .s = s,
         .wx = (wx + b.wx * s),
@@ -113,6 +120,7 @@ namespace pga3d {
         .yz = yz,
         .i = i
     }; }
+
     constexpr Multivector Motor::dot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz),
@@ -131,6 +139,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::dot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = (-i + b.x * yz + b.z * xy - b.y * xz),
@@ -149,6 +158,7 @@ namespace pga3d {
         .xyz = s,
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::dot(const PlaneIdeal& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz),
@@ -167,6 +177,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Motor Motor::dot(const BivectorBulk& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = -b.yz * i,
@@ -177,11 +188,13 @@ namespace pga3d {
         .yz = b.yz * s,
         .i = 0.0
     }; }
+
     constexpr BivectorWeight Motor::dot(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx * s,
         .wy = b.wy * s,
         .wz = b.wz * s
     }; }
+
     constexpr Motor Motor::dot(const PseudoScalar& b) const noexcept { return {
         .s = 0.0,
         .wx = -b.i * yz,
@@ -192,6 +205,7 @@ namespace pga3d {
         .yz = 0.0,
         .i = b.i * s
     }; }
+
     constexpr Multivector Motor::dot(const PointCenter& b) const noexcept { return {
         .s = 0.0,
         .w = -i,
@@ -211,6 +225,7 @@ namespace pga3d {
         .i = 0.0
     }; }
 
+
     constexpr Multivector Plane::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
         .w = (b.s * w - b.wx * x - b.wy * y - b.wz * z),
@@ -229,13 +244,16 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr double Plane::dot(const Plane& b) const noexcept { return (b.x * x + b.y * y + b.z * z); }
+
     constexpr Plane Plane::dot(const Bivector& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y),
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Bivector Plane::dot(const ProjectivePoint& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
@@ -244,29 +262,34 @@ namespace pga3d {
         .xz = -b.w * y,
         .yz = b.w * x
     }; }
+
     constexpr Plane Plane::dot(const Quaternion& b) const noexcept { return {
         .x = (b.s * x - b.xy * y - b.xz * z),
         .y = (b.s * y + b.xy * x - b.yz * z),
         .z = (b.s * z + b.xz * x + b.yz * y),
         .w = b.s * w
     }; }
+
     constexpr Plane Plane::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.s * x,
         .y = b.s * y,
         .z = b.s * z,
         .w = (b.s * w - b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Plane Plane::dot(const Translator& b) const noexcept { return {
         .x = x,
         .y = y,
         .z = z,
         .w = (w - b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr BivectorWeight Plane::dot(const Vector& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
         .wz = (b.x * y - b.y * x)
     }; }
+
     constexpr Bivector Plane::dot(const Point& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
@@ -275,28 +298,34 @@ namespace pga3d {
         .xz = -y,
         .yz = x
     }; }
+
     constexpr double Plane::dot(const PlaneIdeal& b) const noexcept { return (b.x * x + b.y * y + b.z * z); }
+
     constexpr PlaneIdeal Plane::dot(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane Plane::dot(const BivectorWeight& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Vector Plane::dot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
+
     constexpr BivectorBulk Plane::dot(const PointCenter& b) const noexcept { return {
         .xy = z,
         .xz = -y,
         .yz = x
     }; }
+
 
     constexpr Motor Bivector::dot(const Motor& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
@@ -308,19 +337,23 @@ namespace pga3d {
         .yz = b.s * yz,
         .i = 0.0
     }; }
+
     constexpr Plane Bivector::dot(const Plane& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz),
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr double Bivector::dot(const Bivector& b) const noexcept { return (-b.xy * xy - b.xz * xz - b.yz * yz); }
+
     constexpr Plane Bivector::dot(const ProjectivePoint& b) const noexcept { return {
         .x = -b.w * yz,
         .y = b.w * xz,
         .z = -b.w * xy,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr Motor Bivector::dot(const Quaternion& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = b.s * wx,
@@ -331,6 +364,7 @@ namespace pga3d {
         .yz = b.s * yz,
         .i = 0.0
     }; }
+
     constexpr Bivector Bivector::dot(const ProjectiveTranslator& b) const noexcept { return {
         .wx = b.s * wx,
         .wy = b.s * wy,
@@ -339,6 +373,7 @@ namespace pga3d {
         .xz = b.s * xz,
         .yz = b.s * yz
     }; }
+
     constexpr Bivector Bivector::dot(const Translator& b) const noexcept { return {
         .wx = wx,
         .wy = wy,
@@ -347,35 +382,42 @@ namespace pga3d {
         .xz = xz,
         .yz = yz
     }; }
+
     constexpr Plane Bivector::dot(const Vector& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr Plane Bivector::dot(const Point& b) const noexcept { return {
         .x = -yz,
         .y = xz,
         .z = -xy,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr Plane Bivector::dot(const PlaneIdeal& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz),
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr double Bivector::dot(const BivectorBulk& b) const noexcept { return (-b.xy * xy - b.xz * xz - b.yz * yz); }
+
     constexpr BivectorWeight Bivector::dot(const PseudoScalar& b) const noexcept { return {
         .wx = -b.i * yz,
         .wy = b.i * xz,
         .wz = -b.i * xy
     }; }
+
     constexpr PlaneIdeal Bivector::dot(const PointCenter& b) const noexcept { return {
         .x = -yz,
         .y = xz,
         .z = -xy
     }; }
+
 
     constexpr Multivector ProjectivePoint::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -395,6 +437,7 @@ namespace pga3d {
         .xyz = b.s * w,
         .i = 0.0
     }; }
+
     constexpr Bivector ProjectivePoint::dot(const Plane& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
@@ -403,13 +446,16 @@ namespace pga3d {
         .xz = -b.y * w,
         .yz = b.x * w
     }; }
+
     constexpr Plane ProjectivePoint::dot(const Bivector& b) const noexcept { return {
         .x = -b.yz * w,
         .y = b.xz * w,
         .z = -b.xy * w,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
     constexpr double ProjectivePoint::dot(const ProjectivePoint& b) const noexcept { return -b.w * w; }
+
     constexpr Multivector ProjectivePoint::dot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = (b.xy * z + b.yz * x - b.xz * y),
@@ -428,19 +474,23 @@ namespace pga3d {
         .xyz = b.s * w,
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.s * x,
         .y = b.s * y,
         .z = b.s * z,
         .w = b.s * w
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::dot(const Translator& b) const noexcept { return {
         .x = x,
         .y = y,
         .z = z,
         .w = w
     }; }
+
     constexpr double ProjectivePoint::dot(const Point& b) const noexcept { return -w; }
+
     constexpr Bivector ProjectivePoint::dot(const PlaneIdeal& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
@@ -449,19 +499,23 @@ namespace pga3d {
         .xz = -b.y * w,
         .yz = b.x * w
     }; }
+
     constexpr Plane ProjectivePoint::dot(const BivectorBulk& b) const noexcept { return {
         .x = -b.yz * w,
         .y = b.xz * w,
         .z = -b.xy * w,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
     constexpr Plane ProjectivePoint::dot(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i * w
     }; }
+
     constexpr double ProjectivePoint::dot(const PointCenter& b) const noexcept { return -w; }
+
 
     constexpr Motor Quaternion::dot(const Motor& b) const noexcept { return {
         .s = (b.s * s - b.xy * xy - b.xz * xz - b.yz * yz),
@@ -473,12 +527,14 @@ namespace pga3d {
         .yz = (b.s * yz + b.yz * s),
         .i = b.i * s
     }; }
+
     constexpr Plane Quaternion::dot(const Plane& b) const noexcept { return {
         .x = (b.x * s + b.y * xy + b.z * xz),
         .y = (b.y * s + b.z * yz - b.x * xy),
         .z = (b.z * s - b.x * xz - b.y * yz),
         .w = b.w * s
     }; }
+
     constexpr Motor Quaternion::dot(const Bivector& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .wx = b.wx * s,
@@ -489,6 +545,7 @@ namespace pga3d {
         .yz = b.yz * s,
         .i = 0.0
     }; }
+
     constexpr Multivector Quaternion::dot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz),
@@ -507,12 +564,14 @@ namespace pga3d {
         .xyz = b.w * s,
         .i = 0.0
     }; }
+
     constexpr Quaternion Quaternion::dot(const Quaternion& b) const noexcept { return {
         .s = (b.s * s - b.xy * xy - b.xz * xz - b.yz * yz),
         .xy = (b.s * xy + b.xy * s),
         .xz = (b.s * xz + b.xz * s),
         .yz = (b.s * yz + b.yz * s)
     }; }
+
     constexpr Motor Quaternion::dot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * s,
         .wx = b.wx * s,
@@ -523,6 +582,7 @@ namespace pga3d {
         .yz = b.s * yz,
         .i = 0.0
     }; }
+
     constexpr Motor Quaternion::dot(const Translator& b) const noexcept { return {
         .s = s,
         .wx = b.wx * s,
@@ -533,6 +593,7 @@ namespace pga3d {
         .yz = yz,
         .i = 0.0
     }; }
+
     constexpr Multivector Quaternion::dot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz),
@@ -551,6 +612,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Quaternion::dot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz),
@@ -569,22 +631,26 @@ namespace pga3d {
         .xyz = s,
         .i = 0.0
     }; }
+
     constexpr PlaneIdeal Quaternion::dot(const PlaneIdeal& b) const noexcept { return {
         .x = (b.x * s + b.y * xy + b.z * xz),
         .y = (b.y * s + b.z * yz - b.x * xy),
         .z = (b.z * s - b.x * xz - b.y * yz)
     }; }
+
     constexpr Quaternion Quaternion::dot(const BivectorBulk& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .xy = b.xy * s,
         .xz = b.xz * s,
         .yz = b.yz * s
     }; }
+
     constexpr BivectorWeight Quaternion::dot(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx * s,
         .wy = b.wy * s,
         .wz = b.wz * s
     }; }
+
     constexpr Motor Quaternion::dot(const PseudoScalar& b) const noexcept { return {
         .s = 0.0,
         .wx = -b.i * yz,
@@ -595,6 +661,7 @@ namespace pga3d {
         .yz = 0.0,
         .i = b.i * s
     }; }
+
     constexpr Multivector Quaternion::dot(const PointCenter& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -614,6 +681,7 @@ namespace pga3d {
         .i = 0.0
     }; }
 
+
     constexpr Motor ProjectiveTranslator::dot(const Motor& b) const noexcept { return {
         .s = b.s * s,
         .wx = (b.s * wx + b.wx * s),
@@ -624,12 +692,14 @@ namespace pga3d {
         .yz = b.yz * s,
         .i = b.i * s
     }; }
+
     constexpr Plane ProjectiveTranslator::dot(const Plane& b) const noexcept { return {
         .x = b.x * s,
         .y = b.y * s,
         .z = b.z * s,
         .w = (b.w * s + b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector ProjectiveTranslator::dot(const Bivector& b) const noexcept { return {
         .wx = b.wx * s,
         .wy = b.wy * s,
@@ -638,12 +708,14 @@ namespace pga3d {
         .xz = b.xz * s,
         .yz = b.yz * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::dot(const ProjectivePoint& b) const noexcept { return {
         .x = b.x * s,
         .y = b.y * s,
         .z = b.z * s,
         .w = b.w * s
     }; }
+
     constexpr Motor ProjectiveTranslator::dot(const Quaternion& b) const noexcept { return {
         .s = b.s * s,
         .wx = b.s * wx,
@@ -654,54 +726,64 @@ namespace pga3d {
         .yz = b.yz * s,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator ProjectiveTranslator::dot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * s,
         .wx = (b.s * wx + b.wx * s),
         .wy = (b.s * wy + b.wy * s),
         .wz = (b.s * wz + b.wz * s)
     }; }
+
     constexpr ProjectiveTranslator ProjectiveTranslator::dot(const Translator& b) const noexcept { return {
         .s = s,
         .wx = (wx + b.wx * s),
         .wy = (wy + b.wy * s),
         .wz = (wz + b.wz * s)
     }; }
+
     constexpr Vector ProjectiveTranslator::dot(const Vector& b) const noexcept { return {
         .x = b.x * s,
         .y = b.y * s,
         .z = b.z * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::dot(const Point& b) const noexcept { return {
         .x = b.x * s,
         .y = b.y * s,
         .z = b.z * s,
         .w = s
     }; }
+
     constexpr Plane ProjectiveTranslator::dot(const PlaneIdeal& b) const noexcept { return {
         .x = b.x * s,
         .y = b.y * s,
         .z = b.z * s,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorBulk ProjectiveTranslator::dot(const BivectorBulk& b) const noexcept { return {
         .xy = b.xy * s,
         .xz = b.xz * s,
         .yz = b.yz * s
     }; }
+
     constexpr BivectorWeight ProjectiveTranslator::dot(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx * s,
         .wy = b.wy * s,
         .wz = b.wz * s
     }; }
+
     constexpr PseudoScalar ProjectiveTranslator::dot(const PseudoScalar& b) const noexcept { return {
         .i = b.i * s
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::dot(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = s
     }; }
+
 
     constexpr Motor Translator::dot(const Motor& b) const noexcept { return {
         .s = b.s,
@@ -713,12 +795,14 @@ namespace pga3d {
         .yz = b.yz,
         .i = b.i
     }; }
+
     constexpr Plane Translator::dot(const Plane& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = (b.w + b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector Translator::dot(const Bivector& b) const noexcept { return {
         .wx = b.wx,
         .wy = b.wy,
@@ -727,12 +811,14 @@ namespace pga3d {
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr ProjectivePoint Translator::dot(const ProjectivePoint& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = b.w
     }; }
+
     constexpr Motor Translator::dot(const Quaternion& b) const noexcept { return {
         .s = b.s,
         .wx = b.s * wx,
@@ -743,49 +829,59 @@ namespace pga3d {
         .yz = b.yz,
         .i = 0.0
     }; }
+
     constexpr ProjectiveTranslator Translator::dot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s,
         .wx = (b.wx + b.s * wx),
         .wy = (b.wy + b.s * wy),
         .wz = (b.wz + b.s * wz)
     }; }
+
     constexpr Translator Translator::dot(const Translator& b) const noexcept { return {
         .wx = (b.wx + wx),
         .wy = (b.wy + wy),
         .wz = (b.wz + wz)
     }; }
+
     constexpr Vector Translator::dot(const Vector& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z
     }; }
+
     constexpr Point Translator::dot(const Point& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z
     }; }
+
     constexpr Plane Translator::dot(const PlaneIdeal& b) const noexcept { return {
         .x = b.x,
         .y = b.y,
         .z = b.z,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorBulk Translator::dot(const BivectorBulk& b) const noexcept { return {
         .xy = b.xy,
         .xz = b.xz,
         .yz = b.yz
     }; }
+
     constexpr BivectorWeight Translator::dot(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx,
         .wy = b.wy,
         .wz = b.wz
     }; }
+
     constexpr PseudoScalar Translator::dot(const PseudoScalar& b) const noexcept { return {
         .i = b.i
     }; }
+
     constexpr PointCenter Translator::dot(const PointCenter& b) const noexcept { return {
 
     }; }
+
 
     constexpr Multivector Vector::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -805,17 +901,20 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr BivectorWeight Vector::dot(const Plane& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
         .wz = (b.y * x - b.x * y)
     }; }
+
     constexpr Plane Vector::dot(const Bivector& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
     constexpr Multivector Vector::dot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = (b.xy * z + b.yz * x - b.xz * y),
@@ -834,27 +933,32 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Vector Vector::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.s * x,
         .y = b.s * y,
         .z = b.s * z
     }; }
+
     constexpr Vector Vector::dot(const Translator& b) const noexcept { return {
         .x = x,
         .y = y,
         .z = z
     }; }
+
     constexpr BivectorWeight Vector::dot(const PlaneIdeal& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
         .wz = (b.y * x - b.x * y)
     }; }
+
     constexpr Plane Vector::dot(const BivectorBulk& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
 
     constexpr Multivector Point::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -874,6 +978,7 @@ namespace pga3d {
         .xyz = b.s,
         .i = 0.0
     }; }
+
     constexpr Bivector Point::dot(const Plane& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
@@ -882,13 +987,16 @@ namespace pga3d {
         .xz = -b.y,
         .yz = b.x
     }; }
+
     constexpr Plane Point::dot(const Bivector& b) const noexcept { return {
         .x = -b.yz,
         .y = b.xz,
         .z = -b.xy,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
     constexpr double Point::dot(const ProjectivePoint& b) const noexcept { return -b.w; }
+
     constexpr Multivector Point::dot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = (b.xy * z + b.yz * x - b.xz * y),
@@ -907,18 +1015,22 @@ namespace pga3d {
         .xyz = b.s,
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint Point::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.s * x,
         .y = b.s * y,
         .z = b.s * z,
         .w = b.s
     }; }
+
     constexpr Point Point::dot(const Translator& b) const noexcept { return {
         .x = x,
         .y = y,
         .z = z
     }; }
+
     constexpr double Point::dot(const Point& b) const noexcept { return -1.0; }
+
     constexpr Bivector Point::dot(const PlaneIdeal& b) const noexcept { return {
         .wx = (b.z * y - b.y * z),
         .wy = (b.x * z - b.z * x),
@@ -927,19 +1039,23 @@ namespace pga3d {
         .xz = -b.y,
         .yz = b.x
     }; }
+
     constexpr Plane Point::dot(const BivectorBulk& b) const noexcept { return {
         .x = -b.yz,
         .y = b.xz,
         .z = -b.xy,
         .w = (b.xy * z + b.yz * x - b.xz * y)
     }; }
+
     constexpr Plane Point::dot(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
     constexpr double Point::dot(const PointCenter& b) const noexcept { return -1.0; }
+
 
     constexpr Multivector PlaneIdeal::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -959,13 +1075,16 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr double PlaneIdeal::dot(const Plane& b) const noexcept { return (b.x * x + b.y * y + b.z * z); }
+
     constexpr Plane PlaneIdeal::dot(const Bivector& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y),
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Bivector PlaneIdeal::dot(const ProjectivePoint& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
@@ -974,28 +1093,33 @@ namespace pga3d {
         .xz = -b.w * y,
         .yz = b.w * x
     }; }
+
     constexpr PlaneIdeal PlaneIdeal::dot(const Quaternion& b) const noexcept { return {
         .x = (b.s * x - b.xy * y - b.xz * z),
         .y = (b.s * y + b.xy * x - b.yz * z),
         .z = (b.s * z + b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane PlaneIdeal::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.s * x,
         .y = b.s * y,
         .z = b.s * z,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Plane PlaneIdeal::dot(const Translator& b) const noexcept { return {
         .x = x,
         .y = y,
         .z = z,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr BivectorWeight PlaneIdeal::dot(const Vector& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
         .wz = (b.x * y - b.y * x)
     }; }
+
     constexpr Bivector PlaneIdeal::dot(const Point& b) const noexcept { return {
         .wx = (b.y * z - b.z * y),
         .wy = (b.z * x - b.x * z),
@@ -1004,28 +1128,34 @@ namespace pga3d {
         .xz = -y,
         .yz = x
     }; }
+
     constexpr double PlaneIdeal::dot(const PlaneIdeal& b) const noexcept { return (b.x * x + b.y * y + b.z * z); }
+
     constexpr PlaneIdeal PlaneIdeal::dot(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane PlaneIdeal::dot(const BivectorWeight& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Vector PlaneIdeal::dot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
+
     constexpr BivectorBulk PlaneIdeal::dot(const PointCenter& b) const noexcept { return {
         .xy = z,
         .xz = -y,
         .yz = x
     }; }
+
 
     constexpr Motor BivectorBulk::dot(const Motor& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
@@ -1037,95 +1167,114 @@ namespace pga3d {
         .yz = b.s * yz,
         .i = 0.0
     }; }
+
     constexpr PlaneIdeal BivectorBulk::dot(const Plane& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr double BivectorBulk::dot(const Bivector& b) const noexcept { return (-b.xy * xy - b.xz * xz - b.yz * yz); }
+
     constexpr Plane BivectorBulk::dot(const ProjectivePoint& b) const noexcept { return {
         .x = -b.w * yz,
         .y = b.w * xz,
         .z = -b.w * xy,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr Quaternion BivectorBulk::dot(const Quaternion& b) const noexcept { return {
         .s = (-b.xy * xy - b.xz * xz - b.yz * yz),
         .xy = b.s * xy,
         .xz = b.s * xz,
         .yz = b.s * yz
     }; }
+
     constexpr BivectorBulk BivectorBulk::dot(const ProjectiveTranslator& b) const noexcept { return {
         .xy = b.s * xy,
         .xz = b.s * xz,
         .yz = b.s * yz
     }; }
+
     constexpr BivectorBulk BivectorBulk::dot(const Translator& b) const noexcept { return {
         .xy = xy,
         .xz = xz,
         .yz = yz
     }; }
+
     constexpr Plane BivectorBulk::dot(const Vector& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr Plane BivectorBulk::dot(const Point& b) const noexcept { return {
         .x = -yz,
         .y = xz,
         .z = -xy,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr PlaneIdeal BivectorBulk::dot(const PlaneIdeal& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr double BivectorBulk::dot(const BivectorBulk& b) const noexcept { return (-b.xy * xy - b.xz * xz - b.yz * yz); }
+
     constexpr BivectorWeight BivectorBulk::dot(const PseudoScalar& b) const noexcept { return {
         .wx = -b.i * yz,
         .wy = b.i * xz,
         .wz = -b.i * xy
     }; }
+
     constexpr PlaneIdeal BivectorBulk::dot(const PointCenter& b) const noexcept { return {
         .x = -yz,
         .y = xz,
         .z = -xy
     }; }
 
+
     constexpr BivectorWeight BivectorWeight::dot(const Motor& b) const noexcept { return {
         .wx = b.s * wx,
         .wy = b.s * wy,
         .wz = b.s * wz
     }; }
+
     constexpr Plane BivectorWeight::dot(const Plane& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight BivectorWeight::dot(const Quaternion& b) const noexcept { return {
         .wx = b.s * wx,
         .wy = b.s * wy,
         .wz = b.s * wz
     }; }
+
     constexpr BivectorWeight BivectorWeight::dot(const ProjectiveTranslator& b) const noexcept { return {
         .wx = b.s * wx,
         .wy = b.s * wy,
         .wz = b.s * wz
     }; }
+
     constexpr BivectorWeight BivectorWeight::dot(const Translator& b) const noexcept { return {
         .wx = wx,
         .wy = wy,
         .wz = wz
     }; }
+
     constexpr Plane BivectorWeight::dot(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
 
     constexpr Motor PseudoScalar::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -1137,22 +1286,26 @@ namespace pga3d {
         .yz = 0.0,
         .i = b.s * i
     }; }
+
     constexpr Vector PseudoScalar::dot(const Plane& b) const noexcept { return {
         .x = -b.x * i,
         .y = -b.y * i,
         .z = -b.z * i
     }; }
+
     constexpr BivectorWeight PseudoScalar::dot(const Bivector& b) const noexcept { return {
         .wx = -b.yz * i,
         .wy = b.xz * i,
         .wz = -b.xy * i
     }; }
+
     constexpr Plane PseudoScalar::dot(const ProjectivePoint& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -b.w * i
     }; }
+
     constexpr Motor PseudoScalar::dot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .wx = -b.yz * i,
@@ -1163,34 +1316,41 @@ namespace pga3d {
         .yz = 0.0,
         .i = b.s * i
     }; }
+
     constexpr PseudoScalar PseudoScalar::dot(const ProjectiveTranslator& b) const noexcept { return {
         .i = b.s * i
     }; }
+
     constexpr PseudoScalar PseudoScalar::dot(const Translator& b) const noexcept { return {
         .i = i
     }; }
+
     constexpr Plane PseudoScalar::dot(const Point& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -i
     }; }
+
     constexpr Vector PseudoScalar::dot(const PlaneIdeal& b) const noexcept { return {
         .x = -b.x * i,
         .y = -b.y * i,
         .z = -b.z * i
     }; }
+
     constexpr BivectorWeight PseudoScalar::dot(const BivectorBulk& b) const noexcept { return {
         .wx = -b.yz * i,
         .wy = b.xz * i,
         .wz = -b.xy * i
     }; }
+
     constexpr Plane PseudoScalar::dot(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -i
     }; }
+
 
     constexpr Multivector PointCenter::dot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -1210,17 +1370,21 @@ namespace pga3d {
         .xyz = b.s,
         .i = 0.0
     }; }
+
     constexpr BivectorBulk PointCenter::dot(const Plane& b) const noexcept { return {
         .xy = b.z,
         .xz = -b.y,
         .yz = b.x
     }; }
+
     constexpr PlaneIdeal PointCenter::dot(const Bivector& b) const noexcept { return {
         .x = -b.yz,
         .y = b.xz,
         .z = -b.xy
     }; }
+
     constexpr double PointCenter::dot(const ProjectivePoint& b) const noexcept { return -b.w; }
+
     constexpr Multivector PointCenter::dot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -1239,32 +1403,40 @@ namespace pga3d {
         .xyz = b.s,
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint PointCenter::dot(const ProjectiveTranslator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.s
     }; }
+
     constexpr PointCenter PointCenter::dot(const Translator& b) const noexcept { return {
 
     }; }
+
     constexpr double PointCenter::dot(const Point& b) const noexcept { return -1.0; }
+
     constexpr BivectorBulk PointCenter::dot(const PlaneIdeal& b) const noexcept { return {
         .xy = b.z,
         .xz = -b.y,
         .yz = b.x
     }; }
+
     constexpr PlaneIdeal PointCenter::dot(const BivectorBulk& b) const noexcept { return {
         .x = -b.yz,
         .y = b.xz,
         .z = -b.xy
     }; }
+
     constexpr Plane PointCenter::dot(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
     constexpr double PointCenter::dot(const PointCenter& b) const noexcept { return -1.0; }
+
 
 }

@@ -436,6 +436,8 @@ final case class Pga3dMultivector(s: Double = 0.0,
 
   inline infix def ^(v: Pga3dMultivector): Pga3dMultivector = wedge(v)
 
+  inline infix def meet(v: Pga3dMultivector): Pga3dMultivector = wedge(v)
+
   infix def antiGeometric(v: Pga3dMultivector): Pga3dMultivector =
     Pga3dMultivector(
       s = (i * v.s + s * v.i + v.w * xyz + v.wx * yz + v.wxy * z + v.wyz * x + v.wz * xy + v.xy * wz + v.y * wxz + v.yz * wx - v.wxz * y - v.wy * xz - v.x * wyz - v.xyz * w - v.xz * wy - v.z * wxy),
@@ -497,6 +499,8 @@ final case class Pga3dMultivector(s: Double = 0.0,
     )
 
   inline infix def v(v: Pga3dMultivector): Pga3dMultivector = antiWedge(v)
+
+  inline infix def join(v: Pga3dMultivector): Pga3dMultivector = antiWedge(v)
 
   infix def sandwich(v: Pga3dMultivector): Pga3dMultivector =
     val sMs = s * s

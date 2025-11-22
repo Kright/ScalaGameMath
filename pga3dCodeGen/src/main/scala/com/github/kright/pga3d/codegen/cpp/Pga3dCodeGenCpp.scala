@@ -13,7 +13,8 @@ def runCppCodeGen(): Unit = {
     namespace = "pga3d",
   ).generateAll()
 
-  CustomAmalgamate.fuse()
+  CustomAmalgamate.fuseMath()
+  CustomAmalgamate.fusePhysicsWithMath()
 }
 
 

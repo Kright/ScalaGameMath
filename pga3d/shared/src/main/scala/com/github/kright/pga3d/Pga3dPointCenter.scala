@@ -434,12 +434,16 @@ object Pga3dPointCenter:
 
   inline infix def ^(v: Pga3dMotor): Pga3dProjectivePoint = wedge(v)
 
+  inline infix def meet(v: Pga3dMotor): Pga3dProjectivePoint = wedge(v)
+
   infix def wedge(v: Pga3dPlane): Pga3dPseudoScalar =
     Pga3dPseudoScalar(
       i = -v.w,
     )
 
   inline infix def ^(v: Pga3dPlane): Pga3dPseudoScalar = wedge(v)
+
+  inline infix def meet(v: Pga3dPlane): Pga3dPseudoScalar = wedge(v)
 
   infix def wedge(v: Pga3dQuaternion): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
@@ -451,6 +455,8 @@ object Pga3dPointCenter:
 
   inline infix def ^(v: Pga3dQuaternion): Pga3dProjectivePoint = wedge(v)
 
+  inline infix def meet(v: Pga3dQuaternion): Pga3dProjectivePoint = wedge(v)
+
   infix def wedge(v: Pga3dProjectiveTranslator): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
       x = 0.0,
@@ -461,10 +467,14 @@ object Pga3dPointCenter:
 
   inline infix def ^(v: Pga3dProjectiveTranslator): Pga3dProjectivePoint = wedge(v)
 
+  inline infix def meet(v: Pga3dProjectiveTranslator): Pga3dProjectivePoint = wedge(v)
+
   infix def wedge(v: Pga3dTranslator): Pga3dPointCenter.type =
     this
 
   inline infix def ^(v: Pga3dTranslator): Pga3dPointCenter.type = wedge(v)
+
+  inline infix def meet(v: Pga3dTranslator): Pga3dPointCenter.type = wedge(v)
 
   infix def antiGeometric(v: Pga3dMotor): Pga3dMultivector =
     Pga3dMultivector(
@@ -584,10 +594,14 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dMotor): Pga3dMultivector = antiWedge(v)
 
+  inline infix def join(v: Pga3dMotor): Pga3dMultivector = antiWedge(v)
+
   infix def antiWedge(v: Pga3dPlane): Double =
     v.w
 
   inline infix def v(v: Pga3dPlane): Double = antiWedge(v)
+
+  inline infix def join(v: Pga3dPlane): Double = antiWedge(v)
 
   infix def antiWedge(v: Pga3dBivector): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -598,6 +612,8 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dBivector): Pga3dPlaneIdeal = antiWedge(v)
 
+  inline infix def join(v: Pga3dBivector): Pga3dPlaneIdeal = antiWedge(v)
+
   infix def antiWedge(v: Pga3dProjectivePoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
@@ -606,6 +622,8 @@ object Pga3dPointCenter:
     )
 
   inline infix def v(v: Pga3dProjectivePoint): Pga3dBivectorBulk = antiWedge(v)
+
+  inline infix def join(v: Pga3dProjectivePoint): Pga3dBivectorBulk = antiWedge(v)
 
   infix def antiWedge(v: Pga3dProjectiveTranslator): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -616,6 +634,8 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dProjectiveTranslator): Pga3dPlaneIdeal = antiWedge(v)
 
+  inline infix def join(v: Pga3dProjectiveTranslator): Pga3dPlaneIdeal = antiWedge(v)
+
   infix def antiWedge(v: Pga3dTranslator): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
       x = -v.wx,
@@ -624,6 +644,8 @@ object Pga3dPointCenter:
     )
 
   inline infix def v(v: Pga3dTranslator): Pga3dPlaneIdeal = antiWedge(v)
+
+  inline infix def join(v: Pga3dTranslator): Pga3dPlaneIdeal = antiWedge(v)
 
   infix def antiWedge(v: Pga3dVector): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
@@ -634,6 +656,8 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dVector): Pga3dBivectorBulk = antiWedge(v)
 
+  inline infix def join(v: Pga3dVector): Pga3dBivectorBulk = antiWedge(v)
+
   infix def antiWedge(v: Pga3dPoint): Pga3dBivectorBulk =
     Pga3dBivectorBulk(
       xy = v.z,
@@ -642,6 +666,8 @@ object Pga3dPointCenter:
     )
 
   inline infix def v(v: Pga3dPoint): Pga3dBivectorBulk = antiWedge(v)
+
+  inline infix def join(v: Pga3dPoint): Pga3dBivectorBulk = antiWedge(v)
 
   infix def antiWedge(v: Pga3dBivectorWeight): Pga3dPlaneIdeal =
     Pga3dPlaneIdeal(
@@ -652,6 +678,8 @@ object Pga3dPointCenter:
 
   inline infix def v(v: Pga3dBivectorWeight): Pga3dPlaneIdeal = antiWedge(v)
 
+  inline infix def join(v: Pga3dBivectorWeight): Pga3dPlaneIdeal = antiWedge(v)
+
   infix def antiWedge(v: Pga3dPseudoScalar): Pga3dProjectivePoint =
     Pga3dProjectivePoint(
       x = 0.0,
@@ -661,6 +689,8 @@ object Pga3dPointCenter:
     )
 
   inline infix def v(v: Pga3dPseudoScalar): Pga3dProjectivePoint = antiWedge(v)
+
+  inline infix def join(v: Pga3dPseudoScalar): Pga3dProjectivePoint = antiWedge(v)
 
   infix def sandwich(v: Pga3dMotor): Pga3dMotor =
     Pga3dMotor(

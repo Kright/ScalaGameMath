@@ -53,12 +53,14 @@ class AntiDotOpGenerator extends BinaryMethodCodeGen(
 
 class WedgeOpGenerator extends BinaryMethodCodeGen(
   methodName = "wedge",
+  alternativeNames = Seq("meet"),
   fileName = "opsWedge.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.wedge(b)
 )
 
 class AntiWedgeOpGenerator extends BinaryMethodCodeGen(
   methodName = "antiWedge",
+  alternativeNames = Seq("join"),
   fileName = "opsAntiWedge.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.antiWedge(b)
 )
@@ -90,7 +92,8 @@ class CrossOpGenerator extends BinaryMethodCodeGen(
  */
 private class BinaryMethodCodeGen(val methodName: String,
                                   val fileName: String,
-                                  val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym]) extends CppCodeGenerator:
+                                  val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym],
+                                  val alternativeNames: Seq[String] = Seq()) extends CppCodeGenerator:
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] =
     val code = CppCodeBuilder()
@@ -110,8 +113,13 @@ private class BinaryMethodCodeGen(val methodName: String,
             if pairAllowed then
               val result = op(left.self, right.makeSymbolic("b"))
               val target = CppSubclasses.findMatchingClass(result)
-              if target != CppSubclasses.zeroCls then
+              if (target != CppSubclasses.zeroCls) {
                 code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept { return ${target.makeBracesInit(result, multiline = true)}; }")
+                alternativeNames.foreach { altName =>
+                  code(s"constexpr ${target.name} ${left.name}::${altName}(const ${right.name}& b) const noexcept { return ${methodName}(b); }")
+                }
+                code("")
+              }
         }
         code("")
       }
@@ -130,7 +138,11 @@ private class BinaryMethodCodeGen(val methodName: String,
         val result = op(cls.self, right.makeSymbolic("b"))
         val target = CppSubclasses.findMatchingClass(result)
         if target == CppSubclasses.zeroCls then ""
-        else s"[[nodiscard]] constexpr ${target.name} ${methodName}(const ${right.name}& b) const noexcept;"
+        else {
+          (Seq(methodName) ++ alternativeNames)
+            .map(name => s"[[nodiscard]] constexpr ${target.name} ${name}(const ${right.name}& b) const noexcept;")
+            .mkString("\n")
+        }
 
     val result = decls.filter(_.nonEmpty).mkString("\n")
 

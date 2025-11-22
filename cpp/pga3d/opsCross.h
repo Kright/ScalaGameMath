@@ -27,6 +27,7 @@ namespace pga3d {
         .i = (b.wxz * y + b.x * wyz + b.xyz * w + b.z * wxy - b.w * xyz - b.wxy * z - b.wyz * x - b.y * wxz)
     }; }
 
+
     constexpr Bivector Motor::cross(const Motor& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz - b.xy * wy - b.xz * wz),
         .wy = (b.wz * yz + b.xy * wx - b.wx * xy - b.yz * wz),
@@ -35,6 +36,7 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Multivector Motor::cross(const Plane& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz),
@@ -53,6 +55,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Bivector Motor::cross(const Bivector& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz - b.xy * wy - b.xz * wz),
         .wy = (b.wz * yz + b.xy * wx - b.wx * xy - b.yz * wz),
@@ -61,6 +64,7 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Multivector Motor::cross(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = -b.w * i,
@@ -79,6 +83,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Bivector Motor::cross(const Quaternion& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
@@ -87,21 +92,25 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Motor::cross(const ProjectiveTranslator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr BivectorWeight Motor::cross(const Translator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Vector Motor::cross(const Vector& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Multivector Motor::cross(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = -i,
@@ -120,6 +129,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::cross(const PlaneIdeal& b) const noexcept { return {
         .s = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz),
@@ -138,6 +148,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Bivector Motor::cross(const BivectorBulk& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
@@ -146,11 +157,13 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Motor::cross(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Multivector Motor::cross(const PointCenter& b) const noexcept { return {
         .s = 0.0,
         .w = -i,
@@ -170,6 +183,7 @@ namespace pga3d {
         .i = 0.0
     }; }
 
+
     constexpr Multivector Plane::cross(const Motor& b) const noexcept { return {
         .s = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z),
@@ -188,6 +202,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Bivector Plane::cross(const Plane& b) const noexcept { return {
         .wx = (b.x * w - b.w * x),
         .wy = (b.y * w - b.w * y),
@@ -196,38 +211,46 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr Plane Plane::cross(const Bivector& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y),
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr PseudoScalar Plane::cross(const ProjectivePoint& b) const noexcept { return {
         .i = (b.w * w + b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PlaneIdeal Plane::cross(const Quaternion& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane Plane::cross(const ProjectiveTranslator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Plane Plane::cross(const Translator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr PseudoScalar Plane::cross(const Vector& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PseudoScalar Plane::cross(const Point& b) const noexcept { return {
         .i = (w + b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr Bivector Plane::cross(const PlaneIdeal& b) const noexcept { return {
         .wx = b.x * w,
         .wy = b.y * w,
@@ -236,25 +259,30 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr PlaneIdeal Plane::cross(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane Plane::cross(const BivectorWeight& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Vector Plane::cross(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
+
     constexpr PseudoScalar Plane::cross(const PointCenter& b) const noexcept { return {
         .i = w
     }; }
+
 
     constexpr Bivector Bivector::cross(const Motor& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz - b.xy * wy - b.xz * wz),
@@ -264,12 +292,14 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Plane Bivector::cross(const Plane& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz),
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector Bivector::cross(const Bivector& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz - b.xy * wy - b.xz * wz),
         .wy = (b.wz * yz + b.xy * wx - b.wx * xy - b.yz * wz),
@@ -278,11 +308,13 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Vector Bivector::cross(const ProjectivePoint& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz - b.w * wx),
         .y = (b.z * yz - b.w * wy - b.x * xy),
         .z = (-b.w * wz - b.x * xz - b.y * yz)
     }; }
+
     constexpr Bivector Bivector::cross(const Quaternion& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
@@ -291,32 +323,38 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Bivector::cross(const ProjectiveTranslator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr BivectorWeight Bivector::cross(const Translator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Vector Bivector::cross(const Vector& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Vector Bivector::cross(const Point& b) const noexcept { return {
         .x = (-wx + b.y * xy + b.z * xz),
         .y = (-wy + b.z * yz - b.x * xy),
         .z = (-wz - b.x * xz - b.y * yz)
     }; }
+
     constexpr Plane Bivector::cross(const PlaneIdeal& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz),
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Bivector Bivector::cross(const BivectorBulk& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
@@ -325,16 +363,19 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Bivector::cross(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Vector Bivector::cross(const PointCenter& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
+
 
     constexpr Multivector ProjectivePoint::cross(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -354,68 +395,82 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar ProjectivePoint::cross(const Plane& b) const noexcept { return {
         .i = (-b.w * w - b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector ProjectivePoint::cross(const Bivector& b) const noexcept { return {
         .x = (b.wx * w - b.xy * y - b.xz * z),
         .y = (b.wy * w + b.xy * x - b.yz * z),
         .z = (b.wz * w + b.xz * x + b.yz * y)
     }; }
+
     constexpr BivectorWeight ProjectivePoint::cross(const ProjectivePoint& b) const noexcept { return {
         .wx = (b.w * x - b.x * w),
         .wy = (b.w * y - b.y * w),
         .wz = (b.w * z - b.z * w)
     }; }
+
     constexpr Vector ProjectivePoint::cross(const Quaternion& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Vector ProjectivePoint::cross(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.wx * w,
         .y = b.wy * w,
         .z = b.wz * w
     }; }
+
     constexpr Vector ProjectivePoint::cross(const Translator& b) const noexcept { return {
         .x = b.wx * w,
         .y = b.wy * w,
         .z = b.wz * w
     }; }
+
     constexpr BivectorWeight ProjectivePoint::cross(const Vector& b) const noexcept { return {
         .wx = -b.x * w,
         .wy = -b.y * w,
         .wz = -b.z * w
     }; }
+
     constexpr BivectorWeight ProjectivePoint::cross(const Point& b) const noexcept { return {
         .wx = (x - b.x * w),
         .wy = (y - b.y * w),
         .wz = (z - b.z * w)
     }; }
+
     constexpr PseudoScalar ProjectivePoint::cross(const PlaneIdeal& b) const noexcept { return {
         .i = (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector ProjectivePoint::cross(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Vector ProjectivePoint::cross(const BivectorWeight& b) const noexcept { return {
         .x = b.wx * w,
         .y = b.wy * w,
         .z = b.wz * w
     }; }
+
     constexpr Plane ProjectivePoint::cross(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i * w
     }; }
+
     constexpr BivectorWeight ProjectivePoint::cross(const PointCenter& b) const noexcept { return {
         .wx = x,
         .wy = y,
         .wz = z
     }; }
+
 
     constexpr Bivector Quaternion::cross(const Motor& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
@@ -425,11 +480,13 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr PlaneIdeal Quaternion::cross(const Plane& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Bivector Quaternion::cross(const Bivector& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
@@ -438,189 +495,226 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Vector Quaternion::cross(const ProjectivePoint& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr BivectorBulk Quaternion::cross(const Quaternion& b) const noexcept { return {
         .xy = (b.xz * yz - b.yz * xz),
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Quaternion::cross(const ProjectiveTranslator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr BivectorWeight Quaternion::cross(const Translator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Vector Quaternion::cross(const Vector& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Vector Quaternion::cross(const Point& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr PlaneIdeal Quaternion::cross(const PlaneIdeal& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr BivectorBulk Quaternion::cross(const BivectorBulk& b) const noexcept { return {
         .xy = (b.xz * yz - b.yz * xz),
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight Quaternion::cross(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
 
+
     constexpr BivectorWeight ProjectiveTranslator::cross(const Motor& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Plane ProjectiveTranslator::cross(const Plane& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight ProjectiveTranslator::cross(const Bivector& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector ProjectiveTranslator::cross(const ProjectivePoint& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz
     }; }
+
     constexpr BivectorWeight ProjectiveTranslator::cross(const Quaternion& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector ProjectiveTranslator::cross(const Point& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
+
     constexpr Plane ProjectiveTranslator::cross(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight ProjectiveTranslator::cross(const BivectorBulk& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector ProjectiveTranslator::cross(const PointCenter& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
 
+
     constexpr BivectorWeight Translator::cross(const Motor& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Plane Translator::cross(const Plane& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight Translator::cross(const Bivector& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector Translator::cross(const ProjectivePoint& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz
     }; }
+
     constexpr BivectorWeight Translator::cross(const Quaternion& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector Translator::cross(const Point& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
+
     constexpr Plane Translator::cross(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight Translator::cross(const BivectorBulk& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector Translator::cross(const PointCenter& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
 
+
     constexpr Vector Vector::cross(const Motor& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr PseudoScalar Vector::cross(const Plane& b) const noexcept { return {
         .i = (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector Vector::cross(const Bivector& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr BivectorWeight Vector::cross(const ProjectivePoint& b) const noexcept { return {
         .wx = b.w * x,
         .wy = b.w * y,
         .wz = b.w * z
     }; }
+
     constexpr Vector Vector::cross(const Quaternion& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr BivectorWeight Vector::cross(const Point& b) const noexcept { return {
         .wx = x,
         .wy = y,
         .wz = z
     }; }
+
     constexpr PseudoScalar Vector::cross(const PlaneIdeal& b) const noexcept { return {
         .i = (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector Vector::cross(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr BivectorWeight Vector::cross(const PointCenter& b) const noexcept { return {
         .wx = x,
         .wy = y,
         .wz = z
     }; }
+
 
     constexpr Multivector Point::cross(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -640,68 +734,82 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar Point::cross(const Plane& b) const noexcept { return {
         .i = (-b.w - b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector Point::cross(const Bivector& b) const noexcept { return {
         .x = (b.wx - b.xy * y - b.xz * z),
         .y = (b.wy + b.xy * x - b.yz * z),
         .z = (b.wz + b.xz * x + b.yz * y)
     }; }
+
     constexpr BivectorWeight Point::cross(const ProjectivePoint& b) const noexcept { return {
         .wx = (-b.x + b.w * x),
         .wy = (-b.y + b.w * y),
         .wz = (-b.z + b.w * z)
     }; }
+
     constexpr Vector Point::cross(const Quaternion& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Vector Point::cross(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr Vector Point::cross(const Translator& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr BivectorWeight Point::cross(const Vector& b) const noexcept { return {
         .wx = -b.x,
         .wy = -b.y,
         .wz = -b.z
     }; }
+
     constexpr BivectorWeight Point::cross(const Point& b) const noexcept { return {
         .wx = (x - b.x),
         .wy = (y - b.y),
         .wz = (z - b.z)
     }; }
+
     constexpr PseudoScalar Point::cross(const PlaneIdeal& b) const noexcept { return {
         .i = (-b.x * x - b.y * y - b.z * z)
     }; }
+
     constexpr Vector Point::cross(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Vector Point::cross(const BivectorWeight& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr Plane Point::cross(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
     constexpr BivectorWeight Point::cross(const PointCenter& b) const noexcept { return {
         .wx = x,
         .wy = y,
         .wz = z
     }; }
+
 
     constexpr Multivector PlaneIdeal::cross(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -721,6 +829,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Bivector PlaneIdeal::cross(const Plane& b) const noexcept { return {
         .wx = -b.w * x,
         .wy = -b.w * y,
@@ -729,59 +838,71 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr Plane PlaneIdeal::cross(const Bivector& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y),
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr PseudoScalar PlaneIdeal::cross(const ProjectivePoint& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PlaneIdeal PlaneIdeal::cross(const Quaternion& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane PlaneIdeal::cross(const ProjectiveTranslator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Plane PlaneIdeal::cross(const Translator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr PseudoScalar PlaneIdeal::cross(const Vector& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PseudoScalar PlaneIdeal::cross(const Point& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr BivectorBulk PlaneIdeal::cross(const PlaneIdeal& b) const noexcept { return {
         .xy = (b.y * x - b.x * y),
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr PlaneIdeal PlaneIdeal::cross(const BivectorBulk& b) const noexcept { return {
         .x = (-b.xy * y - b.xz * z),
         .y = (b.xy * x - b.yz * z),
         .z = (b.xz * x + b.yz * y)
     }; }
+
     constexpr Plane PlaneIdeal::cross(const BivectorWeight& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (-b.wx * x - b.wy * y - b.wz * z)
     }; }
+
     constexpr Vector PlaneIdeal::cross(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
+
 
     constexpr Bivector BivectorBulk::cross(const Motor& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
@@ -791,11 +912,13 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr PlaneIdeal BivectorBulk::cross(const Plane& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Bivector BivectorBulk::cross(const Bivector& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
@@ -804,128 +927,152 @@ namespace pga3d {
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr Vector BivectorBulk::cross(const ProjectivePoint& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr BivectorBulk BivectorBulk::cross(const Quaternion& b) const noexcept { return {
         .xy = (b.xz * yz - b.yz * xz),
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight BivectorBulk::cross(const ProjectiveTranslator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr BivectorWeight BivectorBulk::cross(const Translator& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
+
     constexpr Vector BivectorBulk::cross(const Vector& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr Vector BivectorBulk::cross(const Point& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr PlaneIdeal BivectorBulk::cross(const PlaneIdeal& b) const noexcept { return {
         .x = (b.y * xy + b.z * xz),
         .y = (b.z * yz - b.x * xy),
         .z = (-b.x * xz - b.y * yz)
     }; }
+
     constexpr BivectorBulk BivectorBulk::cross(const BivectorBulk& b) const noexcept { return {
         .xy = (b.xz * yz - b.yz * xz),
         .xz = (b.yz * xy - b.xy * yz),
         .yz = (b.xy * xz - b.xz * xy)
     }; }
+
     constexpr BivectorWeight BivectorBulk::cross(const BivectorWeight& b) const noexcept { return {
         .wx = (b.wy * xy + b.wz * xz),
         .wy = (b.wz * yz - b.wx * xy),
         .wz = (-b.wx * xz - b.wy * yz)
     }; }
 
+
     constexpr BivectorWeight BivectorWeight::cross(const Motor& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Plane BivectorWeight::cross(const Plane& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight BivectorWeight::cross(const Bivector& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector BivectorWeight::cross(const ProjectivePoint& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz
     }; }
+
     constexpr BivectorWeight BivectorWeight::cross(const Quaternion& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector BivectorWeight::cross(const Point& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
+
     constexpr Plane BivectorWeight::cross(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr BivectorWeight BivectorWeight::cross(const BivectorBulk& b) const noexcept { return {
         .wx = (-b.xy * wy - b.xz * wz),
         .wy = (b.xy * wx - b.yz * wz),
         .wz = (b.xz * wx + b.yz * wy)
     }; }
+
     constexpr Vector BivectorWeight::cross(const PointCenter& b) const noexcept { return {
         .x = -wx,
         .y = -wy,
         .z = -wz
     }; }
 
+
     constexpr Vector PseudoScalar::cross(const Plane& b) const noexcept { return {
         .x = -b.x * i,
         .y = -b.y * i,
         .z = -b.z * i
     }; }
+
     constexpr Plane PseudoScalar::cross(const ProjectivePoint& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -b.w * i
     }; }
+
     constexpr Plane PseudoScalar::cross(const Point& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -i
     }; }
+
     constexpr Vector PseudoScalar::cross(const PlaneIdeal& b) const noexcept { return {
         .x = -b.x * i,
         .y = -b.y * i,
         .z = -b.z * i
     }; }
+
     constexpr Plane PseudoScalar::cross(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -i
     }; }
+
 
     constexpr Multivector PointCenter::cross(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -945,49 +1092,59 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar PointCenter::cross(const Plane& b) const noexcept { return {
         .i = -b.w
     }; }
+
     constexpr Vector PointCenter::cross(const Bivector& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr BivectorWeight PointCenter::cross(const ProjectivePoint& b) const noexcept { return {
         .wx = -b.x,
         .wy = -b.y,
         .wz = -b.z
     }; }
+
     constexpr Vector PointCenter::cross(const ProjectiveTranslator& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr Vector PointCenter::cross(const Translator& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr BivectorWeight PointCenter::cross(const Vector& b) const noexcept { return {
         .wx = -b.x,
         .wy = -b.y,
         .wz = -b.z
     }; }
+
     constexpr BivectorWeight PointCenter::cross(const Point& b) const noexcept { return {
         .wx = -b.x,
         .wy = -b.y,
         .wz = -b.z
     }; }
+
     constexpr Vector PointCenter::cross(const BivectorWeight& b) const noexcept { return {
         .x = b.wx,
         .y = b.wy,
         .z = b.wz
     }; }
+
     constexpr Plane PointCenter::cross(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
 
 }

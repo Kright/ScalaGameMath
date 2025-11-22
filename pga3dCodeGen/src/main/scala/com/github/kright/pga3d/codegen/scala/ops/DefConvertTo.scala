@@ -45,7 +45,7 @@ object DefConvertTo:
           code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
           code.block {
             val mult = Sym(1.0) / cls.self("s")
-            val result = cls.self.filter((b, _) => b.grade == 2).map((_, s) => s / Sym("mult"))
+            val result = cls.self.filter((b, _) => b.grade == 2).map((_, s) => s * Sym("mult"))
             code(s"val mult = ${Sym(1.0) / cls.self("s")}")
             code(target.makeConstructor(result))
           }

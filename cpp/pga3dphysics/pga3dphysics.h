@@ -20,5 +20,9 @@
 #include "LinearOperator.h"
 #include "Friction.h"
 #include "BodyState.h"
+#include "BodyPoint.h"
 #include "PhysicsBody.h"
+#include "Gravity.h"
+#include "Spring.h"
+
 #include "PhysicsSolverRK4.h"

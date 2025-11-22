@@ -27,6 +27,7 @@ namespace pga3d {
         .i = (b.i * i + b.wxy * wxy + b.wxz * wxz + b.wyz * wyz - b.w * w - b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
 
+
     constexpr Motor Motor::antiDot(const Motor& b) const noexcept { return {
         .s = (b.i * s + b.s * i),
         .wx = (b.i * wx + b.wx * i),
@@ -37,6 +38,7 @@ namespace pga3d {
         .yz = (b.i * yz + b.yz * i - b.s * wx - b.wx * s),
         .i = (b.i * i - b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector Motor::antiDot(const Plane& b) const noexcept { return {
         .s = 0.0,
         .w = b.w * i,
@@ -55,6 +57,7 @@ namespace pga3d {
         .xyz = (b.x * wx + b.y * wy + b.z * wz - b.w * s),
         .i = 0.0
     }; }
+
     constexpr Motor Motor::antiDot(const Bivector& b) const noexcept { return {
         .s = 0.0,
         .wx = b.wx * i,
@@ -65,6 +68,7 @@ namespace pga3d {
         .yz = (b.yz * i - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector Motor::antiDot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -83,12 +87,14 @@ namespace pga3d {
         .xyz = (b.w * i + b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr Quaternion Motor::antiDot(const Quaternion& b) const noexcept { return {
         .s = b.s * i,
         .xy = (b.xy * i - b.s * wz),
         .xz = (b.s * wy + b.xz * i),
         .yz = (b.yz * i - b.s * wx)
     }; }
+
     constexpr Motor Motor::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * i,
         .wx = b.wx * i,
@@ -99,6 +105,7 @@ namespace pga3d {
         .yz = (-b.s * wx - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor Motor::antiDot(const Translator& b) const noexcept { return {
         .s = i,
         .wx = b.wx * i,
@@ -109,6 +116,7 @@ namespace pga3d {
         .yz = (-wx - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector Motor::antiDot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -127,6 +135,7 @@ namespace pga3d {
         .xyz = (b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::antiDot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -145,6 +154,7 @@ namespace pga3d {
         .xyz = (i + b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr Multivector Motor::antiDot(const PlaneIdeal& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -163,11 +173,13 @@ namespace pga3d {
         .xyz = (b.x * wx + b.y * wy + b.z * wz),
         .i = 0.0
     }; }
+
     constexpr BivectorBulk Motor::antiDot(const BivectorBulk& b) const noexcept { return {
         .xy = b.xy * i,
         .xz = b.xz * i,
         .yz = b.yz * i
     }; }
+
     constexpr Motor Motor::antiDot(const BivectorWeight& b) const noexcept { return {
         .s = 0.0,
         .wx = b.wx * i,
@@ -178,6 +190,7 @@ namespace pga3d {
         .yz = -b.wx * s,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor Motor::antiDot(const PseudoScalar& b) const noexcept { return {
         .s = b.i * s,
         .wx = b.i * wx,
@@ -188,12 +201,14 @@ namespace pga3d {
         .yz = b.i * yz,
         .i = b.i * i
     }; }
+
     constexpr ProjectivePoint Motor::antiDot(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = i
     }; }
+
 
     constexpr Multivector Plane::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -213,15 +228,18 @@ namespace pga3d {
         .xyz = (b.s * w + b.wx * x + b.wy * y + b.wz * z),
         .i = 0.0
     }; }
+
     constexpr PseudoScalar Plane::antiDot(const Plane& b) const noexcept { return {
         .i = -b.w * w
     }; }
+
     constexpr ProjectivePoint Plane::antiDot(const Bivector& b) const noexcept { return {
         .x = -b.wx * w,
         .y = -b.wy * w,
         .z = -b.wz * w,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr Bivector Plane::antiDot(const ProjectivePoint& b) const noexcept { return {
         .wx = b.x * w,
         .wy = b.y * w,
@@ -230,24 +248,28 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr ProjectivePoint Plane::antiDot(const Quaternion& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.s * w
     }; }
+
     constexpr ProjectivePoint Plane::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .x = -b.wx * w,
         .y = -b.wy * w,
         .z = -b.wz * w,
         .w = (b.s * w + b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr ProjectivePoint Plane::antiDot(const Translator& b) const noexcept { return {
         .x = -b.wx * w,
         .y = -b.wy * w,
         .z = -b.wz * w,
         .w = (w + b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr Bivector Plane::antiDot(const Vector& b) const noexcept { return {
         .wx = b.x * w,
         .wy = b.y * w,
@@ -256,6 +278,7 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr Bivector Plane::antiDot(const Point& b) const noexcept { return {
         .wx = b.x * w,
         .wy = b.y * w,
@@ -264,18 +287,21 @@ namespace pga3d {
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr ProjectivePoint Plane::antiDot(const BivectorWeight& b) const noexcept { return {
         .x = -b.wx * w,
         .y = -b.wy * w,
         .z = -b.wz * w,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr Plane Plane::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z,
         .w = b.i * w
     }; }
+
 
     constexpr Motor Bivector::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -287,26 +313,31 @@ namespace pga3d {
         .yz = (b.i * yz - b.s * wx),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint Bivector::antiDot(const Plane& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr PseudoScalar Bivector::antiDot(const Bivector& b) const noexcept { return {
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint Bivector::antiDot(const ProjectivePoint& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx),
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr BivectorBulk Bivector::antiDot(const Quaternion& b) const noexcept { return {
         .xy = -b.s * wz,
         .xz = b.s * wy,
         .yz = -b.s * wx
     }; }
+
     constexpr Motor Bivector::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -317,6 +348,7 @@ namespace pga3d {
         .yz = -b.s * wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor Bivector::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -327,27 +359,32 @@ namespace pga3d {
         .yz = -wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint Bivector::antiDot(const Vector& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx),
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr ProjectivePoint Bivector::antiDot(const Point& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx),
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr ProjectivePoint Bivector::antiDot(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr PseudoScalar Bivector::antiDot(const BivectorWeight& b) const noexcept { return {
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Bivector Bivector::antiDot(const PseudoScalar& b) const noexcept { return {
         .wx = b.i * wx,
         .wy = b.i * wy,
@@ -356,6 +393,7 @@ namespace pga3d {
         .xz = b.i * xz,
         .yz = b.i * yz
     }; }
+
 
     constexpr Multivector ProjectivePoint::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -375,6 +413,7 @@ namespace pga3d {
         .xyz = (b.i * w + b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Bivector ProjectivePoint::antiDot(const Plane& b) const noexcept { return {
         .wx = b.w * x,
         .wy = b.w * y,
@@ -383,15 +422,18 @@ namespace pga3d {
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::antiDot(const Bivector& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x),
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr PseudoScalar ProjectivePoint::antiDot(const ProjectivePoint& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr Multivector ProjectivePoint::antiDot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -410,6 +452,7 @@ namespace pga3d {
         .xyz = (b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Multivector ProjectivePoint::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -428,6 +471,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector ProjectivePoint::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -446,28 +490,34 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar ProjectivePoint::antiDot(const Vector& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PseudoScalar ProjectivePoint::antiDot(const Point& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr BivectorBulk ProjectivePoint::antiDot(const PlaneIdeal& b) const noexcept { return {
         .xy = (b.x * y - b.y * x),
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::antiDot(const BivectorBulk& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr Vector ProjectivePoint::antiDot(const BivectorWeight& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x)
     }; }
+
     constexpr ProjectivePoint ProjectivePoint::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
@@ -475,23 +525,27 @@ namespace pga3d {
         .w = b.i * w
     }; }
 
+
     constexpr Quaternion Quaternion::antiDot(const Motor& b) const noexcept { return {
         .s = b.i * s,
         .xy = (b.i * xy - b.wz * s),
         .xz = (b.i * xz + b.wy * s),
         .yz = (b.i * yz - b.wx * s)
     }; }
+
     constexpr ProjectivePoint Quaternion::antiDot(const Plane& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = -b.w * s
     }; }
+
     constexpr BivectorBulk Quaternion::antiDot(const Bivector& b) const noexcept { return {
         .xy = -b.wz * s,
         .xz = b.wy * s,
         .yz = -b.wx * s
     }; }
+
     constexpr Multivector Quaternion::antiDot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -510,16 +564,19 @@ namespace pga3d {
         .xyz = (b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr BivectorBulk Quaternion::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .xy = -b.wz * s,
         .xz = b.wy * s,
         .yz = -b.wx * s
     }; }
+
     constexpr BivectorBulk Quaternion::antiDot(const Translator& b) const noexcept { return {
         .xy = -b.wz * s,
         .xz = b.wy * s,
         .yz = -b.wx * s
     }; }
+
     constexpr Multivector Quaternion::antiDot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -538,6 +595,7 @@ namespace pga3d {
         .xyz = (b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr Multivector Quaternion::antiDot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -556,17 +614,20 @@ namespace pga3d {
         .xyz = (b.x * yz + b.z * xy - b.y * xz),
         .i = 0.0
     }; }
+
     constexpr BivectorBulk Quaternion::antiDot(const BivectorWeight& b) const noexcept { return {
         .xy = -b.wz * s,
         .xz = b.wy * s,
         .yz = -b.wx * s
     }; }
+
     constexpr Quaternion Quaternion::antiDot(const PseudoScalar& b) const noexcept { return {
         .s = b.i * s,
         .xy = b.i * xy,
         .xz = b.i * xz,
         .yz = b.i * yz
     }; }
+
 
     constexpr Motor ProjectiveTranslator::antiDot(const Motor& b) const noexcept { return {
         .s = b.i * s,
@@ -578,12 +639,14 @@ namespace pga3d {
         .yz = (-b.s * wx - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::antiDot(const Plane& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz,
         .w = (b.x * wx + b.y * wy + b.z * wz - b.w * s)
     }; }
+
     constexpr Motor ProjectiveTranslator::antiDot(const Bivector& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -594,6 +657,7 @@ namespace pga3d {
         .yz = -b.wx * s,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector ProjectiveTranslator::antiDot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -612,11 +676,13 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr BivectorBulk ProjectiveTranslator::antiDot(const Quaternion& b) const noexcept { return {
         .xy = -b.s * wz,
         .xz = b.s * wy,
         .yz = -b.s * wx
     }; }
+
     constexpr Motor ProjectiveTranslator::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -627,6 +693,7 @@ namespace pga3d {
         .yz = (-b.s * wx - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor ProjectiveTranslator::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -637,6 +704,7 @@ namespace pga3d {
         .yz = (-wx - b.wx * s),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector ProjectiveTranslator::antiDot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -655,6 +723,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector ProjectiveTranslator::antiDot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -673,12 +742,14 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint ProjectiveTranslator::antiDot(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Motor ProjectiveTranslator::antiDot(const BivectorWeight& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -689,12 +760,14 @@ namespace pga3d {
         .yz = -b.wx * s,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectiveTranslator ProjectiveTranslator::antiDot(const PseudoScalar& b) const noexcept { return {
         .s = b.i * s,
         .wx = b.i * wx,
         .wy = b.i * wy,
         .wz = b.i * wz
     }; }
+
 
     constexpr Motor Translator::antiDot(const Motor& b) const noexcept { return {
         .s = b.i,
@@ -706,12 +779,14 @@ namespace pga3d {
         .yz = (-b.wx - b.s * wx),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint Translator::antiDot(const Plane& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz,
         .w = (-b.w + b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Motor Translator::antiDot(const Bivector& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -722,6 +797,7 @@ namespace pga3d {
         .yz = -b.wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector Translator::antiDot(const ProjectivePoint& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -740,11 +816,13 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr BivectorBulk Translator::antiDot(const Quaternion& b) const noexcept { return {
         .xy = -b.s * wz,
         .xz = b.s * wy,
         .yz = -b.s * wx
     }; }
+
     constexpr Motor Translator::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -755,6 +833,7 @@ namespace pga3d {
         .yz = (-b.wx - b.s * wx),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor Translator::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -765,6 +844,7 @@ namespace pga3d {
         .yz = (-b.wx - wx),
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Multivector Translator::antiDot(const Vector& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -783,6 +863,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Translator::antiDot(const Point& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -801,12 +882,14 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint Translator::antiDot(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr Motor Translator::antiDot(const BivectorWeight& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -817,12 +900,14 @@ namespace pga3d {
         .yz = -b.wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectiveTranslator Translator::antiDot(const PseudoScalar& b) const noexcept { return {
         .s = b.i,
         .wx = b.i * wx,
         .wy = b.i * wy,
         .wz = b.i * wz
     }; }
+
 
     constexpr Multivector Vector::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -842,6 +927,7 @@ namespace pga3d {
         .xyz = (b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Bivector Vector::antiDot(const Plane& b) const noexcept { return {
         .wx = b.w * x,
         .wy = b.w * y,
@@ -850,15 +936,18 @@ namespace pga3d {
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint Vector::antiDot(const Bivector& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x),
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr PseudoScalar Vector::antiDot(const ProjectivePoint& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr Multivector Vector::antiDot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -877,6 +966,7 @@ namespace pga3d {
         .xyz = (b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Multivector Vector::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -895,6 +985,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Vector::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -913,33 +1004,40 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar Vector::antiDot(const Vector& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PseudoScalar Vector::antiDot(const Point& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr BivectorBulk Vector::antiDot(const PlaneIdeal& b) const noexcept { return {
         .xy = (b.x * y - b.y * x),
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint Vector::antiDot(const BivectorBulk& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr Vector Vector::antiDot(const BivectorWeight& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x)
     }; }
+
     constexpr Vector Vector::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
+
 
     constexpr Multivector Point::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -959,6 +1057,7 @@ namespace pga3d {
         .xyz = (b.i + b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Bivector Point::antiDot(const Plane& b) const noexcept { return {
         .wx = b.w * x,
         .wy = b.w * y,
@@ -967,15 +1066,18 @@ namespace pga3d {
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint Point::antiDot(const Bivector& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x),
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr PseudoScalar Point::antiDot(const ProjectivePoint& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr Multivector Point::antiDot(const Quaternion& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -994,6 +1096,7 @@ namespace pga3d {
         .xyz = (b.xz * y - b.xy * z - b.yz * x),
         .i = 0.0
     }; }
+
     constexpr Multivector Point::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -1012,6 +1115,7 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr Multivector Point::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .w = 0.0,
@@ -1030,34 +1134,41 @@ namespace pga3d {
         .xyz = 0.0,
         .i = 0.0
     }; }
+
     constexpr PseudoScalar Point::antiDot(const Vector& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr PseudoScalar Point::antiDot(const Point& b) const noexcept { return {
         .i = (b.x * x + b.y * y + b.z * z)
     }; }
+
     constexpr BivectorBulk Point::antiDot(const PlaneIdeal& b) const noexcept { return {
         .xy = (b.x * y - b.y * x),
         .xz = (b.x * z - b.z * x),
         .yz = (b.y * z - b.z * y)
     }; }
+
     constexpr ProjectivePoint Point::antiDot(const BivectorBulk& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.xz * y - b.xy * z - b.yz * x)
     }; }
+
     constexpr Vector Point::antiDot(const BivectorWeight& b) const noexcept { return {
         .x = (b.wy * z - b.wz * y),
         .y = (b.wz * x - b.wx * z),
         .z = (b.wx * y - b.wy * x)
     }; }
+
     constexpr ProjectivePoint Point::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z,
         .w = b.i
     }; }
+
 
     constexpr Multivector PlaneIdeal::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -1077,79 +1188,93 @@ namespace pga3d {
         .xyz = (b.wx * x + b.wy * y + b.wz * z),
         .i = 0.0
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::antiDot(const Bivector& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr BivectorBulk PlaneIdeal::antiDot(const ProjectivePoint& b) const noexcept { return {
         .xy = (b.y * x - b.x * y),
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::antiDot(const Translator& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr BivectorBulk PlaneIdeal::antiDot(const Vector& b) const noexcept { return {
         .xy = (b.y * x - b.x * y),
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr BivectorBulk PlaneIdeal::antiDot(const Point& b) const noexcept { return {
         .xy = (b.y * x - b.x * y),
         .xz = (b.z * x - b.x * z),
         .yz = (b.z * y - b.y * z)
     }; }
+
     constexpr ProjectivePoint PlaneIdeal::antiDot(const BivectorWeight& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.wx * x + b.wy * y + b.wz * z)
     }; }
+
     constexpr PlaneIdeal PlaneIdeal::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = b.i * x,
         .y = b.i * y,
         .z = b.i * z
     }; }
 
+
     constexpr BivectorBulk BivectorBulk::antiDot(const Motor& b) const noexcept { return {
         .xy = b.i * xy,
         .xz = b.i * xz,
         .yz = b.i * yz
     }; }
+
     constexpr ProjectivePoint BivectorBulk::antiDot(const ProjectivePoint& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr ProjectivePoint BivectorBulk::antiDot(const Vector& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr ProjectivePoint BivectorBulk::antiDot(const Point& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * yz + b.z * xy - b.y * xz)
     }; }
+
     constexpr BivectorBulk BivectorBulk::antiDot(const PseudoScalar& b) const noexcept { return {
         .xy = b.i * xy,
         .xz = b.i * xz,
         .yz = b.i * yz
     }; }
+
 
     constexpr Motor BivectorWeight::antiDot(const Motor& b) const noexcept { return {
         .s = 0.0,
@@ -1161,25 +1286,30 @@ namespace pga3d {
         .yz = -b.s * wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr ProjectivePoint BivectorWeight::antiDot(const Plane& b) const noexcept { return {
         .x = -b.w * wx,
         .y = -b.w * wy,
         .z = -b.w * wz,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr PseudoScalar BivectorWeight::antiDot(const Bivector& b) const noexcept { return {
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Vector BivectorWeight::antiDot(const ProjectivePoint& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx)
     }; }
+
     constexpr BivectorBulk BivectorWeight::antiDot(const Quaternion& b) const noexcept { return {
         .xy = -b.s * wz,
         .xz = b.s * wy,
         .yz = -b.s * wx
     }; }
+
     constexpr Motor BivectorWeight::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -1190,6 +1320,7 @@ namespace pga3d {
         .yz = -b.s * wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Motor BivectorWeight::antiDot(const Translator& b) const noexcept { return {
         .s = 0.0,
         .wx = 0.0,
@@ -1200,30 +1331,36 @@ namespace pga3d {
         .yz = -wx,
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr Vector BivectorWeight::antiDot(const Vector& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx)
     }; }
+
     constexpr Vector BivectorWeight::antiDot(const Point& b) const noexcept { return {
         .x = (b.y * wz - b.z * wy),
         .y = (b.z * wx - b.x * wz),
         .z = (b.x * wy - b.y * wx)
     }; }
+
     constexpr ProjectivePoint BivectorWeight::antiDot(const PlaneIdeal& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = (b.x * wx + b.y * wy + b.z * wz)
     }; }
+
     constexpr PseudoScalar BivectorWeight::antiDot(const BivectorWeight& b) const noexcept { return {
         .i = (-b.wx * wx - b.wy * wy - b.wz * wz)
     }; }
+
     constexpr BivectorWeight BivectorWeight::antiDot(const PseudoScalar& b) const noexcept { return {
         .wx = b.i * wx,
         .wy = b.i * wy,
         .wz = b.i * wz
     }; }
+
 
     constexpr Motor PseudoScalar::antiDot(const Motor& b) const noexcept { return {
         .s = b.s * i,
@@ -1235,12 +1372,14 @@ namespace pga3d {
         .yz = b.yz * i,
         .i = b.i * i
     }; }
+
     constexpr Plane PseudoScalar::antiDot(const Plane& b) const noexcept { return {
         .x = b.x * i,
         .y = b.y * i,
         .z = b.z * i,
         .w = b.w * i
     }; }
+
     constexpr Bivector PseudoScalar::antiDot(const Bivector& b) const noexcept { return {
         .wx = b.wx * i,
         .wy = b.wy * i,
@@ -1249,59 +1388,70 @@ namespace pga3d {
         .xz = b.xz * i,
         .yz = b.yz * i
     }; }
+
     constexpr ProjectivePoint PseudoScalar::antiDot(const ProjectivePoint& b) const noexcept { return {
         .x = b.x * i,
         .y = b.y * i,
         .z = b.z * i,
         .w = b.w * i
     }; }
+
     constexpr Quaternion PseudoScalar::antiDot(const Quaternion& b) const noexcept { return {
         .s = b.s * i,
         .xy = b.xy * i,
         .xz = b.xz * i,
         .yz = b.yz * i
     }; }
+
     constexpr ProjectiveTranslator PseudoScalar::antiDot(const ProjectiveTranslator& b) const noexcept { return {
         .s = b.s * i,
         .wx = b.wx * i,
         .wy = b.wy * i,
         .wz = b.wz * i
     }; }
+
     constexpr ProjectiveTranslator PseudoScalar::antiDot(const Translator& b) const noexcept { return {
         .s = i,
         .wx = b.wx * i,
         .wy = b.wy * i,
         .wz = b.wz * i
     }; }
+
     constexpr Vector PseudoScalar::antiDot(const Vector& b) const noexcept { return {
         .x = b.x * i,
         .y = b.y * i,
         .z = b.z * i
     }; }
+
     constexpr ProjectivePoint PseudoScalar::antiDot(const Point& b) const noexcept { return {
         .x = b.x * i,
         .y = b.y * i,
         .z = b.z * i,
         .w = i
     }; }
+
     constexpr PlaneIdeal PseudoScalar::antiDot(const PlaneIdeal& b) const noexcept { return {
         .x = b.x * i,
         .y = b.y * i,
         .z = b.z * i
     }; }
+
     constexpr BivectorBulk PseudoScalar::antiDot(const BivectorBulk& b) const noexcept { return {
         .xy = b.xy * i,
         .xz = b.xz * i,
         .yz = b.yz * i
     }; }
+
     constexpr BivectorWeight PseudoScalar::antiDot(const BivectorWeight& b) const noexcept { return {
         .wx = b.wx * i,
         .wy = b.wy * i,
         .wz = b.wz * i
     }; }
+
     constexpr PseudoScalar PseudoScalar::antiDot(const PseudoScalar& b) const noexcept { return {
         .i = b.i * i
     }; }
+
     constexpr ProjectivePoint PseudoScalar::antiDot(const PointCenter& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
@@ -1309,17 +1459,20 @@ namespace pga3d {
         .w = i
     }; }
 
+
     constexpr ProjectivePoint PointCenter::antiDot(const Motor& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
     constexpr ProjectivePoint PointCenter::antiDot(const PseudoScalar& b) const noexcept { return {
         .x = 0.0,
         .y = 0.0,
         .z = 0.0,
         .w = b.i
     }; }
+
 
 }
