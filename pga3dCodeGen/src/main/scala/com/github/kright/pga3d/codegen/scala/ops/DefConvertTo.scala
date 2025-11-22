@@ -3,6 +3,7 @@ package com.github.kright.pga3d.codegen.scala.ops
 import com.github.kright.ga.PGA3
 import com.github.kright.pga3d.codegen.scala.{GeneratedCode, MultivectorUnaryOp, ScalaMultivectorSubClass}
 import com.github.kright.symbolic.Sym
+import com.github.kright.symbolic.Sym.given_Numeric_Sym.mkNumericOps
 
 object DefConvertTo:
   def apply()(using pga3: PGA3): MultivectorUnaryOp =
@@ -28,11 +29,25 @@ object DefConvertTo:
         if (cls == ScalaMultivectorSubClass.projectivePoint) {
           val target = ScalaMultivectorSubClass.point
           val xyzBlade = pga3.representation.basisBladeWithSign("xyz").basisBlade
-          val xyz = cls.self("xyz")
-          val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => s / xyz)
+
           code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
           code.block {
+            val xyz = cls.self("xyz")
+            val r = cls.self.filter((b, _) => b != xyzBlade).map((_, s) => s * Sym("mult"))
+            code(s"val mult = ${Sym(1.0) / xyz}")
             code(target.makeConstructor(r))
+          }
+        }
+
+        if (cls == ScalaMultivectorSubClass.projectiveTranslator) {
+          val target = ScalaMultivectorSubClass.translator
+
+          code(s"\ndef to${target.typeNameWithoutPrefix}: ${target.typeName} =")
+          code.block {
+            val mult = Sym(1.0) / cls.self("s")
+            val result = cls.self.filter((b, _) => b.grade == 2).map((_, s) => s / Sym("mult"))
+            code(s"val mult = ${Sym(1.0) / cls.self("s")}")
+            code(target.makeConstructor(result))
           }
         }
       }

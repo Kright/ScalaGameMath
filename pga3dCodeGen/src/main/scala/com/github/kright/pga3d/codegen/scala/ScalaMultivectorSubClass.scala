@@ -231,6 +231,7 @@ object ScalaMultivectorSubClass:
   val quaternion = ScalaMultivectorSubClass("Pga3dQuaternion", motor.variableFields.filter(f => !f.basisBlade.contains(genW)))
   //  val quaternionDual = MultivectorSubClass("QuaternionDual", motor.variableFields.filter(f => f.basisBlade.contains(genW)))
   val translator = ScalaMultivectorSubClass("Pga3dTranslator", motor.variableFields.filter(f => f.basisBlade.grade == 2 && f.basisBlade.contains(genW)), Seq(scalar.variableFields.head -> 1.0))
+  val projectiveTranslator = ScalaMultivectorSubClass("Pga3dProjectiveTranslator", motor.variableFields.filter(f => f.basisBlade.grade == 0 || f.basisBlade.grade == 2 && f.basisBlade.contains(genW)))
 
   val vector = ScalaMultivectorSubClass("Pga3dVector", projectivePoint.variableFields.filter(f => f.basisBlade.contains(genW)))
   val planeIdeal = ScalaMultivectorSubClass("Pga3dPlaneIdeal", plane.variableFields.filter(f => !f.basisBlade.contains(genW)))
@@ -255,6 +256,7 @@ object ScalaMultivectorSubClass:
 
     quaternion,
     //    quaternionDual,
+    projectiveTranslator,
     translator,
 
     vector,

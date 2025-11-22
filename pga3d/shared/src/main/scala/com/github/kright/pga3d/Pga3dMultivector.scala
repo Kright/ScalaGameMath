@@ -324,6 +324,14 @@ final case class Pga3dMultivector(s: Double = 0.0,
       yz = yz,
     )
 
+  def toProjectiveTranslatorUnsafe: Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
+      s = s,
+      wx = wx,
+      wy = wy,
+      wz = wz,
+    )
+
   def toTranslatorUnsafe: Pga3dTranslator =
     Pga3dTranslator(
       wx = wx,

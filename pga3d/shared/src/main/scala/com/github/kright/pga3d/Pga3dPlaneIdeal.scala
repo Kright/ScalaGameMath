@@ -206,6 +206,26 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       i = 0.0,
     )
 
+  infix def geometric(v: Pga3dProjectiveTranslator): Pga3dMultivector =
+    Pga3dMultivector(
+      s = 0.0,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
+      x = v.s * x,
+      y = v.s * y,
+      z = v.s * z,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (v.wx * y - v.wy * x),
+      wxz = (v.wx * z - v.wz * x),
+      wyz = (v.wy * z - v.wz * y),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
   infix def geometric(v: Pga3dTranslator): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -360,6 +380,14 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       z = (v.s * z + v.xz * x + v.yz * y),
     )
 
+  infix def dot(v: Pga3dProjectiveTranslator): Pga3dPlane =
+    Pga3dPlane(
+      x = v.s * x,
+      y = v.s * y,
+      z = v.s * z,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
+    )
+
   infix def dot(v: Pga3dTranslator): Pga3dPlane =
     Pga3dPlane(
       x = x,
@@ -490,6 +518,28 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
 
   inline infix def ^(v: Pga3dQuaternion): Pga3dMultivector = wedge(v)
 
+  infix def wedge(v: Pga3dProjectiveTranslator): Pga3dMultivector =
+    Pga3dMultivector(
+      s = 0.0,
+      w = 0.0,
+      x = v.s * x,
+      y = v.s * y,
+      z = v.s * z,
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = (v.wx * y - v.wy * x),
+      wxz = (v.wx * z - v.wz * x),
+      wyz = (v.wy * z - v.wz * y),
+      xyz = 0.0,
+      i = 0.0,
+    )
+
+  inline infix def ^(v: Pga3dProjectiveTranslator): Pga3dMultivector = wedge(v)
+
   infix def wedge(v: Pga3dTranslator): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -609,6 +659,26 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       yz = (v.z * y - v.y * z),
     )
 
+  infix def antiGeometric(v: Pga3dProjectiveTranslator): Pga3dMultivector =
+    Pga3dMultivector(
+      s = 0.0,
+      w = 0.0,
+      x = (v.wy * z - v.wz * y),
+      y = (v.wz * x - v.wx * z),
+      z = (v.wx * y - v.wy * x),
+      wx = 0.0,
+      wy = 0.0,
+      wz = 0.0,
+      xy = 0.0,
+      xz = 0.0,
+      yz = 0.0,
+      wxy = 0.0,
+      wxz = 0.0,
+      wyz = 0.0,
+      xyz = (v.wx * x + v.wy * y + v.wz * z),
+      i = 0.0,
+    )
+
   infix def antiGeometric(v: Pga3dTranslator): Pga3dMultivector =
     Pga3dMultivector(
       s = 0.0,
@@ -705,6 +775,14 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       xy = (v.y * x - v.x * y),
       xz = (v.z * x - v.x * z),
       yz = (v.z * y - v.y * z),
+    )
+
+  infix def antiDot(v: Pga3dProjectiveTranslator): Pga3dProjectivePoint =
+    Pga3dProjectivePoint(
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      w = (v.wx * x + v.wy * y + v.wz * z),
     )
 
   infix def antiDot(v: Pga3dTranslator): Pga3dProjectivePoint =
@@ -853,22 +931,32 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       yz = (2.0 * (v.xy * xMz - v.xz * xMy) + v.yz * (xMx - yMy - zMz)),
     )
 
-  infix def sandwich(v: Pga3dTranslator): Pga3dMotor =
+  infix def sandwich(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator =
     val xMx = x * x
     val xMy = x * y
     val xMz = x * z
     val yMy = y * y
     val yMz = y * z
     val zMz = z * z
-    Pga3dMotor(
+    Pga3dProjectiveTranslator(
+      s = v.s * (xMx + yMy + zMz),
+      wx = (2.0 * (-v.wy * xMy - v.wz * xMz) + v.wx * (yMy + zMz - xMx)),
+      wy = (2.0 * (-v.wx * xMy - v.wz * yMz) + v.wy * (xMx + zMz - yMy)),
+      wz = (2.0 * (-v.wx * xMz - v.wy * yMz) + v.wz * (xMx + yMy - zMz)),
+    )
+
+  infix def sandwich(v: Pga3dTranslator): Pga3dProjectiveTranslator =
+    val xMx = x * x
+    val xMy = x * y
+    val xMz = x * z
+    val yMy = y * y
+    val yMz = y * z
+    val zMz = z * z
+    Pga3dProjectiveTranslator(
       s = (xMx + yMy + zMz),
       wx = (2.0 * (-v.wy * xMy - v.wz * xMz) + v.wx * (yMy + zMz - xMx)),
       wy = (2.0 * (-v.wx * xMy - v.wz * yMz) + v.wy * (xMx + zMz - yMy)),
       wz = (2.0 * (-v.wx * xMz - v.wy * yMz) + v.wz * (xMx + yMy - zMz)),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
   infix def sandwich(v: Pga3dVector): Pga3dVector =
@@ -1026,22 +1114,32 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       yz = (2.0 * (v.xy * xMz - v.xz * xMy) + v.yz * (xMx - yMy - zMz)),
     )
 
-  infix def reverseSandwich(v: Pga3dTranslator): Pga3dMotor =
+  infix def reverseSandwich(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator =
     val xMx = x * x
     val xMy = x * y
     val xMz = x * z
     val yMy = y * y
     val yMz = y * z
     val zMz = z * z
-    Pga3dMotor(
+    Pga3dProjectiveTranslator(
+      s = v.s * (xMx + yMy + zMz),
+      wx = (2.0 * (-v.wy * xMy - v.wz * xMz) + v.wx * (yMy + zMz - xMx)),
+      wy = (2.0 * (-v.wx * xMy - v.wz * yMz) + v.wy * (xMx + zMz - yMy)),
+      wz = (2.0 * (-v.wx * xMz - v.wy * yMz) + v.wz * (xMx + yMy - zMz)),
+    )
+
+  infix def reverseSandwich(v: Pga3dTranslator): Pga3dProjectiveTranslator =
+    val xMx = x * x
+    val xMy = x * y
+    val xMz = x * z
+    val yMy = y * y
+    val yMz = y * z
+    val zMz = z * z
+    Pga3dProjectiveTranslator(
       s = (xMx + yMy + zMz),
       wx = (2.0 * (-v.wy * xMy - v.wz * xMz) + v.wx * (yMy + zMz - xMx)),
       wy = (2.0 * (-v.wx * xMy - v.wz * yMz) + v.wy * (xMx + zMz - yMy)),
       wz = (2.0 * (-v.wx * xMz - v.wy * yMz) + v.wz * (xMx + yMy - zMz)),
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
   infix def reverseSandwich(v: Pga3dVector): Pga3dVector =
@@ -1171,6 +1269,14 @@ final case class Pga3dPlaneIdeal(x: Double = 0.0,
       x = (-v.xy * y - v.xz * z),
       y = (v.xy * x - v.yz * z),
       z = (v.xz * x + v.yz * y),
+    )
+
+  infix def cross(v: Pga3dProjectiveTranslator): Pga3dPlane =
+    Pga3dPlane(
+      x = 0.0,
+      y = 0.0,
+      z = 0.0,
+      w = (-v.wx * x - v.wy * y - v.wz * z),
     )
 
   infix def cross(v: Pga3dTranslator): Pga3dPlane =

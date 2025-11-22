@@ -154,6 +154,11 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
       i = i * v.s,
     )
 
+  infix def geometric(v: Pga3dProjectiveTranslator): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
+      i = i * v.s,
+    )
+
   infix def geometric(v: Pga3dTranslator): Pga3dPseudoScalar =
     this
 
@@ -233,6 +238,11 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
       i = i * v.s,
     )
 
+  infix def dot(v: Pga3dProjectiveTranslator): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
+      i = i * v.s,
+    )
+
   infix def dot(v: Pga3dTranslator): Pga3dPseudoScalar =
     this
 
@@ -279,6 +289,13 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
     )
 
   inline infix def ^(v: Pga3dQuaternion): Pga3dPseudoScalar = wedge(v)
+
+  infix def wedge(v: Pga3dProjectiveTranslator): Pga3dPseudoScalar =
+    Pga3dPseudoScalar(
+      i = i * v.s,
+    )
+
+  inline infix def ^(v: Pga3dProjectiveTranslator): Pga3dPseudoScalar = wedge(v)
 
   infix def wedge(v: Pga3dTranslator): Pga3dPseudoScalar =
     this
@@ -331,16 +348,20 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
       yz = i * v.yz,
     )
 
-  infix def antiGeometric(v: Pga3dTranslator): Pga3dMotor =
-    Pga3dMotor(
+  infix def antiGeometric(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
+      s = i * v.s,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+    )
+
+  infix def antiGeometric(v: Pga3dTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
       s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
   infix def antiGeometric(v: Pga3dVector): Pga3dVector =
@@ -438,16 +459,20 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
       yz = i * v.yz,
     )
 
-  infix def antiDot(v: Pga3dTranslator): Pga3dMotor =
-    Pga3dMotor(
+  infix def antiDot(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
+      s = i * v.s,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+    )
+
+  infix def antiDot(v: Pga3dTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
       s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
   infix def antiDot(v: Pga3dVector): Pga3dVector =
@@ -558,19 +583,25 @@ final case class Pga3dPseudoScalar(i: Double = 0.0) derives CanEqual:
 
   inline infix def v(v: Pga3dQuaternion): Pga3dQuaternion = antiWedge(v)
 
-  infix def antiWedge(v: Pga3dTranslator): Pga3dMotor =
-    Pga3dMotor(
+  infix def antiWedge(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
+      s = i * v.s,
+      wx = i * v.wx,
+      wy = i * v.wy,
+      wz = i * v.wz,
+    )
+
+  inline infix def v(v: Pga3dProjectiveTranslator): Pga3dProjectiveTranslator = antiWedge(v)
+
+  infix def antiWedge(v: Pga3dTranslator): Pga3dProjectiveTranslator =
+    Pga3dProjectiveTranslator(
       s = i,
       wx = i * v.wx,
       wy = i * v.wy,
       wz = i * v.wz,
-      xy = 0.0,
-      xz = 0.0,
-      yz = 0.0,
-      i = 0.0,
     )
 
-  inline infix def v(v: Pga3dTranslator): Pga3dMotor = antiWedge(v)
+  inline infix def v(v: Pga3dTranslator): Pga3dProjectiveTranslator = antiWedge(v)
 
   infix def antiWedge(v: Pga3dVector): Pga3dVector =
     Pga3dVector(
