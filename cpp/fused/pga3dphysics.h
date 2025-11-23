@@ -6282,7 +6282,13 @@ namespace pga3d {
 
 namespace pga3d {
 
-    [[nodiscard]] constexpr Translator Translator::addVector(const Vector& v) noexcept { return {.wx = v.x, .wy = v.y, .wz = v.z}; }
+    [[nodiscard]] constexpr Translator Translator::addVector(const Vector& v) noexcept {
+        return {
+            .wx = -0.5 * v.x,
+            .wy = -0.5 * v.y,
+            .wz = -0.5 * v.z
+        };
+    }
 
     [[nodiscard]] constexpr BivectorWeight Translator::log() const noexcept {
         return BivectorWeight {
@@ -17761,13 +17767,13 @@ namespace pga3d {
                d4.resize(newSize);
           }
 
-          void resetForqueAccumulators(std::span<PhysicsBody>& dynamicBodies) {
+          static void resetForqueAccumulators(std::span<PhysicsBody>& dynamicBodies) {
                for (PhysicsBody &body: dynamicBodies) {
                     body.resetForqueAccum();
                }
           }
 
-          void computeDerivativeInto(std::vector<BodyState> &result, const std::span<PhysicsBody>& dynamicBodies) {
+          static void computeDerivativeInto(std::vector<BodyState> &result, const std::span<PhysicsBody>& dynamicBodies) {
                const size_t size = dynamicBodies.size();
                for (size_t pos = 0; pos < size; ++pos) {
                     result[pos] = dynamicBodies[pos].stateDerivative();
