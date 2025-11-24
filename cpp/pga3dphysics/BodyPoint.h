@@ -13,12 +13,12 @@ namespace pga3d {
         PhysicsBody* body = nullptr;
         Point localPoint = {};
 
-        [[nodiscard]] constexpr Point getGlobalPos() const noexcept {
+        [[nodiscard]] constexpr Point globalPos() const noexcept {
             return body->localPosToGlobal(localPoint);
         }
 
-        [[nodiscard]] constexpr Vector getGlobalPosVelocity() const noexcept {
-            return body->getGlobalVelocityForLocalPos(localPoint);
+        [[nodiscard]] constexpr Vector globalPosVelocity() const noexcept {
+            return body->globalVelocityForLocalPos(localPoint);
         }
     };
 }

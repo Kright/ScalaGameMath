@@ -57,15 +57,15 @@ namespace pga3d {
         }
 
         [[nodiscard]] constexpr Point localPosToGlobal(const Point& localPos) const noexcept {
-            return state.motor.sandwich(localPos).toPointUnsafe();
+            return state.localPosToGlobal(localPos);
         }
 
-        [[nodiscard]] constexpr Point globalCenter() const noexcept {
+        [[nodiscard]] constexpr Point globalCenterOfMass() const noexcept {
             return localPosToGlobal(inertia.centerOfMassPoint());
         }
 
-        [[nodiscard]] constexpr Vector getGlobalVelocityForLocalPos(const Point& localPos) const noexcept {
-            return state.motor.sandwich(localPos.cross(state.localB));
+        [[nodiscard]] constexpr Vector globalVelocityForLocalPos(const Point& localPos) const noexcept {
+            return state.globalVelocityForLocalPos(localPos);
         }
     };
 }

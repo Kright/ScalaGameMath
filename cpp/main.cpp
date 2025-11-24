@@ -1,9 +1,6 @@
 #include <iostream>
 #include <chrono>
 
-#include "Friction.h"
-#include "Gravity.h"
-#include "Spring.h"
 #include "pga3d/pga3d.h"
 #include "pga3dphysics/pga3dphysics.h"
 

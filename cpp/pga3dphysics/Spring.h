@@ -16,8 +16,8 @@ namespace pga3d {
         bool noPull = false;
 
         void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
-            const Point pos1 = first.getGlobalPos();
-            const Point pos2 = second.getGlobalPos();
+            const Point pos1 = first.globalPos();
+            const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
             const double r2 = dPos.normSquare();
             if (r2 <= targetR * targetR) {
@@ -30,8 +30,8 @@ namespace pga3d {
 
             double frictionForce = 0.0;
             if (!velocityFriction.isZero()) {
-                const Vector velocity1 = first.getGlobalPosVelocity();
-                const Vector velocity2 = second.getGlobalPosVelocity();
+                const Vector velocity1 = first.globalPosVelocity();
+                const Vector velocity2 = second.globalPosVelocity();
                 const Vector dv = velocity2 - velocity1;
                 const double sign = dPos.antiDot(dv).i;
                 frictionForce += velocityFriction(sign * dv.norm());
@@ -45,8 +45,8 @@ namespace pga3d {
         }
 
         void afterStep(const BodyPoint& first, const BodyPoint& second) noexcept {
-            const Point pos1 = first.getGlobalPos();
-            const Point pos2 = second.getGlobalPos();
+            const Point pos1 = first.globalPos();
+            const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
             const double r = dPos.normSquare();
             positionFriction.correctBoundPosition(r);

@@ -16890,6 +16890,10 @@ namespace pga3d {
             return point.antiWedge(force);
         }
 
+        [[nodiscard]] static constexpr Bivector force(const Point& point, const Point& endPoint) noexcept{
+            return point.antiWedge(endPoint);
+        }
+
         [[nodiscard]] static constexpr Bivector torque(const Vector &torque) noexcept {
             return Bivector{.wx = torque.x, .wy = torque.y, .wz = torque.z, .xy = 0.0, .xz = 0.0, .yz = 0.0};
         }
@@ -17533,6 +17537,14 @@ namespace pga3d {
                 .localB = localB,
             };
         }
+
+        [[nodiscard]] constexpr Point localPosToGlobal(const Point& localPos) const noexcept {
+            return motor.sandwich(localPos).toPointUnsafe();
+        }
+
+        [[nodiscard]] constexpr Vector globalVelocityForLocalPos(const Point& localPos) const noexcept {
+            return motor.sandwich(localPos.cross(localB));
+        }
     };
 
     [[nodiscard]] constexpr BodyState operator+(const BodyState& a, const BodyState& b) noexcept {
@@ -17622,15 +17634,15 @@ namespace pga3d {
         }
 
         [[nodiscard]] constexpr Point localPosToGlobal(const Point& localPos) const noexcept {
-            return state.motor.sandwich(localPos).toPointUnsafe();
+            return state.localPosToGlobal(localPos);
         }
 
-        [[nodiscard]] constexpr Point globalCenter() const noexcept {
+        [[nodiscard]] constexpr Point globalCenterOfMass() const noexcept {
             return localPosToGlobal(inertia.centerOfMassPoint());
         }
 
-        [[nodiscard]] constexpr Vector getGlobalVelocityForLocalPos(const Point& localPos) const noexcept {
-            return state.motor.sandwich(localPos.cross(state.localB));
+        [[nodiscard]] constexpr Vector globalVelocityForLocalPos(const Point& localPos) const noexcept {
+            return state.globalVelocityForLocalPos(localPos);
         }
     };
 }
@@ -17642,12 +17654,25 @@ namespace pga3d {
         PhysicsBody* body = nullptr;
         Point localPoint = {};
 
-        [[nodiscard]] constexpr Point getGlobalPos() const noexcept {
+        [[nodiscard]] constexpr Point globalPos() const noexcept {
             return body->localPosToGlobal(localPoint);
         }
 
-        [[nodiscard]] constexpr Vector getGlobalPosVelocity() const noexcept {
-            return body->getGlobalVelocityForLocalPos(localPoint);
+        [[nodiscard]] constexpr Vector globalPosVelocity() const noexcept {
+            return body->globalVelocityForLocalPos(localPoint);
+        }
+    };
+}
+
+// BodyLine.h
+
+namespace pga3d {
+    struct BodyLine {
+        PhysicsBody* body = nullptr;
+        Bivector localLine = {};
+
+        [[nodiscard]] constexpr Bivector globalLine() const {
+            return body->state.motor.sandwich(localLine);
         }
     };
 }
@@ -17662,7 +17687,7 @@ namespace pga3d {
             if (gravity == Vector{}) return;
 
             for (auto &body: bodies) {
-                body.addGlobalForque(Forque::force(body.globalCenter(), body.inertia.mass() * gravity));
+                body.addGlobalForque(Forque::force(body.globalCenterOfMass(), body.inertia.mass() * gravity));
             }
         }
     };
@@ -17680,8 +17705,8 @@ namespace pga3d {
         bool noPull = false;
 
         void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
-            const Point pos1 = first.getGlobalPos();
-            const Point pos2 = second.getGlobalPos();
+            const Point pos1 = first.globalPos();
+            const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
             const double r2 = dPos.normSquare();
             if (r2 <= targetR * targetR) {
@@ -17694,8 +17719,8 @@ namespace pga3d {
 
             double frictionForce = 0.0;
             if (!velocityFriction.isZero()) {
-                const Vector velocity1 = first.getGlobalPosVelocity();
-                const Vector velocity2 = second.getGlobalPosVelocity();
+                const Vector velocity1 = first.globalPosVelocity();
+                const Vector velocity2 = second.globalPosVelocity();
                 const Vector dv = velocity2 - velocity1;
                 const double sign = dPos.antiDot(dv).i;
                 frictionForce += velocityFriction(sign * dv.norm());
@@ -17709,8 +17734,8 @@ namespace pga3d {
         }
 
         void afterStep(const BodyPoint& first, const BodyPoint& second) noexcept {
-            const Point pos1 = first.getGlobalPos();
-            const Point pos2 = second.getGlobalPos();
+            const Point pos1 = first.globalPos();
+            const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
             const double r = dPos.normSquare();
             positionFriction.correctBoundPosition(r);
@@ -17744,6 +17769,34 @@ namespace pga3d {
             for (Spring &spring: springs) {
                 spring.afterStep();
             }
+        }
+    };
+}
+
+// SpringToLine.h
+
+namespace pga3d {
+    struct SpringToLineConfig {
+        double k = 0.0;
+
+        void addForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
+            const Bivector line = bodyLine.globalLine();
+            const Point pos2 = bodyPoint.globalPos();
+
+            const Point posOnLine = pos2.projectOntoLine(line).toPoint();
+            const Bivector forque = Forque::force(posOnLine, pos2) * k;
+
+            bodyLine.body->addGlobalForquePaired(forque, *bodyPoint.body);
+        }
+    };
+
+    struct SpringToLine {
+        SpringToLineConfig config;
+        BodyLine line;
+        BodyPoint point;
+
+        void addForque() const noexcept {
+            config.addForque(line, point);
         }
     };
 }

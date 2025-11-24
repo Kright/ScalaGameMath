@@ -19,6 +19,10 @@ namespace pga3d {
             return point.antiWedge(force);
         }
 
+        [[nodiscard]] static constexpr Bivector force(const Point& point, const Point& endPoint) noexcept{
+            return point.antiWedge(endPoint);
+        }
+
         [[nodiscard]] static constexpr Bivector torque(const Vector &torque) noexcept {
             return Bivector{.wx = torque.x, .wy = torque.y, .wz = torque.z, .xy = 0.0, .xz = 0.0, .yz = 0.0};
         }

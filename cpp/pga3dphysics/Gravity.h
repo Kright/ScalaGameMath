@@ -16,7 +16,7 @@ namespace pga3d {
             if (gravity == Vector{}) return;
 
             for (auto &body: bodies) {
-                body.addGlobalForque(Forque::force(body.globalCenter(), body.inertia.mass() * gravity));
+                body.addGlobalForque(Forque::force(body.globalCenterOfMass(), body.inertia.mass() * gravity));
             }
         }
     };
