@@ -61,7 +61,7 @@ int main() {
                 system.springs.springs.push_back(pga3d::Spring{
                     .config = pga3d::SpringConfig{
                         .velocityFriction = {.linearK = 2.0, .quadraticK = 1.0, .maxForce = 1000.0},
-                        .positionFriction = {.linearK = 2.0, .maxDelta = 0.001, .boundPosition = 0.0},
+                        .positionFriction = {.stiffness = {.linearK = 2.0, .maxDelta = 0.001}, .boundPosition = 0.0},
                         .k = 2.0, .targetR = 2.0, .noPush = false, .noPull = false,
                     },
                     .first = {.body = &system.bodies[body_no], .localPoint = {0.0, 0.0, 0.0}},

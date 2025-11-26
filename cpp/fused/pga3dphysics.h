@@ -16788,6 +16788,34 @@ namespace pga3d {
     struct Sphere {
         Point center = {};
         double radius = 0.0;
+
+        [[nodiscard]] constexpr bool contains(const Point& point) const noexcept {
+            const Vector dr = point - center;
+            const double drNormSquare = dr.normSquare();
+            return drNormSquare <= radius * radius;
+        }
+
+        [[nodiscard]] Point clamp(const Point& point) const noexcept {
+            const Vector dr = point - center;
+            const double drNormSquare = dr.normSquare();
+            if (drNormSquare <= radius * radius) {
+                return point;
+            }
+
+            const double drNorm = std::sqrt(drNormSquare);
+            return center + dr * (radius / (drNorm + 1e-100));
+        }
+
+        [[nodiscard]] constexpr Vector clampDR(const Point& point) const noexcept {
+            const Vector dr = point - center;
+            const double drNormSquare = dr.normSquare();
+            if (drNormSquare <= radius * radius) {
+                return dr;
+            }
+
+            const double drNorm = std::sqrt(drNormSquare);
+            return dr * (radius / (drNorm + 1e-100));
+        }
     };
 }
 
@@ -17428,81 +17456,6 @@ namespace pga3d {
     }
 }
 
-// Friction.h
-
-namespace pga3d {
-    struct VelocityFriction {
-        double linearK = 0.0;
-        double quadraticK = 0.0;
-        double maxForce = 0.0;
-
-        [[nodiscard]] constexpr bool isZero() const noexcept {
-            return maxForce == 0.0;
-        }
-
-        [[nodiscard]] constexpr double operator()(double velocity) const noexcept {
-            const double sign = velocity > 0.0 ? 1.0 : -1.0;
-            const double f = velocity * ( -linearK - velocity * quadraticK * sign);
-            return std::clamp(f, -maxForce, maxForce);
-        }
-
-        [[nodiscard]] Vector operator()(const Vector& velocity) const noexcept {
-            const Vector f = velocity * (-linearK - quadraticK * velocity.norm());
-            return f.clamp(
-                {-maxForce, -maxForce, -maxForce},
-                {maxForce, maxForce, maxForce}
-            );
-        }
-
-        [[nodiscard]] constexpr static VelocityFriction linear(const double k, const double maxForce) noexcept {
-            return {k, 0.0, maxForce};
-        }
-
-        [[nodiscard]] constexpr static VelocityFriction quadratic(const double k2, const double maxForce) noexcept {
-            return {0.0, k2, maxForce};
-        }
-
-        [[nodiscard]] constexpr static VelocityFriction constant(const double maxForce, const double minVelocity) noexcept {
-            return {maxForce / minVelocity, 0.0, maxForce};
-        }
-    };
-
-    struct PositionFriction {
-        double linearK = 0.0;
-        double maxDelta = 0.0;
-        double boundPosition = 0.0;
-
-        [[nodiscard]] constexpr double getMaxForce() const noexcept {
-            return maxDelta * linearK;
-        }
-
-        constexpr void setMaxForce(const double maxForce, const double newMaxDelta) noexcept {
-            linearK = maxForce / newMaxDelta;
-            maxDelta = newMaxDelta;
-        }
-
-        [[nodiscard]] constexpr bool isZero() const noexcept {
-            return linearK == 0.0;
-        }
-
-        [[nodiscard]] constexpr double operator()(const double position) const noexcept {
-            return std::clamp(boundPosition - position, -maxDelta, maxDelta) * linearK;
-        }
-
-        constexpr void correctBoundPosition(const double position) noexcept {
-            boundPosition = std::clamp(boundPosition, position - maxDelta, position + maxDelta);
-        }
-
-        [[nodiscard]] constexpr static PositionFriction create(const double maxForce, const double maxDetla) noexcept {
-            return {
-                .linearK = maxForce / maxDetla,
-                .maxDelta = maxDetla,
-                .boundPosition = 0.0
-            };
-        }
-    };
-}
-
 // BodyState.h
 
 namespace pga3d {
@@ -17540,6 +17493,10 @@ namespace pga3d {
 
         [[nodiscard]] constexpr Point localPosToGlobal(const Point& localPos) const noexcept {
             return motor.sandwich(localPos).toPointUnsafe();
+        }
+
+        [[nodiscard]] constexpr Point globalPosToLocal(const Point& globalPos) const noexcept {
+            return motor.reversed().sandwich(globalPos).toPointUnsafe();
         }
 
         [[nodiscard]] constexpr Vector globalVelocityForLocalPos(const Point& localPos) const noexcept {
@@ -17637,6 +17594,10 @@ namespace pga3d {
             return state.localPosToGlobal(localPos);
         }
 
+        [[nodiscard]] constexpr Point globalPosToLocal(const Point& localPos) const noexcept {
+            return state.globalPosToLocal(localPos);
+        }
+
         [[nodiscard]] constexpr Point globalCenterOfMass() const noexcept {
             return localPosToGlobal(inertia.centerOfMassPoint());
         }
@@ -17693,18 +17654,176 @@ namespace pga3d {
     };
 }
 
+// Friction.h
+
+namespace pga3d {
+    struct VelocityFriction {
+        double linearK = 0.0;
+        double quadraticK = 0.0;
+        double maxForce = 0.0;
+
+        [[nodiscard]] constexpr bool isZero() const noexcept {
+            return maxForce == 0.0;
+        }
+
+        [[nodiscard]] constexpr double operator()(double velocity) const noexcept {
+            const double sign = velocity > 0.0 ? 1.0 : -1.0;
+            const double f = velocity * ( -linearK - velocity * quadraticK * sign);
+            return std::clamp(f, -maxForce, maxForce);
+        }
+
+        [[nodiscard]] Vector operator()(const Vector& velocity) const noexcept {
+            const Vector f = velocity * (-linearK - quadraticK * velocity.norm());
+            return f.clamp(
+                {-maxForce, -maxForce, -maxForce},
+                {maxForce, maxForce, maxForce}
+            );
+        }
+
+        [[nodiscard]] constexpr static VelocityFriction linear(const double k, const double maxForce) noexcept {
+            return {k, 0.0, maxForce};
+        }
+
+        [[nodiscard]] constexpr static VelocityFriction quadratic(const double k2, const double maxForce) noexcept {
+            return {0.0, k2, maxForce};
+        }
+
+        [[nodiscard]] constexpr static VelocityFriction constant(const double maxForce, const double minVelocity) noexcept {
+            return {maxForce / minVelocity, 0.0, maxForce};
+        }
+    };
+
+    struct PositionFrictionStiffness {
+        double linearK = 0.0;
+        double maxDelta = 0.0;
+
+        [[nodiscard]] constexpr double getMaxForce() const noexcept {
+            return maxDelta * linearK;
+        }
+
+        constexpr void setMaxForce(const double maxForce, const double newMaxDelta) noexcept {
+            linearK = maxForce / newMaxDelta;
+            maxDelta = newMaxDelta;
+        }
+
+        [[nodiscard]] constexpr bool isZero() const noexcept {
+            return linearK == 0.0;
+        }
+
+        [[nodiscard]] constexpr static PositionFrictionStiffness create(const double maxForce, const double maxDetla) noexcept {
+            return {
+                .linearK = maxForce / maxDetla,
+                .maxDelta = maxDetla,
+            };
+        }
+    };
+
+    struct Position1dFriction {
+        PositionFrictionStiffness stiffness;
+        double boundPosition = 0.0;
+
+        [[nodiscard]] constexpr double getMaxForce() const noexcept {
+            return stiffness.getMaxForce();
+        }
+
+        constexpr void setMaxForce(const double maxForce, const double newMaxDelta) noexcept {
+            stiffness.setMaxForce(maxForce, newMaxDelta);
+        }
+
+        [[nodiscard]] constexpr bool isZero() const noexcept {
+            return stiffness.isZero();
+        }
+
+        [[nodiscard]] constexpr double operator()(const double position) const noexcept {
+            return std::clamp(boundPosition - position, -stiffness.maxDelta, stiffness.maxDelta) * stiffness.linearK;
+        }
+
+        constexpr void correctBoundPosition(const double position) noexcept {
+            boundPosition = std::clamp(boundPosition, position - stiffness.maxDelta, position + stiffness.maxDelta);
+        }
+
+        [[nodiscard]] constexpr static Position1dFriction create(const double maxForce, const double maxDelta) noexcept {
+            return {
+                .stiffness = PositionFrictionStiffness::create(maxForce, maxDelta),
+                .boundPosition = 0.0
+            };
+        }
+    };
+
+    struct Position3dFriction {
+        PositionFrictionStiffness stiffness;
+        Point boundPosition = {}; // in local coords
+        [[nodiscard]] constexpr double getMaxForce() const noexcept {
+            return stiffness.getMaxForce();
+        }
+
+        constexpr void setMaxForce(const double maxForce, const double newMaxDelta) noexcept {
+            stiffness.setMaxForce(maxForce, newMaxDelta);
+        }
+
+        [[nodiscard]] constexpr bool isZero() const noexcept {
+            return stiffness.isZero();
+        }
+
+        constexpr void correctBoundPosition(const Point& position) noexcept {
+            boundPosition = Sphere{position, stiffness.maxDelta}.clamp(boundPosition);
+        }
+
+        [[nodiscard]] constexpr static Position3dFriction create(const double maxForce, const double maxDelta) noexcept {
+            return {
+                .stiffness = PositionFrictionStiffness::create(maxForce, maxDelta),
+                .boundPosition = {}
+            };
+        }
+
+        [[nodiscard]] static Bivector getForque(const PositionFrictionStiffness& stiffness,
+                                                const Point& newPosition,
+                                                const Point& globalBoundPosition) noexcept {
+            const Vector targetShift = Sphere{newPosition, stiffness.maxDelta}.clampDR(globalBoundPosition);
+            return Forque::force(newPosition, targetShift * stiffness.linearK);
+        }
+    };
+
+    struct Point3dFriction {
+        Position3dFriction positionFriction = {};
+        VelocityFriction velocityFriction = {};
+        BodyPoint first = {};
+        PhysicsBody* second = nullptr;
+
+        [[nodiscard]] Bivector getForque() const {
+            const Point firstPos = first.globalPos();
+            const Point secondPos = second->localPosToGlobal(positionFriction.boundPosition);
+
+            const Vector firstVelocity = first.globalPosVelocity();
+            const Vector secondVelocity = second->globalVelocityForLocalPos(positionFriction.boundPosition);
+
+            return
+                Position3dFriction::getForque(positionFriction.stiffness, firstPos, secondPos) +
+                Forque::force(firstPos, velocityFriction(firstVelocity - secondVelocity));
+        }
+
+        void addForque() const {
+            first.body->addGlobalForquePaired(getForque(), *second);
+        }
+
+        void afterStep() {
+            const Point firstPointInSecond = second->globalPosToLocal(first.globalPos());
+            positionFriction.correctBoundPosition(firstPointInSecond);
+        }
+    };
+}
+
 // Spring.h
 
 namespace pga3d {
     struct SpringConfig {
         VelocityFriction velocityFriction{};
-        PositionFriction positionFriction{};
+        Position1dFriction positionFriction{};
         double k = 0.0;
         double targetR = 0.0;
         bool noPush = false;
         bool noPull = false;
 
-    private:
         void addForque(const BodyPoint &first, const BodyPoint &second, auto processResult) const noexcept {
             const Point pos1 = first.globalPos();
             const Point pos2 = second.globalPos();
@@ -17734,7 +17853,6 @@ namespace pga3d {
             processResult(forque);
         }
 
-    public:
         void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
             addForque(first, second, [&](const Bivector& forque) {
                 first.body->addGlobalForquePaired(forque, *second.body);
@@ -17824,6 +17942,82 @@ namespace pga3d {
 
         [[nodiscard]] Bivector getForque() const noexcept {
             return config.getForque(line, point);
+        }
+    };
+}
+
+// Torsion.h
+
+namespace pga3d {
+
+    struct TorsionConfig {
+        double kNperRad = 0.0;
+
+        void calculateForque(const BodyPoint &first, const BodyPoint &second, const BodyLine& axis, auto onResult) const noexcept {
+            const Point firstGlobalPos = first.globalPos();
+            const Point secondGlobalPos = second.globalPos();
+
+            const Bivector axisGlobalLine = axis.globalLine();
+
+            const Point firstProjectedToLine = firstGlobalPos.projectOntoLine(axisGlobalLine).toPoint();
+            const Point secondProjectedToLine = secondGlobalPos.projectOntoLine(axisGlobalLine).toPoint();
+
+            const Vector dr1 = firstGlobalPos - firstProjectedToLine;
+            const Vector dr2 = secondGlobalPos - secondProjectedToLine;
+
+            const double dr1NormSquare = dr1.normSquare();
+            const double dr2NormSquare = dr2.normSquare();
+
+            const double dr1Dr2Norm = std::sqrt(dr1NormSquare * dr2NormSquare);
+
+            if (dr1Dr2Norm < 1e-100) return;
+
+            const BivectorBulk momentum = (dr1.dual().geometric(dr2.dual()) / dr1Dr2Norm).log() * kNperRad;
+
+            const BivectorWeight f1 = Translator::addVector(dr1).sandwich(-momentum).weight() / dr1NormSquare;
+            const Vector force1 = Vector(f1.wx, f1.wy, f1.wz);
+
+            const BivectorWeight f2 = Translator::addVector(dr2).sandwich(momentum).weight() / dr2NormSquare;
+            const Vector force2 = Vector(f2.wx, f2.wy, f2.wz);
+
+            const Bivector mf1 = Forque::force(firstGlobalPos, force1);
+            const Bivector mf2 = Forque::force(secondGlobalPos, force2);
+
+            onResult(mf1, mf2);
+        }
+
+        void addForque(const BodyPoint &first, const BodyPoint &second, const BodyLine& axis) const noexcept {
+            calculateForque(first, second, axis, [&](const Bivector& mf1, const Bivector& mf2) {
+                first.body->addGlobalForquePaired(mf1, *axis.body);
+                second.body->addGlobalForquePaired(mf2, *axis.body);
+            });
+        }
+
+        [[nodiscard]] std::pair<Bivector, Bivector> getTorque(const BodyPoint &first, const BodyPoint &second, const BodyLine& axis) const noexcept {
+            std::pair<Bivector, Bivector> result = {};
+
+            calculateForque(first, second, axis, [&](const Bivector& mf1, const Bivector& mf2) {
+                result.first = mf1;
+                result.second = mf2;
+            });
+
+            return result;
+        }
+    };
+
+    struct Torsion {
+        TorsionConfig config = {};
+
+        BodyPoint first = {};
+        BodyPoint second = {};
+        BodyLine axis = {};
+
+        void addForque() const noexcept {
+            config.addForque(first, second, axis);
+        }
+
+        [[nodiscard]] std::pair<Bivector, Bivector> getForque() const noexcept {
+            return config.getTorque(first, second, axis);
         }
     };
 }

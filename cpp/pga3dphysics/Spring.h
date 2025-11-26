@@ -9,7 +9,7 @@
 namespace pga3d {
     struct SpringConfig {
         VelocityFriction velocityFriction{};
-        PositionFriction positionFriction{};
+        Position1dFriction positionFriction{};
         double k = 0.0;
         double targetR = 0.0;
         bool noPush = false;

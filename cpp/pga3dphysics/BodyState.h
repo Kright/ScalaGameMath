@@ -44,6 +44,10 @@ namespace pga3d {
             return motor.sandwich(localPos).toPointUnsafe();
         }
 
+        [[nodiscard]] constexpr Point globalPosToLocal(const Point& globalPos) const noexcept {
+            return motor.reversed().sandwich(globalPos).toPointUnsafe();
+        }
+
         [[nodiscard]] constexpr Vector globalVelocityForLocalPos(const Point& localPos) const noexcept {
             return motor.sandwich(localPos.cross(localB));
         }

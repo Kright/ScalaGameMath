@@ -18,13 +18,16 @@
 #include "InertiaSummable.h"
 
 #include "LinearOperator.h"
-#include "Friction.h"
+
 #include "BodyState.h"
 #include "BodyPoint.h"
 #include "BodyLine.h"
 #include "PhysicsBody.h"
 #include "Gravity.h"
+
+#include "Friction.h"
 #include "Spring.h"
 #include "SpringToLine.h"
+#include "Torsion.h"
 
 #include "PhysicsSolverRK4.h"
