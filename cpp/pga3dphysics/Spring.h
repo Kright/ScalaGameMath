@@ -15,7 +15,7 @@ namespace pga3d {
         bool noPush = false;
         bool noPull = false;
 
-        void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+        void addForque(const BodyPoint &first, const BodyPoint &second, auto processResult) const noexcept {
             const Point pos1 = first.globalPos();
             const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
@@ -41,7 +41,21 @@ namespace pga3d {
             const double mult = (k * (r - targetR) - frictionForce) / (r + 1e-100);
             const Bivector forque = pos1.antiWedge(dPos) * mult;
 
-            first.body->addGlobalForquePaired(forque, *second.body);
+            processResult(forque);
+        }
+
+        void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+            addForque(first, second, [&](const Bivector& forque) {
+                first.body->addGlobalForquePaired(forque, *second.body);
+            });
+        }
+
+        [[nodiscard]] Bivector getForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+            Bivector result = {};
+            addForque(first, second, [&](const Bivector& forque) {
+                result = forque;
+            });
+            return result;
         }
 
         void afterStep(const BodyPoint& first, const BodyPoint& second) noexcept {
@@ -60,6 +74,10 @@ namespace pga3d {
 
         void addForque() const noexcept {
             config.addForque(first, second);
+        }
+
+        [[nodiscard]] Bivector getForque() const noexcept {
+            return config.getForque(first, second);
         }
 
         void afterStep() noexcept {

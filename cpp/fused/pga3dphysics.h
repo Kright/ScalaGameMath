@@ -17704,7 +17704,8 @@ namespace pga3d {
         bool noPush = false;
         bool noPull = false;
 
-        void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+    private:
+        void addForque(const BodyPoint &first, const BodyPoint &second, auto processResult) const noexcept {
             const Point pos1 = first.globalPos();
             const Point pos2 = second.globalPos();
             const Vector dPos = pos2 - pos1;
@@ -17730,7 +17731,22 @@ namespace pga3d {
             const double mult = (k * (r - targetR) - frictionForce) / (r + 1e-100);
             const Bivector forque = pos1.antiWedge(dPos) * mult;
 
-            first.body->addGlobalForquePaired(forque, *second.body);
+            processResult(forque);
+        }
+
+    public:
+        void addForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+            addForque(first, second, [&](const Bivector& forque) {
+                first.body->addGlobalForquePaired(forque, *second.body);
+            });
+        }
+
+        [[nodiscard]] Bivector getForque(const BodyPoint &first, const BodyPoint &second) const noexcept {
+            Bivector result = {};
+            addForque(first, second, [&](const Bivector& forque) {
+                result = forque;
+            });
+            return result;
         }
 
         void afterStep(const BodyPoint& first, const BodyPoint& second) noexcept {
@@ -17749,6 +17765,10 @@ namespace pga3d {
 
         void addForque() const noexcept {
             config.addForque(first, second);
+        }
+
+        [[nodiscard]] Bivector getForque() const noexcept {
+            return config.getForque(first, second);
         }
 
         void afterStep() noexcept {
@@ -17779,13 +17799,16 @@ namespace pga3d {
     struct SpringToLineConfig {
         double k = 0.0;
 
-        void addForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
+        [[nodiscard]] Bivector getForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
             const Bivector line = bodyLine.globalLine();
             const Point pos2 = bodyPoint.globalPos();
 
             const Point posOnLine = pos2.projectOntoLine(line).toPoint();
-            const Bivector forque = Forque::force(posOnLine, pos2) * k;
+            return Forque::force(posOnLine, pos2) * k;
+        }
 
+        void addForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
+            const Bivector forque = getForque(bodyLine, bodyPoint);
             bodyLine.body->addGlobalForquePaired(forque, *bodyPoint.body);
         }
     };
@@ -17797,6 +17820,10 @@ namespace pga3d {
 
         void addForque() const noexcept {
             config.addForque(line, point);
+        }
+
+        [[nodiscard]] Bivector getForque() const noexcept {
+            return config.getForque(line, point);
         }
     };
 }

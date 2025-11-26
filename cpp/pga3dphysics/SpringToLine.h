@@ -12,13 +12,16 @@ namespace pga3d {
     struct SpringToLineConfig {
         double k = 0.0;
 
-        void addForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
+        [[nodiscard]] Bivector getForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
             const Bivector line = bodyLine.globalLine();
             const Point pos2 = bodyPoint.globalPos();
 
             const Point posOnLine = pos2.projectOntoLine(line).toPoint();
-            const Bivector forque = Forque::force(posOnLine, pos2) * k;
+            return Forque::force(posOnLine, pos2) * k;
+        }
 
+        void addForque(const BodyLine &bodyLine, const BodyPoint &bodyPoint) const noexcept {
+            const Bivector forque = getForque(bodyLine, bodyPoint);
             bodyLine.body->addGlobalForquePaired(forque, *bodyPoint.body);
         }
     };
@@ -30,6 +33,10 @@ namespace pga3d {
 
         void addForque() const noexcept {
             config.addForque(line, point);
+        }
+
+        [[nodiscard]] Bivector getForque() const noexcept {
+            return config.getForque(line, point);
         }
     };
 }
