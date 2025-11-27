@@ -121,11 +121,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
         val selfGrouped = selfMv.mapValues(_.groupMultipliers())
         val otherGrouped = otherMvSame.mapValues(_.groupMultipliers())
         val fieldsInit = cls.variableFields.map { f =>
-          val selfExpr = selfGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
-          val otherExpr = otherGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
-          val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
-          val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
-          s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
+          s".${f.name} = std::fma(${otherGrouped(f.basisBladeWithSign)}, mult, ${selfGrouped(f.basisBladeWithSign)})"
         }.mkString(s"{\n$pad", s",\n$pad", "\n}")
         code(s"constexpr ${cls.name} ${cls.name}::madd(const ${cls.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
       }
@@ -139,11 +135,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
           val selfGrouped = selfMv.mapValues(_.groupMultipliers())
           val otherGrouped = otherMvVec.mapValues(_.groupMultipliers())
           val fieldsInit = cls.variableFields.map { f =>
-            val selfExpr = selfGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
-            val otherExpr = otherGrouped.values.getOrElse(f.basisBlade, Sym.zero).toString
-            val sExprFinal = if (selfExpr.startsWith("--")) selfExpr.drop(2) else selfExpr
-            val oExprFinal = if (otherExpr.startsWith("--")) otherExpr.drop(2) else otherExpr
-            s".${f.name} = std::fma(${oExprFinal}, mult, ${sExprFinal})"
+            s".${f.name} = std::fma(${otherGrouped(f.basisBladeWithSign)}, mult, ${selfGrouped(f.basisBladeWithSign)})"
           }.mkString(s"{\n$pad", s",\n$pad", "\n}")
           code(s"constexpr ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
         }

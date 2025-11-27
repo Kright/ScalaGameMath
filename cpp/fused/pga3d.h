@@ -3766,9 +3766,9 @@ namespace pga3d {
         .yz = std::fma(other.yz, mult, yz)
     }; }
     constexpr ProjectivePoint ProjectivePoint::madd(const ProjectivePoint& other, double mult) const noexcept { return {
-        .x = std::fma(-other.x, mult, -x),
+        .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
-        .z = std::fma(-other.z, mult, -z),
+        .z = std::fma(other.z, mult, z),
         .w = std::fma(other.w, mult, w)
     }; }
     constexpr Quaternion Quaternion::madd(const Quaternion& other, double mult) const noexcept { return {
@@ -3784,14 +3784,14 @@ namespace pga3d {
         .wz = std::fma(other.wz, mult, wz)
     }; }
     constexpr Vector Vector::madd(const Vector& other, double mult) const noexcept { return {
-        .x = std::fma(-other.x, mult, -x),
+        .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
-        .z = std::fma(-other.z, mult, -z)
+        .z = std::fma(other.z, mult, z)
     }; }
     constexpr Point Point::madd(const Vector& other, double mult) const noexcept { return {
-        .x = std::fma(-other.x, mult, -x),
+        .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
-        .z = std::fma(-other.z, mult, -z)
+        .z = std::fma(other.z, mult, z)
     }; }
     constexpr PlaneIdeal PlaneIdeal::madd(const PlaneIdeal& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
