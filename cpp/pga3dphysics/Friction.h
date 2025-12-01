@@ -122,7 +122,7 @@ namespace pga3d {
             return stiffness.isZero();
         }
 
-        constexpr void correctBoundPosition(const Point& position) noexcept {
+        inline void correctBoundPosition(const Point& position) noexcept {
             boundPosition = Sphere{position, stiffness.maxDelta}.clamp(boundPosition);
         }
 

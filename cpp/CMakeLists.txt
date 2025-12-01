@@ -49,3 +49,20 @@ add_executable(cpp
         pga3dphysics/Spring.h
         pga3dphysics/Gravity.h
 )
+
+# -----------------------------
+# Tests (doctest + CTest)
+# -----------------------------
+include(CTest)
+
+# Test executable with doctest main and a simple sample test
+add_executable(cpp_tests
+        test/test_main.cpp
+        test/simple_arith_tests.cpp
+)
+
+# Ensure the tests can find doctest.h which lives in test/
+target_include_directories(cpp_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/test)
+
+# Register the test with CTest
+add_test(NAME cpp_unit_tests COMMAND cpp_tests)
