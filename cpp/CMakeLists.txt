@@ -59,6 +59,7 @@ include(CTest)
 add_executable(cpp_tests
         test/test_main.cpp
         test/simple_arith_tests.cpp
+        test/binary_ops_test.cpp
 )
 
 # Ensure the tests can find doctest.h which lives in test/

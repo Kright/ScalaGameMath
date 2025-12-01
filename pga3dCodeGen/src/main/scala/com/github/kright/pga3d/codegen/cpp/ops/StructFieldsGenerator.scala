@@ -31,12 +31,10 @@ class StructFieldsGenerator extends CppCodeGenerator:
       }
     }
 
-    if (cls.variableFields.nonEmpty) {
-      code("")
-      code(s"[[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { ${cls.variableFields.map(_.name).mkString(", ")} }; }")
-      code(s"[[nodiscard]] static constexpr ${cls.name} from(const std::array<double, componentsCount>& values) noexcept { return { ${cls.variableFields.zipWithIndex.map((f, i) => s".${f.name} = values[$i]").mkString(", ")} }; }")
-      code(s"[[nodiscard]] static constexpr ${cls.name} from(const std::span<double, componentsCount>& values) noexcept { return { ${cls.variableFields.zipWithIndex.map((f, i) => s".${f.name} = values[$i]").mkString(", ")} }; }")
-    }
+    code("")
+    code(s"[[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept { return { ${cls.variableFields.map(_.name).mkString(", ")} }; }")
+    code(s"[[nodiscard]] static constexpr ${cls.name} from(const std::array<double, componentsCount>& values) noexcept { return { ${cls.variableFields.zipWithIndex.map((f, i) => s".${f.name} = values[$i]").mkString(", ")} }; }")
+    code(s"[[nodiscard]] static constexpr ${cls.name} from(const std::span<double, componentsCount>& values) noexcept { return { ${cls.variableFields.zipWithIndex.map((f, i) => s".${f.name} = values[$i]").mkString(", ")} }; }")
 
     val includes =
       if (cls.variableFields.nonEmpty) Seq("<array>", "<span>")
