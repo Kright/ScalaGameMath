@@ -1,15 +1,14 @@
-# Scala Game Math
+# Kright Game Tools
 
 ## Introduction
 
-ScalaGameMath library consists of several independent modules in Scala for 3d applications: math and physics simulation.
-And here is experimental C++ code too.
+KrightGameTools consists of several independent modules in Scala and C++ for 3d applications: math and physics simulation.
 
 It contains some basic classes like vectors, quaternion, matrices, and rigid body physics built on top of them. 
 All of this is implemented from scratch and doesn't depend on other libraries. 
 So I hope the library could be used with in graalvm or from Kotlin or Java. 
 
-Library is under MIT license. Contributions are welcome, feel free to send a pull request.
+All the code is under MIT license. Contributions are welcome, feel free to send a pull request.
 
 ## Table of Contents
 - [Getting started](#Getting-started)
@@ -27,10 +26,11 @@ Library is under MIT license. Contributions are welcome, feel free to send a pul
 1. [examples/precession](examples/precession/README.md): Scala + sbt, simulate body precession
 2. [examples/nbody](examples/nbody/README.md): Gradle + Kotlin + Java on JVM and GraalVM, simulation of N-bodies in space.
 3. [examples/indigodemo](examples/indigodemo/README.md): Indigo game engine with scala js.
+4. [cpp](cpp/main.cpp): C++ code for 3d physics simulation.
 
 ### Getting started
 
-I'm using jitpack [https://jitpack.io/#Kright/ScalaGameMath](https://jitpack.io/#Kright/ScalaGameMath)
+I'm using jitpack [https://jitpack.io/#Kright/KrightGameTools](https://jitpack.io/#Kright/ScalaGameMath)
 
 You may add the whole library or specific modules.
 
@@ -117,9 +117,9 @@ I rewrote physics equations in PGA, it looks like PGA is a better way of describ
 
 ### C++ code
 
-* [**cpp**](cpp/README.md): some code as in pga3d and pga3dphysics in Scala, but for C++.
+* [**cpp**](cpp/README.md): same code as in pga3d and pga3dphysics in Scala, but for C++.
 
-The current implementation is very experimental and may be changed in the future.
+The current implementation is experimental and may be changed in the future.
 I use C++ 20 because of Unreal Engine 5 requirements.
 
 ## Tests
