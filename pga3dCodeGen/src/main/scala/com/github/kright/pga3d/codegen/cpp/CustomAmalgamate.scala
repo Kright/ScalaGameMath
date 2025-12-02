@@ -131,7 +131,7 @@ object CustomAmalgamate:
   }
 
   private def getFiles(dirs: Seq[Path]): Map[String, FileContent] = {
-    val files = dirs.flatMap(dir => Files.list(dir).iterator().asScala)
+    val files = dirs.flatMap(dir => Files.list(dir).iterator().asScala).filterNot(_.getFileName.toString.endsWith(".md"))
 
     require(files.map(_.getFileName.toString).toSet.size == files.size)
 

@@ -3098,6 +3098,20 @@ namespace pga3d {
         Translator translator{};
         Quaternion quaternion{};
 
+        static size_t constexpr componentsCount = Quaternion::componentsCount + Translator::componentsCount;
+
+        [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept {
+            // a compiler will optimize this
+            return { translator.toArray()[0], translator.toArray()[1], translator.toArray()[2], quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3] };
+        }
+
+        [[nodiscard]] static constexpr TranslatorWithQuaternion from(const std::span<double, componentsCount>& values) noexcept {
+            return {
+                .translator = Translator::from(values.first<Translator::componentsCount>()),
+                .quaternion = Quaternion::from(values.last<Quaternion::componentsCount>())
+            };
+        }
+
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return translator.geometric(quaternion); }
 
         [[nodiscard]] constexpr QuaternionWithTranslator reversed() const noexcept;
@@ -3110,6 +3124,20 @@ namespace pga3d {
     struct QuaternionWithTranslator {
         Quaternion quaternion{};
         Translator translator{};
+
+        static size_t constexpr componentsCount = Quaternion::componentsCount + Translator::componentsCount;
+
+        [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept {
+            // a compiler will optimize this
+            return { quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3], translator.toArray()[0], translator.toArray()[1], translator.toArray()[2] };
+        }
+
+        [[nodiscard]] static constexpr QuaternionWithTranslator from(const std::span<double, componentsCount>& values) noexcept {
+            return {
+                .quaternion = Quaternion::from(values.first<Quaternion::componentsCount>()),
+                .translator = Translator::from(values.last<Translator::componentsCount>())
+            };
+        }
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return quaternion.geometric(translator); }
 
@@ -16998,57 +17026,6 @@ namespace pga3d {
     };
 }
 
-// InertiaLocal.h
-
-namespace pga3d {
-    struct InertiaLocal {
-        double mass = 0.0;
-        double mryz = 0.0;
-        double mrxz = 0.0;
-        double mrxy = 0.0;
-
-        [[nodiscard]] constexpr Bivector operator()(const Bivector& velocity) const noexcept {
-            return Bivector {
-              .wx = velocity.yz * mryz,
-              .wy = -velocity.xz * mrxz,
-              .wz = velocity.xy * mrxy,
-              .xy = velocity.wz * mass,
-              .xz = -velocity.wy * mass,
-              .yz = velocity.wx * mass,
-            };
-        }
-
-        [[nodiscard]] constexpr Bivector invert(const Bivector& localInertia) const noexcept {
-            const double massInv = 1.0 / mass;
-
-            return Bivector {
-              .wx = localInertia.yz * massInv,
-              .wy = -localInertia.xz * massInv,
-              .wz = localInertia.xy * massInv,
-              .xy = localInertia.wz / mrxy,
-              .xz = -localInertia.wy / mrxz,
-              .yz = localInertia.wx / mryz,
-            };
-        }
-
-        /** invert(localB.cross(apply(localB)) + localForque) */
-        [[nodiscard]] constexpr Bivector getAcceleration(const Bivector& localB, const Bivector& localForque) const noexcept {
-            return Bivector {
-              .wx = localForque.yz / mass + localB.wy * localB.xy + localB.wz * localB.xz,
-              .wy = -localForque.xz / mass + localB.wz * localB.yz - localB.wx * localB.xy,
-              .wz = localForque.xy / mass - localB.wx * localB.xz - localB.wy * localB.yz,
-              .xy = (localForque.wz + localB.xz * localB.yz * (mrxz - mryz)) / mrxy,
-              .xz = (-localForque.wy + localB.xy * localB.yz * (mryz - mrxy)) / mrxz,
-              .yz = (localForque.wx + localB.xy * localB.xz * (mrxy - mrxz)) / mryz,
-            };
-        }
-
-        [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
-            return velocity.antiWedge(operator()(velocity)) * 0.5;
-        }
-    };
-}
-
 // InertiaLocalSphere.h
 
 namespace pga3d {
@@ -17100,6 +17077,57 @@ namespace pga3d {
                 .xy = localForque.wz * mr2Inv,
                 .xz = -localForque.wy * mr2Inv,
                 .yz = localForque.wx * mr2Inv,
+            };
+        }
+
+        [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
+            return velocity.antiWedge(operator()(velocity)) * 0.5;
+        }
+    };
+}
+
+// InertiaLocal.h
+
+namespace pga3d {
+    struct InertiaLocal {
+        double mass = 0.0;
+        double mryz = 0.0;
+        double mrxz = 0.0;
+        double mrxy = 0.0;
+
+        [[nodiscard]] constexpr Bivector operator()(const Bivector& velocity) const noexcept {
+            return Bivector {
+              .wx = velocity.yz * mryz,
+              .wy = -velocity.xz * mrxz,
+              .wz = velocity.xy * mrxy,
+              .xy = velocity.wz * mass,
+              .xz = -velocity.wy * mass,
+              .yz = velocity.wx * mass,
+            };
+        }
+
+        [[nodiscard]] constexpr Bivector invert(const Bivector& localInertia) const noexcept {
+            const double massInv = 1.0 / mass;
+
+            return Bivector {
+              .wx = localInertia.yz * massInv,
+              .wy = -localInertia.xz * massInv,
+              .wz = localInertia.xy * massInv,
+              .xy = localInertia.wz / mrxy,
+              .xz = -localInertia.wy / mrxz,
+              .yz = localInertia.wx / mryz,
+            };
+        }
+
+        /** invert(localB.cross(apply(localB)) + localForque) */
+        [[nodiscard]] constexpr Bivector getAcceleration(const Bivector& localB, const Bivector& localForque) const noexcept {
+            return Bivector {
+              .wx = localForque.yz / mass + localB.wy * localB.xy + localB.wz * localB.xz,
+              .wy = -localForque.xz / mass + localB.wz * localB.yz - localB.wx * localB.xy,
+              .wz = localForque.xy / mass - localB.wx * localB.xz - localB.wy * localB.yz,
+              .xy = (localForque.wz + localB.xz * localB.yz * (mrxz - mryz)) / mrxy,
+              .xz = (-localForque.wy + localB.xy * localB.yz * (mryz - mrxy)) / mrxz,
+              .yz = (localForque.wx + localB.xy * localB.xz * (mrxy - mrxz)) / mryz,
             };
         }
 

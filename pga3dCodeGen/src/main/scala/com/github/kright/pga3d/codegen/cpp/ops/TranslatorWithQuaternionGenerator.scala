@@ -35,6 +35,42 @@ class TranslatorWithQuaternionGenerator extends CppCodeGenerator {
           }
 
           code("")
+          code(s"static size_t constexpr componentsCount = ${CppSubclasses.quaternion.name}::componentsCount + ${CppSubclasses.translator.name}::componentsCount;")
+
+          code("")
+          code(s"[[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept {")
+          code.block {
+            code("// a compiler will optimize this")
+            if (translatorFirst) {
+              code(s"return { translator.toArray()[0], translator.toArray()[1], translator.toArray()[2], quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3] };")
+            } else {
+              code(s"return { quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3], translator.toArray()[0], translator.toArray()[1], translator.toArray()[2] };")
+            }
+          }
+          code("}")
+
+          code("")
+          code(s"[[nodiscard]] static constexpr ${structName} from(const std::span<double, componentsCount>& values) noexcept {")
+          code.block {
+            code("return {")
+            code.block {
+              if (translatorFirst) {
+                code(
+                  """.translator = Translator::from(values.first<Translator::componentsCount>()),
+                    |.quaternion = Quaternion::from(values.last<Quaternion::componentsCount>())""".stripMargin
+                )
+              } else {
+                code(
+                  """.quaternion = Quaternion::from(values.first<Quaternion::componentsCount>()),
+                    |.translator = Translator::from(values.last<Translator::componentsCount>())""".stripMargin
+                )
+              }
+            }
+            code("};")
+          }
+          code("}")
+
+          code("")
           code(s"[[nodiscard]] constexpr ${CppSubclasses.motor.name} to${CppSubclasses.motor.name}() const noexcept { return ${fieldClasses.head.name.toLowerCase}.geometric(${fieldClasses.last.name.toLowerCase}); }")
 
           code("")

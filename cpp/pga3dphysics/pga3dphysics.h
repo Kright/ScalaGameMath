@@ -12,19 +12,19 @@
 #include "Forque.h"
 #include "Velocity.h"
 
-#include "InertiaLocal.h"
 #include "InertiaLocalSphere.h"
+#include "InertiaLocal.h"
 #include "InertiaMovedLocal.h"
 #include "InertiaSummable.h"
 
 #include "LinearOperator.h"
 
 #include "BodyState.h"
+#include "PhysicsBody.h"
 #include "BodyPoint.h"
 #include "BodyLine.h"
-#include "PhysicsBody.h"
-#include "Gravity.h"
 
+#include "Gravity.h"
 #include "Friction.h"
 #include "Spring.h"
 #include "SpringToLine.h"

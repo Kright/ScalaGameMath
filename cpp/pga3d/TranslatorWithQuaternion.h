@@ -15,6 +15,20 @@ namespace pga3d {
         Translator translator{};
         Quaternion quaternion{};
 
+        static size_t constexpr componentsCount = Quaternion::componentsCount + Translator::componentsCount;
+
+        [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept {
+            // a compiler will optimize this
+            return { translator.toArray()[0], translator.toArray()[1], translator.toArray()[2], quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3] };
+        }
+
+        [[nodiscard]] static constexpr TranslatorWithQuaternion from(const std::span<double, componentsCount>& values) noexcept {
+            return {
+                .translator = Translator::from(values.first<Translator::componentsCount>()),
+                .quaternion = Quaternion::from(values.last<Quaternion::componentsCount>())
+            };
+        }
+
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return translator.geometric(quaternion); }
 
         [[nodiscard]] constexpr QuaternionWithTranslator reversed() const noexcept;
@@ -27,6 +41,20 @@ namespace pga3d {
     struct QuaternionWithTranslator {
         Quaternion quaternion{};
         Translator translator{};
+
+        static size_t constexpr componentsCount = Quaternion::componentsCount + Translator::componentsCount;
+
+        [[nodiscard]] constexpr std::array<double, componentsCount> toArray() const noexcept {
+            // a compiler will optimize this
+            return { quaternion.toArray()[0], quaternion.toArray()[1], quaternion.toArray()[2], quaternion.toArray()[3], translator.toArray()[0], translator.toArray()[1], translator.toArray()[2] };
+        }
+
+        [[nodiscard]] static constexpr QuaternionWithTranslator from(const std::span<double, componentsCount>& values) noexcept {
+            return {
+                .quaternion = Quaternion::from(values.first<Quaternion::componentsCount>()),
+                .translator = Translator::from(values.last<Translator::componentsCount>())
+            };
+        }
 
         [[nodiscard]] constexpr Motor toMotor() const noexcept { return quaternion.geometric(translator); }
 
