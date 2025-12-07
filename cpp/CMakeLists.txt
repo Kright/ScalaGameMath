@@ -48,6 +48,7 @@ add_executable(cpp
         pga3dphysics/BodyPoint.h
         pga3dphysics/Spring.h
         pga3dphysics/Gravity.h
+        pga3dphysics/Inertia.h
 )
 
 # -----------------------------

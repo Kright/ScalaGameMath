@@ -17,6 +17,10 @@ namespace pga3d {
         double mass = 0.0;
         double mr2 = 0.0;
 
+        [[nodiscard]] constexpr double mryz() const noexcept { return mr2; }
+        [[nodiscard]] constexpr double mrxz() const noexcept { return mr2; }
+        [[nodiscard]] constexpr double mrxy() const noexcept { return mr2; }
+
         [[nodiscard]] constexpr Bivector operator()(const Bivector& velocity) const noexcept {
             return Bivector {
                 .wx = velocity.yz * mr2,
@@ -59,6 +63,36 @@ namespace pga3d {
 
         [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
             return velocity.antiWedge(operator()(velocity)) * 0.5;
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere fromXX(const double mass, const double xx) noexcept {
+            return {
+                .mass = mass,
+                .mr2 = mass * xx * 2.0 ,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere fromR2(const double mass, const double r2) noexcept {
+            return {
+                .mass = mass,
+                .mr2 = mass * r2,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere point(const double mass) noexcept {
+            return {mass, 0.0};
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere cube(const double mass, const double rx) noexcept {
+            return fromR2(mass, rx * rx * (2.0 / 3.0));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere hollowSphere(const double mass, const double r) noexcept {
+            return fromR2(mass, r * r * (2.0 / 3.0));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere solidSphere(const double mass, const double r) noexcept {
+            return fromR2(mass, r * r * (2.0 / 5.0));
         }
     };
 }

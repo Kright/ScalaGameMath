@@ -12,6 +12,7 @@
 #include "Forque.h"
 #include "Velocity.h"
 
+#include "Inertia.h"
 #include "InertiaLocalSphere.h"
 #include "InertiaLocal.h"
 #include "InertiaMovedLocal.h"

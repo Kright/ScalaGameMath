@@ -17026,6 +17026,25 @@ namespace pga3d {
     };
 }
 
+// Inertia.h
+
+//
+// Helper formulas for inertia construction
+//
+namespace pga3d::inertia {
+    [[nodiscard]] static constexpr double diskInPlane(const double r, const double innerR = 0.0) noexcept {
+        return 0.5 * (r * r + innerR * innerR);
+    }
+
+    [[nodiscard]] static constexpr double diskXX(const double r, const double innerR = 0.0) noexcept {
+        return 0.25 * (r * r + innerR * innerR);
+    }
+
+    [[nodiscard]] static constexpr double rodAlongAxis(const double length) noexcept {
+        return length * length / 12;
+    }
+}
+
 // InertiaLocalSphere.h
 
 namespace pga3d {
@@ -17039,6 +17058,10 @@ namespace pga3d {
     struct InertiaLocalSphere {
         double mass = 0.0;
         double mr2 = 0.0;
+
+        [[nodiscard]] constexpr double mryz() const noexcept { return mr2; }
+        [[nodiscard]] constexpr double mrxz() const noexcept { return mr2; }
+        [[nodiscard]] constexpr double mrxy() const noexcept { return mr2; }
 
         [[nodiscard]] constexpr Bivector operator()(const Bivector& velocity) const noexcept {
             return Bivector {
@@ -17083,6 +17106,36 @@ namespace pga3d {
         [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
             return velocity.antiWedge(operator()(velocity)) * 0.5;
         }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere fromXX(const double mass, const double xx) noexcept {
+            return {
+                .mass = mass,
+                .mr2 = mass * xx * 2.0 ,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere fromR2(const double mass, const double r2) noexcept {
+            return {
+                .mass = mass,
+                .mr2 = mass * r2,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere point(const double mass) noexcept {
+            return {mass, 0.0};
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere cube(const double mass, const double rx) noexcept {
+            return fromR2(mass, rx * rx * (2.0 / 3.0));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere hollowSphere(const double mass, const double r) noexcept {
+            return fromR2(mass, r * r * (2.0 / 3.0));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocalSphere solidSphere(const double mass, const double r) noexcept {
+            return fromR2(mass, r * r * (2.0 / 5.0));
+        }
     };
 }
 
@@ -17091,7 +17144,7 @@ namespace pga3d {
 namespace pga3d {
     struct InertiaLocal {
         double mass = 0.0;
-        double mryz = 0.0;
+        double mryz = 0.0; // moment of inertia in plane yz (including both integral for (dm * y^2 and dm * z^2)
         double mrxz = 0.0;
         double mrxy = 0.0;
 
@@ -17133,6 +17186,74 @@ namespace pga3d {
 
         [[nodiscard]] constexpr double getKineticEnergy(const Bivector& velocity) const noexcept {
             return velocity.antiWedge(operator()(velocity)) * 0.5;
+        }
+
+        // constructors
+        [[nodiscard]] static constexpr InertiaLocal from(const InertiaLocalSphere& i) noexcept {
+            return {
+                .mass = i.mass,
+                .mryz = i.mryz(),
+                .mrxz = i.mrxz(),
+                .mrxy = i.mrxy(),
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal symmetric(const double mass, const double mr2) noexcept {
+            return {.mass = mass, .mryz = mr2, .mrxz = mr2, .mrxy = mr2};
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal fromXXYYZZ(const double mass, const double xx, const double yy, const double zz) noexcept {
+            return {
+                .mass = mass,
+                .mryz = (yy + zz) * mass,
+                .mrxz = (xx + zz) * mass,
+                .mrxy = (xx + yy) * mass,
+            };
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal point(const double mass) noexcept {
+            return from(InertiaLocalSphere::point(mass));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal cube(const double mass, const double rx) noexcept {
+            return from(InertiaLocalSphere::cube(mass, rx));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal cube(const double mass, const double rx, const double ry, const double rz) noexcept {
+            constexpr double mult = 1.0 / 3.0;
+            return fromXXYYZZ(mass, rx * rx * mult, ry * ry * mult, rz * rz * mult);
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal hollowSphere(const double mass, const double r) noexcept {
+            return from(InertiaLocalSphere::hollowSphere(mass, r));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal solidSphere(const double mass, const double r) noexcept {
+            return from( InertiaLocalSphere::solidSphere(mass, r));
+        }
+
+        [[nodiscard]] static constexpr InertiaLocal solidEllipsoid(const double mass, const double rx, const double ry, const double rz) noexcept {
+            constexpr double mult = 1.0 / 5.0;
+            return fromXXYYZZ(mass, rx * rx * mult, ry * ry * mult, rz * rz * mult);
+        }
+
+        // rod along OX
+        [[nodiscard]] static constexpr InertiaLocal rodX(const double mass, const double length) noexcept {
+            const double rod = inertia::rodAlongAxis(length);
+            return fromXXYYZZ(mass, rod, 0.0, 0.0);
+        }
+
+        // disk in plane YZ
+        [[nodiscard]] static constexpr InertiaLocal diskYZ(const double mass, const double r, const double innerR = 0.0) noexcept {
+            const double disk = inertia::diskXX(r, innerR);
+            return fromXXYYZZ(mass, 0.0, disk, disk);
+        }
+
+        // cylinder with axis along OX
+        [[nodiscard]] static constexpr InertiaLocal cylinderX(const double mass, const double length, const double r, const double innerR = 0.0) noexcept {
+            const double disk = inertia::diskXX(r, 0.0);
+            const double rod = inertia::rodAlongAxis(length);
+            return fromXXYYZZ(mass, rod, disk, disk);
         }
     };
 }
