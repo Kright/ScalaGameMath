@@ -123,7 +123,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
         val fieldsInit = cls.variableFields.map { f =>
           s".${f.name} = std::fma(${otherGrouped(f.basisBladeWithSign)}, mult, ${selfGrouped(f.basisBladeWithSign)})"
         }.mkString(s"{\n$pad", s",\n$pad", "\n}")
-        code(s"constexpr ${cls.name} ${cls.name}::madd(const ${cls.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
+        code(s"inline ${cls.name} ${cls.name}::madd(const ${cls.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
       }
 
       // Case 2: Point + Vector * mult -> Point
@@ -137,7 +137,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
           val fieldsInit = cls.variableFields.map { f =>
             s".${f.name} = std::fma(${otherGrouped(f.basisBladeWithSign)}, mult, ${selfGrouped(f.basisBladeWithSign)})"
           }.mkString(s"{\n$pad", s",\n$pad", "\n}")
-          code(s"constexpr ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
+          code(s"inline ${cls.name} ${cls.name}::madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept { return ${fieldsInit}; }")
         }
       }
     }
@@ -158,7 +158,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
     val trialSame = a + b * Sym("mult")
     val resultClsSame = CppSubclasses.findMatchingClass(trialSame)
 
-    val sameTypeDecl = if (resultClsSame == cls && cls.variableFields.nonEmpty) s"[[nodiscard]] constexpr ${cls.name} madd(const ${cls.name}& other, double mult) const noexcept;" else ""
+    val sameTypeDecl = if (resultClsSame == cls && cls.variableFields.nonEmpty) s"[[nodiscard]] inline ${cls.name} madd(const ${cls.name}& other, double mult) const noexcept;" else ""
 
     // Special overload for Point + Vector * mult -> Point
     val pointVectorDecl =
@@ -166,7 +166,7 @@ class ArithmeticsGenerator extends CppCodeGenerator:
         val otherV = CppSubclasses.vector.makeSymbolic("b")
         val trialPV = a + otherV * Sym("mult")
         val resultPV = CppSubclasses.findMatchingClass(trialPV)
-        if (resultPV == CppSubclasses.point) s"[[nodiscard]] constexpr ${cls.name} madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept;" else ""
+        if (resultPV == CppSubclasses.point) s"[[nodiscard]] inline ${cls.name} madd(const ${CppSubclasses.vector.name}& other, double mult) const noexcept;" else ""
       } else ""
 
     structBodyPart(Seq(sameTypeDecl, pointVectorDecl).filter(_.nonEmpty).mkString("\n"))

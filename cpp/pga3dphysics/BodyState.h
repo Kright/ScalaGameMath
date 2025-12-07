@@ -26,7 +26,7 @@ namespace pga3d {
             };
         }
 
-        [[nodiscard]] constexpr BodyState madd(const BodyState& other, double t) const noexcept {
+        [[nodiscard]] BodyState madd(const BodyState& other, double t) const noexcept {
             return {
                 .motor = motor.madd(other.motor, t),
                 .localB = localB.madd(other.localB, t),

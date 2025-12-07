@@ -606,7 +606,7 @@ namespace pga3d {
     [[nodiscard]] constexpr ProjectivePoint operator/(const PointCenter& a, double d) noexcept { return a * (1.0 / d); }
 
 
-    constexpr Multivector Multivector::madd(const Multivector& other, double mult) const noexcept { return {
+    inline Multivector Multivector::madd(const Multivector& other, double mult) const noexcept { return {
         .s = std::fma(other.s, mult, s),
         .w = std::fma(other.w, mult, w),
         .x = std::fma(other.x, mult, x),
@@ -624,7 +624,7 @@ namespace pga3d {
         .xyz = std::fma(other.xyz, mult, xyz),
         .i = std::fma(other.i, mult, i)
     }; }
-    constexpr Motor Motor::madd(const Motor& other, double mult) const noexcept { return {
+    inline Motor Motor::madd(const Motor& other, double mult) const noexcept { return {
         .s = std::fma(other.s, mult, s),
         .wx = std::fma(other.wx, mult, wx),
         .wy = std::fma(other.wy, mult, wy),
@@ -634,13 +634,13 @@ namespace pga3d {
         .yz = std::fma(other.yz, mult, yz),
         .i = std::fma(other.i, mult, i)
     }; }
-    constexpr Plane Plane::madd(const Plane& other, double mult) const noexcept { return {
+    inline Plane Plane::madd(const Plane& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
         .z = std::fma(other.z, mult, z),
         .w = std::fma(other.w, mult, w)
     }; }
-    constexpr Bivector Bivector::madd(const Bivector& other, double mult) const noexcept { return {
+    inline Bivector Bivector::madd(const Bivector& other, double mult) const noexcept { return {
         .wx = std::fma(other.wx, mult, wx),
         .wy = std::fma(other.wy, mult, wy),
         .wz = std::fma(other.wz, mult, wz),
@@ -648,50 +648,50 @@ namespace pga3d {
         .xz = std::fma(other.xz, mult, xz),
         .yz = std::fma(other.yz, mult, yz)
     }; }
-    constexpr ProjectivePoint ProjectivePoint::madd(const ProjectivePoint& other, double mult) const noexcept { return {
+    inline ProjectivePoint ProjectivePoint::madd(const ProjectivePoint& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
         .z = std::fma(other.z, mult, z),
         .w = std::fma(other.w, mult, w)
     }; }
-    constexpr Quaternion Quaternion::madd(const Quaternion& other, double mult) const noexcept { return {
+    inline Quaternion Quaternion::madd(const Quaternion& other, double mult) const noexcept { return {
         .s = std::fma(other.s, mult, s),
         .xy = std::fma(other.xy, mult, xy),
         .xz = std::fma(other.xz, mult, xz),
         .yz = std::fma(other.yz, mult, yz)
     }; }
-    constexpr ProjectiveTranslator ProjectiveTranslator::madd(const ProjectiveTranslator& other, double mult) const noexcept { return {
+    inline ProjectiveTranslator ProjectiveTranslator::madd(const ProjectiveTranslator& other, double mult) const noexcept { return {
         .s = std::fma(other.s, mult, s),
         .wx = std::fma(other.wx, mult, wx),
         .wy = std::fma(other.wy, mult, wy),
         .wz = std::fma(other.wz, mult, wz)
     }; }
-    constexpr Vector Vector::madd(const Vector& other, double mult) const noexcept { return {
+    inline Vector Vector::madd(const Vector& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
         .z = std::fma(other.z, mult, z)
     }; }
-    constexpr Point Point::madd(const Vector& other, double mult) const noexcept { return {
+    inline Point Point::madd(const Vector& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
         .z = std::fma(other.z, mult, z)
     }; }
-    constexpr PlaneIdeal PlaneIdeal::madd(const PlaneIdeal& other, double mult) const noexcept { return {
+    inline PlaneIdeal PlaneIdeal::madd(const PlaneIdeal& other, double mult) const noexcept { return {
         .x = std::fma(other.x, mult, x),
         .y = std::fma(other.y, mult, y),
         .z = std::fma(other.z, mult, z)
     }; }
-    constexpr BivectorBulk BivectorBulk::madd(const BivectorBulk& other, double mult) const noexcept { return {
+    inline BivectorBulk BivectorBulk::madd(const BivectorBulk& other, double mult) const noexcept { return {
         .xy = std::fma(other.xy, mult, xy),
         .xz = std::fma(other.xz, mult, xz),
         .yz = std::fma(other.yz, mult, yz)
     }; }
-    constexpr BivectorWeight BivectorWeight::madd(const BivectorWeight& other, double mult) const noexcept { return {
+    inline BivectorWeight BivectorWeight::madd(const BivectorWeight& other, double mult) const noexcept { return {
         .wx = std::fma(other.wx, mult, wx),
         .wy = std::fma(other.wy, mult, wy),
         .wz = std::fma(other.wz, mult, wz)
     }; }
-    constexpr PseudoScalar PseudoScalar::madd(const PseudoScalar& other, double mult) const noexcept { return {
+    inline PseudoScalar PseudoScalar::madd(const PseudoScalar& other, double mult) const noexcept { return {
         .i = std::fma(other.i, mult, i)
     }; }
 
