@@ -5,7 +5,7 @@
 #include <span>
 
 #include "Forque.h"
-#include "pga3d.h"
+#include "pga3d/pga3d.h"
 #include "PhysicsBody.h"
 
 namespace pga3d {
