@@ -1133,13 +1133,15 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
   inline infix def join(v: Pga3dPointCenter.type): Pga3dBivectorBulk = antiWedge(v)
 
   infix def sandwich(v: Pga3dMotor): Pga3dMotor =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dMotor(
       s = v.s * wMw,
-      wx = (2.0 * (v.xy * yMw + v.xz * w * z) - v.wx * wMw),
-      wy = (-v.wy * wMw + 2.0 * w * (v.yz * z - v.xy * x)),
-      wz = (2.0 * (-v.yz * yMw - v.xz * w * x) - v.wz * wMw),
+      wx = (2.0 * (v.xy * yMw + v.xz * zMw) - v.wx * wMw),
+      wy = (2.0 * (v.yz * zMw - v.xy * xMw) - v.wy * wMw),
+      wz = (2.0 * (-v.xz * xMw - v.yz * yMw) - v.wz * wMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1156,12 +1158,14 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def sandwich(v: Pga3dBivector): Pga3dBivector =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dBivector(
-      wx = (2.0 * (v.xy * yMw + v.xz * w * z) - v.wx * wMw),
-      wy = (-v.wy * wMw + 2.0 * w * (v.yz * z - v.xy * x)),
-      wz = (2.0 * (-v.yz * yMw - v.xz * w * x) - v.wz * wMw),
+      wx = (2.0 * (v.xy * yMw + v.xz * zMw) - v.wx * wMw),
+      wy = (2.0 * (v.yz * zMw - v.xy * xMw) - v.wy * wMw),
+      wz = (2.0 * (-v.xz * xMw - v.yz * yMw) - v.wz * wMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1177,13 +1181,15 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def sandwich(v: Pga3dQuaternion): Pga3dMotor =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dMotor(
       s = v.s * wMw,
-      wx = 2.0 * (v.xy * yMw + v.xz * w * z),
-      wy = 2.0 * w * (v.yz * z - v.xy * x),
-      wz = 2.0 * (-v.yz * yMw - v.xz * w * x),
+      wx = 2.0 * (v.xy * yMw + v.xz * zMw),
+      wy = 2.0 * (v.yz * zMw - v.xy * xMw),
+      wz = 2.0 * (-v.xz * xMw - v.yz * yMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1235,12 +1241,14 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def sandwich(v: Pga3dBivectorBulk): Pga3dBivector =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dBivector(
-      wx = 2.0 * (v.xy * yMw + v.xz * w * z),
-      wy = 2.0 * w * (v.yz * z - v.xy * x),
-      wz = 2.0 * (-v.yz * yMw - v.xz * w * x),
+      wx = 2.0 * (v.xy * yMw + v.xz * zMw),
+      wy = 2.0 * (v.yz * zMw - v.xy * xMw),
+      wz = 2.0 * (-v.xz * xMw - v.yz * yMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1268,13 +1276,15 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def reverseSandwich(v: Pga3dMotor): Pga3dMotor =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dMotor(
       s = v.s * wMw,
-      wx = (2.0 * (v.xy * yMw + v.xz * w * z) - v.wx * wMw),
-      wy = (-v.wy * wMw + 2.0 * w * (v.yz * z - v.xy * x)),
-      wz = (2.0 * (-v.yz * yMw - v.xz * w * x) - v.wz * wMw),
+      wx = (2.0 * (v.xy * yMw + v.xz * zMw) - v.wx * wMw),
+      wy = (2.0 * (v.yz * zMw - v.xy * xMw) - v.wy * wMw),
+      wz = (2.0 * (-v.xz * xMw - v.yz * yMw) - v.wz * wMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1291,12 +1301,14 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def reverseSandwich(v: Pga3dBivector): Pga3dBivector =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dBivector(
-      wx = (2.0 * (v.xy * yMw + v.xz * w * z) - v.wx * wMw),
-      wy = (-v.wy * wMw + 2.0 * w * (v.yz * z - v.xy * x)),
-      wz = (2.0 * (-v.yz * yMw - v.xz * w * x) - v.wz * wMw),
+      wx = (2.0 * (v.xy * yMw + v.xz * zMw) - v.wx * wMw),
+      wy = (2.0 * (v.yz * zMw - v.xy * xMw) - v.wy * wMw),
+      wz = (2.0 * (-v.xz * xMw - v.yz * yMw) - v.wz * wMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1312,13 +1324,15 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def reverseSandwich(v: Pga3dQuaternion): Pga3dMotor =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dMotor(
       s = v.s * wMw,
-      wx = 2.0 * (v.xy * yMw + v.xz * w * z),
-      wy = 2.0 * w * (v.yz * z - v.xy * x),
-      wz = 2.0 * (-v.yz * yMw - v.xz * w * x),
+      wx = 2.0 * (v.xy * yMw + v.xz * zMw),
+      wy = 2.0 * (v.yz * zMw - v.xy * xMw),
+      wz = 2.0 * (-v.xz * xMw - v.yz * yMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,
@@ -1370,12 +1384,14 @@ final case class Pga3dProjectivePoint(x: Double = 0.0,
     )
 
   infix def reverseSandwich(v: Pga3dBivectorBulk): Pga3dBivector =
+    val xMw = w * x
     val yMw = w * y
+    val zMw = w * z
     val wMw = w * w
     Pga3dBivector(
-      wx = 2.0 * (v.xy * yMw + v.xz * w * z),
-      wy = 2.0 * w * (v.yz * z - v.xy * x),
-      wz = 2.0 * (-v.yz * yMw - v.xz * w * x),
+      wx = 2.0 * (v.xy * yMw + v.xz * zMw),
+      wy = 2.0 * (v.yz * zMw - v.xy * xMw),
+      wz = 2.0 * (-v.xz * xMw - v.yz * yMw),
       xy = v.xy * wMw,
       xz = v.xz * wMw,
       yz = v.yz * wMw,

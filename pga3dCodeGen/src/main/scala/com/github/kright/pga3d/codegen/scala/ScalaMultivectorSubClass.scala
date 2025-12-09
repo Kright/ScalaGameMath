@@ -175,7 +175,7 @@ class ScalaMultivectorSubClass(name: String,
     val simplifications: Seq[(Sym, Sym)] =
       (for ((fx, i) <- variableFields.zipWithIndex;
             (fy, j) <- variableFields.zipWithIndex if i <= j)
-      yield Sym(s"${fx.name}M${fy.name}") -> self(fx.basisBlade) * self(fy.basisBlade))
+      yield Sym(s"${fx.name}M${fy.name}") -> self(fx.basisBladeWithSign) * self(fy.basisBladeWithSign))
 
     var rr = result
     for ((simple, expr) <- simplifications) {
