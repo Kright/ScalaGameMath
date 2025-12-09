@@ -5,6 +5,8 @@ import com.github.kright.math.Sign.Positive
 import com.github.kright.pga3d.codegen.common.FileContent
 import com.github.kright.pga3d.codegen.cpp.*
 import com.github.kright.symbolic.Sym
+import com.github.kright.symbolic.Sym.given_Numeric_Sym.mkNumericOps
+import com.github.kright.symbolic.transform.simplifiers.ReplaceSumOrProduct
 
 class GeometricOpsGenerator extends CppCodeGeneratorSum(
   Seq(
@@ -69,7 +71,52 @@ class AntiWedgeOpGenerator extends BinaryMethodCodeGen(
 class SandwichOpGenerator extends BinaryMethodCodeGen(
   methodName = "sandwich",
   fileName = "opsSandwich.h",
-  op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.sandwich(b)
+  op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.sandwich(b),
+  makeCustomBody = Some(
+    new CustomFuncBody {
+      override def apply(left: CppSubclass, leftS: MultiVector[Sym], right: CppSubclass, rightS: MultiVector[Sym], target: CppSubclass, resultS: MultiVector[Sym]): String = {
+        val code = CppCodeBuilder()
+
+        val simplifications: Seq[(Sym, Sym)] =
+          (for ((fx, i) <- left.variableFields.zipWithIndex;
+                (fy, j) <- left.variableFields.zipWithIndex if i <= j)
+          yield Sym(s"${fx.name}M${fy.name}") -> leftS(fx.basisBladeWithSign) * leftS(fy.basisBladeWithSign))
+
+        var rr = resultS
+        for ((simple, expr) <- simplifications) {
+          val replacer = ReplaceSumOrProduct(expr.symbol, simple.symbol)
+          val newRR = rr.mapValues(v => v.map(replacer))
+
+          if ((getSize(newRR) + 1 < getSize(rr))) {
+            rr = newRR
+            code(s"const double ${simple.toString} = ${expr.toString};")
+          }
+        }
+
+        code(s"return ${target.makeBracesInit(rr, multiline = true)};")
+
+        code.toString
+      }
+
+      private def getSize(a: MultiVector[Sym]): Int =
+        a.values.map((b, s) => s.size).sum
+    }
+  ),
+  comment = Option(
+    """/**
+      | * Compiler can reuse constants between calls, where the same object used several times,
+      | * So in the code below all that constants `const double sMs = s * s` are reused and the code is fast.
+      | * It is crucial to keep method constexpr or inline to achieve this
+      | * On my machine this trick speed up `Motor.sandwich(Bivector)` from 9 ns to 3 ns
+      | * @code
+      | * const pga3d::Motor& motor = ...
+      | * for(pga3d::Vector& v: array) {
+      | *     v = motor.sandwich(v);
+      | * }
+      | * @endcode
+      | */
+      |""".stripMargin
+  )
 )
 
 
@@ -78,6 +125,11 @@ class CrossOpGenerator extends BinaryMethodCodeGen(
   fileName = "opsCross.h",
   op = (a: MultiVector[Sym], b: MultiVector[Sym]) => a.crossX2(b) * Sym(0.5)
 )
+
+
+private trait CustomFuncBody {
+  def apply(left: CppSubclass, leftS: MultiVector[Sym], right: CppSubclass, rightS: MultiVector[Sym], target: CppSubclass, resultS: MultiVector[Sym]): String
+}
 
 
 /**
@@ -93,12 +145,16 @@ class CrossOpGenerator extends BinaryMethodCodeGen(
 private class BinaryMethodCodeGen(val methodName: String,
                                   val fileName: String,
                                   val op: (MultiVector[Sym], MultiVector[Sym]) => MultiVector[Sym],
-                                  val alternativeNames: Seq[String] = Seq()) extends CppCodeGenerator:
+                                  val alternativeNames: Seq[String] = Seq(),
+                                  val makeCustomBody: Option[CustomFuncBody] = None,
+                                  val comment: Option[String] = None) extends CppCodeGenerator:
 
   override def generateFiles(codeGen: Pga3dCodeGenCpp): Seq[FileContent] =
     val code = CppCodeBuilder()
 
     code.myHeader(Seq(s"#include \"${codeGen.Headers.types}\""), getClass.getName)
+
+    comment.foreach(code(_))
 
     code.namespace(codeGen.namespace) {
       for (left <- CppSubclasses.all if left.shouldBeGenerated) {
@@ -110,16 +166,32 @@ private class BinaryMethodCodeGen(val methodName: String,
               if left == CppSubclasses.multivector then right == CppSubclasses.multivector
               else right != CppSubclasses.multivector
 
-            if pairAllowed then
-              val result = op(left.self, right.makeSymbolic("b"))
-              val target = CppSubclasses.findMatchingClass(result)
+            if (pairAllowed) {
+              val leftS = left.self
+              val rightS = right.makeSymbolic("b")
+              val resultS = op(leftS, rightS)
+              val target = CppSubclasses.findMatchingClass(resultS)
               if (target != CppSubclasses.zeroCls) {
-                code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept { return ${target.makeBracesInit(result, multiline = true)}; }")
+
+                makeCustomBody match {
+                  case Some(makeBody) => {
+                    code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept {") // (" return ${target.makeBracesInit(result, multiline = true)}; }")
+                    code.block {
+                      code(makeBody(left, leftS, right, rightS, target, resultS))
+                    }
+                    code("}")
+                  }
+                  case None => {
+                    code(s"constexpr ${target.name} ${left.name}::${methodName}(const ${right.name}& b) const noexcept { return ${target.makeBracesInit(resultS, multiline = true)}; }")
+                  }
+                }
+
                 alternativeNames.foreach { altName =>
                   code(s"constexpr ${target.name} ${left.name}::${altName}(const ${right.name}& b) const noexcept { return ${methodName}(b); }")
                 }
                 code("")
               }
+            }
         }
         code("")
       }

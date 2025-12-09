@@ -8,6 +8,8 @@ include_directories(pga3d)
 include_directories(pga3dphysics)
 
 add_compile_options(-O3)
+add_compile_options(-march=native)
+#add_compile_options(-Ofast)
 #add_compile_options(-ffast-math -fno-math-errno)
 
 add_executable(cpp

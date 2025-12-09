@@ -1,9 +1,9 @@
 #include <iostream>
 #include <chrono>
+#include <random>
 
 #include "pga3d/pga3d.h"
 #include "pga3dphysics/pga3dphysics.h"
-
 
 
 class PhysicsSystem {
@@ -37,7 +37,64 @@ public:
 };
 
 
+namespace {
+    std::mt19937 &rng() {
+        static std::mt19937 engine(0xC0FFEEu); // deterministic seed for reproducible tests
+        return engine;
+    }
+
+    std::uniform_real_distribution<double> &dist01() {
+        static std::uniform_real_distribution<double> dist(-1.0, 1.0);
+        return dist;
+    }
+
+    template<class T>
+    T makeRandom() {
+        std::array<double, T::componentsCount> arr{};
+        for (auto &v: arr) v = dist01()(rng());
+        return T::from(arr);
+    }
+}
+
+void measurePerf() {
+    const int size = 100000;
+
+    std::vector<pga3d::Bivector> bivecs;
+    for (int i = 0; i < size; ++i) {
+        bivecs.push_back(makeRandom<pga3d::Bivector>());
+    }
+
+    std::vector<pga3d::Motor> motors;
+    for (int i = 0; i < size; ++i) {
+        motors.push_back(makeRandom<pga3d::Motor>());
+    }
+
+    for (int j = 0; j < 10; ++j) {
+        pga3d::Bivector sum = {};
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for (int i = 0; i < size; ++i) {
+            const auto &bivec = bivecs[i];
+            // const auto &motor = motors[i];
+            const auto &motor = motors[0];
+
+            sum += motor.sandwich(bivec);
+            // sum += motor.geometric(bivec).geometric(motor.reversed()).toBivectorUnsafe();
+        }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        const auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+
+        std::cout << "Motor.sandwich(Bivector) " << duration.count() << "ns, " << duration.count() / size << " ns/step" << ", result = " << sum <<
+                std::endl;
+    }
+}
+
+
 int main() {
+    measurePerf();
+
     for (int i = 0; i < 10; ++i) {
         PhysicsSystem system;
 
@@ -85,11 +142,15 @@ int main() {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
-        std::cout << duration.count() << " ns for " << stepsCount << " steps, dE = " << system.getKineticEnergy() - initialEnergy << ", " << duration.count() / stepsCount << " ns per step" << std::endl;
+        std::cout << duration.count() << " ns for " << stepsCount << " steps, dE = " << system.getKineticEnergy() -
+                initialEnergy << ", " << duration.count() / stepsCount << " ns per step" << std::endl;
     }
 
-    const pga3d::Motor motor = pga3d::Translator::addVector({1.0, 2.0, 3.0}).geometric(pga3d::Quaternion::rotation(pga3d::Vector{0, 0, 1}, pga3d::Vector{1, 1, 0.0}));
-    const auto linear = pga3d::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint& p){ return motor.sandwich(p); });
+    const pga3d::Motor motor = pga3d::Translator::addVector({1.0, 2.0, 3.0}).geometric(
+        pga3d::Quaternion::rotation(pga3d::Vector{0, 0, 1}, pga3d::Vector{1, 1, 0.0}));
+    const auto linear = pga3d::LinearOperator<pga3d::ProjectivePoint>::create([&](const pga3d::ProjectivePoint &p) {
+        return motor.sandwich(p);
+    });
 
     std::cout << linear << std::endl;
     std::cout << pga3d::linearOperatorForSandwichForProjectivePoint(motor) << std::endl;

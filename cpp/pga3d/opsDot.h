@@ -878,9 +878,7 @@ namespace pga3d {
         .i = b.i
     }; }
 
-    constexpr PointCenter Translator::dot(const PointCenter& b) const noexcept { return {
-
-    }; }
+    constexpr PointCenter Translator::dot(const PointCenter& b) const noexcept { return {}; }
 
 
     constexpr Multivector Vector::dot(const Motor& b) const noexcept { return {
@@ -1411,9 +1409,7 @@ namespace pga3d {
         .w = b.s
     }; }
 
-    constexpr PointCenter PointCenter::dot(const Translator& b) const noexcept { return {
-
-    }; }
+    constexpr PointCenter PointCenter::dot(const Translator& b) const noexcept { return {}; }
 
     constexpr double PointCenter::dot(const Point& b) const noexcept { return -1.0; }
 

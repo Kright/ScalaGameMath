@@ -894,9 +894,7 @@ namespace pga3d {
     }; }
     constexpr PseudoScalar Translator::meet(const PseudoScalar& b) const noexcept { return wedge(b); }
 
-    constexpr PointCenter Translator::wedge(const PointCenter& b) const noexcept { return {
-
-    }; }
+    constexpr PointCenter Translator::wedge(const PointCenter& b) const noexcept { return {}; }
     constexpr PointCenter Translator::meet(const PointCenter& b) const noexcept { return wedge(b); }
 
 
@@ -1300,9 +1298,7 @@ namespace pga3d {
     }; }
     constexpr ProjectivePoint PointCenter::meet(const ProjectiveTranslator& b) const noexcept { return wedge(b); }
 
-    constexpr PointCenter PointCenter::wedge(const Translator& b) const noexcept { return {
-
-    }; }
+    constexpr PointCenter PointCenter::wedge(const Translator& b) const noexcept { return {}; }
     constexpr PointCenter PointCenter::meet(const Translator& b) const noexcept { return wedge(b); }
 
 

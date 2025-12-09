@@ -47,7 +47,7 @@ class CppSubclass(name: String,
       s".${f.name} = ${exprString}"
     }
 
-    if (multiline) {
+    if (multiline && elems.nonEmpty) {
       val pad = " " * 4
       elems.mkString("{\n" + pad, s",\n$pad", "\n}")
     } else {
